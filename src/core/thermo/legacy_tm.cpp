@@ -1,9 +1,13 @@
 #include "core/thermo/legacy_tm.hpp"
 
+#include "core/sequence/nucleotide.hpp"
 #include "core/thermo/breslauer_1986.hpp"
+#include "core/thermo/units.hpp"
 
 #include <cassert>
 #include <cmath>
+#include <optional>
+#include <span>
 
 namespace primerpicker::thermo {
 
@@ -26,12 +30,12 @@ auto legacy_primer_tm(std::span<sequence::Nucleotide const> const primer) noexce
     assert(primer.size() >= 2);
     auto const sums = breslauer_1986_sums(primer);
     auto const entropy = sums.entropy.cal_per_kelvin_per_mol + entropy_constant.cal_per_kelvin_per_mol;
-    return Celsius{cal_per_kcal * sums.enthalpy.kcal_per_mol / entropy - kelvin_offset};
+    return Celsius{(cal_per_kcal * sums.enthalpy.kcal_per_mol / entropy) - kelvin_offset};
 }
 
-auto legacy_displayed_tm(Celsius const tm) noexcept -> std::optional<int> {
-    assert(std::isfinite(tm.degrees));
-    auto const truncated = static_cast<int>(std::floor(tm.degrees));
+auto legacy_displayed_tm(Celsius const temperature) noexcept -> std::optional<int> {
+    assert(std::isfinite(temperature.degrees));
+    auto const truncated = static_cast<int>(std::floor(temperature.degrees));
     if (truncated <= 0) {
         return std::nullopt;
     }

@@ -1,0 +1,25 @@
+# clang-tidy checks, chosen to enforce the rules of CLAUDE.md
+# (run: clang-tidy-20 -p build/clang-debug FILE)
+Checks: >
+  -*,
+  bugprone-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -misc-non-private-member-variables-in-classes,
+  -modernize-use-designated-initializers,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-naming
+# CLAUDE.md: avoid identifiers shorter than three letters
+CheckOptions:
+  readability-identifier-length.MinimumVariableNameLength: 3
+  readability-identifier-length.MinimumParameterNameLength: 3
+  readability-identifier-length.MinimumLoopCounterNameLength: 3
+  readability-implicit-bool-conversion.AllowPointerConditions: false
+  misc-include-cleaner.IgnoreHeaders: 'catch2/.*'
+HeaderFilterRegex: 'src/core/.*'
+WarningsAsErrors: ''

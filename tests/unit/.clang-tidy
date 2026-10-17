@@ -1,0 +1,5 @@
+# Tests hold reference values inline, each with its source in a
+# comment (CLAUDE.md, "Numerical reference values")
+InheritParentConfig: true
+Checks: >
+  -readability-magic-numbers

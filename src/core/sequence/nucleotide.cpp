@@ -1,5 +1,9 @@
 #include "core/sequence/nucleotide.hpp"
 
+#include <optional>
+#include <string_view>
+#include <vector>
+
 namespace primerpicker::sequence {
 
 auto to_nucleotide(char const letter) noexcept -> std::optional<Nucleotide> {

@@ -1,9 +1,13 @@
 #include "core/thermo/breslauer_1986.hpp"
 
+#include "core/sequence/nucleotide.hpp"
+#include "core/thermo/units.hpp"
+
+#include <cassert>
 #include <cstddef>
-#include <functional>
 #include <iterator>
 #include <numeric>
+#include <span>
 
 namespace primerpicker::thermo {
 
@@ -11,8 +15,12 @@ namespace {
 
 auto pair_parameters(sequence::Nucleotide const first, sequence::Nucleotide const second) noexcept
     -> NearestNeighbourSums {
-    auto const& parameters =
-        breslauer_1986_table.at(static_cast<std::size_t>(first)).at(static_cast<std::size_t>(second));
+    auto const row = static_cast<std::size_t>(first);
+    auto const column = static_cast<std::size_t>(second);
+    assert(row < breslauer_1986_table.size() and column < breslauer_1986_table.front().size());
+    // not at(): it may throw, and this function is noexcept; the
+    // indexes come from a four-value enum
+    auto const& parameters = breslauer_1986_table[row][column];  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
     return {KilocaloriesPerMole{parameters.enthalpy_kcal_per_mol},
             CaloriesPerKelvinPerMole{parameters.entropy_cal_per_kelvin_per_mol}};
 }

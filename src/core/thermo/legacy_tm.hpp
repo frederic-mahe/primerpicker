@@ -18,6 +18,6 @@ namespace primerpicker::thermo {
 
 // The value Primer Designer shows: truncated, and none ("?" on screen)
 // when not positive
-[[nodiscard]] auto legacy_displayed_tm(Celsius tm) noexcept -> std::optional<int>;
+[[nodiscard]] auto legacy_displayed_tm(Celsius temperature) noexcept -> std::optional<int>;
 
 }  // namespace primerpicker::thermo
