@@ -18,8 +18,9 @@ endif()
 include(Catch)
 
 add_executable(unit_tests
-  test_skeleton.cpp)
-target_link_libraries(unit_tests PRIVATE Catch2::Catch2WithMain)
+  test_skeleton.cpp
+  test_nucleotide.cpp)
+target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 
 # PRE_TEST: list the tests when ctest runs, not after linking, so that

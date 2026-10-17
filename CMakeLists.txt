@@ -18,6 +18,8 @@ set(PRIMERPICKER_WARNING_FLAGS "" CACHE STRING
 
 include(CTest)
 
+add_subdirectory(src/core)
+
 if(BUILD_TESTING)
   add_subdirectory(tests/unit)
 endif()
