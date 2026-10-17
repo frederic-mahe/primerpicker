@@ -20,14 +20,14 @@
       "name": "gcc-warnings",
       "hidden": true,
       "cacheVariables": {
-        "PRIMERPICKER_WARNING_FLAGS": "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wold-style-cast;-Wuseless-cast;-Wcast-align;-Wcast-qual;-Wnon-virtual-dtor;-Woverloaded-virtual;-Wnull-dereference;-Wdouble-promotion;-Wformat=2;-Wimplicit-fallthrough;-Wswitch-default;-Wswitch-enum;-Wundef;-Wduplicated-cond;-Wduplicated-branches;-Wlogical-op"
+        "PRIMERPICKER_WARNING_FLAGS": "-Wall;-Wextra;-Wpedantic;-Wcast-align;-Wcast-qual;-Wconversion;-Wdate-time;-Wdouble-promotion;-Wfloat-equal;-Wformat=2;-Wimplicit-fallthrough;-Wnon-virtual-dtor;-Wnull-dereference;-Wold-style-cast;-Woverloaded-virtual;-Wshadow;-Wsign-conversion;-Wswitch-default;-Wswitch-enum;-Wundef;-Wuninitialized;-Wunused;-Wunused-macros;-Wvla;-Wduplicated-branches;-Wduplicated-cond;-Wformat-overflow;-Wlogical-op;-Wunsafe-loop-optimizations;-Wuseless-cast"
       }
     },
     {
       "name": "clang-warnings",
       "hidden": true,
       "cacheVariables": {
-        "PRIMERPICKER_WARNING_FLAGS": "-Wall;-Wextra;-Wpedantic;-Wshadow;-Wconversion;-Wsign-conversion;-Wold-style-cast;-Wcast-align;-Wcast-qual;-Wnon-virtual-dtor;-Woverloaded-virtual;-Wnull-dereference;-Wdouble-promotion;-Wformat=2;-Wimplicit-fallthrough;-Wswitch-default;-Wswitch-enum;-Wundef;-Wextra-semi;-Wcomma"
+        "PRIMERPICKER_WARNING_FLAGS": "-Wall;-Wextra;-Wpedantic;-Wcast-align;-Wcast-qual;-Wconversion;-Wdate-time;-Wdouble-promotion;-Wfloat-equal;-Wformat=2;-Wimplicit-fallthrough;-Wnon-virtual-dtor;-Wnull-dereference;-Wold-style-cast;-Woverloaded-virtual;-Wshadow;-Wsign-conversion;-Wswitch-default;-Wswitch-enum;-Wundef;-Wuninitialized;-Wunused;-Wunused-macros;-Wvla;-Wassign-enum;-Wcomma;-Wextra-semi;-Wover-aligned"
       }
     },
     {
@@ -37,6 +37,7 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS_DEBUG": "-O0 -ggdb3",
         "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS",
         "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined"
       }
