@@ -26,6 +26,9 @@ runs in 80x25 text mode (720x400 pixels).
   records the Primer Pair and amplified product screens.
 - `tools/fit_pairs.py`: checks the product Tm and annealing
   temperature models below against `pairs/pairs.tsv`.
+- `tools/inspect_primer.sh`: types one primer, and records the Primer
+  Analysis (Inspect), Hairpins and Dimers screens;
+  `tools/parse_inspect.py` turns the recordings into a table.
 
 
 ## Built-in defaults (recorded 2026-10-17)
@@ -141,3 +144,37 @@ The product spans primer A's 5' end to primer B's 5' end (positions
 
 Not yet probed: products with a 5' extension, Tm values at or below
 0, and primer lengths other than 20.
+
+
+## Primer criteria (recorded 2026-10-17)
+
+`inspect/inspect.tsv`: 111 primers typed with Direct Entry, then
+Inspect (Primer Analysis screen, "Actual" column), H (Hairpins screen)
+and D (Dimers screen), with built-in defaults. The primers are those
+of `tm/direct_entry_tm.tsv` (first batch) whose recording completed.
+
+Counts, exact for every record (`tests/unit/test_legacy_criteria.cpp`
+checks them all):
+- **Runs**: the longest run of one base, not counting the run at the
+  3' end (a homopolymer gives 0; `CAACTGCTATTT` gives 2).
+- **3' GC runs**: the number of G or C at the 3' end.
+- **Dimers, adjacent homologous bases**: the longest run of
+  consecutive complementary pairs between the primer and a copy of
+  itself, in any antiparallel alignment (the fully overlapping one
+  included).
+- **3' dimers, matches at 3' end**: in antiparallel alignments of the
+  primer with a copy of itself where the copy extends at least one
+  base beyond the primer's 3' end (a template for extension), the
+  largest number of consecutive complementary pairs counted from the
+  primer's 3' end. Without that overhang condition, 19 records
+  disagree (for instance, self-complementary 30-mers give 28, not 30).
+
+**Hairpins** (Hairpins screen): an energy in kcal with one decimal
+(`-.4` for -0.4), and a drawing of one hairpin: the 5' part, pairing
+marks (`:`), and the 3' part written 3' to 5', right-aligned, with
+`)` for the loop; or "No Hairpins Found". The energy model is not
+solved yet. Breslauer 1986 free energies at 25 °C plus a constant per
+loop size do not fit, nor do dH - T dS at one temperature plus a loop
+term. Self-complementary repeats such as CGCG... and GCGC... with the
+same stem and loop differ by 1.4 kcal, which suggests terms for the
+closing pair, the loop bases or the ends.
