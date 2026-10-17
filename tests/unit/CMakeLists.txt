@@ -19,9 +19,13 @@ include(Catch)
 
 add_executable(unit_tests
   test_skeleton.cpp
-  test_nucleotide.cpp)
+  test_nucleotide.cpp
+  test_breslauer_1986.cpp
+  test_legacy_tm.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
+target_compile_definitions(unit_tests PRIVATE
+  PRIMERPICKER_LEGACY_DIR="${PROJECT_SOURCE_DIR}/tests/legacy")
 
 # PRE_TEST: list the tests when ctest runs, not after linking, so that
 # a cross-compiled build succeeds even where the emulator (Wine)
