@@ -20,6 +20,12 @@ runs in 80x25 text mode (720x400 pixels).
   Direct Entry and prints the result line (usage in the file header).
 - `tools/fit_tm.py`: checks the primer Tm model below against
   `tm/direct_entry_tm.tsv`.
+- `tools/make_molecule.py`: writes a random test molecule as a
+  GenBank file.
+- `tools/pair_product.sh`: makes two primers from a molecule, and
+  records the Primer Pair and amplified product screens.
+- `tools/fit_pairs.py`: checks the product Tm and annealing
+  temperature models below against `pairs/pairs.tsv`.
 
 
 ## Built-in defaults (recorded 2026-10-17)
@@ -89,7 +95,8 @@ doubles, next to each other at file offset 0x429d3: 21.6, 0.3, 41,
 59.9 + 41 x (GC fraction) - 675 / length (that is, 81.5 + 16.6
 log10(0.05) + 0.41 %GC - 675 / length) and the annealing temperature
 of Rychlik et al. 1990 (0.3 x Tm primer + 0.7 x Tm product - 14.9).
-To be checked with Primer Pair analysis.
+Confirmed with Primer Pair analysis: see "Product Tm and annealing
+temperature" below.
 
 Recording notes:
 - Keys are typed every 0.3 s. On a busy machine (about 20 runs in
@@ -99,3 +106,38 @@ Recording notes:
   where the 50-base limit or non-ACGT letters apply).
 - DOSBox-X resolves a relative `mount c c` against the directory of
   the configuration file, not the current directory.
+
+
+## Product Tm and annealing temperature (recorded 2026-10-17)
+
+`pairs/pairs.tsv`: 28 primer pairs on two generated molecules, made
+with Primer/Create -> from Molecule (primer A at a position, 20 bases;
+primer B on the complement strand), then Analyze -> Primer Pair ->
+A=AnalProd. Molecules (GenBank files, which the program loads):
+- `pairs/TEST600.GB`: 600 random bases (Python `random.Random(600)`,
+  `choice('acgt')`).
+- `pairs/TGRAD.GB` (LOCUS name GRAD): 1,200 bases in eight segments
+  of 150 with GC fractions 0.25, 0.4, 0.55, 0.7, 0.55, 0.4, 0.25,
+  0.8 (`tools/make_molecule.py GRAD 1201
+  0.25,0.4,0.55,0.7,0.55,0.4,0.25,0.8 150`).
+
+The product spans primer A's 5' end to primer B's 5' end (positions
+51 and 400C give 350 bases). All 28 records follow
+(`tools/fit_pairs.py`):
+
+    product Tm = floor(59.9 + 41 x GC fraction - 675 / length)
+    Ta = floor(0.3 x (lower primer Tm - 21.6) + 0.7 x product Tm - 14.9)
+
+- The constants are the doubles found in the executable (see "Primer
+  Tm" above): 59.9 = 81.5 + 16.6 log10(0.05), and 21.6 =
+  -16.6 log10(0.05), so both formulas assume 50 mM monovalent salt.
+- Ta uses the *displayed* (truncated) Tm values, of the primer with
+  the lower Tm (A or B, both occur in the data), and of the product.
+  Using unrounded values, or another primer choice, contradicts
+  several records.
+- The GC fraction is not truncated to a whole percentage (that
+  contradicts 7 records).
+- The primer Tm values on the pair screen are those of Direct Entry.
+
+Not yet probed: products with a 5' extension, Tm values at or below
+0, and primer lengths other than 20.

@@ -1,0 +1,25 @@
+LOCUS       GRAD         1200 bp    DNA     linear
+DEFINITION  Random test molecule (seed 1201, GC 0.25,0.4,0.55,0.7,0.55,0.4,0.25,0.8).
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ccgcctctat aaacataaca ttttcagtaa ccgcctaaaa agctataaat actatataca
+       61 ttcttaaagg ctacattaag aatcctgatc ctatgatctt ttttataaca cacaaatcta
+      121 ataggtatca tagccattag cttaggacgt agtttactta cagaacatag gcctgtagac
+      181 gttacaaata tcgatcttta ttacttgact ggggccaatg ttatctctta catcagaaat
+      241 atatccacta tattttccct tcatgcacgt aattgaatgg ggaaggacgt tgctcttgag
+      301 ctttgttaaa gacgggcgca gcaccagcta gttatgttcg ttgtgtggac agtcccaaca
+      361 tctgcgactc cacttcccta gagagaccag tcctaggggg gcccagccag ggattcgggg
+      421 tcccacgggg acctccattc taaaagcggt ccggtccgac tctcgcgagg cccgcaacgg
+      481 ctatcgcatc cgggctgatg cacgttcgac cagttgcgtg cgtgaagtaa acgggtctgt
+      541 gggaggctcc gcctgacctc gctcaggctg gacaacgacc ggctgggaac gggcgtgggc
+      601 ccctacccat acccgcgttg gtctgtttct acttgcggtg cctgtaccta ctagcgaatg
+      661 ctgttctggg accaatcttc cgacttgatg tgcccgcaag cagtgtggtg aattgggtgc
+      721 gggtggccga tcgtaagaat ttgtgatact ttatttgatt cctaaaacct atcgctgcgc
+      781 gcgtaaagta acttctaacc tagctaatct tttggtatca gacaccacgc attacaggtt
+      841 cggtttccta tgaagtaaat gttatgggtg tggtttgttt cgcttaagag ttggatttat
+      901 aataaggtcc atattatcat taacccggga ctcgcatttt ttagacgatg aatagttcag
+      961 ataatattat atagtgtttt tttgtcgtct atgtatgata tttttattat atttgtttta
+     1021 tttccataaa atataaagtt ctttaatcct ggtgtcggcg gcgttgggcc agcggggggc
+     1081 ggccgccccc cggggctcgt cccccgccgc cgacggtgcg agcccacggc gactcggcgc
+     1141 ggggtcccgc tcggcgcgtg cgcgcggcgt ggggtacggc ctccagggca tagagcctcg
+//
