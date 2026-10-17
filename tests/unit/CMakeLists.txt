@@ -21,7 +21,8 @@ add_executable(unit_tests
   test_skeleton.cpp
   test_nucleotide.cpp
   test_breslauer_1986.cpp
-  test_legacy_tm.cpp)
+  test_legacy_tm.cpp
+  test_legacy_criteria.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE

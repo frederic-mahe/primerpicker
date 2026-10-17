@@ -4,7 +4,9 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
-#include <cassert>
+#include <array>
+#include <stdexcept>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -17,7 +19,9 @@ using primerpicker::thermo::breslauer_1986_sums;
 
 auto nucleotides(std::string_view const letters) -> std::vector<Nucleotide> {
     auto converted = to_nucleotides(letters);
-    assert(converted.has_value());
+    if (not converted.has_value()) {
+        throw std::runtime_error{"not a nucleotide sequence: " + std::string{letters}};
+    }
     return *converted;
 }
 
@@ -68,4 +72,12 @@ TEST_CASE("Breslauer 1986 sums cover all 16 pairs", "[thermo]") {
         CHECK_THAT(sums.entropy.cal_per_kelvin_per_mol,
                    WithinAbs(expected.entropy_cal_per_kelvin_per_mol, tolerance));
     }
+}
+
+TEST_CASE("Breslauer 1986 sums work at compile time", "[thermo][constexpr]") {
+    using primerpicker::sequence::Nucleotide;
+    constexpr auto poly_a = std::array{Nucleotide::adenine, Nucleotide::adenine, Nucleotide::adenine};
+    // two AA pairs: 2 x 9.1 kcal/mol (Breslauer 1986, Table 2)
+    STATIC_CHECK(breslauer_1986_sums(poly_a).enthalpy.kcal_per_mol > 18.19);
+    STATIC_CHECK(breslauer_1986_sums(poly_a).enthalpy.kcal_per_mol < 18.21);
 }

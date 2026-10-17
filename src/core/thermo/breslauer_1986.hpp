@@ -4,6 +4,10 @@
 #include "core/thermo/units.hpp"
 
 #include <array>
+#include <cassert>
+#include <cstddef>
+#include <iterator>
+#include <numeric>
 #include <span>
 
 namespace primerpicker::thermo {
@@ -33,9 +37,40 @@ constexpr auto breslauer_1986_table = std::array<std::array<PairParameters, 4>, 
     {{{6.0, 16.9}, {5.6, 13.5}, {5.8, 12.9}, {9.1, 24.0}}},
 }};
 
+namespace detail {
+
+constexpr auto pair_parameters(sequence::Nucleotide const first, sequence::Nucleotide const second) noexcept
+    -> NearestNeighbourSums {
+    auto const row = static_cast<std::size_t>(first);
+    auto const column = static_cast<std::size_t>(second);
+    assert(row < breslauer_1986_table.size() and column < breslauer_1986_table.front().size());
+    // not at(): it may throw, and this function is noexcept; the
+    // indexes come from a four-value enum
+    auto const& parameters = breslauer_1986_table[row][column];  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+    return {KilocaloriesPerMole{parameters.enthalpy_kcal_per_mol},
+            CaloriesPerKelvinPerMole{parameters.entropy_cal_per_kelvin_per_mol}};
+}
+
+constexpr auto add(NearestNeighbourSums const& lhs, NearestNeighbourSums const& rhs) noexcept
+    -> NearestNeighbourSums {
+    return {KilocaloriesPerMole{lhs.enthalpy.kcal_per_mol + rhs.enthalpy.kcal_per_mol},
+            CaloriesPerKelvinPerMole{lhs.entropy.cal_per_kelvin_per_mol +
+                                     rhs.entropy.cal_per_kelvin_per_mol}};
+}
+
+}  // namespace detail
+
 // Sums over the nearest-neighbour pairs of a single strand; zero for
 // fewer than two nucleotides. No initiation or symmetry term.
-[[nodiscard]] auto breslauer_1986_sums(std::span<sequence::Nucleotide const> strand) noexcept
-    -> NearestNeighbourSums;
+[[nodiscard]] constexpr auto breslauer_1986_sums(std::span<sequence::Nucleotide const> const strand) noexcept
+    -> NearestNeighbourSums {
+    auto const zero = NearestNeighbourSums{KilocaloriesPerMole{0.0}, CaloriesPerKelvinPerMole{0.0}};
+    if (strand.size() < 2) {
+        return zero;
+    }
+    // C++23 refactoring: replace with std::views::pairwise
+    return std::transform_reduce(strand.begin(), std::prev(strand.end()), std::next(strand.begin()),
+                                 zero, detail::add, detail::pair_parameters);
+}
 
 }  // namespace primerpicker::thermo

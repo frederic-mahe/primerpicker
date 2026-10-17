@@ -3,7 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <cassert>
+#include <array>
 #include <charconv>
 #include <iterator>
 #include <system_error>
@@ -11,6 +11,7 @@
 #include <fstream>
 #include <optional>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -24,7 +25,9 @@ using primerpicker::thermo::legacy_primer_tm;
 
 auto nucleotides(std::string_view const letters) -> std::vector<Nucleotide> {
     auto converted = to_nucleotides(letters);
-    assert(converted.has_value());
+    if (not converted.has_value()) {
+        throw std::runtime_error{"not a nucleotide sequence: " + std::string{letters}};
+    }
     return *converted;
 }
 
@@ -67,7 +70,9 @@ auto read_recordings(std::filesystem::path const& path) -> std::vector<Recording
         for (auto field = std::string{}; std::getline(stream, field, '\t');) {
             fields.push_back(field);
         }
-        assert(fields.size() == column_count);
+        if (fields.size() != column_count) {
+            throw std::runtime_error{"unexpected line: " + line};
+        }
         recordings.push_back({fields[primer_column], fields[tm_column]});
     }
     return recordings;
@@ -112,7 +117,9 @@ auto computed_tm(std::string const& primer) -> std::optional<int> {
 
 auto shown_tm(std::string const& shown) -> std::optional<int> {
     auto const value = shown == "?" ? undefined : to_int(shown);
-    assert(shown == "?" or value.has_value());
+    if (shown != "?" and not value.has_value()) {
+        throw std::runtime_error{"unexpected Tm: " + shown};
+    }
     return value;
 }
 
@@ -174,4 +181,25 @@ TEST_CASE("legacy annealing temperature uses the lower primer Tm", "[thermo][leg
     // TGRAD, primers at 961 and 1031C: Tm 47 and 59, product Tm 56
     CHECK(legacy_displayed_tm(legacy_annealing_tm(LegacyPairTms{
               .primer_a_celsius = 47, .primer_b_celsius = 59, .product_celsius = 56})) == 31);  // PRIMER.exe
+}
+
+TEST_CASE("legacy Tm functions work at compile time", "[thermo][legacy][constexpr]") {
+    constexpr auto primer = std::array{Nucleotide::cytosine, Nucleotide::cytosine, Nucleotide::cytosine,
+                                       Nucleotide::guanine, Nucleotide::thymine, Nucleotide::cytosine,
+                                       Nucleotide::cytosine, Nucleotide::cytosine};
+    // CCCGTCCC: 28 °C shown by PRIMER.exe (direct_entry_tm.tsv)
+    STATIC_CHECK(legacy_primer_tm(primer).degrees >= 28.0);
+    STATIC_CHECK(legacy_primer_tm(primer).degrees < 29.0);
+    // TEST600, primers at 51 and 400C: Ta 52 °C shown by PRIMER.exe (pairs.tsv)
+    constexpr auto pair_tms = LegacyPairTms{.primer_a_celsius = 66, .primer_b_celsius = 66, .product_celsius = 77};
+    STATIC_CHECK(legacy_annealing_tm(pair_tms).degrees >= 52.0);
+    STATIC_CHECK(legacy_annealing_tm(pair_tms).degrees < 53.0);
+    // TGRAD, primers at 322 and 380C: product Tm 69 °C shown by PRIMER.exe (pairs.tsv)
+    constexpr auto product_tm = [] {
+        auto const product =
+            to_nucleotides("CACCAGCTAGTTATGTTCGTTGTGTGGACAGTCCCAACATCTGCGACTCCACTTCCCTA").value();
+        return legacy_product_tm(product).degrees;
+    }();
+    STATIC_CHECK(product_tm >= 69.0);
+    STATIC_CHECK(product_tm < 70.0);
 }

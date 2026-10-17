@@ -42,3 +42,17 @@ TEST_CASE("an empty string converts to an empty sequence", "[sequence]") {
 TEST_CASE("a string with a non-nucleotide does not convert", "[sequence]") {
     CHECK_FALSE(to_nucleotides("GTAAAACGNCGG").has_value());
 }
+
+TEST_CASE("Watson-Crick complements", "[sequence]") {
+    using primerpicker::sequence::complement;
+    STATIC_CHECK(complement(Nucleotide::adenine) == Nucleotide::thymine);
+    STATIC_CHECK(complement(Nucleotide::cytosine) == Nucleotide::guanine);
+    STATIC_CHECK(complement(Nucleotide::guanine) == Nucleotide::cytosine);
+    STATIC_CHECK(complement(Nucleotide::thymine) == Nucleotide::adenine);
+}
+
+TEST_CASE("nucleotide conversions work at compile time", "[sequence][constexpr]") {
+    STATIC_CHECK(to_nucleotide('g') == Nucleotide::guanine);
+    STATIC_CHECK(not to_nucleotide('N').has_value());
+    STATIC_CHECK(to_nucleotides("GAT").value().size() == 3);
+}
