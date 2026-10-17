@@ -13,6 +13,13 @@ runs in 80x25 text mode (720x400 pixels).
   distinct frames (needs Python 3 and Pillow).
 - `tools/system_defaults.conf`: DOSBox-X configuration that records
   the System Defaults screens (usage in the file header).
+- `tools/screen_text.py`: decodes the PNG frames into text, exactly
+  (each 9x16 cell is matched against the VGA font in
+  `tools/vga_glyphs.png`; `tools/make_vga_glyphs.sh` remakes it).
+- `tools/tm_direct_entry.sh`: types one primer with Primer/Create ->
+  Direct Entry and prints the result line (usage in the file header).
+- `tools/fit_tm.py`: checks the primer Tm model below against
+  `tm/direct_entry_tm.tsv`.
 
 
 ## Built-in defaults (recorded 2026-10-17)
@@ -37,3 +44,58 @@ Defaults.
 | | Runs: reject runs of >= | 3 bases (any) |
 | | Runs: reject runs of >= | 3 G or C at 3' end |
 | `screens/weights_defaults.png` | Find-Pair weighting factors (0 = ignore, 1-5): GC mismatch, Tm mismatch, 3' dimers, any dimers, false priming | 1 each |
+
+
+## Primer Tm (recorded 2026-10-17)
+
+`tm/direct_entry_tm.tsv`: 186 primers typed with Primer/Create ->
+Direct Entry (built-in defaults), and the values shown on the result
+line (`Length: 17  %GC: 52    Tm°C: 64 ...`). A `!` flag means that
+the value is outside the criteria range. The primers are homopolymers
+and dinucleotide repeats (12 to 30 bases), random primers (8 to 64
+typed bases, 20 to 80 % GC), primers chosen to narrow the fit below,
+primers whose Tm is close to 0 °C, five primers with a 5' extension,
+and two with non-ACGT letters.
+
+All 186 values follow this model (`tools/fit_tm.py`):
+
+    Tm = floor(1000 * dH / (dS + b) - 273)    displayed as "?" when Tm <= 0
+
+- dH (kcal/mol) and dS (cal/K/mol) are sums over the nearest-neighbour
+  pairs of the primer, with the parameters of Breslauer et al. 1986
+  (PNAS 83:3746, Table 2). No initiation term, no terminal or
+  symmetry correction (self-complementary repeats such as `ATAT...`
+  and `CGCG...` follow the same formula).
+- b = 60.698 to 60.700 cal/K/mol, constant (no length, salt or
+  concentration term was needed). Its origin is not known. One
+  combination that falls in the interval: Breslauer's initiation free
+  energy (5.0 kcal/mol) divided by 298.2 K, plus R ln(1/C) with
+  R = 1.987 cal/K/mol and C = 250 pM: 16.767 + 43.932 = 60.699. This
+  is a guess, not a finding.
+- The result is truncated (floor), and the offset is 273, not 273.15:
+  rounding, or 273.15, contradict several records.
+- %GC is truncated as well (9 G+C out of 17: 52.9 % shown as 52).
+- The 5' extension does not change the Tm, but it is included in the
+  displayed length and %GC.
+- The primer field holds 50 bases; further keys are ignored.
+- Letters other than A, C, G and T (N, R, U) are not inserted, and
+  the next key is lost as well; `U` garbles the entry field. Not
+  investigated further.
+
+Nearest-neighbour parameters were not found in the executable (as
+float, double or 16-bit integers). The executable does contain these
+doubles, next to each other at file offset 0x429d3: 21.6, 0.3, 41,
+675, 59.9, 0.7, 14.9. They look like a product Tm of
+59.9 + 41 x (GC fraction) - 675 / length (that is, 81.5 + 16.6
+log10(0.05) + 0.41 %GC - 675 / length) and the annealing temperature
+of Rychlik et al. 1990 (0.3 x Tm primer + 0.7 x Tm product - 14.9).
+To be checked with Primer Pair analysis.
+
+Recording notes:
+- Keys are typed every 0.3 s. On a busy machine (about 20 runs in
+  parallel), the program misses keys (probably the 15-key BIOS
+  buffer); slower typing (`PAUSE=1`) fixes it. Each record was
+  checked: the displayed length equals the typed length (except
+  where the 50-base limit or non-ACGT letters apply).
+- DOSBox-X resolves a relative `mount c c` against the directory of
+  the configuration file, not the current directory.
