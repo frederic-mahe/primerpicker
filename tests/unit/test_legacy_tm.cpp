@@ -133,3 +133,45 @@ TEST_CASE("legacy Tm matches every recorded primer", "[thermo][legacy]") {
     }
     CHECK(checked == 180);
 }
+
+// Reference values: PRIMER.exe, Analyze -> Primer Pair -> AnalProd,
+// on generated molecules (tests/legacy/pairs/, recorded 2026-10-17)
+
+namespace {
+
+using primerpicker::thermo::legacy_annealing_tm;
+using primerpicker::thermo::legacy_product_tm;
+using primerpicker::thermo::LegacyPairTms;
+
+auto displayed_product_tm(std::string_view const product) -> std::optional<int> {
+    return legacy_displayed_tm(legacy_product_tm(nucleotides(product)));
+}
+
+}  // namespace
+
+TEST_CASE("legacy product Tm of recorded products", "[thermo][legacy]") {
+    // TGRAD, primers at 961 and 1031C: 71 bp
+    CHECK(displayed_product_tm("ATAATATTATATAGTGTTTTTTTGTCGTCTATGTATGATATTTTTATTATATTTGTTTTATTTCC"
+                               "ATAAAA") == 56);  // PRIMER.exe
+    // TGRAD, primers at 322 and 380C: 59 bp
+    CHECK(displayed_product_tm("CACCAGCTAGTTATGTTCGTTGTGTGGACAGTCCCAACATCTGCGACTCCACTTCCCTA") ==
+          69);  // PRIMER.exe
+    // TGRAD, primers at 148 and 229C: 82 bp
+    CHECK(displayed_product_tm("CGTAGTTTACTTACAGAACATAGGCCTGTAGACGTTACAAATATCGATCTTTATTACTTGACTG"
+                               "GGGCCAATGTTATCTCTT") == 67);  // PRIMER.exe
+}
+
+TEST_CASE("legacy annealing temperature uses the lower primer Tm", "[thermo][legacy]") {
+    // TEST600, primers at 51 and 400C: Tm 66 and 66, product Tm 77
+    CHECK(legacy_displayed_tm(legacy_annealing_tm(LegacyPairTms{
+              .primer_a_celsius = 66, .primer_b_celsius = 66, .product_celsius = 77})) == 52);  // PRIMER.exe
+    // TGRAD, primers at 43 and 1078C: Tm 44 and 92, product Tm 78
+    CHECK(legacy_displayed_tm(legacy_annealing_tm(LegacyPairTms{
+              .primer_a_celsius = 44, .primer_b_celsius = 92, .product_celsius = 78})) == 46);  // PRIMER.exe
+    // TGRAD, primers at 195 and 969C: Tm 63 and 49, product Tm 79
+    CHECK(legacy_displayed_tm(legacy_annealing_tm(LegacyPairTms{
+              .primer_a_celsius = 63, .primer_b_celsius = 49, .product_celsius = 79})) == 48);  // PRIMER.exe
+    // TGRAD, primers at 961 and 1031C: Tm 47 and 59, product Tm 56
+    CHECK(legacy_displayed_tm(legacy_annealing_tm(LegacyPairTms{
+              .primer_a_celsius = 47, .primer_b_celsius = 59, .product_celsius = 56})) == 31);  // PRIMER.exe
+}
