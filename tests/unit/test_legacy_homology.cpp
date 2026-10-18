@@ -1,6 +1,7 @@
 #include "core/analysis/legacy_homology.hpp"
 #include "core/io/genbank.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -23,7 +24,7 @@ namespace {
 using primerpicker::analysis::HomologyKind;
 using primerpicker::analysis::HomologySite;
 using primerpicker::analysis::legacy_homology_sites;
-using primerpicker::analysis::Strand;
+using primerpicker::sequence::Strand;
 using primerpicker::sequence::Nucleotide;
 using primerpicker::sequence::to_nucleotides;
 

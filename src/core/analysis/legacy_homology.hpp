@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 #include "core/thermo/legacy_tm.hpp"
 
 #include <algorithm>
@@ -12,7 +13,7 @@
 
 namespace primerpicker::analysis {
 
-enum struct Strand : std::uint8_t { top, complement };
+using sequence::Strand;
 
 // Uniqueness: stretches of 7 bases or more anywhere in the primer;
 // false priming: stretches of 6 bases or more at the primer's 3' end
