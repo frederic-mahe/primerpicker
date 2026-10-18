@@ -1,0 +1,15 @@
+LOCUS       TENZ         600 bp    DNA     linear
+DEFINITION  Random test molecule (seed 4015, GC 0.5,0.5,0.5,0.5), copies AGCT@1 CATCC@6 AGCT@150 GGATC@200 GATCC@300 GGATG@400 CATCC@460 GGGCCC@500 GGGCCA@520 AGGCCC@540 GGATG@592 AGCT@597.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 agcttcatcc cactggtttc ggcggtgata tggagtggtt tcgaaggcca acgtgtgtat
+       61 tgtagcatat tccgttcttg gtgagtcagg taggccgagt actaatcgct accgccgggt
+      121 cgtggacgtc accacactat caccaagtga gctagcgtac gtctgtacga tgcgccatac
+      181 gggtgaagac aatttttagg gatcaagcca atcataattt cctaccagcc gtctctctat
+      241 aaaccggaaa acttttgaca cgcgcaccga cgggaaaggt aatacaacgc ctattcacag
+      301 atcctgattc gggttgcatc acagacagta ggataacagt gaaataggac acaacgcggc
+      361 aggggctgct agagtcaaac gcatgccggc gagagcaacg gatgcggaac agtttccgct
+      421 tctggatagc agcgcatctt tccttggtac cgtcaatcac atccttaaac ccgcttccaa
+      481 tgccatttag taccacggcg ggccctatga gatgaggtcg ggccaccggt gaggccggaa
+      541 ggcccaaata ctatcacgtt atcaagtaga agtaacggga gttccccgaa tggatgagct
+//

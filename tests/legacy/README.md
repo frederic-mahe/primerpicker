@@ -566,3 +566,36 @@ map is drawn: type them 3 s apart.
 
 True Sites for AluI (AGCT) on `pairs/TEST600.GB`: "Number of Sites =
 1", position 322, the first base of the only AGCT of the top strand.
+
+### True and almost sites (recorded 2026-10-18)
+
+`enzymes/find_enzymes.tsv`: True Sites and Almost Sites screens on
+`enzymes/TENZ.GB`, a random linear molecule of 600 bases (seed 4015,
+no site of the probed enzymes) with planted sites: AluI AGCT at 1,
+150 and 597 (the first and last bases); AlwI GGATC at 200 and its
+reverse complement GATCC at 300; FokI GGATG at 400 and 592 and CATCC
+at 6 and 460 (FokI cuts 9/13 bases outside its site: at 6 and 592
+the cut is outside the molecule); ApaI GGGCCC at 500, and GGGCCA at
+520 and AGGCCC at 540 (one mismatch each). Recorded with
+`tools/find_enzyme.sh` and `tools/parse_enzymes.py`.
+
+All 6 screens follow these rules:
+- both strands are searched; a site is reported at the top-strand
+  position of its leftmost base (its 5' end on the top strand, its
+  3' end on the complement strand); complement sites of
+  non-palindromic enzymes are marked "C" (true sites) or written in
+  parentheses (almost sites); palindromic sites are reported once;
+- sites whose cut falls outside a linear molecule are listed;
+- sites are sorted by position;
+- almost sites are the sites with at most one mismatch, true sites
+  included; each shows a dot per matching base and the molecule's
+  base where it differs, read on the site's strand in top-strand
+  order (a complement site is compared with the reverse complement
+  of the recognition sequence, as the header shows: "GGATC
+  (GATCC)"). Both lists equal a brute-force search, order included.
+
+Not probed yet: enzymes with IUPAC letters or N (none is in the
+default menu), sites at the same position on both strands, circular
+molecules (sites across the origin), lists longer than one screen
+and the "( >50 sites )" and "More than 100 sites" limits, and adding
+enzymes to the menu.
