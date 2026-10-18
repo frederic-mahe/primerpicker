@@ -34,4 +34,41 @@ struct LegacyPairValues {
             .dimer_adjacent_bases = longest_complementary_run(primers)};
 }
 
+// The "!" flags of one primer on the Primer Pair Analysis screen
+struct LegacyPairCautions {
+    bool gc;             // GC % outside the criteria range
+    bool tm;             // Tm outside the criteria range
+    bool gc_run_3prime;  // "Runs of G/C at 3' end"
+    bool runs;           // "Runs of bases (any)"
+    bool hairpin;        // "Hairpins"
+};
+
+// Flags as recorded on 42 pair screens: GC % and Tm as on the Primer
+// Analysis screen, a hairpin as there; but runs and 3' G/C runs are
+// flagged only above the "reject if >=" value (a run of 3 is not
+// flagged with the default 3, while the Primer Analysis screen fails
+// it)
+[[nodiscard]] constexpr auto legacy_pair_cautions(LegacyActualValues const& actual,
+                                                  LegacyCriteria const& criteria) noexcept -> LegacyPairCautions {
+    auto const verdict = evaluate(actual, criteria);
+    return {.gc = not verdict.gc,
+            .tm = not verdict.tm,
+            .gc_run_3prime = actual.gc_run_3prime > criteria.reject_gc_run_3prime,
+            .runs = actual.longest_run > criteria.reject_run_length,
+            .hairpin = not verdict.no_hairpin};
+}
+
+struct LegacyDimerFlags {
+    bool three_prime;  // "3' end matches"
+    bool adjacent;     // "Any adj homol bases"
+};
+
+// Dimer flags (A:A, B:B or A:B): the criteria's "reject if >=" values
+[[nodiscard]] constexpr auto legacy_dimer_flags(std::size_t const three_prime_matches,
+                                                std::size_t const adjacent_bases,
+                                                LegacyCriteria const& criteria) noexcept -> LegacyDimerFlags {
+    return {.three_prime = three_prime_matches >= criteria.reject_dimer_3prime_matches,
+            .adjacent = adjacent_bases >= criteria.reject_dimer_adjacent_bases};
+}
+
 }  // namespace primerpicker::analysis

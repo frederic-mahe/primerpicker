@@ -1,9 +1,11 @@
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_pair.hpp"
+#include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/nucleotide.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <array>
 #include <charconv>
 #include <cstddef>
 #include <filesystem>
@@ -18,6 +20,10 @@
 
 namespace {
 
+using primerpicker::analysis::LegacyCriteria;
+using primerpicker::analysis::legacy_actual_values;
+using primerpicker::analysis::legacy_dimer_flags;
+using primerpicker::analysis::legacy_pair_cautions;
 using primerpicker::analysis::legacy_pair_values;
 using primerpicker::analysis::PrimerPair;
 using primerpicker::sequence::Nucleotide;
@@ -159,9 +165,60 @@ auto computed(Recording const& recording) -> Values {
 
 }  // namespace
 
+namespace {
+
+auto all_recordings() -> std::vector<Recording> {
+    auto const directory = std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "pairs";
+    auto recordings = read_recordings(directory / "pair_screens.tsv");
+    auto const more = read_recordings(directory / "pair_screens_2.tsv");
+    recordings.insert(recordings.end(), more.begin(), more.end());
+    return recordings;
+}
+
+// the "!" flags of a recorded pair screen, in column order
+auto recorded_flags(Recording const& recording) -> std::string {
+    constexpr auto flag_columns = std::array{5U, 6U, 8U, 9U, 11U, 12U, 14U, 15U, 17U, 18U, 20U, 21U, 22U, 23U, 24U, 25U};
+    auto flags = std::string{};
+    for (auto const column : flag_columns) {
+        flags += recording.fields.at(column).ends_with('!') ? '!' : '.';
+    }
+    return flags;
+}
+
+auto computed_flags(Recording const& recording) -> std::string {
+    auto const primer_a = nucleotides(recording.primer_a);
+    auto const primer_b = nucleotides(recording.primer_b);
+    auto const criteria = LegacyCriteria{};
+    auto const actual_a = legacy_actual_values(primer_a);
+    auto const actual_b = legacy_actual_values(primer_b);
+    auto const cautions_a = legacy_pair_cautions(actual_a, criteria);
+    auto const cautions_b = legacy_pair_cautions(actual_b, criteria);
+    auto const pair = legacy_pair_values(PrimerPair{.first = primer_a, .second = primer_b});
+    auto const dimers_aa = legacy_dimer_flags(actual_a.dimer_3prime_matches, actual_a.dimer_adjacent_bases, criteria);
+    auto const dimers_bb = legacy_dimer_flags(actual_b.dimer_3prime_matches, actual_b.dimer_adjacent_bases, criteria);
+    auto const dimers_ab = legacy_dimer_flags(pair.dimer_3prime_matches, pair.dimer_adjacent_bases, criteria);
+    auto const mark = [](bool const flagged) { return flagged ? '!' : '.'; };
+    return std::string{mark(cautions_a.gc),           mark(cautions_b.gc),           mark(cautions_a.tm),
+                       mark(cautions_b.tm),           mark(cautions_a.gc_run_3prime), mark(cautions_b.gc_run_3prime),
+                       mark(cautions_a.runs),         mark(cautions_b.runs),         mark(cautions_a.hairpin),
+                       mark(cautions_b.hairpin),      mark(dimers_aa.three_prime),   mark(dimers_bb.three_prime),
+                       mark(dimers_ab.three_prime),   mark(dimers_aa.adjacent),      mark(dimers_bb.adjacent),
+                       mark(dimers_ab.adjacent)};
+}
+
+}  // namespace
+
+TEST_CASE("legacy pair flags match every recorded pair", "[analysis][legacy]") {
+    // hairpins are shown "OK" or "!"
+    for (auto const& recording : all_recordings()) {
+        INFO("primers " << recording.primer_a << " " << recording.primer_b);
+        CHECK(computed_flags(recording) == recorded_flags(recording));
+    }
+}
+
 TEST_CASE("legacy pair values match every recorded pair", "[analysis][legacy]") {
-    auto const recordings = read_recordings(std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "pairs" / "pair_screens.tsv");
-    REQUIRE(recordings.size() >= 36);
+    auto const recordings = all_recordings();
+    REQUIRE(recordings.size() >= 42);
     for (auto const& recording : recordings) {
         INFO("primers " << recording.primer_a << " " << recording.primer_b);
         CHECK(computed(recording) == recorded(recording));
