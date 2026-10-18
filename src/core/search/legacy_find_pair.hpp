@@ -7,7 +7,9 @@
 #include "core/sequence/strand.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
+#include <functional>
 #include <optional>
 #include <span>
 #include <utility>
@@ -126,6 +128,58 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
         }
     }
     return result;
+}
+
+// The "Find-Pair Weighting Factors" (F4 in the pair constraints form):
+// 0 ignores a term, 1 to 5 weigh it. Defaults: the built-in system
+// defaults (tests/legacy/README.md, "Built-in defaults").
+struct FindPairWeights {
+    int gc_mismatch = 1;
+    int tm_mismatch = 1;
+    int dimer_3prime = 1;
+    int dimer_any = 1;
+    int false_priming = 1;
+};
+
+namespace detail {
+
+constexpr auto max_weight = 5;
+
+constexpr auto is_weight(int const weight) noexcept -> bool {
+    return weight >= 0 and weight <= max_weight;
+}
+
+}  // namespace detail
+
+// Score of a pair in Find Pair of Primer Designer 2.0, lower is better
+// (tests/legacy/README.md, "Find Pair"): the sum of weight x term, the
+// terms being the GC % difference, the Tm difference, the max 3' dimer
+// matches, the max adjacent bases, and the sum of the false-priming
+// site Tm of primers A and B (0 for a primer without site)
+[[nodiscard]] constexpr auto legacy_pair_score(PairCandidate const& pair, FindPairWeights const& weights) noexcept
+    -> int {
+    assert(detail::is_weight(weights.gc_mismatch) and detail::is_weight(weights.tm_mismatch) and
+           detail::is_weight(weights.dimer_3prime) and detail::is_weight(weights.dimer_any) and
+           detail::is_weight(weights.false_priming));
+    auto const gc_mismatch = detail::difference(pair.primer_a.gc_percent, pair.primer_b.gc_percent);
+    auto const tm_mismatch = detail::difference(pair.primer_a.tm_celsius, pair.primer_b.tm_celsius);
+    auto const dimer_3prime = static_cast<int>(pair.max_dimer_3prime_matches);
+    auto const dimer_any = static_cast<int>(pair.max_dimer_adjacent_bases);
+    auto const false_priming = pair.false_priming_tm_a.value_or(0) + pair.false_priming_tm_b.value_or(0);
+    return (weights.gc_mismatch * gc_mismatch) + (weights.tm_mismatch * tm_mismatch) +
+           (weights.dimer_3prime * dimer_3prime) + (weights.dimer_any * dimer_any) +
+           (weights.false_priming * false_priming);
+}
+
+// The Find Pair list of Primer Designer 2.0: the pairs of
+// legacy_find_pair (in generation order: by position of A, then of B),
+// by increasing score; pairs of equal score keep their generation order.
+// C++26 refactoring: make constexpr (std::ranges::stable_sort)
+[[nodiscard]] inline auto legacy_rank_pairs(std::vector<PairCandidate> pairs, FindPairWeights const& weights)
+    -> std::vector<PairCandidate> {
+    auto const score = [&weights](PairCandidate const& pair) { return legacy_pair_score(pair, weights); };
+    std::ranges::stable_sort(pairs, std::less{}, score);
+    return pairs;
 }
 
 }  // namespace primerpicker::search
