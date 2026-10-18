@@ -26,6 +26,9 @@ runs in 80x25 text mode (720x400 pixels).
   records the Primer Pair and amplified product screens.
 - `tools/fit_pairs.py`: checks the product Tm and annealing
   temperature models below against `pairs/pairs.tsv`.
+- `tools/pair_direct.sh`: types two primers with Direct Entry and
+  records their Primer Pair Analysis screen; `tools/parse_pair.py`
+  turns pair screens (from it or from `pair_product.sh`) into a table.
 - `tools/inspect_primer.sh`: types one primer, and records the Primer
   Analysis (Inspect), Hairpins and Dimers screens;
   `tools/parse_inspect.py` turns the recordings into a table.
@@ -291,3 +294,30 @@ the screen order (only offset 38 changed). Navigation notes: in the
 settings forms the first digit typed clears a field; Enter on the
 last field completes the form, and the menu then reopens the same
 form by itself (Esc cancels that second pass).
+
+
+## Primer pair analysis (recorded 2026-10-18)
+
+`pairs/pair_screens.tsv`: the Primer Pair Analysis screen (balance,
+cautions, dimer matrix) of 36 pairs: those of `pairs/pairs.tsv`, and
+pairs typed with Direct Entry, where B's 3' end is complementary to
+A's 3' end over 0 to 6 bases.
+
+All 36 follow these rules (`tests/unit/test_legacy_pair.cpp`):
+- self values (A:A, B:B) and cautions are the single-primer counts
+  (see "Primer criteria");
+- A:B adjacent homologous bases: the longest run of complementary
+  pairs between A and B in any antiparallel alignment;
+- A:B 3' end matches: the larger of A's 3'-end count on B and B's
+  3'-end count on A (each with the partner extending beyond the 3'
+  end, as for self-dimers);
+- balance comments: "N base difference", "N % difference",
+  "N°C difference" whenever the lengths, GC % or Tm differ (by 1 or
+  more); GC % and Tm carry the "!" of the single-primer criteria;
+- caution and dimer flags ("!"): 3' end matches from 3 (the
+  criterion's "reject if >="); adjacent homologous bases: 6 is not
+  flagged, 8 is (7 not recorded yet); but G/C runs at the 3' end and
+  runs of bases are flagged from 4, one more than the criteria's
+  "reject if >= 3" (a value of 3 is not flagged here, while the
+  Primer Analysis screen fails it). "Runs found" and "Hairpin(s)
+  found" appear when either primer is flagged; hairpins show OK or !.
