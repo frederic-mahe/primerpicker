@@ -5,6 +5,7 @@
 #   WEIGHTS: five digits for GC mismatch, Tm mismatch, 3' dimers, any
 #   dimers and false priming (0 to 5), for instance 05001; default:
 #   the built-in weights (all 1)
+#   DOWNS: number of down keys that scroll the list (default 12)
 #
 # The molecule file must be listed after PRIMER.EXE. Keys: space, down
 # down down enter (Find Pair), enter (Load File), down down enter (the
@@ -12,7 +13,8 @@
 # extension, length), TARGET_B, enter; with weights: f4, then the five
 # digits (one-digit fields move on by themselves); enter x5 (search
 # end, extension, length, GC and Tm tolerances) starts the search; a
-# key shows the list, and downs scroll it. The list is in screens.txt;
+# key shows the list, and downs scroll it (two ups at the end show the
+# last pair unhighlighted). The list is in screens.txt;
 # the counts of possible primers and pairs are on the screen before it.
 set -eu
 
@@ -27,7 +29,7 @@ pause=${PAUSE:-2}
 digits() { printf '%s' "$1" | sed 's/./& /g'; }
 weight_keys=""
 [ -n "$weights" ] && weight_keys="f4 $(digits "$weights")"
-downs=$(printf 'down %.0s' $(seq 1 12))
+downs=$(printf 'down %.0s' $(seq 1 "${DOWNS:-12}"))
 
 name=$(basename "$molecule")
 run="$workdir/${name}_${target_a}_${target_b}${weights:+_$weights}"
@@ -47,7 +49,7 @@ cycles=max
 [autoexec]
 mount c c
 c:
-autotype -w 4 -p $pause space down down down enter enter down down enter enter $(digits "$target_a") enter enter enter enter $(digits "$target_b") enter $weight_keys enter enter enter enter enter $downs
+autotype -w 4 -p $pause space down down down enter enter down down enter enter $(digits "$target_a") enter enter enter enter $(digits "$target_b") enter $weight_keys enter enter enter enter enter $downs up up
 dx-capture /V primer.exe
 exit
 EOC
