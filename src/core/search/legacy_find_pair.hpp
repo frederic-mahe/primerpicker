@@ -89,8 +89,8 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
 // Find Pair of Primer Designer 2.0 (tests/legacy/README.md, "Find
 // Pair"): the possible primers A and B (every criterion met), and the
 // pairs whose GC % and Tm match within the tolerances and that have
-// fewer A:B 3' end matches than the criterion. Not sorted by score
-// yet: how false priming enters the score is not determined. Not
+// fewer A:B 3' end matches than the criterion, in generation order;
+// legacy_rank_pairs sorts them as the Find Pair list. Not
 // constexpr: the false-priming search uses std::ranges::stable_sort;
 // not noexcept: vectors allocate.
 [[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
