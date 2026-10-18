@@ -4,19 +4,28 @@
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/io/molecule_file.hpp"
+#include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/nucleotide.hpp"
 
 #include <algorithm>
+#include <charconv>
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
+#include <filesystem>
 #include <format>
+#include <fstream>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include <optional>
 #include <span>
+#include <sstream>
 #include <string>
 #include <string_view>
+#include <system_error>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -34,13 +43,21 @@ constexpr auto program_name = std::string_view{"primerpicker"};
 constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair PRIMER_A PRIMER_B\n"
+    "       primerpicker find-pair [--weights WEIGHTS] MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
     "criteria and methods of Primer Designer 2.0.\n"
     "analyze  one primer, with an optional 5' extension, as the Primer\n"
     "         Analysis screen\n"
-    "pair     two primers, as the Primer Pair Analysis screen\n"};
+    "pair     two primers, as the Primer Pair Analysis screen\n"
+    "find-pair\n"
+    "         pairs of primers around two targets of a molecule file (GenBank,\n"
+    "         FASTA or plain sequence), ranked as the Find Primer Pair list;\n"
+    "         primer A is searched from TARGET_A - 100 to TARGET_A, primer B\n"
+    "         (complement strand) from TARGET_B to TARGET_B + 100. WEIGHTS: five\n"
+    "         digits from 0 to 5, for GC mismatch, Tm mismatch, 3' dimers, any\n"
+    "         dimers and false priming (default: 11111)\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -238,6 +255,114 @@ auto pair(std::string_view const text_a, std::string_view const text_b) -> int {
     return EXIT_SUCCESS;
 }
 
+auto read_text_file(std::filesystem::path const& path) -> std::optional<std::string> {
+    auto file = std::ifstream{path, std::ios::binary};
+    if (not file) {
+        return std::nullopt;
+    }
+    auto text = std::ostringstream{};
+    text << file.rdbuf();
+    return std::move(text).str();
+}
+
+// The nucleotides of a molecule file, or none after printing why on
+// stderr
+auto read_molecule(std::filesystem::path const& path) -> std::optional<std::vector<Nucleotide>> {
+    auto const text = read_text_file(path);
+    if (not text.has_value()) {
+        fail(std::format("cannot read {}", path.string()));
+        return std::nullopt;
+    }
+    auto const name = path.stem().string();
+    auto const parsed = primerpicker::io::parse_molecule_file({.text = *text, .name = name});
+    auto sequence = parsed.molecule.has_value() ? primerpicker::sequence::to_nucleotides(parsed.molecule->sequence)
+                                                : std::nullopt;
+    if (not sequence.has_value()) {
+        fail(std::format("{}: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)", path.string()));
+    }
+    return sequence;
+}
+
+// A position typed on the command line (1 or more), or none after
+// printing why on stderr
+auto parse_position(std::string_view const text, std::string_view const what) -> std::optional<std::size_t> {
+    auto const digits = std::string{text};
+    auto position = std::size_t{0};
+    auto const* const end = std::next(digits.data(), std::ssize(digits));
+    auto const [stop, error] = std::from_chars(digits.data(), end, position);
+    if (error != std::errc{} or stop != end or position == 0) {
+        fail(std::format("{}: '{}' is not a position (1 or more)", what, text));
+        return std::nullopt;
+    }
+    return position;
+}
+
+// Five digits from 0 to 5, or none after printing why on stderr
+auto parse_weights(std::string_view const text) -> std::optional<primerpicker::search::FindPairWeights> {
+    constexpr auto weight_count = std::size_t{5};
+    constexpr auto max_weight = '5';
+    auto const is_weight = [](char const digit) { return digit >= '0' and digit <= max_weight; };
+    if (text.size() != weight_count or not std::ranges::all_of(text, is_weight)) {
+        fail(std::format("weights: '{}' is not five digits from 0 to 5", text));
+        return std::nullopt;
+    }
+    auto const weight = [text](std::size_t const index) { return text[index] - '0'; };
+    return primerpicker::search::FindPairWeights{.gc_mismatch = weight(0),
+                                                 .tm_mismatch = weight(1),
+                                                 .dimer_3prime = weight(2),
+                                                 .dimer_any = weight(3),
+                                                 .false_priming = weight(4)};
+}
+
+auto site_tm(std::optional<int> const tm_celsius) -> std::string {
+    return tm_celsius.has_value() ? std::to_string(*tm_celsius) : std::string{"-"};
+}
+
+auto find_pair_line(primerpicker::search::PairCandidate const& pair) -> std::string {
+    return std::format("{:>8}{:>10}{:>8} / {:<2}{:>6} / {:<2}{:>8}{:>5}{:>9} / {}\n", pair.position_a, pair.position_b,
+                       pair.primer_a.gc_percent, pair.primer_b.gc_percent, pair.primer_a.tm_celsius,
+                       pair.primer_b.tm_celsius, pair.max_dimer_3prime_matches, pair.max_dimer_adjacent_bases,
+                       site_tm(pair.false_priming_tm_a), site_tm(pair.false_priming_tm_b));
+}
+
+auto find_pair_report(primerpicker::search::FindPairResult const& result,
+                      primerpicker::search::FindPairWeights const& weights) -> std::string {
+    auto report = std::format("Primer A: {} possible primers\n", result.possible_a);
+    report += std::format("Primer B: {} possible primers\n", result.possible_b);
+    report += std::format("Pairs:    {} possible\n\n", result.pairs.size());
+    report += "   Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming\n";
+    report += "     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB\n";
+    auto const ranked = primerpicker::search::legacy_rank_pairs(result.pairs, weights);
+    return std::accumulate(ranked.begin(), ranked.end(), std::move(report),
+                           [](std::string text, primerpicker::search::PairCandidate const& candidate) {
+                               return std::move(text) + find_pair_line(candidate);
+                           });
+}
+
+struct FindPairArguments {
+    std::string_view weights;
+    std::string_view molecule;
+    std::string_view target_a;
+    std::string_view target_b;
+};
+
+auto find_pair(FindPairArguments const& arguments) -> int {
+    auto const weights = parse_weights(arguments.weights);
+    auto const target_a = parse_position(arguments.target_a, "target A");
+    auto const target_b = parse_position(arguments.target_b, "target B");
+    if (not weights.has_value() or not target_a.has_value() or not target_b.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
+    if (not molecule.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const result = primerpicker::search::legacy_find_pair(
+        *molecule, {.target_a = *target_a, .target_b = *target_b}, LegacyCriteria{});
+    std::cout << find_pair_report(result, *weights);
+    return EXIT_SUCCESS;
+}
+
 auto run(std::span<char const* const> const arguments) -> int {
     if (arguments.size() < 2) {
         std::cerr << usage;
@@ -266,6 +391,19 @@ auto run(std::span<char const* const> const arguments) -> int {
     }
     if (command == "pair" and arguments.size() == pair_count) {
         return pair(arguments[2], arguments[3]);
+    }
+    constexpr auto find_pair_count = std::size_t{5};
+    constexpr auto find_pair_with_weights_count = std::size_t{7};
+    constexpr auto weights_option = std::string_view{"--weights"};
+    constexpr auto default_weights = std::string_view{"11111"};
+    if (command == "find-pair" and arguments.size() == find_pair_count) {
+        return find_pair(
+            {.weights = default_weights, .molecule = arguments[2], .target_a = arguments[3], .target_b = arguments[4]});
+    }
+    if (command == "find-pair" and arguments.size() == find_pair_with_weights_count and
+        arguments[2] == weights_option) {
+        auto const options = arguments.subspan(3);  // after "--weights"
+        return find_pair({.weights = options[0], .molecule = options[1], .target_a = options[2], .target_b = options[3]});
     }
     std::cerr << usage;
     return EXIT_FAILURE;
