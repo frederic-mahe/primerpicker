@@ -1,6 +1,9 @@
 #pragma once
 
+#include "core/analysis/legacy_criteria.hpp"
+#include "core/analysis/legacy_hairpin.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/thermo/legacy_tm.hpp"
 #include "core/thermo/units.hpp"
 
 #include <algorithm>
@@ -63,6 +66,24 @@ struct LegacyVerdict {
         return nucleotide == sequence::Nucleotide::cytosine or nucleotide == sequence::Nucleotide::guanine;
     });
     return static_cast<int>((gc_count * percent) / std::ssize(primer));
+}
+
+// The "Actual" column for a primer (without 5' extension), computed
+// as Primer Designer does. Requires at least two nucleotides.
+[[nodiscard]] constexpr auto legacy_actual_values(std::span<sequence::Nucleotide const> const primer) noexcept
+    -> LegacyActualValues {
+    assert(primer.size() >= 2);
+    auto const hairpin = legacy_hairpin(primer);
+    // the Tm is truncated, and shown as 0 when not positive
+    auto const tm = thermo::legacy_primer_tm(primer).degrees;
+    auto const truncated_tm = static_cast<int>(tm);  // truncation toward zero is floor for tm > 0
+    return {.gc_percent = legacy_gc_percent(primer),
+            .tm_celsius = tm > 0.0 ? truncated_tm : 0,
+            .hairpin = hairpin.has_value() ? std::optional{hairpin->energy} : std::nullopt,
+            .dimer_3prime_matches = self_dimer_at_3prime_end(primer),
+            .dimer_adjacent_bases = longest_self_complementary_run(primer),
+            .longest_run = longest_run_before_3prime_end(primer),
+            .gc_run_3prime = gc_run_at_3prime_end(primer)};
 }
 
 // Range limits are inclusive (PRIMER.exe shows YES at 50 and 60 %, 55

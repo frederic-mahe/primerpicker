@@ -108,3 +108,33 @@ TEST_CASE("range limits are inclusive", "[analysis][legacy]") {
     actual.longest_run = 3;  // "reject runs of >= 3"
     CHECK_FALSE(evaluate(actual, LegacyCriteria{}).all());
 }
+
+namespace {
+
+using primerpicker::analysis::legacy_actual_values;
+
+}  // namespace
+
+TEST_CASE("actual values of the M13 primer", "[analysis][legacy]") {
+    // GTAAAACGACGGCCAGT, Inspect screen (PRIMER.exe)
+    auto const actual = legacy_actual_values(nucleotides("GTAAAACGACGGCCAGT"));
+    CHECK(actual.gc_percent == 52);
+    CHECK(actual.tm_celsius == 64);
+    CHECK_FALSE(actual.hairpin.has_value());  // "--"
+    CHECK(actual.dimer_3prime_matches == 2);
+    CHECK(actual.dimer_adjacent_bases == 4);
+    CHECK(actual.longest_run == 4);
+    CHECK(actual.gc_run_3prime == 0);
+    CHECK_FALSE(evaluate(actual, LegacyCriteria{}).all());  // MEETS CRITERIA SELECTED: NO
+}
+
+TEST_CASE("the Tm is 0 when it is not positive", "[analysis][legacy]") {
+    // AAGATTTA: "?" on the Direct Entry line, 0 on the Inspect screen (PRIMER.exe)
+    CHECK(legacy_actual_values(nucleotides("AAGATTTA")).tm_celsius == 0);
+}
+
+TEST_CASE("actual values work at compile time", "[analysis][legacy][constexpr]") {
+    // GGCCTCCGCC (PRIMER.exe, inspect.tsv): hairpin -0.4 kcal, 3' GC run 5
+    constexpr auto gc_run = [] { return legacy_actual_values(to_nucleotides("GGCCTCCGCC").value()).gc_run_3prime; }();
+    STATIC_CHECK(gc_run == 5);
+}
