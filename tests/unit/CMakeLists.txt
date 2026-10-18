@@ -33,6 +33,7 @@ add_executable(unit_tests
   test_legacy_match.cpp
   test_legacy_find_pair.cpp
   test_legacy_find_pair_ranking.cpp
+  test_rebase_enzymes.cpp
   test_molecule_formats.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
