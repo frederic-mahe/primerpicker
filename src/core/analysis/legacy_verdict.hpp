@@ -75,10 +75,10 @@ struct LegacyVerdict {
     assert(primer.size() >= 2);
     auto const hairpin = legacy_hairpin(primer);
     // the Tm is truncated, and shown as 0 when not positive
-    auto const tm = thermo::legacy_primer_tm(primer).degrees;
-    auto const truncated_tm = static_cast<int>(tm);  // truncation toward zero is floor for tm > 0
+    auto const primer_tm = thermo::legacy_primer_tm(primer).degrees;
+    auto const truncated_tm = static_cast<int>(primer_tm);  // toward zero: the floor when positive
     return {.gc_percent = legacy_gc_percent(primer),
-            .tm_celsius = tm > 0.0 ? truncated_tm : 0,
+            .tm_celsius = primer_tm > 0.0 ? truncated_tm : 0,
             .hairpin = hairpin.has_value() ? std::optional{hairpin->energy} : std::nullopt,
             .dimer_3prime_matches = self_dimer_at_3prime_end(primer),
             .dimer_adjacent_bases = longest_self_complementary_run(primer),
