@@ -26,6 +26,8 @@ runs in 80x25 text mode (720x400 pixels).
   records the Primer Pair and amplified product screens.
 - `tools/fit_pairs.py`: checks the product Tm and annealing
   temperature models below against `pairs/pairs.tsv`.
+- `tools/parse_homology.py`: turns a recorded Uniqueness or False
+  Priming screen into table rows.
 - `tools/pair_direct.sh`: types two primers with Direct Entry and
   records their Primer Pair Analysis screen; `tools/parse_pair.py`
   turns pair screens (from it or from `pair_product.sh`) into a table.
@@ -373,3 +375,33 @@ then `03 01 00 00 05 00 00 00 00 00` in both files; then records of a
   (float32, 0.0), 0x13 = adjacent homologous bases, 3' dimer matches
   (7, 3), 0x14 = the two run thresholds (3, 3; their order is not
   known, both being 3).
+
+
+## Uniqueness and false priming (recorded 2026-10-18)
+
+`homology/homology.tsv`: the Uniqueness (U) and False Priming (F)
+screens of primers made from molecules (Inspect, or Analyze -> Active
+Primer for a complement-strand primer), with built-in settings
+(exclude Tm <= 0 °C: Y; sort homologies by Tm: Y). Molecules:
+`pairs/TEST600.GB` ("Primer is unique"), and `homology/TREP.GB` and
+`homology/TREP2.GB`: TEST600 with planted copies of parts of primer
+CTCAAAGGCTCAGACATCAG (position 51) and TGTATCCAGGTAATGCAAGG
+(position 400, complement strand), on either strand, at the 3' end or
+inside.
+
+All 7 screens follow these rules:
+- both strands of the molecule are searched for exact matches between
+  a stretch of the primer and the molecule; the primer's own site (a
+  full-length match) is not listed;
+- uniqueness lists maximal matches of 7 bases or more; false priming
+  lists maximal matches of 6 bases or more that include the primer's
+  3' end;
+- each site shows the matching bases, the molecule position facing
+  the 5'-most matching base, "(C)" for a match on the complement
+  strand, and the Tm of the matching bases (the primer Tm formula,
+  truncated);
+- sites with a Tm <= 0 are not listed (so 6-base false-priming sites
+  rarely appear), and sites are sorted by decreasing Tm (top-strand
+  sites first among equal Tm).
+Not probed yet: the "exclude Tm <= 0" and "sort by Tm" settings set
+to N, and molecules with more sites than one screen holds.

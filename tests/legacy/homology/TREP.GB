@@ -1,0 +1,15 @@
+LOCUS       TREP         600 bp    DNA     linear
+DEFINITION  TEST600 with planted copies of CTCAAAGGCTCAGACATCAG.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ggtcatttta aatggacaac catctattga gaatactcat gtcaacctgg ctcaaaggct
+       61 cagacatcag ggctcaatga cgtgcggtta gttatcaacc tacatggact ttatttatgc
+      121 ggcgaggcaa taaacaaacg tgcgcccagg tgttgggcct gtctgtaggc ccaacagact
+      181 gcgtgcgtca aatgcctccc agacatcagt agagcgaacc ggtccttaca tttatttcca
+      241 agtaacgacc gtaacgatga gcaacactcg tcctatacta gacgatggga cgccatcagc
+      301 tgatgtcatg aataaagttt cagctctaca aactctaatg cgtttaccac aggacatgat
+      361 gttagcgtgc gacctggtat ccttgcatta cctggataca aggctcagac agccagatga
+      421 cttcccgtat ggaaacgcga tgagtagtaa ccgcactcca aagtgcatac cggactgaaa
+      481 agtacccatt atgattctac tcgaaggctc atacatcagt cgaaaacgtc tactcctgtc
+      541 caggggggat aagcaaatcc atctgtaagt caccagtcaa gatttccgat ttaaagcgac
+//

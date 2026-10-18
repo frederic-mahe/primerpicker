@@ -1,0 +1,15 @@
+LOCUS       TREP2        600 bp    DNA     linear
+DEFINITION  TEST600 with planted copies of two primers.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ggtcatttta aatggacaac catctattga gaatactcat gtcaacctgg ctcaaaggct
+       61 cagacatcag ggctcaatga cgtgcggtta gttatcaacc tacatggact ttatttatgc
+      121 ggcgaggcaa taaacaaacg tgcgcccagc agacatcagt gtctgtaggc ccaacagact
+      181 gcgtgcgtca aatgcctccc gttttcattt agagcgaacc tgatgtctga tttatttcca
+      241 agtaacgacc gtaacgatga gcaacactcc aaaggctcaa gacgatggga cgccatcagt
+      301 tatcgatatg aataaagttt ctgagccttt aactctaatg cgtttaccac aggacatgat
+      361 gttagcgtgc gacctggtat ccttgcatta cctggataca ctgacactta cgccagatga
+      421 cttcccgtat ggaaacgcga tgagtagtat aatgcaagga aagtgcatac cggactgaac
+      481 cttgcattac atgattctat gttcgtcgac tctcaggtag tatccaggtc tactcctgtc
+      541 caggggggat aagcttacct ggatataagt caccagtcaa gatttccgat ttaaagcgac
+//
