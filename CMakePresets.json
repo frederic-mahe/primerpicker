@@ -33,7 +33,10 @@
     {
       "name": "debug",
       "displayName": "Debug, GCC, ASan + UBSan",
-      "inherits": ["base", "gcc-warnings"],
+      "inherits": [
+        "base",
+        "gcc-warnings"
+      ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_COMPILER": "g++",
@@ -45,16 +48,36 @@
     {
       "name": "release",
       "displayName": "Release, GCC",
-      "inherits": ["base", "gcc-warnings"],
+      "inherits": [
+        "base",
+        "gcc-warnings"
+      ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_CXX_COMPILER": "g++"
       }
     },
     {
+      "name": "clang-libstdcxx",
+      "displayName": "Debug, clang 20 and libstdc++ (reference library for clang-tidy)",
+      "inherits": [
+        "base",
+        "clang-warnings"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "clang++-20",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined"
+      }
+    },
+    {
       "name": "clang-debug",
       "displayName": "Debug, clang 20 and libc++, ASan + UBSan",
-      "inherits": ["base", "clang-warnings"],
+      "inherits": [
+        "base",
+        "clang-warnings"
+      ],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_COMPILER": "clang++-20",
@@ -66,7 +89,10 @@
     {
       "name": "mingw-release",
       "displayName": "Release, cross-compiled to Windows with MinGW-w64",
-      "inherits": ["base", "gcc-warnings"],
+      "inherits": [
+        "base",
+        "gcc-warnings"
+      ],
       "toolchainFile": "${sourceDir}/cmake/mingw-w64-x86_64.cmake",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
@@ -74,21 +100,62 @@
     }
   ],
   "buildPresets": [
-    { "name": "debug", "configurePreset": "debug" },
-    { "name": "release", "configurePreset": "release" },
-    { "name": "clang-debug", "configurePreset": "clang-debug" },
-    { "name": "mingw-release", "configurePreset": "mingw-release" }
+    {
+      "name": "debug",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "release"
+    },
+    {
+      "name": "clang-debug",
+      "configurePreset": "clang-debug"
+    },
+    {
+      "name": "clang-libstdcxx",
+      "configurePreset": "clang-libstdcxx"
+    },
+    {
+      "name": "mingw-release",
+      "configurePreset": "mingw-release"
+    }
   ],
   "testPresets": [
     {
       "name": "base",
       "hidden": true,
-      "output": { "outputOnFailure": true },
-      "execution": { "noTestsAction": "error" }
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error"
+      }
     },
-    { "name": "debug", "inherits": "base", "configurePreset": "debug" },
-    { "name": "release", "inherits": "base", "configurePreset": "release" },
-    { "name": "clang-debug", "inherits": "base", "configurePreset": "clang-debug" },
-    { "name": "mingw-release", "inherits": "base", "configurePreset": "mingw-release" }
+    {
+      "name": "debug",
+      "inherits": "base",
+      "configurePreset": "debug"
+    },
+    {
+      "name": "release",
+      "inherits": "base",
+      "configurePreset": "release"
+    },
+    {
+      "name": "clang-debug",
+      "inherits": "base",
+      "configurePreset": "clang-debug"
+    },
+    {
+      "name": "clang-libstdcxx",
+      "inherits": "base",
+      "configurePreset": "clang-libstdcxx"
+    },
+    {
+      "name": "mingw-release",
+      "inherits": "base",
+      "configurePreset": "mingw-release"
+    }
   ]
 }

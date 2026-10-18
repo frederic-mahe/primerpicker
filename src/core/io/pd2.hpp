@@ -32,7 +32,7 @@ enum struct Pd2Error : std::uint8_t { none, bad_header, truncated, unknown_recor
 // C++23 refactoring: replace with std::expected<Pd2Primer, Pd2Error>
 struct Pd2Result {
     std::optional<Pd2Primer> primer;
-    Pd2Error error;
+    Pd2Error error = Pd2Error::none;
 };
 
 namespace detail {

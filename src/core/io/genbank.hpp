@@ -19,7 +19,7 @@ enum struct GenbankError : std::uint8_t { none, missing_locus, missing_origin };
 // C++23 refactoring: replace with std::expected<Molecule, GenbankError>
 struct GenbankResult {
     std::optional<Molecule> molecule;
-    GenbankError error;
+    GenbankError error = GenbankError::none;
 };
 
 namespace detail {

@@ -96,7 +96,8 @@ constexpr auto letter(sequence::Nucleotide const nucleotide) noexcept -> char {
 
 // in hundredths of kcal/mol; none if the step is not in the table
 [[nodiscard]] constexpr auto freier_1986_wobble_stack(Step const& step) noexcept -> std::optional<int> {
-    auto const found = std::ranges::find_if(freier_1986_wobble_table, [&step](WobbleStack const& entry) {
+    // std::array iterators are pointers in libstdc++ and libc++
+    auto const* const found = std::ranges::find_if(freier_1986_wobble_table, [&step](WobbleStack const& entry) {
         return entry.step == step or entry.step == step.reversed();
     });
     if (found == freier_1986_wobble_table.end()) {
@@ -144,7 +145,7 @@ constexpr auto interpolate(LoopPenalty const& lower, LoopPenalty const& upper, s
     auto const& table = freier_1986_hairpin_loop_table;
     // the first tabulated length not below this one (the first entry,
     // 3, is the minimum)
-    auto const upper = std::ranges::find_if(
+    auto const* const upper = std::ranges::find_if(
         std::next(table.cbegin()), table.cend(), [length](LoopPenalty const& entry) { return length <= entry.length; });
     if (upper != table.cend()) {
         return detail::interpolate(*std::prev(upper), *upper, length);

@@ -32,13 +32,13 @@ struct LegacyCriteria {
 
 // The "Actual" column of the Primer Analysis screen
 struct LegacyActualValues {
-    int gc_percent;
-    int tm_celsius;  // 0 when the Tm is not positive ("?" elsewhere)
+    int gc_percent = 0;
+    int tm_celsius = 0;  // 0 when the Tm is not positive ("?" elsewhere)
     std::optional<thermo::KilocaloriesPerMole> hairpin;  // the most stable hairpin, if any
-    std::size_t dimer_3prime_matches;
-    std::size_t dimer_adjacent_bases;
-    std::size_t longest_run;
-    std::size_t gc_run_3prime;
+    std::size_t dimer_3prime_matches = 0;
+    std::size_t dimer_adjacent_bases = 0;
+    std::size_t longest_run = 0;
+    std::size_t gc_run_3prime = 0;
 };
 
 // The "Meets Criteria" column; all() is "MEETS CRITERIA SELECTED"
