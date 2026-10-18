@@ -6,6 +6,9 @@
 #include <initializer_list>
 #include <numeric>
 #include <optional>
+#include <ranges>
+#include <string>
+#include <string_view>
 
 namespace primerpicker::sequence {
 
@@ -86,6 +89,36 @@ private:
         default:
             return std::nullopt;
     }
+}
+
+// The upper-case IUPAC letter of the complementary set (R: Y), none
+// for other letters
+[[nodiscard]] constexpr auto complement_iupac(char const letter) noexcept -> std::optional<char> {
+    constexpr auto letters = std::string_view{"ACGTRYSWKMBDHVN"};
+    constexpr auto complements = std::string_view{"TGCAYRSWMKVHDBN"};
+    constexpr auto lower_to_upper = 'a' - 'A';
+    auto const upper = letter >= 'a' and letter <= 'z' ? static_cast<char>(letter - lower_to_upper) : letter;
+    auto const index = letters.find(upper);
+    if (index == std::string_view::npos) {
+        return std::nullopt;
+    }
+    return complements[index];
+}
+
+// The reverse complement of a sequence of IUPAC letters, in upper case;
+// none if a letter is not an IUPAC code. Not noexcept: the string
+// allocates.
+[[nodiscard]] constexpr auto reverse_complement_iupac(std::string_view const letters) -> std::optional<std::string> {
+    auto reversed = std::string{};
+    reversed.reserve(letters.size());
+    for (auto const letter : letters | std::views::reverse) {
+        auto const paired = complement_iupac(letter);
+        if (not paired.has_value()) {
+            return std::nullopt;
+        }
+        reversed.push_back(*paired);
+    }
+    return reversed;
 }
 
 }  // namespace primerpicker::sequence

@@ -58,3 +58,12 @@ TEST_CASE("IUPAC sets: membership and complement", "[sequence][iupac]") {
     CHECK(code('S').complement() == code('S'));
     CHECK(code('N').complement() == code('N'));
 }
+
+TEST_CASE("IUPAC sequences: reverse complement", "[sequence][iupac]") {
+    using primerpicker::sequence::reverse_complement_iupac;
+    CHECK(reverse_complement_iupac("GGATC") == "GATCC");
+    CHECK(reverse_complement_iupac("GTMKAC") == "GTMKAC");  // M (A, C) pairs with K (G, T)
+    CHECK(reverse_complement_iupac("ACNNNNGTAYC") == "GRTACNNNNGT");
+    CHECK(reverse_complement_iupac("gaattc") == "GAATTC");  // either case in, upper case out
+    CHECK(not reverse_complement_iupac("GAUC").has_value());
+}

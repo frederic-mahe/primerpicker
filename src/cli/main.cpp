@@ -4,9 +4,14 @@
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/enzymes/enzyme.hpp"
+#include "core/enzymes/rebase_enzymes.hpp"
+#include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/search/legacy_find_pair.hpp"
+#include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <algorithm>
 #include <charconv>
@@ -44,6 +49,7 @@ constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair PRIMER_A PRIMER_B\n"
     "       primerpicker find-pair [--weights WEIGHTS] MOLECULE TARGET_A TARGET_B\n"
+    "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
@@ -57,7 +63,12 @@ constexpr auto usage = std::string_view{
     "         primer A is searched from TARGET_A - 100 to TARGET_A, primer B\n"
     "         (complement strand) from TARGET_B to TARGET_B + 100. WEIGHTS: five\n"
     "         digits from 0 to 5, for GC mismatch, Tm mismatch, 3' dimers, any\n"
-    "         dimers and false priming (default: 11111)\n"};
+    "         dimers and false priming (default: 11111)\n"
+    "find-enzymes\n"
+    "         sites of a restriction enzyme (REBASE name, commercially\n"
+    "         available enzymes) on both strands of a molecule file, as the True\n"
+    "         Sites screen; with --almost, sites with at most one mismatch, as the\n"
+    "         Almost Sites screen\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -363,6 +374,74 @@ auto find_pair(FindPairArguments const& arguments) -> int {
     return EXIT_SUCCESS;
 }
 
+// "....A": a dot per matching base, the molecule's base where it differs
+auto match_text(primerpicker::enzymes::Site const& site, std::span<Nucleotide const> const molecule,
+                std::size_t const length) -> std::string {
+    auto text = std::string(length, '.');
+    if (site.mismatch_offset.has_value()) {
+        text.at(*site.mismatch_offset) = letter(molecule[site.position - 1 + *site.mismatch_offset]);
+    }
+    return text;
+}
+
+auto site_line(primerpicker::enzymes::Site const& site, std::span<Nucleotide const> const molecule,
+               std::size_t const length, primerpicker::enzymes::Mismatches const mismatches) -> std::string {
+    auto const complement = site.strand == primerpicker::sequence::Strand::complement;
+    if (mismatches == primerpicker::enzymes::Mismatches::none) {
+        return std::format("{:>8}{}\n", site.position, complement ? "C" : "");
+    }
+    auto const text = match_text(site, molecule, length);
+    return complement ? std::format("{:>8} ({})\n", site.position, text)
+                      : std::format("{:>8}  {}\n", site.position, text);
+}
+
+auto enzyme_report(primerpicker::enzymes::Enzyme const& enzyme, std::span<Nucleotide const> const molecule,
+                   primerpicker::enzymes::Mismatches const mismatches) -> std::optional<std::string> {
+    auto const pattern = primerpicker::enzymes::parse_site(enzyme.site);
+    if (not pattern.has_value()) {
+        return std::nullopt;
+    }
+    auto const sites = primerpicker::enzymes::find_sites(molecule, *pattern, mismatches);
+    auto const reversed = primerpicker::sequence::reverse_complement_iupac(enzyme.site);
+    // as Primer Designer, the almost sites header shows the reverse
+    // complement of a non-palindromic site
+    auto const shown_complement = mismatches == primerpicker::enzymes::Mismatches::at_most_one and
+                                          reversed.has_value() and *reversed != enzyme.site
+                                      ? std::format("  ({})", reversed.value_or(""))
+                                      : std::string{};
+    auto report = std::format("Search for: {:<8} {}{}    Number of Sites = {}\n", enzyme.name, enzyme.site,
+                              shown_complement, sites.size());
+    return std::accumulate(sites.begin(), sites.end(), std::move(report),
+                           [&](std::string text, primerpicker::enzymes::Site const& site) {
+                               return std::move(text) + site_line(site, molecule, enzyme.site.size(), mismatches);
+                           });
+}
+
+struct FindEnzymesArguments {
+    primerpicker::enzymes::Mismatches mismatches;
+    std::string_view molecule;
+    std::string_view enzyme;
+};
+
+auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
+    auto const enzyme = primerpicker::enzymes::find_rebase_enzyme(arguments.enzyme);
+    if (not enzyme.has_value()) {
+        return fail(std::format("enzyme: '{}' is not a commercially available REBASE enzyme (names are case "
+                                "sensitive, for instance EcoRI)",
+                                arguments.enzyme));
+    }
+    auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
+    if (not molecule.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const report = enzyme_report(*enzyme, *molecule, arguments.mismatches);
+    if (not report.has_value()) {
+        return fail(std::format("enzyme {}: unexpected recognition sequence {}", enzyme->name, enzyme->site));
+    }
+    std::cout << *report;
+    return EXIT_SUCCESS;
+}
+
 auto run(std::span<char const* const> const arguments) -> int {
     if (arguments.size() < 2) {
         std::cerr << usage;
@@ -404,6 +483,20 @@ auto run(std::span<char const* const> const arguments) -> int {
         arguments[2] == weights_option) {
         auto const options = arguments.subspan(3);  // after "--weights"
         return find_pair({.weights = options[0], .molecule = options[1], .target_a = options[2], .target_b = options[3]});
+    }
+    constexpr auto find_enzymes_count = std::size_t{4};
+    constexpr auto find_almost_enzymes_count = std::size_t{5};
+    constexpr auto almost_option = std::string_view{"--almost"};
+    if (command == "find-enzymes" and arguments.size() == find_enzymes_count) {
+        return find_enzymes({.mismatches = primerpicker::enzymes::Mismatches::none,
+                             .molecule = arguments[2],
+                             .enzyme = arguments[3]});
+    }
+    if (command == "find-enzymes" and arguments.size() == find_almost_enzymes_count and
+        arguments[2] == almost_option) {
+        return find_enzymes({.mismatches = primerpicker::enzymes::Mismatches::at_most_one,
+                             .molecule = arguments[3],
+                             .enzyme = arguments[4]});
     }
     std::cerr << usage;
     return EXIT_FAILURE;
