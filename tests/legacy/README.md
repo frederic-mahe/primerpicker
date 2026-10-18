@@ -119,6 +119,24 @@ Recording notes:
   the configuration file, not the current directory.
 
 
+### Primer3 equivalent (2026-10-18)
+
+Primer3's `oligotm` (2.6.1, Breslauer mode: `-tp 0 -sc 0 -dv 0 -n 0`)
+gives the same Tm, to its 6 printed decimals, for all 159 recorded
+primers it accepts (A, C, G and T only, up to 36 bases), with:
+
+- DNA 0.0496293659554817 nM: Primer3 computes dH / (dS - 10.8 +
+  R ln(C/4)) with R = 1.987, so b = 10.8 + R ln(4/C) = 60.699 for
+  C = 49.6 pM. A primer concentration of about 50 pM is therefore one
+  possible origin of b;
+- monovalent cations 1021.0244559195794 mM: this has no physical
+  meaning, it makes Primer3's salt term 16.6 log10([K+]) equal to
+  +0.15 so that its -273.15 becomes Primer Designer's -273.
+
+The values are in `../data/primer3_legacy_tm.tsv` (made by
+`../data/primer3_legacy_tm.sh`) and tested in
+`tests/unit/test_legacy_tm_primer3.cpp`.
+
 ## Product Tm and annealing temperature (recorded 2026-10-17)
 
 `pairs/pairs.tsv`: 28 primer pairs on two generated molecules, made

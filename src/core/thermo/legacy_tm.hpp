@@ -17,6 +17,9 @@ namespace detail {
 // value matches for b in [60.6983, 60.7000] cal/K/mol
 // (tests/legacy/tools/fit_tm.py). The origin of b is not known.
 constexpr auto legacy_entropy_constant = CaloriesPerKelvinPerMole{60.699};
+// Primer3's oligotm gives the same Tm in Breslauer mode with a DNA
+// concentration C of 49.6 pM: b = 10.8 + R ln(4 / C), 10.8 being
+// Primer3's initiation entropy (tests/data/primer3_legacy_tm.sh)
 
 // Primer Designer subtracts 273, not 273.15: 273.15 contradicts
 // several recorded values
