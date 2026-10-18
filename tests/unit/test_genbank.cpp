@@ -25,9 +25,16 @@ auto molecule_of(GenbankResult const& result) -> Molecule {
     return *result.molecule;
 }
 
+// not istreambuf_iterator: GCC 13 -O3 reports a spurious null
+// dereference inside it (-Wnull-dereference)
 auto read_file(std::filesystem::path const& path) -> std::string {
+    auto text = std::string(std::filesystem::file_size(path), '\0');
     auto file = std::ifstream{path, std::ios::binary};
-    return {std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    file.read(text.data(), std::ssize(text));
+    if (not file) {
+        throw std::runtime_error{"cannot read " + path.string()};
+    }
+    return text;
 }
 
 auto legacy_molecule(std::string_view const name) -> std::string {
