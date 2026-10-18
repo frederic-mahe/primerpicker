@@ -100,7 +100,7 @@
     },
     {
       "name": "fuzz",
-      "displayName": "libFuzzer harnesses, clang 20 and libstdc++, ASan + UBSan",
+      "displayName": "libFuzzer harnesses, clang 20 and libstdc++, ASan + UBSan, assertions on",
       "inherits": [
         "base",
         "clang-warnings"
@@ -111,7 +111,8 @@
         "CMAKE_CXX_FLAGS": "-fsanitize=fuzzer-no-link,address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS",
         "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined",
         "BUILD_TESTING": "OFF",
-        "PRIMERPICKER_FUZZ": "ON"
+        "PRIMERPICKER_FUZZ": "ON",
+        "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "-O1 -g"
       }
     }
   ],
