@@ -1,0 +1,55 @@
+LOCUS       TLONG3       3000 bp    DNA     linear
+DEFINITION  Random test molecule (seed 4102, GC 0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5).
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 atggagatga aaggaccggc ataaatctta ttcaactcta gggtcacatc tctcactgca
+       61 taaaagcgag cgtggaactg taggaggggg tcacatattc tagatttcaa ccctgcgacg
+      121 gttcataaac cgtgctctca tgacttagac tttgtgggta ctcagggatt tagttctttg
+      181 cccccatctg aggcagcggt tgcgggtgga gtgagagacc gtgctgagtt gtaagtaaat
+      241 atgcgtgtgt tgaaagaccg ggactcagta atcgggagag ggtcatagtt agaccatacg
+      301 cgcgcggcgg gggcgatata gcatcattta ctcagcagaa ccacaaatca gccaatggaa
+      361 cagacggtac cgaacgtcag ggaaagtccc agggcctggc tttgtgatca caatgcggca
+      421 ggcgatttaa ctctggaatt ccgagtctta cgttcgtccc tatgatctca attgatgcag
+      481 ggacgagcgc ctgatggcgg tctaggactt agatgtgcat gcgggtagac gaactaatcg
+      541 gtcatcttcc ctctcgagaa gggttcggtt cggacacatc taaatcgatc ttatagaagg
+      601 tgtgaatatt gaagatagag acaccaagta gttttccgtg ctacgtcgcg caattagttt
+      661 ataccagagg aacgcgttgt gtgcttcatt cttacaacgc aagttgccgc cgccagctgc
+      721 atattccaat acaacgccgg ttgagccgtg agttagtgcg tggattggta acttgttgtc
+      781 ctgtacgaca tcaaacacaa ataagcgccg cctcatcgct ctgatagaat agttctgcca
+      841 cctatagcca tctccggtcc gctgtaccct atcaaaggtc atgctctcca gcaatgaaac
+      901 ggttggcggt gggtacatga agagagtggg tggtgccccc gtctgtccga attagaaaga
+      961 ggggtgcttc tcgggcagcg agggtaggcg ttcgctgcct acatcttatg gagtgaagat
+     1021 gattataatg acaattaatg taggggtcgc catagtagca gctagattaa acgctggggt
+     1081 aatacaatat ggtgtagtcg ggtgcgcatc gttagctagt cacatcattg gtcagatttt
+     1141 gtaggcgacc atcgttcaca tagcttacgc atcatacatg caatgggttc tcgatcacta
+     1201 acgcacagtg cccgattccc ccagactaca gatttagtaa ggcagtacct gtcccgtcgg
+     1261 gattcccatc tcgaatttgc ttttaattac ccctgactac caatgacgtg ttgagatccg
+     1321 tcaggacaag ttatgatgag gcgtcgcttc aggagatgcg gcggtgctac gtgggccatg
+     1381 ctgcggtgta gaaaagattt cggcatgtag cctgtctcgc tgtctctggg acaacgtgtg
+     1441 ccgcagatgg ttataacaga cgcttattgc gctaccgggg tgagtacact tacctccgcg
+     1501 tctctagcgg ctttgaggcc ctaccgattg tttagtcgct ctcggtttct taacccaaac
+     1561 gagcctccgt ccggatgcgc ggcgtcttgt agcatctcgg tcggggatca cctgctggcc
+     1621 gcccctgaaa tgcttgtcat agagttagga actattcctg tacaagcgtc aaacggggtg
+     1681 gtgatacctt attacgcata gatcgcggag ggctccccag tagaacgctg tacaaggtcg
+     1741 tcgtgataag cttcataaac gagtaaaaca agaccccctg gccggtataa gcttacccgt
+     1801 tcgcagtcaa ggtaggtgtt aagtaagctt taccacctgc cagacaaatt ggtgcttaac
+     1861 ctcctcacgg aacataacgc cagcataagg ctagcaggga gccttctcac gctacgtgcg
+     1921 gcgctgcagg cggtagtttg cgtctatgtg accagtgcga ttggttagtg gcatgaaggt
+     1981 ggacgccgga gcctttgacc ctacaaggcc ctcacagtac tggatttcgt aatctgttgg
+     2041 gcgtattaac tagaatatgg gttactgcac cgtgtatgca ctcacgcatt attcgattct
+     2101 tgttcgttgt agtgcgtggg gacgtacatt aaatctttct cggaactcca actatgtcac
+     2161 gtgtgtttgc caattttagg gttaatgatg ccgaatagac gaaactgtac aacgtacgac
+     2221 gaggtggcct tttgttcacc agtcccttgt gtatgttgcc aacgcttatc gtgactccag
+     2281 cgaacctagt attggagggc ttcgtcgttt tgtggctcat tcgtgtcgtc cgtgtctagc
+     2341 ttcttgtcaa tgacgttatg gctggcttca ggcccggcta ccttgactct aatttaatac
+     2401 tagcctaact tcgacacggc gatattgacg gaggtgatag tctgcaccaa cgttctggat
+     2461 acgtcatctt gtccgcggac ctccggatgc ttgagggcca tgctccgaaa gataatactg
+     2521 gtgcccaatc tactattggc gcccgtcagc tgtcgtgctg ttgaatcctg gaatttccaa
+     2581 tggccatgaa tactctctga cacgctactc ggactttcgt cgaggggtcg aatggatgag
+     2641 gaagaggtat atctccgttc agaccatgcc ggtcagggga acggcgatgg ggattcttta
+     2701 attgaagaaa acctctaggg gcggaatcag ggttctgtct tactcggtcc cgccccacgc
+     2761 ccgggcctac ggaggccccc gcacggcgta atgagtttgc attgtattgt ggattctggc
+     2821 gactctgtcg tcctcgtccg acgtaggcgg ctgccattgc agcagctctg ttgtacagag
+     2881 tgctggttta aagtccataa acatgtggca ttaccaagcg gatttacatg tacgttttcg
+     2941 atacaaaatt actattgaac cgggatgtag cgatccgcac gtccaatgcg agttttcatt
+//

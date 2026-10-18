@@ -22,8 +22,8 @@ def make_sequence(seed, gc_fractions, segment_length):
                    for gc in gc_fractions for _ in range(segment_length))
 
 
-def genbank(name, description, sequence):
-    lines = [f'LOCUS       {name:<12s} {len(sequence)} bp    DNA     linear',
+def genbank(name, description, sequence, topology='linear'):
+    lines = [f'LOCUS       {name:<12s} {len(sequence)} bp    DNA     {topology}',
              f'DEFINITION  {description}',
              'FEATURES             Location/Qualifiers',
              'ORIGIN']

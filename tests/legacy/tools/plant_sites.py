@@ -6,7 +6,8 @@ of another part, for instance the 3' end of a primer, to create
 false-priming sites, or with a given sequence, for instance a
 restriction site.
 
-Usage: python3 -I plant_sites.py NAME SEED GC_FRACTIONS SEGMENT_LENGTH COPY... > FILE
+Usage: python3 -I plant_sites.py [--circular] NAME SEED GC_FRACTIONS SEGMENT_LENGTH COPY... > FILE
+  --circular: write "circular" on the LOCUS line (default: linear)
   COPY: FIRST:LENGTH:DESTINATION (1-based positions on the top strand)
   copies LENGTH bases from FIRST to DESTINATION; SEQUENCE@DESTINATION
   writes SEQUENCE (A, C, G, T) at DESTINATION; copies are made in the
@@ -42,12 +43,16 @@ def parse_copy(spec):
     return (first, length), destination
 
 
-def main(name, seed, gc_fractions, segment_length, *copy_specs):
+def main(*arguments):
+    topology = 'circular' if arguments and arguments[0] == '--circular' else 'linear'
+    if topology == 'circular':
+        arguments = arguments[1:]
+    name, seed, gc_fractions, segment_length, *copy_specs = arguments
     gcs = [float(gc) for gc in gc_fractions.split(',')]
     copies = [parse_copy(spec) for spec in copy_specs]
     sequence = plant(make_molecule.make_sequence(int(seed), gcs, int(segment_length)), copies)
     description = f'Random test molecule (seed {seed}, GC {gc_fractions}), copies {" ".join(copy_specs)}.'
-    sys.stdout.buffer.write(make_molecule.genbank(name, description, sequence).encode('ascii'))
+    sys.stdout.buffer.write(make_molecule.genbank(name, description, sequence, topology).encode('ascii'))
 
 
 if __name__ == '__main__':

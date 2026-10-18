@@ -594,8 +594,32 @@ All 6 screens follow these rules:
   of the recognition sequence, as the header shows: "GGATC
   (GATCC)"). Both lists equal a brute-force search, order included.
 
-Not probed yet: enzymes with IUPAC letters or N (none is in the
-default menu), sites at the same position on both strands, circular
-molecules (sites across the origin), lists longer than one screen
-and the "( >50 sites )" and "More than 100 sites" limits, and adding
-enzymes to the menu.
+More lists (recorded 2026-10-18, same tools; `find_enzyme.sh` with
+`DOWNS` set to scroll long lists):
+- `enzymes/TENZC.GB`: a circular molecule (LOCUS line "circular"),
+  random (seed 4015) with AluI AGCT split across the origin (AG at
+  599-600, CT at 1-2) and PleI GAGTC at 300 and GACTC at 400 (plus
+  GAGTC at 83 and 372 by chance); PleI's site differs from its
+  reverse complement GACTC by one base, so an almost search finds
+  sites on both strands at the same position;
+- `enzymes/TLONG.GB` (1200 bases) and `enzymes/TLONG3.GB` (3000
+  bases): random linear molecules with 63 and 151 almost AluI sites.
+
+All 12 lists (284 sites) follow the rules above, and:
+- a circular molecule is searched across the origin: the AluI site
+  split across it is reported at 599 (a true site, and an almost
+  site "....");
+- at the same position, exact sites come before sites with one
+  mismatch, then top before complement: PleI almost sites at 300
+  (top, exact) then 300 (complement, one mismatch), but 400
+  (complement, exact) then 400 (top, one mismatch); at 306, both
+  with one mismatch, top first;
+- long lists scroll, three sites per line; 63 and 151 sites are all
+  listed, without a warning: the "( >50 sites )" and "More than 100
+  sites found" messages belong to other screens (probably Find Pair).
+
+The 359-enzyme table cannot be reached from the screens: Find
+Enzymes and the F1 = REnz list of the Find Pair form show the same 89
+enzymes of the default menu; INS, DEL and F1-F4 do not change the
+menu. No enzyme of that menu has IUPAC letters or N, so how PRIMER.exe
+matches them was not observed.

@@ -1,0 +1,15 @@
+LOCUS       TENZC        600 bp    DNA     circular
+DEFINITION  Random test molecule (seed 4015, GC 0.5,0.5,0.5,0.5), copies CT@1 GAGTC@300 GACTC@400 AG@599.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 cttgtagttg cactggtttc ggcggtgata tggagtggtt tcgaaggcca acgtgtgtat
+       61 tgtagcatat tccgttcttg gtgagtcagg taggccgagt actaatcgct accgccgggt
+      121 cgtggacgtc accacactat caccaagtgt cgtagcgtac gtctgtacga tgcgccatac
+      181 gggtgaagac aatttttagt taacaagcca atcataattt cctaccagcc gtctctctat
+      241 aaaccggaaa acttttgaca cgcgcaccga cgggaaaggt aatacaacgc ctattcacag
+      301 agtctgattc gggttgcatc acagacagta ggataacagt gaaataggac acaacgcggc
+      361 aggggctgct agagtcaaac gcatgccggc gagagcaacg actccggaac agtttccgct
+      421 tctggatagc agcgcatctt tccttggtac cgtcaatcac ggctttaaac ccgcttccaa
+      481 tgccatttag taccacggct gttcctatga gatgaggtca ctagtccggt gaggccggag
+      541 cacagaaata ctatcacgtt atcaagtaga agtaacggga gttccccgaa tacgctaaag
+//
