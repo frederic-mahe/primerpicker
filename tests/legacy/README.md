@@ -186,3 +186,26 @@ loop size do not fit, nor do dH - T dS at one temperature plus a loop
 term. Self-complementary repeats such as CGCG... and GCGC... with the
 same stem and loop differ by 1.4 kcal, which suggests terms for the
 closing pair, the loop bases or the ends.
+
+
+## Molecule file formats (recorded 2026-10-18)
+
+Files in `molecules/` hold the sequence of `pairs/TEST600.GB` in other
+formats (DOS line ends). Each was loaded with Primer/Create -> from
+Molecule -> Load File, then a primer was made at position 51 (20
+bases), which shows the first sequence lines and the primer values.
+
+| File | Format | Result |
+|---|---|---|
+| `pairs/TEST600.GB` | GenBank (`LOCUS`, `ORIGIN`, `//`) | loads; name from `LOCUS` (TEST600) |
+| `molecules/TFASTA.FA` | FASTA, uppercase, header `>TEST600 random test molecule` | loads; name TEST600 |
+| `molecules/TFA2.FA` | FASTA, lowercase, header `>VERYLONGMOLECULENAME_2026 with a description` | loads; name VERYLONGMOLECULENAME_2026 (first word, not truncated) |
+| `molecules/TFA3.FA` | FASTA, uppercase, header `>name with spaces` | loads; name `name` |
+| `molecules/TPLAIN.SEQ` | plain sequence, no header | loads; name TPLAIN.SEQ (the file name) |
+| `molecules/TEST600.EMB`, `TMIN.EMB`, `TNONUM.EMB` | EMBL (`ID`, `SQ`, `//`), with or without other lines or position numbers | "Illegal File Format" |
+
+Every file that loads gives the same sequence (first line
+`GGTCATTTTA AATGGACAAC ...`) and the same primer at position 51
+(%GC 50, Tm 66). The executable contains the strings `ID   `,
+`FT   ` and `SQ   `: EMBL may be written (Molecule-Ops -> Save) or
+read in a form not found yet.

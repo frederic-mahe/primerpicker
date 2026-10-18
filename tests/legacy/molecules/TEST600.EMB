@@ -1,0 +1,19 @@
+ID   TEST600E   standard; DNA; 600 BP.
+XX
+DE   Random test molecule (seed 600), EMBL format.
+XX
+FH   Key             Location/Qualifiers
+FH
+XX
+SQ   Sequence 600 BP;
+     ggtcatttta aatggacaac catctattga gaatactcat gtcaacctgg ctcaaaggct        60
+     cagacatcag ggctcaatga cgtgcggtta gttatcaacc tacatggact ttatttatgc       120
+     ggcgaggcaa taaacaaacg tgcgcccagg tgttgggcct gtctgtaggc ccaacagact       180
+     gcgtgcgtca aatgcctccc gttttcattt agagcgaacc ggtccttaca tttatttcca       240
+     agtaacgacc gtaacgatga gcaacactcg tcctatacta gacgatggga cgccatcagt       300
+     tatcgatatg aataaagttt cagctctaca aactctaatg cgtttaccac aggacatgat       360
+     gttagcgtgc gacctggtat ccttgcatta cctggataca ctgacactta cgccagatga       420
+     cttcccgtat ggaaacgcga tgagtagtaa ccgcactcca aagtgcatac cggactgaaa       480
+     agtacccatt atgattctat gttcgtcgac tctcaggtat cgaaaacgtc tactcctgtc       540
+     caggggggat aagcaaatcc atctgtaagt caccagtcaa gatttccgat ttaaagcgac       600
+//
