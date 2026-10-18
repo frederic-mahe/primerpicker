@@ -1,0 +1,116 @@
+# primer	dimers_3prime	dimers_any	runs	gc_run_3prime	meets_no_hairpins	hairpin_kcal	hairpin_5prime	hairpin_pairs	hairpin_3prime
+CACACCCCCGTGTG	3	5	5	1	NO	-1.9	             5'-CACACCC	                :::::  )	             3'-GTGTGCC
+GCGCGTTTTCGCGC	4	5	4	5	NO	-4.9	             5'-GCGCGTT	                :::::  )	             3'-CGCGCTT
+GACGCTTTTGCGTCG	2	5	4	2	NO	-3.9	             5'-GACGCTT	                :::::  )	            3'-GCTGCGTT
+ACAGTCTTTTGGTTGT	1	3	4	0	NO	-.3	             5'-ACAGTCTT	                ::::::  )	             3'-TGTTGGTT
+ACCTAGTTTTCTGGGT	1	4	4	0	NO	-3.0	             5'-ACCTAGTT	                ::::::  )	             3'-TGGGTCTT
+ACGCCGTTTTCGGTGT	0	3	4	0	NO	-4.5	             5'-ACGCCGTT	                ::::::  )	             3'-TGTGGCTT
+ACTAACTTTTGTTGGT	2	3	4	0	NO	-1.4	             5'-ACTAACTT	                ::::::  )	             3'-TGGTTGTT
+ACTCCCTTTTGGGGGT	0	3	5	0	NO	-4.8	             5'-ACTCCCTT	                ::::::  )	             3'-TGGGGGTT
+AGATCCTTTTGGGTCT	1	4	4	0	NO	-3.0	             5'-AGATCCTT	                ::::::  )	             3'-TCTGGGTT
+AGGTGGTTTTCCACTT	1	4	4	0	NO	-2.9	             5'-AGGTGGTT	                ::::::  )	             3'-TTCACCTT
+ATCTGCTTTTGTAGAT	2	4	4	0	NO	-1.6	             5'-ATCTGCTT	                ::::::  )	             3'-TAGATGTT
+ATGCAGTTTTCTGCGT	1	4	4	0	NO	-3.2	             5'-ATGCAGTT	                ::::::  )	             3'-TGCGTCTT
+ATGCGGTTTTCCGTAT	2	3	4	0	NO	-2.5	             5'-ATGCGGTT	                ::::::  )	             3'-TATGCCTT
+ATTGTCTTTTGACAGT	2	4	4	0	NO	-1.5	             5'-ATTGTCTT	                ::::::  )	             3'-TGACAGTT
+CAGTGGTTTTCCGCTG	1	3	4	1	NO	-3.9	             5'-CAGTGGTT	                ::::::  )	             3'-GTCGCCTT
+CATGCCTTTTGGCGTG	1	4	4	1	NO	-4.4	             5'-CATGCCTT	                ::::::  )	             3'-GTGCGGTT
+CCGCACTTTTGTGTGG	1	3	4	2	NO	-4.3	             5'-CCGCACTT	                ::::::  )	             3'-GGTGTGTT
+CGCGCGCGCGCGCGCG	14	16	1	16	NO	-6.9	             5'-CGCGCGCG	                ::::::  )	             3'-GCGCGCGC
+CTCTACTTTTGTAGGG	1	4	4	3	NO	-1.8	             5'-CTCTACTT	                ::::::  )	             3'-GGGATGTT
+CTCTCGTTTTCGAGGG	1	4	4	3	NO	-2.9	             5'-CTCTCGTT	                ::::::  )	             3'-GGGAGCTT
+GACGCGTTTTTGCGTC	1	6	5	1	NO	-5.5	             5'-GACGCGTT	                :::::   )	             3'-CTGCGTTT
+GAGAAGTTTTCTTTTC	3	4	4	1	YES	-	-	-	-
+GAGCTGTTTTCGGTTC	1	4	4	1	NO	-1.8	             5'-GAGCTGTT	                ::::::  )	             3'-CTTGGCTT
+GAGTTGTTTTCAGCTC	1	4	4	1	NO	-2.3	             5'-GAGTTGTT	                ::::::  )	             3'-CTCGACTT
+GCGGACTTTTGTTCGC	2	3	4	3	NO	-3.4	             5'-GCGGACTT	                ::::::  )	             3'-CGCTTGTT
+GCGGCCTTTTGGCTGC	2	4	4	2	NO	-6.8	             5'-GCGGCCTT	                ::::::  )	             3'-CGTCGGTT
+GGACGCTTTTGCGTCT	1	5	4	0	NO	-3.9	             5'-GGACGCTT	                 :::::  )	             3'-TCTGCGTT
+GGTTACTTTTGTAGCC	1	3	4	3	NO	-2.6	             5'-GGTTACTT	                ::::::  )	             3'-CCGATGTT
+GGTTGGTTTTCTAACC	4	4	4	2	NO	-2.2	             5'-GGTTGGTT	                ::::::  )	             3'-CCAATCTT
+GTATGCTTTTGTATAC	6	6	4	1	NO	-.8	             5'-GTATGCTT	                ::::::  )	             3'-CATATGTT
+GTTCGGTTTTCTGGAC	2	2	4	1	NO	-1.0	             5'-GTTCGGTT	                ::::::  )	             3'-CAGGTCTT
+TATATATATATATATA	14	16	1	0	YES	-	-	-	-
+TATATCTTTTGGTGTA	2	4	4	0	YES	-	-	-	-
+TCCATCTTTTGGTGGA	2	4	4	0	NO	-3.1	             5'-TCCATCTT	                ::::::  )	             3'-AGGTGGTT
+TCCCTCTTTTGGGGGA	2	4	5	0	NO	-5.0	             5'-TCCCTCTT	                ::::::  )	             3'-AGGGGGTT
+TCGGAGTTTTCTTTGA	2	2	4	0	NO	-.6	             5'-TCGGAGTT	                ::::::  )	             3'-AGTTTCTT
+TCGGGGTTTTCTTCGA	4	4	4	0	NO	-1.7	             5'-TCGGGGTT	                ::::::  )	             3'-AGCTTCTT
+TGAAACTTTTGTTTTA	2	4	4	0	YES	-	-	-	-
+TGACGCTTTTGCGTCA	2	6	4	0	NO	-5.7	             5'-TGACGCTT	                ::::::  )	             3'-ACTGCGTT
+TGACGCTTTTGCGTCG	2	5	4	2	NO	-3.9	             5'-TGACGCTT	                 :::::  )	             3'-GCTGCGTT
+TGCGTCTTTTGGCGCA	2	4	4	0	NO	-4.5	             5'-TGCGTCTT	                ::::::  )	             3'-ACGCGGTT
+TGTGCCTTTTGGCGCA	3	4	4	0	NO	-5.6	             5'-TGTGCCTT	                ::::::  )	             3'-ACGCGGTT
+TGTGTGTGTGTGTGTG	0	0	1	1	YES	-	-	-	-
+GACGCTTTTTGTGCGTC	1	5	5	1	NO	-5.7	             5'-GACGCTTTT	                :::::    )	             3'-CTGCGTGTT
+AAGAGGGTTTTCTTTCTT	1	4	4	0	NO	-1.5	             5'-AAGAGGGTT	                :::::::  )	             3'-TTCTTTCTT
+ACCTGTGTTTTCGTAGGT	1	4	4	0	NO	-3.5	             5'-ACCTGTGTT	                :::::::  )	             3'-TGGATGCTT
+ACTTTACTTTTGTAAGGT	2	4	4	0	NO	-2.3	             5'-ACTTTACTT	                :::::::  )	             3'-TGGAATGTT
+AGCGTTCTTTTGAATGCT	1	3	4	0	NO	-4.6	             5'-AGCGTTCTT	                :::::::  )	             3'-TCGTAAGTT
+AGGCATCTTTTGATGTCT	1	4	4	0	NO	-4.0	             5'-AGGCATCTT	                :::::::  )	             3'-TCTGTAGTT
+AGGTCGGTTTTCTGGCCT	0	4	4	0	NO	-4.9	             5'-AGGTCGGTT	                :::::::  )	             3'-TCCGGTCTT
+AGTATGCTTTTGCATGCT	1	6	4	0	NO	-4.5	             5'-AGTATGCTT	                :::::::  )	             3'-TCGTACGTT
+ATACGTCTTTTGACGTGT	2	5	4	0	NO	-4.0	             5'-ATACGTCTT	                :::::::  )	             3'-TGTGCAGTT
+CAACTCCTTTTGGGGTTG	1	4	4	1	NO	-4.6	             5'-CAACTCCTT	                :::::::  )	             3'-GTTGGGGTT
+CACCAGCTTTTGTTGGTG	2	5	4	1	NO	-5.1	             5'-CACCAGCTT	                :::::::  )	             3'-GTGGTTGTT
+CCTCACCTTTTGGTGGGG	2	4	4	4	NO	-6.6	             5'-CCTCACCTT	                :::::::  )	             3'-GGGGTGGTT
+CTCAGAGTTTTCTTTGGG	1	3	4	3	NO	-1.4	             5'-CTCAGAGTT	                :::::::  )	             3'-GGGTTTCTT
+CTGTTACTTTTGTAATAG	2	4	4	1	NO	-1.3	             5'-CTGTTACTT	                :::::::  )	             3'-GATAATGTT
+CTTCCGGTTTTCCGGAGG	2	6	4	2	NO	-6.2	             5'-CTTCCGGTT	                :::::::  )	             3'-GGAGGCCTT
+GAAGGCCTTTTGGCTTTC	1	8	4	1	NO	-5.6	             5'-GAAGGCCTT	                :::::::  )	             3'-CTTTCGGTT
+GACGCTTTTTTTTGCGTC	1	5	8	1	NO	-5.7	             5'-GACGCTTTT	                :::::    )	             3'-CTGCGTTTT
+GAGGACGTTTTCGTCTTC	2	4	4	1	NO	-4.8	             5'-GAGGACGTT	                :::::::  )	             3'-CTTCTGCTT
+GAGGCGGTTTTCTGTCTC	1	3	4	1	NO	-4.3	             5'-GAGGCGGTT	                :::::::  )	             3'-CTCTGTCTT
+GATGAAGTTTTCTTCGTC	2	4	4	1	NO	-3.5	             5'-GATGAAGTT	                :::::::  )	             3'-CTGCTTCTT
+GGAAACCTTTTGGTTTTC	4	5	4	1	NO	-2.7	             5'-GGAAACCTT	                :::::::  )	             3'-CTTTTGGTT
+GGAGCCGTTTTCGGCTTC	2	5	4	1	NO	-5.9	             5'-GGAGCCGTT	                :::::::  )	             3'-CTTCGGCTT
+GGCCCGGTTTTCCGGGTC	1	5	4	1	NO	-8.0	             5'-GGCCCGGTT	                :::::::  )	             3'-CTGGGCCTT
+GGGAAAGTTTTCTTTTCC	5	5	4	2	NO	-2.9	             5'-GGGAAAGTTT	                 :::::    )	              3'-CCTTTTCTT
+GTATTTCTTTTGAAATGC	2	5	4	2	NO	-1.7	             5'-GTATTTCTT	                :::::::  )	             3'-CGTAAAGTT
+TAACAGGTTTTCTTGTTA	2	5	4	0	NO	-2.0	             5'-TAACAGGTT	                :::::::  )	             3'-ATTGTTCTT
+TACGCTCTTTTGGGCGTA	2	5	4	0	NO	-5.5	             5'-TACGCTCTT	                :::::::  )	             3'-ATGCGGGTT
+TAGGCAGTTTTCTGCTTA	2	4	4	0	NO	-4.1	             5'-TAGGCAGTT	                :::::::  )	             3'-ATTCGTCTT
+TAGTTCGTTTTCGAGCTA	2	4	4	0	NO	-3.6	             5'-TAGTTCGTT	                :::::::  )	             3'-ATCGAGCTT
+TCTAATCTTTTGATTGGA	2	4	4	0	NO	-2.7	             5'-TCTAATCTT	                :::::::  )	             3'-AGGTTAGTT
+TCTACGGTTTTCTGTAGA	3	5	4	0	NO	-4.3	             5'-TCTACGGTT	                :::::::  )	             3'-AGATGTCTT
+TGCAATCTTTTGGTTGCA	4	5	4	0	NO	-4.0	             5'-TGCAATCTT	                :::::::  )	             3'-ACGTTGGTT
+TTAGTGCTTTTGCGCTAA	2	4	4	0	NO	-4.6	             5'-TTAGTGCTT	                :::::::  )	             3'-AATCGCGTT
+TTCTCGGTTTTCTGAGAA	4	5	4	0	NO	-4.3	             5'-TTCTCGGTT	                :::::::  )	             3'-AAGAGTCTT
+TTCTTTCTTTTGAAAGGA	2	5	4	0	NO	-1.7	             5'-TTCTTTCTT	                :::::::  )	             3'-AGGAAAGTT
+GACGCTTTTTTTTTTTTTGCGTC	1	5	13	1	NO	-4.5	             5'-GACGCTTTTTTT	                :::::       )	             3'-CTGCGTTTTTTT
+ACACACACACACACACACACACAC	0	0	1	1	YES	-	-	-	-
+GACGCTTTTTTTTTTTTTTGCGTC	1	5	14	1	NO	-4.2	             5'-GACGCTTTTTTT	                :::::       )	             3'-CTGCGTTTTTTT
+GACGCTTTTTTTTTTTTTTTGCGTC	1	5	15	1	NO	-3.9	             5'-GACGCTTTTTTTT	                :::::        )	             3'-CTGCGTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTGCGTC	1	5	16	1	NO	-3.7	             5'-GACGCTTTTTTTT	                :::::        )	             3'-CTGCGTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTGCGTC	1	5	17	1	NO	-3.4	             5'-GACGCTTTTTTTTT	                :::::         )	             3'-CTGCGTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTGCGTC	1	5	18	1	NO	-3.1	             5'-GACGCTTTTTTTTT	                :::::         )	             3'-CTGCGTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTGCGTC	1	5	19	1	NO	-2.9	             5'-GACGCTTTTTTTTTT	                :::::          )	             3'-CTGCGTTTTTTTTTT
+ATATATATATATATATATATATATATATAT	28	30	1	0	NO	-6.1	             5'-ATATATATATATATA	                :::::::::::::  )	             3'-TATATATATATATAT
+CAAACTGAGATACAAAGATATTTAATCAAT	3	4	3	0	YES	-	-	-	-
+CCACACGTAACCTCGGGCGGTGGGTTGCCG	3	4	3	4	NO	-4.2	             5'-CCACACGTAACCTCGGG	                      ::::::     )	                 3'-GCCGTTGGGTGGC
+GACGCTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	20	1	NO	-2.7	             5'-GACGCTTTTTTTTTT	                :::::          )	             3'-CTGCGTTTTTTTTTT
+TCCCGCCCGGCAGGGTAGGCGCCGCCCCCG	3	6	5	13	NO	-4.1	             5'-TCCCGCCCGGCAGGGT	                       ::::     )	              3'-GCCCCCGCCGCGGAT
+GACGCTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	21	1	NO	-2.5	             5'-GACGCTTTTTTTTTTT	                :::::           )	             3'-CTGCGTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	23	1	NO	-2.1	             5'-GACGCTTTTTTTTTTTT	                :::::            )	             3'-CTGCGTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	24	1	NO	-1.9	             5'-GACGCTTTTTTTTTTTT	                :::::            )	             3'-CTGCGTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	25	1	NO	-1.8	             5'-GACGCTTTTTTTTTTTTT	                :::::             )	             3'-CTGCGTTTTTTTTTTTTT
+GCTGTCCGTTGGTAAATTAAGACTAAGTTGTGAGT	3	4	3	0	NO	-1.1	             5'-GCTGTCCGTTGGTAAAT	                        :::::    )	            3'-TGAGTGTTGAATCAGAAT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	26	1	NO	-1.6	             5'-GACGCTTTTTTTTTTTTT	                :::::             )	             3'-CTGCGTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	27	1	NO	-1.4	             5'-GACGCTTTTTTTTTTTTTT	                :::::              )	             3'-CTGCGTTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	28	1	NO	-1.2	             5'-GACGCTTTTTTTTTTTTTT	                :::::              )	             3'-CTGCGTTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	29	1	NO	-1.0	             5'-GACGCTTTTTTTTTTTTTTT	                :::::               )	             3'-CTGCGTTTTTTTTTTTTTTT
+GACAGCCACGATAACTATCCCGCGGGCGTTGCCCCGGAGT	3	8	4	0	NO	-3.5	             5'-GACAGCCACGATAACTATCCCGCGGGCGT	                                      ::::   )	                               3'-TGAGGCCCCGT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	30	1	NO	-.9	             5'-GACGCTTTTTTTTTTTTTTT	                :::::               )	             3'-CTGCGTTTTTTTTTTTTTTT
+TCGATTGAAGCGGCCTACAGTATGATCCCGTGGGTCGGTC	2	4	3	1	NO	-7.8	             5'-TCGATTGAAGCGGCCTACAGTATG	                          ::::::::      )	                    3'-CTGGCTGGGTGCCCTAG
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	31	1	NO	-.7	             5'-GACGCTTTTTTTTTTTTTTTT	                :::::                )	             3'-CTGCGTTTTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	32	1	NO	-.5	             5'-GACGCTTTTTTTTTTTTTTTT	                :::::                )	             3'-CTGCGTTTTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	33	1	NO	-.3	             5'-GACGCTTTTTTTTTTTTTTTTT	                :::::                 )	             3'-CTGCGTTTTTTTTTTTTTTTTT
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	34	1	NO	-.1	             5'-GACGCTTTTTTTTTTTTTTTTT	                :::::                 )	             3'-CTGCGTTTTTTTTTTTTTTTTT
+AAACAAAAATTATTGAATTATGATGACTACAAAATTAATAAGATA	3	6	5	0	YES	-	-	-	-
+ACTGTGGGCAATGCTAGCCGTCAGGAAAGTTACCAATAGGTACAA	2	6	3	0	NO	-2.2	             5'-ACTGTGGGCAATG	                      :::    )	 GGATAACCATTGAAAGGACTGCCGATCG
+CGGTGCCAGCCCGGAGAGGACAATACTGATTTGGCGGCCCAGGAA	2	4	3	0	NO	-.8	             5'-CGGTGCC	                :::    )	 GTCATAACAGGAGAGGCCCGAC
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	35	1	YES	-	-	-	-
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	36	1	YES	-	-	-	-
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	38	1	YES	-	-	-	-
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	39	1	YES	-	-	-	-
+GACGCTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTGCGTC	1	5	40	1	YES	-	-	-	-

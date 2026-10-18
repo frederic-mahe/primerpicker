@@ -198,9 +198,13 @@ Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
   (and their equivalents on the other strand). Not Breslauer 1986,
   which the primer Tm uses;
 - loop penalty: Freier 1986 hairpin loops, by length: 3: 7.4, 4: 5.9,
-  5: 4.4, 6: 4.3, 7: 4.1, 8: 4.1, 9: 4.2, 10: 4.3, 12: 4.9, 14: 5.6;
-  lengths in between are interpolated (recorded 11: 4.6, 13: 5.3).
-  The loop sequence and bases outside the hairpin do not matter;
+  5: 4.4, 6: 4.3, 7: 4.1, 8: 4.1, 9: 4.2, 10: 4.3, 12: 4.9, 14: 5.6,
+  16: 6.1, 18: 6.7, 20: 7.1, 30: 8.9. Lengths in between are
+  interpolated linearly (11: 4.6, 13: 5.25, 23: 7.64), and lengths
+  beyond 30 extrapolated with the slope from 20 to 30 (0.18 per base;
+  recorded up to 34: a loop of 35 next to the strongest 5-pair stem
+  gives no hairpin). The loop sequence and bases outside the hairpin
+  do not matter;
 - the stem may contain G.T pairs (as RNA G.U), but never at either
   end: a stem starts and ends with Watson-Crick pairs. Steps with a
   G.T pair have their own values; the recordings determine only the
@@ -211,7 +215,18 @@ Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
   maximal stems are scored (`ATAT...` repeats get a loop of 4, not
   6);
 - the most stable hairpin is shown; "No Hairpins Found" when none has
-  a negative energy.
+  a negative energy;
+- the energy is shown truncated toward zero to tenths: a loop of 23
+  gives -2.16, shown -2.1 (all values are exact in hundredths of
+  kcal, so the core computes in integer hundredths);
+- stems do not extend through a tandem T.G/G.T step (no recorded
+  stem contains one).
+
+`inspect/inspect_2.tsv` adds the primers of the first batch whose
+recording had failed, loop lengths 13 to 40 next to the same stem,
+hairpins with one or two G.T pairs inside 6- or 7-pair stems, and
+G.T pairs offered at the outer end of a stem or next to the loop
+(they are not used).
 
 
 ## Molecule file formats (recorded 2026-10-18)
