@@ -301,7 +301,9 @@ form by itself (Esc cancels that second pass).
 `pairs/pair_screens.tsv`: the Primer Pair Analysis screen (balance,
 cautions, dimer matrix) of 36 pairs: those of `pairs/pairs.tsv`, and
 pairs typed with Direct Entry, where B's 3' end is complementary to
-A's 3' end over 0 to 6 bases.
+A's 3' end over 0 to 6 bases. `pairs/pair_screens_2.tsv` adds 6
+pairs, four of them designed to have exactly 7 adjacent homologous
+bases (A:B or A:A).
 
 All 36 follow these rules (`tests/unit/test_legacy_pair.cpp`):
 - self values (A:A, B:B) and cautions are the single-primer counts
@@ -314,9 +316,9 @@ All 36 follow these rules (`tests/unit/test_legacy_pair.cpp`):
 - balance comments: "N base difference", "N % difference",
   "N°C difference" whenever the lengths, GC % or Tm differ (by 1 or
   more); GC % and Tm carry the "!" of the single-primer criteria;
-- caution and dimer flags ("!"): 3' end matches from 3 (the
-  criterion's "reject if >="); adjacent homologous bases: 6 is not
-  flagged, 8 is (7 not recorded yet); but G/C runs at the 3' end and
+- caution and dimer flags ("!"): 3' end matches from 3 and adjacent
+  homologous bases from 7 (the criteria's "reject if >="); but G/C
+  runs at the 3' end and
   runs of bases are flagged from 4, one more than the criteria's
   "reject if >= 3" (a value of 3 is not flagged here, while the
   Primer Analysis screen fails it). "Runs found" and "Hairpin(s)
