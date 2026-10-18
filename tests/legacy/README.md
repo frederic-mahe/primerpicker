@@ -619,7 +619,19 @@ All 12 lists (284 sites) follow the rules above, and:
   sites found" messages belong to other screens (probably Find Pair).
 
 The 359-enzyme table cannot be reached from the screens: Find
-Enzymes and the F1 = REnz list of the Find Pair form show the same 89
+Enzymes, the F1 = REnz list of the Find Pair form and the F1 = REnz
+list of Modify -> Mutagenize (checked 2026-10-18) show the same 89
 enzymes of the default menu; INS, DEL and F1-F4 do not change the
 menu. No enzyme of that menu has IUPAC letters or N, so how PRIMER.exe
 matches them was not observed.
+
+Mutagenize (Modify -> Active Primer: Mutagenize, five downs from the
+top of the menu) shows the original and mutated primer with their
+translations in three frames, and %GC, Tm, hairpin, dimers and runs of
+both. Bases are typed over (overwrite mode; the cursor does not move
+by itself). No screen lists restriction sites created by a mutation:
+F1 only opens the enzyme list (selecting an enzyme there did not
+change the primer; the executable holds the message "Can Only Paste
+Enzyme Sequence Into 5'Extension Field"). Not recorded as data: the
+key sequence is space, down, enter, enter, the primer, enter, s,
+right, down x5, enter, then f1.
