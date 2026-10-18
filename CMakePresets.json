@@ -97,6 +97,22 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
       }
+    },
+    {
+      "name": "fuzz",
+      "displayName": "libFuzzer harnesses, clang 20 and libstdc++, ASan + UBSan",
+      "inherits": [
+        "base",
+        "clang-warnings"
+      ],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_COMPILER": "clang++-20",
+        "CMAKE_CXX_FLAGS": "-fsanitize=fuzzer-no-link,address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer -D_GLIBCXX_ASSERTIONS",
+        "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined",
+        "BUILD_TESTING": "OFF",
+        "PRIMERPICKER_FUZZ": "ON"
+      }
     }
   ],
   "buildPresets": [
@@ -119,6 +135,10 @@
     {
       "name": "mingw-release",
       "configurePreset": "mingw-release"
+    },
+    {
+      "name": "fuzz",
+      "configurePreset": "fuzz"
     }
   ],
   "testPresets": [

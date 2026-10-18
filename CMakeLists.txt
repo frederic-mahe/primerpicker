@@ -25,3 +25,8 @@ if(BUILD_TESTING)
   add_subdirectory(tests/unit)
   add_subdirectory(tests/cli)
 endif()
+
+option(PRIMERPICKER_FUZZ "Build the libFuzzer harnesses (clang only)" OFF)
+if(PRIMERPICKER_FUZZ)
+  add_subdirectory(tests/fuzz)
+endif()
