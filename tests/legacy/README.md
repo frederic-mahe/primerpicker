@@ -430,3 +430,32 @@ position = 5' end, from 350 to 450) that:
 Entries are sorted by position; "bps from target" is the distance
 between the position and the target. Every primer of the window that
 passes these tests is listed, and no other.
+
+
+## Find Pair (recorded 2026-10-18)
+
+`search/find_pair.tsv`: the Find Primer Pair list for
+`pairs/TEST600.GB` with targets 150 (primer A) and 400 (primer B) and
+the form's other defaults: primer A searched from target - 100 to the
+target, primer B (complement strand) from the target to target + 100,
+length 20, no extensions, GC within 5 % and Tm within 10 °C, all five
+weights 1. Keys: space, down down down enter (Find Pair), enter, down
+down enter (TEST600), enter (Bp position), 150, enter x3, 400, enter
+x5. The program reported "Primer A: 3 possible primers, Primer B: 7
+possible primers, Pairs: 10 possible", then the list (rank = order on
+screen).
+
+Rules that reproduce the list:
+- possible primers: those of the search windows that meet every
+  criterion (A: 71, 72, 73; B: 413, 414, 422, 424, 425, 453, 457);
+- possible pairs: GC % within 5, Tm within 10 °C, and fewer A:B 3'
+  end matches than the criterion (3), as in Match Active Primer;
+- "Max Dimers 3'" and "Any": the largest of the A:A, B:B and A:B
+  values; "FalsePriming TmA/TmB": the highest false-priming site Tm
+  of each primer on the molecule, "-" if none;
+- order: with all weights 1, the eight pairs without false-priming
+  site are sorted by GC difference + Tm difference + max 3' dimers +
+  max adjacent bases (ties: primer B's position); the two pairs whose
+  primer A has a false-priming site (Tm 21) come last. How false
+  priming enters the score, and how the weights scale each term, is
+  not determined yet.
