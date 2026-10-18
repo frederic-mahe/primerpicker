@@ -496,6 +496,30 @@ GC difference, Tm difference, max 3' dimers and max adjacent bases;
 the false-priming term (weight 1) is above 15 for a site of Tm 21.
 Taking the site's Tm itself fits all three lists, but is not proven.
 
+### Limits on primers and pairs (probed 2026-10-18, partial)
+
+`config/PD2_RELAXED.CFG` is not a recording: it is a settings file
+written for probes, with the layout of "Settings file `pd2.cfg`"
+(built-in values, except GC 0-100 %, Tm 0-99 °C, hairpin cutoff -99
+kcal, dimer and run thresholds 99), so that nearly every primer meets
+the criteria. Copied as `PD2.CFG` next to PRIMER.EXE, it is loaded at
+start (a file with another name is ignored). Find Pair on
+`enzymes/TLONG.GB` (1200 bases, random), targets 400 and 800:
+- windows of 41 positions (target - 40, target + 40): "Primer A: 41
+  possible primers", "Primer B: 41", "Pairs: 626 possible", then the
+  list;
+- windows of 61 positions: 61 and 61 possible primers; the pair count
+  climbs to "Pairs: 1000 possible" and stops there, while the search
+  goes on ("Press key to interrupt search") for more than 20 minutes
+  of emulated time, without another message. Whether a warning
+  follows ("More than 1000 pairs", proposal §1.2) was not observed.
+- the 100-site message ("More than 100 sites found. Suggest you
+  redefine matching limits.") was not reached: the run with windows
+  of 151 positions lost keys. To probe again with long time limits,
+  one emulator at a time.
+Keys typed during the search may interrupt it: type nothing after the
+last Enter of the form until the counts are final.
+
 ### The false-priming term of the score (recorded 2026-10-18)
 
 `search/find_pair_false_priming.tsv`: Find Primer Pair lists of
