@@ -30,7 +30,8 @@ add_executable(unit_tests
   test_pd2.cpp
   test_legacy_homology.cpp
   test_legacy_match.cpp
-  test_legacy_find_pair.cpp)
+  test_legacy_find_pair.cpp
+  test_molecule_formats.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
