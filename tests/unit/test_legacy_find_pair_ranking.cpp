@@ -187,20 +187,20 @@ TEST_CASE("Find Pair ranks the pairs as the recorded lists (other weights)", "[s
 }
 
 TEST_CASE("Find Pair ranks pairs with false-priming sites as the recorded lists", "[search][legacy]") {
-    auto const sequence = molecule(legacy_path("search", "TFP.GB"));
-    auto expected = std::map<std::string, std::vector<std::string>>{};  // weights -> pair values, by rank
+    // (molecule, weights) -> pair values, by rank
+    auto expected = std::map<std::pair<std::string, std::string>, std::vector<std::string>>{};
     constexpr auto first_value_column = 5U;
     for (auto const& fields : table(legacy_path("search", "find_pair_false_priming.tsv"))) {
-        REQUIRE(fields.at(0) == "TFP.GB");
-        expected[fields.at(3)].push_back(join(fields, first_value_column));
+        expected[{fields.at(0), fields.at(3)}].push_back(join(fields, first_value_column));
     }
-    REQUIRE(expected.size() == 7);
-    for (auto const& [weight_text, expected_pairs] : expected) {
-        auto const computed =
-            ranked(sequence, FindPairSettings{.target_a = 150, .target_b = 400}, weights(weight_text));
+    REQUIRE(expected.size() == 9);  // TFP.GB: 7 weight sets, TFP2.GB: 2
+    for (auto const& [run, expected_pairs] : expected) {
+        auto const& [molecule_name, weight_text] = run;
+        auto const computed = ranked(molecule(legacy_path("search", molecule_name)),
+                                     FindPairSettings{.target_a = 150, .target_b = 400}, weights(weight_text));
         auto actual = std::vector<std::string>{};
         std::ranges::transform(computed, std::back_inserter(actual), describe);
-        INFO("weights " << weight_text);
+        INFO(molecule_name << ", weights " << weight_text);
         REQUIRE(expected_pairs.size() == 30);  // PRIMER.exe: "Pairs: 30 possible"
         CHECK(actual == expected_pairs);
     }

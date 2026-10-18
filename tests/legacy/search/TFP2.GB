@@ -1,0 +1,20 @@
+LOCUS       TFP2         900 bp    DNA     linear
+DEFINITION  Random test molecule (seed 3236, GC 0.55,0.55,0.55,0.55,0.55,0.55), copies 88:11:620 126:11:660 140:11:700 452:8:740 141:10:780 127:10:820.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 acgtgataat ttgcggcaca gccgcgggtc cccgaaattt cgtgccggtt caccgtgggt
+       61 gttcccagga acgctgcgcg tagtactgcg gagctattgg ttcaccagcc ctctttgaag
+      121 cgcacgactc gtggatcagg cgtgtgagtc gattaacact gcttctgtgg ttaggctgac
+      181 ctcaggtaga ccttctgctg tgcgcgaata tgcgatcagg gatggcaagc ggtcggtctt
+      241 acggtcaccc acgagccgtc taacccgtct gcctttattt gtagacagct ctcgcccaat
+      301 cgcacaattt ttaagagttc accgatagcg atgttgccac acaactgttg ttcgctagtc
+      361 ggcagctacg taagctgtat cctataggag gatgactctg taccctatac gtaagacccc
+      421 cccccggcat ctgccatact gttatgcacg tagacacggt gccactactc ccggtaacct
+      481 taagcattac gaggtcttcc aagcaagtct gcgcacatga gcacagaacc cattctatga
+      541 cgcggatgcc cggcccggtc ctgtgatttg gctaccgtgc tccaatgacg caatagaatg
+      601 tctttacgca gcttccatgg cggagctatt cagggaagca gatcaggaat atcccccaag
+      661 actcgtggat cccttgtacg taaaacgggc agcgaagtcg cgtgtgagtc aaggtggaca
+      721 tagtgcacag attctgggta gacacggagt gcccgtggca gtcgatcccc ctcatgtggc
+      781 gtgtgagtcg tcattcccta tgaacgagag ctctgcagca ctcgtggatg actagcataa
+      841 ggagattcgg cttagcaagt atgtaaggac gcaaggtcca ttaccagtgg ccgcgaactt
+//

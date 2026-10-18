@@ -477,3 +477,39 @@ generation order, with score = sum of weight x term, the terms being
 GC difference, Tm difference, max 3' dimers and max adjacent bases;
 the false-priming term (weight 1) is above 15 for a site of Tm 21.
 Taking the site's Tm itself fits all three lists, but is not proven.
+
+### The false-priming term of the score (recorded 2026-10-18)
+
+`search/find_pair_false_priming.tsv`: Find Primer Pair lists of
+`search/TFP.GB` and `search/TFP2.GB` (targets 150 and 400, other
+settings built in), with several weight sets. Both molecules are
+random sequences with planted copies of primer 3' ends
+(`tools/plant_sites.py`; the copies are listed in the DEFINITION
+line), which give false-priming sites to primers A (site Tm 15 to
+39) and to one primer B (site Tm 6); in `TFP2.GB`, seven primers A
+have a second, weaker site. 30 pairs per list. Recorded with
+`tools/find_pair.sh` (`DOWNS=32`, `PAUSE=2.5`) and
+`tools/parse_find_pair.py`. Runs that lost keys were discarded:
+the parser checks the first four weights on the weights form (the
+form closes before showing the fifth) and that the list was
+reached.
+
+All 12 recorded lists (these 9, and the 3 lists of `TEST600.GB`)
+follow this score, by increasing score and in generation order for
+equal scores:
+
+    score = wGC x |GC% A - GC% B| + wTm x |Tm A - Tm B|
+          + w3' x max 3' dimers + wAny x max dimers (any)
+          + wFP x (false-priming Tm of A + false-priming Tm of B)
+
+- the false-priming Tm of a primer is that of its highest site (the
+  TmA/TmB columns), 0 when it has none; the sum over all its sites
+  does not fit the `TFP2.GB` lists;
+- the term is the sum of both primers' Tm: the largest, or primer
+  A's alone, contradict several lists;
+- the weight multiplies it (`0 5 0 5 2`: the order differs from
+  `0 5 0 5 1` predictions);
+- a pair whose only site has Tm 6 is placed exactly as a score of 6.
+
+Not probed: lists of more than 1000 pairs or more than 100 sites
+(the program warns), and other targets or windows.
