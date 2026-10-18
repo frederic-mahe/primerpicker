@@ -14,6 +14,7 @@
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
+#include "core/sequence/topology.hpp"
 
 #include <algorithm>
 #include <charconv>
@@ -278,9 +279,14 @@ auto read_text_file(std::filesystem::path const& path) -> std::optional<std::str
     return std::move(text).str();
 }
 
-// The nucleotides of a molecule file, or none after printing why on
-// stderr
-auto read_molecule(std::filesystem::path const& path) -> std::optional<std::vector<Nucleotide>> {
+struct LoadedMolecule {
+    std::vector<Nucleotide> sequence;
+    primerpicker::sequence::Topology topology;
+};
+
+// The nucleotides and topology of a molecule file, or none after
+// printing why on stderr
+auto read_molecule(std::filesystem::path const& path) -> std::optional<LoadedMolecule> {
     auto const text = read_text_file(path);
     if (not text.has_value()) {
         fail(std::format("cannot read {}", path.string()));
@@ -292,8 +298,9 @@ auto read_molecule(std::filesystem::path const& path) -> std::optional<std::vect
                                                 : std::nullopt;
     if (not sequence.has_value()) {
         fail(std::format("{}: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)", path.string()));
+        return std::nullopt;
     }
-    return sequence;
+    return LoadedMolecule{.sequence = std::move(*sequence), .topology = parsed.molecule->topology};
 }
 
 // A position typed on the command line (1 or more), or none after
@@ -371,17 +378,19 @@ auto find_pair(FindPairArguments const& arguments) -> int {
         return EXIT_FAILURE;
     }
     auto const result = primerpicker::search::legacy_find_pair(
-        *molecule, {.target_a = *target_a, .target_b = *target_b}, LegacyCriteria{});
+        molecule->sequence, {.target_a = *target_a, .target_b = *target_b}, LegacyCriteria{});
     std::cout << find_pair_report(result, *weights);
     return EXIT_SUCCESS;
 }
 
 // "....A": a dot per matching base, the molecule's base where it differs
+// (across the origin of a circular molecule)
 auto match_text(primerpicker::enzymes::Site const& site, std::span<Nucleotide const> const molecule,
                 std::size_t const length) -> std::string {
     auto text = std::string(length, '.');
     if (site.mismatch_offset.has_value()) {
-        text.at(*site.mismatch_offset) = letter(molecule[site.position - 1 + *site.mismatch_offset]);
+        auto const index = (site.position - 1 + *site.mismatch_offset) % molecule.size();
+        text.at(*site.mismatch_offset) = letter(molecule[index]);
     }
     return text;
 }
@@ -397,13 +406,14 @@ auto site_line(primerpicker::enzymes::Site const& site, std::span<Nucleotide con
                       : std::format("{:>8}  {}\n", site.position, text);
 }
 
-auto enzyme_report(primerpicker::enzymes::Enzyme const& enzyme, std::span<Nucleotide const> const molecule,
+auto enzyme_report(primerpicker::enzymes::Enzyme const& enzyme, LoadedMolecule const& loaded,
                    primerpicker::enzymes::Mismatches const mismatches) -> std::optional<std::string> {
+    auto const molecule = std::span<Nucleotide const>{loaded.sequence};
     auto const pattern = primerpicker::enzymes::parse_site(enzyme.site);
     if (not pattern.has_value()) {
         return std::nullopt;
     }
-    auto const sites = primerpicker::enzymes::find_sites(molecule, *pattern, mismatches);
+    auto const sites = primerpicker::enzymes::find_sites(molecule, *pattern, mismatches, loaded.topology);
     auto const reversed = primerpicker::sequence::reverse_complement_iupac(enzyme.site);
     // as Primer Designer, the almost sites header shows the reverse
     // complement of a non-palindromic site

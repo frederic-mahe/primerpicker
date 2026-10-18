@@ -3,6 +3,7 @@
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
+#include "core/sequence/topology.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -103,31 +104,44 @@ constexpr auto site(std::size_t const offset, sequence::Strand const strand, Com
 
 }  // namespace detail
 
-// The sites of a recognition sequence on both strands of a linear
-// molecule, by position (top strand first at the same position: not
-// recorded); a palindromic site is found once, on the top strand. Not
-// noexcept: vectors allocate.
+// The sites of a recognition sequence on both strands of a molecule,
+// by position (tests/legacy/README.md, "True and almost sites"); on a
+// circular molecule, sites across the origin too. At the same
+// position, an exact site comes before a site with a mismatch, then
+// top before complement. A palindromic site is found once, on the top
+// strand. Not noexcept: vectors allocate.
 [[nodiscard]] constexpr auto find_sites(std::span<sequence::Nucleotide const> const molecule,
-                                        SitePattern const& pattern, Mismatches const mismatches)
-    -> std::vector<Site> {
+                                        SitePattern const& pattern, Mismatches const mismatches,
+                                        sequence::Topology const topology) -> std::vector<Site> {
     assert(not pattern.empty());
     auto sites = std::vector<Site>{};
     if (molecule.size() < pattern.size()) {
         return sites;
     }
+    // a circular molecule is searched on a copy followed by its first
+    // bases, from every start position of the molecule
+    auto const circular = topology == sequence::Topology::circular;
+    auto extended = std::vector<sequence::Nucleotide>(molecule.begin(), molecule.end());
+    if (circular) {
+        extended.insert(extended.end(), molecule.begin(), std::next(molecule.begin(), std::ssize(pattern) - 1));
+    }
+    auto const starts = circular ? molecule.size() : molecule.size() - pattern.size() + 1;
     auto const complement_pattern = detail::reverse_complement(pattern);
     auto const palindromic = complement_pattern == pattern;
-    for (auto offset = std::size_t{0}; offset + pattern.size() <= molecule.size(); ++offset) {
-        auto const window = molecule.subspan(offset, pattern.size());
+    for (auto offset = std::size_t{0}; offset < starts; ++offset) {
+        auto const window = std::span{extended}.subspan(offset, pattern.size());
         auto const top = detail::compare(window, pattern);
+        // a palindrome's complement sites are its top sites: never accepted
+        auto const complement = palindromic ? detail::Comparison{.mismatch_count = 2, .first_mismatch_offset = 0}
+                                            : detail::compare(window, complement_pattern);
+        auto const complement_first = complement.mismatch_count < top.mismatch_count;
+        if (complement_first and detail::accepted(complement, mismatches)) {
+            sites.push_back(detail::site(offset, sequence::Strand::complement, complement));
+        }
         if (detail::accepted(top, mismatches)) {
             sites.push_back(detail::site(offset, sequence::Strand::top, top));
         }
-        if (palindromic) {
-            continue;
-        }
-        auto const complement = detail::compare(window, complement_pattern);
-        if (detail::accepted(complement, mismatches)) {
+        if (not complement_first and detail::accepted(complement, mismatches)) {
             sites.push_back(detail::site(offset, sequence::Strand::complement, complement));
         }
     }

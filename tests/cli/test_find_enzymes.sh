@@ -68,7 +68,7 @@ sites () {
 
 recorded () {
     awk -F'\t' -v kind="$1" -v enzyme="$2" \
-        '$2 == kind && $3 == enzyme {print $6, $7, $8}' "${RECORDED}"
+        '$1 == "TENZ.GB" && $2 == kind && $3 == enzyme {print $6, $7, $8}' "${RECORDED}"
 }
 
 for ENZYME in AluI AlwI FokI ApaI ; do
@@ -86,5 +86,25 @@ for ENZYME in AlwI ApaI ; do
         success "${DESCRIPTION}" || \
             failure "${DESCRIPTION}"
 done
+
+## circular molecule: a site across the origin, and sites on both
+## strands at the same position
+TENZC="${LEGACY}/enzymes/TENZC.GB"
+recorded_on () {
+    awk -F'\t' -v molecule="$1" -v kind="$2" -v enzyme="$3" \
+        '$1 == molecule && $2 == kind && $3 == enzyme {print $6, $7, $8}' "${RECORDED}"
+}
+
+DESCRIPTION="find-enzymes: true sites across the origin of a circular molecule"
+EXPECTED=$(recorded_on TENZC.GB true AluI)
+[[ -n "${EXPECTED}" && $(sites "${TENZC}" AluI) == "${EXPECTED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-enzymes: almost sites at the same position on both strands"
+EXPECTED=$(recorded_on TENZC.GB almost PleI)
+[[ -n "${EXPECTED}" && $(sites --almost "${TENZC}" PleI) == "${EXPECTED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
 
 exit 0

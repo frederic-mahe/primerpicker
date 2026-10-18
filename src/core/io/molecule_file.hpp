@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/io/genbank.hpp"
+#include "core/sequence/topology.hpp"
 
 #include <cstdint>
 #include <optional>
@@ -35,11 +36,13 @@ constexpr auto failure(MoleculeError const error) -> MoleculeResult {
     return {.molecule = std::nullopt, .error = error};
 }
 
-constexpr auto success(std::string name, std::string sequence) -> MoleculeResult {
+constexpr auto success(std::string name, std::string sequence, sequence::Topology const topology)
+    -> MoleculeResult {
     if (sequence.empty()) {
         return failure(MoleculeError::empty_sequence);
     }
-    return {.molecule = Molecule{.name = std::move(name), .sequence = std::move(sequence)}, .error = MoleculeError::none};
+    return {.molecule = Molecule{.name = std::move(name), .sequence = std::move(sequence), .topology = topology},
+            .error = MoleculeError::none};
 }
 
 constexpr auto is_blank_line(std::string_view const line) noexcept -> bool {
@@ -77,7 +80,7 @@ constexpr auto first_content_line(std::string_view const text) noexcept -> std::
     for (line = lines.next(); line.has_value() and not line->starts_with(header_mark); line = lines.next()) {
         detail::append_letters(sequence, *line);
     }
-    return detail::success(std::move(name), std::move(sequence));
+    return detail::success(std::move(name), std::move(sequence), sequence::Topology::linear);
 }
 
 // A file holding only a sequence: its letters (uppercase), named after
@@ -85,7 +88,7 @@ constexpr auto first_content_line(std::string_view const text) noexcept -> std::
 [[nodiscard]] constexpr auto parse_plain_sequence(MoleculeFile const& file) -> MoleculeResult {
     auto sequence = std::string{};
     detail::append_letters(sequence, file.text);
-    return detail::success(std::string{file.name}, std::move(sequence));
+    return detail::success(std::string{file.name}, std::move(sequence), sequence::Topology::linear);
 }
 
 // Any of the three formats, recognised from the first line that is not
@@ -100,7 +103,8 @@ constexpr auto first_content_line(std::string_view const text) noexcept -> std::
         if (not genbank.molecule.has_value()) {
             return detail::failure(MoleculeError::missing_origin);
         }
-        return detail::success(std::move(genbank.molecule->name), std::move(genbank.molecule->sequence));
+        return detail::success(std::move(genbank.molecule->name), std::move(genbank.molecule->sequence),
+                               genbank.molecule->topology);
     }
     if (first.has_value() and first->starts_with('>')) {
         return parse_fasta(text);

@@ -5,6 +5,7 @@
 #include "core/enzymes/site_search.hpp"
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/topology.hpp"
 #include "fuzz_input.hpp"
 
 #include <algorithm>
@@ -31,14 +32,19 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
     if (not pattern.has_value() or not molecule.has_value()) {
         return 0;
     }
-    auto const exact = primerpicker::enzymes::find_sites(*molecule, *pattern, Mismatches::none);
-    auto const almost = primerpicker::enzymes::find_sites(*molecule, *pattern, Mismatches::at_most_one);
-    primerpicker::fuzz::check(exact.size() <= almost.size());
-    auto const fits = [&](primerpicker::enzymes::Site const& found) {
-        return found.position >= 1 and found.position - 1 + pattern->size() <= molecule->size() and
-               (not found.mismatch_offset.has_value() or *found.mismatch_offset < pattern->size());
-    };
-    primerpicker::fuzz::check(std::ranges::all_of(almost, fits));
-    primerpicker::fuzz::check(std::ranges::is_sorted(almost, {}, &primerpicker::enzymes::Site::position));
+    using primerpicker::sequence::Topology;
+    for (auto const topology : {Topology::linear, Topology::circular}) {
+        auto const exact = primerpicker::enzymes::find_sites(*molecule, *pattern, Mismatches::none, topology);
+        auto const almost = primerpicker::enzymes::find_sites(*molecule, *pattern, Mismatches::at_most_one, topology);
+        primerpicker::fuzz::check(exact.size() <= almost.size());
+        auto const last_start =
+            topology == Topology::circular ? molecule->size() : molecule->size() + 1 - pattern->size();
+        auto const fits = [&](primerpicker::enzymes::Site const& found) {
+            return found.position >= 1 and found.position <= last_start and
+                   (not found.mismatch_offset.has_value() or *found.mismatch_offset < pattern->size());
+        };
+        primerpicker::fuzz::check(std::ranges::all_of(almost, fits));
+        primerpicker::fuzz::check(std::ranges::is_sorted(almost, {}, &primerpicker::enzymes::Site::position));
+    }
     return 0;
 }
