@@ -26,7 +26,8 @@ add_executable(unit_tests
   test_genbank.cpp
   test_legacy_verdict.cpp
   test_legacy_hairpin.cpp
-  test_legacy_pair.cpp)
+  test_legacy_pair.cpp
+  test_pd2.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
