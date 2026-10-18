@@ -8,3 +8,5 @@ endif()
 find_program(BASH_EXECUTABLE NAMES bash REQUIRED)
 add_test(NAME cli_analyze
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_analyze.sh $<TARGET_FILE:primerpicker>)
+add_test(NAME cli_pair
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_pair.sh $<TARGET_FILE:primerpicker>)

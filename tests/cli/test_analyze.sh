@@ -44,7 +44,7 @@ DESCRIPTION="--version prints the version and succeeds"
         failure "${DESCRIPTION}"
 
 DESCRIPTION="--help prints the usage and succeeds"
-"${PRIMERPICKER}" --help | grep -q "^Usage: primerpicker analyze PRIMER" && \
+"${PRIMERPICKER}" --help | grep -q "^Usage: primerpicker analyze \[--extension EXTENSION\] PRIMER" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -143,5 +143,35 @@ DESCRIPTION="a primer can meet all criteria"
 "${PRIMERPICKER}" analyze ACACACACACACACACACAC | grep -qx "Meets criteria: YES" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
+
+
+#*****************************************************************************#
+#                                                                             #
+#                               5' extension                                  #
+#                                                                             #
+#*****************************************************************************#
+
+## CCCC + GTAAAACGACGGCCAGT, Inspect screen (inspect_extension.tsv)
+EXTENDED=$("${PRIMERPICKER}" analyze --extension CCCC GTAAAACGACGGCCAGT)
+
+check_extended () {
+    local DESCRIPTION="extension: ${1}"
+    grep -qxE "${2}" <<< "${EXTENDED}" && \
+        success "${DESCRIPTION}" || \
+            failure "${DESCRIPTION}"
+}
+
+check_extended "sequence" "Sequence: +5'-CCCCGTAAAACGACGGCCAGT-3'"
+check_extended "length includes the extension" "Length: +21"
+check_extended "extension" "5' extension: +CCCC"
+check_extended "GC % includes the extension" "% GC +min 50, max 60 +61 +NO"
+check_extended "Tm without the extension" "Tm °C +min 55, max 80 +64 +YES"
+check_extended "hairpin with the extension" "Hairpin: +-2\.7 kcal"
+check_extended "runs" "No runs +reject >= 3 base runs +4 +NO"
+
+DESCRIPTION="the extension is checked like a primer"
+"${PRIMERPICKER}" analyze --extension CCNC GTAAAACGACGGCCAGT > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
 
 exit 0
