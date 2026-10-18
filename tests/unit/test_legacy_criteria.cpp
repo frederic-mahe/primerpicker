@@ -127,9 +127,13 @@ auto read_recordings(std::filesystem::path const& path) -> std::vector<Recording
 }  // namespace
 
 TEST_CASE("legacy criteria match every recorded primer", "[analysis][legacy]") {
-    auto const recordings =
-        read_recordings(std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "inspect" / "inspect.tsv");
-    REQUIRE(not recordings.empty());
+    auto const directory = std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "inspect";
+    auto recordings = read_recordings(directory / "inspect.tsv");
+    for (auto const* const name : {"hairpin_design.tsv", "inspect_2.tsv"}) {
+        auto const more = read_recordings(directory / name);
+        recordings.insert(recordings.end(), more.begin(), more.end());
+    }
+    REQUIRE(recordings.size() > 260);
     for (auto const& recording : recordings) {
         INFO("primer " << recording.primer);
         CHECK(computed(recording.primer) == recording);

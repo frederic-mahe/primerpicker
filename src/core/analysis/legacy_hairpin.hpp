@@ -15,8 +15,17 @@ struct Hairpin {
     std::size_t stem_start;   // 0-based position of the outermost 5' stem base
     std::size_t stem_length;  // base pairs
     std::size_t loop_length;  // unpaired bases between the two arms
-    thermo::KilocaloriesPerMole energy;
+    int energy_centi_kcal_per_mol;  // exact: Primer Designer's values are in hundredths
 };
+
+// The energy as Primer Designer shows it: truncated toward zero to
+// tenths of kcal/mol (a loop of 23 gives -2.16, shown -2.1)
+[[nodiscard]] constexpr auto legacy_displayed_energy(Hairpin const& hairpin) noexcept -> thermo::KilocaloriesPerMole {
+    constexpr auto centi_per_tenth = 10;
+    constexpr auto tenths_per_unit = 10.0;
+    // integer division truncates toward zero, as Primer Designer does
+    return thermo::KilocaloriesPerMole{(hairpin.energy_centi_kcal_per_mol / centi_per_tenth) / tenths_per_unit};  // NOLINT(bugprone-integer-division)
+}
 
 namespace detail {
 
@@ -30,23 +39,25 @@ constexpr auto is_wobble(sequence::Nucleotide const lhs, sequence::Nucleotide co
            (lhs == Nucleotide::thymine and rhs == Nucleotide::guanine);
 }
 
-// Stability of the step between the pair (outer_5prime, outer_3prime)
-// and the next pair inwards
+// Stability (hundredths of kcal/mol) of the step between the pair
+// (outer_5prime, outer_3prime) and the next pair inwards; none if the
+// step cannot be part of a stem
 constexpr auto stack(std::span<sequence::Nucleotide const> const primer, std::size_t const outer_5prime,
-                     std::size_t const outer_3prime) noexcept -> double {
+                     std::size_t const outer_3prime) noexcept -> std::optional<int> {
     auto const top_5prime = primer[outer_5prime];
     auto const top_3prime = primer[outer_5prime + 1];
     auto const bottom_3prime = primer[outer_3prime];
     auto const bottom_5prime = primer[outer_3prime - 1];
     if (pairs(top_5prime, bottom_3prime) and pairs(top_3prime, bottom_5prime)) {
-        return thermo::freier_1986_stack(top_5prime, top_3prime).kcal_per_mol;
+        return thermo::freier_1986_stack(top_5prime, top_3prime);
     }
-    auto const wobble = thermo::freier_1986_wobble_stack(thermo::Step{.top_5prime = thermo::letter(top_5prime),
-                                                                      .top_3prime = thermo::letter(top_3prime),
-                                                                      .bottom_3prime = thermo::letter(bottom_3prime),
-                                                                      .bottom_5prime = thermo::letter(bottom_5prime)});
-    assert(wobble.has_value());
-    return wobble.has_value() ? wobble->kcal_per_mol : 0.0;
+    if (not(pairs(top_5prime, bottom_3prime) or is_wobble(top_5prime, bottom_3prime))) {
+        return std::nullopt;
+    }
+    return thermo::freier_1986_wobble_stack(thermo::Step{.top_5prime = thermo::letter(top_5prime),
+                                                         .top_3prime = thermo::letter(top_3prime),
+                                                         .bottom_3prime = thermo::letter(bottom_3prime),
+                                                         .bottom_5prime = thermo::letter(bottom_5prime)});
 }
 
 // The hairpin closed by primer[inner_5prime] and primer[inner_3prime],
@@ -58,25 +69,25 @@ constexpr auto hairpin_at(std::span<sequence::Nucleotide const> const primer, st
     if (not loop_penalty.has_value()) {
         return std::nullopt;
     }
-    // extend over Watson-Crick and G.T pairs, then drop G.T pairs at
-    // the outer end: a stem starts and ends with Watson-Crick pairs
+    // extend over Watson-Crick and G.T pairs (through known steps only),
+    // then drop G.T pairs at the outer end: a stem starts and ends with
+    // Watson-Crick pairs
     auto length = std::size_t{1};
     while (length <= inner_5prime and inner_3prime + length < primer.size() and
-           (pairs(primer[inner_5prime - length], primer[inner_3prime + length]) or
-            is_wobble(primer[inner_5prime - length], primer[inner_3prime + length]))) {
+           stack(primer, inner_5prime - length, inner_3prime + length).has_value()) {
         ++length;
     }
     while (length > 1 and not pairs(primer[inner_5prime + 1 - length], primer[inner_3prime + length - 1])) {
         --length;
     }
-    auto stem_energy = 0.0;
+    auto stem_energy = 0;
     for (auto step = std::size_t{1}; step < length; ++step) {
-        stem_energy += stack(primer, inner_5prime - step, inner_3prime + step);
+        stem_energy += stack(primer, inner_5prime - step, inner_3prime + step).value_or(0);
     }
     return Hairpin{.stem_start = inner_5prime + 1 - length,
                    .stem_length = length,
                    .loop_length = loop_length,
-                   .energy = thermo::KilocaloriesPerMole{loop_penalty->kcal_per_mol - stem_energy}};
+                   .energy_centi_kcal_per_mol = *loop_penalty - stem_energy};
 }
 
 }  // namespace detail
@@ -102,12 +113,13 @@ constexpr auto hairpin_at(std::span<sequence::Nucleotide const> const primer, st
                 continue;
             }
             auto const hairpin = detail::hairpin_at(primer, inner_5prime, inner_3prime);
-            if (hairpin.has_value() and (not best.has_value() or hairpin->energy.kcal_per_mol < best->energy.kcal_per_mol)) {
+            if (hairpin.has_value() and
+                (not best.has_value() or hairpin->energy_centi_kcal_per_mol < best->energy_centi_kcal_per_mol)) {
                 best = hairpin;
             }
         }
     }
-    if (best.has_value() and best->energy.kcal_per_mol >= 0.0) {
+    if (best.has_value() and best->energy_centi_kcal_per_mol >= 0) {
         return std::nullopt;
     }
     return best;

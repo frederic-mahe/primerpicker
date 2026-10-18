@@ -79,7 +79,7 @@ struct LegacyVerdict {
     auto const truncated_tm = static_cast<int>(primer_tm);  // toward zero: the floor when positive
     return {.gc_percent = legacy_gc_percent(primer),
             .tm_celsius = primer_tm > 0.0 ? truncated_tm : 0,
-            .hairpin = hairpin.has_value() ? std::optional{hairpin->energy} : std::nullopt,
+            .hairpin = hairpin.has_value() ? std::optional{legacy_displayed_energy(*hairpin)} : std::nullopt,
             .dimer_3prime_matches = self_dimer_at_3prime_end(primer),
             .dimer_adjacent_bases = longest_self_complementary_run(primer),
             .longest_run = longest_run_before_3prime_end(primer),
