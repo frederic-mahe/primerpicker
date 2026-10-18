@@ -344,3 +344,32 @@ AAAA + ACGTCAGTCGATCGTCAGCT: GC 45 %, Tm 71 °C, no hairpin, 3' dimers
 4, dimers 6, runs 5; GAATTC + CAGTCAGACTGACAGTCAGT: GC 46 %, Tm
 59 °C, hairpin -0.5, 6, 6, runs 2; GCGGCCGC + CAGTCAGACTGACAGTCAGT:
 GC 64 %, Tm 59 °C, hairpin -0.5, 6, 8, runs 2.
+
+
+## Primer files `.PD2` (recorded 2026-10-18)
+
+Written by Primer/Create -> Save Active Primer (file name typed
+without extension; the program adds `.PD2`):
+- `primers/M13EXT.PD2`: Direct Entry, 5' extension GAATTC, primer
+  GTAAAACGACGGCCAGT (built-in criteria);
+- `primers/COMP.PD2`: from molecule `pairs/TEST600.GB`, position 400,
+  complement strand, 20 bases (TGTATCCAGGTAATGCAAGG).
+
+Layout (little-endian): a 14-byte header, `1A 53 45 53` (`\x1aSES`)
+then `03 01 00 00 05 00 00 00 00 00` in both files; then records of a
+16-bit tag (high byte: group, low byte: field) and data, ended by tag
+`FFFF` and four zero bytes.
+- Group 8, text: a 32-bit length, then the text, NUL-terminated and
+  padded with NUL to an even length. Fields seen: 0 = 5' extension
+  (absent when there is none), 1 = primer typed with Direct Entry,
+  2 = molecule name, 3 = molecule file path (`C:\TEST600.GB`), 4 =
+  primer taken from the molecule.
+- Group 9, numbers: 8 bytes, a zero 32-bit word then the value(s).
+  Fields: 0 = length including the extension (23, 20), 1 = length
+  without it (17, 20), 2 = extension length (6, 0), 3 = position on
+  the molecule (1 for Direct Entry, 400), 4 = complement strand (0, 1);
+  then the primer's own criteria: 0x10 = GC max, min (two int16:
+  60, 50), 0x11 = Tm max, min (80, 55), 0x12 = hairpin cutoff
+  (float32, 0.0), 0x13 = adjacent homologous bases, 3' dimer matches
+  (7, 3), 0x14 = the two run thresholds (3, 3; their order is not
+  known, both being 3).
