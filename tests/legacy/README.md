@@ -26,8 +26,11 @@ runs in 80x25 text mode (720x400 pixels).
   records the Primer Pair and amplified product screens.
 - `tools/fit_pairs.py`: checks the product Tm and annealing
   temperature models below against `pairs/pairs.tsv`.
-- `tools/parse_homology.py`: turns a recorded Uniqueness or False
-  Priming screen into table rows.
+- `tools/homology_screen.sh`: makes a primer from a molecule and
+  records its Uniqueness or False Priming screen;
+  `tools/parse_homology.py` turns the screen into table rows.
+- `tools/find_pair.sh`: records the Find Primer Pair list for two
+  targets on a molecule, with optional weights.
 - `tools/pair_direct.sh`: types two primers with Direct Entry and
   records their Primer Pair Analysis screen; `tools/parse_pair.py`
   turns pair screens (from it or from `pair_product.sh`) into a table.
