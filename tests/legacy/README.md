@@ -180,12 +180,38 @@ the Tm as "?", the Primer Analysis screen shows 0.
 **Hairpins** (Hairpins screen): an energy in kcal with one decimal
 (`-.4` for -0.4), and a drawing of one hairpin: the 5' part, pairing
 marks (`:`), and the 3' part written 3' to 5', right-aligned, with
-`)` for the loop; or "No Hairpins Found". The energy model is not
-solved yet. Breslauer 1986 free energies at 25 °C plus a constant per
-loop size do not fit, nor do dH - T dS at one temperature plus a loop
-term. Self-complementary repeats such as CGCG... and GCGC... with the
-same stem and loop differ by 1.4 kcal, which suggests terms for the
-closing pair, the loop bases or the ends.
+`)` for the loop; or "No Hairpins Found". When the 3' part is long,
+its left end is cut off the screen; for an odd loop, the middle loop
+base is drawn on both lines.
+
+`inspect/hairpin_design.tsv` adds hairpins designed to vary one thing
+at a time: stem length, loop length (3 to 12) and composition, single
+nearest-neighbour stems, and flanking bases.
+
+Hairpin model (every recorded hairpin, energy and "No Hairpins
+Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
+- energy = loop penalty - sum of stacking stabilities along the stem,
+  in kcal, shown with one decimal;
+- stacking stabilities: Freier et al. 1986 (PNAS 83:9373), RNA
+  nearest neighbours at 37 °C, read for DNA (T for U): AA 0.9, AT
+  0.9, TA 1.1, CT 1.7, CA 1.8, AC 2.1, GA 2.3, CG 2.0, GG 2.9, GC 3.4
+  (and their equivalents on the other strand). Not Breslauer 1986,
+  which the primer Tm uses;
+- loop penalty: Freier 1986 hairpin loops, by length: 3: 7.4, 4: 5.9,
+  5: 4.4, 6: 4.3, 7: 4.1, 8: 4.1, 9: 4.2, 10: 4.3, 12: 4.9, 14: 5.6;
+  lengths in between are interpolated (recorded 11: 4.6, 13: 5.3).
+  The loop sequence and bases outside the hairpin do not matter;
+- the stem may contain G.T pairs (as RNA G.U), but never at either
+  end: a stem starts and ends with Watson-Crick pairs. Steps with a
+  G.T pair have their own values; the recordings determine only the
+  sum of the two steps around each G.T pair, so the ten step values
+  in `core/thermo/freier_1986.hpp` are one solution of that system;
+- stems are zipped inwards as long as the next inner pair is a
+  Watson-Crick pair and the loop keeps at least 3 bases; only these
+  maximal stems are scored (`ATAT...` repeats get a loop of 4, not
+  6);
+- the most stable hairpin is shown; "No Hairpins Found" when none has
+  a negative energy.
 
 
 ## Molecule file formats (recorded 2026-10-18)
