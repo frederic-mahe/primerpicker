@@ -169,6 +169,14 @@ checks them all):
   primer's 3' end. Without that overhang condition, 19 records
   disagree (for instance, self-complementary 30-mers give 28, not 30).
 
+**Verdict** ("Meets Criteria" column, checked on 184 recorded Primer
+Analysis screens): GC% and Tm pass inside their ranges, limits
+included (YES is shown at 50 and 60 %, and at 55 and 80 °C); the
+four counts fail when they reach the "Reject >=" value; the hairpin
+criterion fails when a hairpin is found. "MEETS CRITERIA SELECTED" is
+YES exactly when all seven criteria are met. Where Direct Entry shows
+the Tm as "?", the Primer Analysis screen shows 0.
+
 **Hairpins** (Hairpins screen): an energy in kcal with one decimal
 (`-.4` for -0.4), and a drawing of one hairpin: the 5' part, pairing
 marks (`:`), and the 3' part written 3' to 5', right-aligned, with
