@@ -1,12 +1,14 @@
 #pragma once
 
 #include "core/sequence/nucleotide.hpp"
+#include "core/thermo/nearest_neighbour_table.hpp"
 #include "core/thermo/units.hpp"
 
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <optional>
 
 namespace primerpicker::thermo {
@@ -21,7 +23,7 @@ namespace primerpicker::thermo {
 // Watson-Crick nearest neighbours, Table 1, in hundredths of kcal/mol
 // (integers keep sums exact), indexed by [5' nucleotide][3' nucleotide]
 // of a pair on one strand (A, C, G, T)
-constexpr auto freier_1986_stack_table = std::array<std::array<int, 4>, 4>{{
+constexpr auto freier_1986_stack_table = NearestNeighbourTable<int>{{
     // AA, AC, AG, AT
     {{90, 210, 170, 90}},
     // CA, CC, CG, CT
@@ -35,10 +37,7 @@ constexpr auto freier_1986_stack_table = std::array<std::array<int, 4>, 4>{{
 // in hundredths of kcal/mol
 [[nodiscard]] constexpr auto freier_1986_stack(sequence::Nucleotide const first,
                                                sequence::Nucleotide const second) noexcept -> int {
-    auto const row = static_cast<std::size_t>(first);
-    auto const column = static_cast<std::size_t>(second);
-    assert(row < freier_1986_stack_table.size() and column < freier_1986_stack_table.front().size());
-    return freier_1986_stack_table[row][column];  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+    return lookup(freier_1986_stack_table, first, second);
 }
 
 // Steps with a G.T pair, as Primer Designer uses them for hairpins. A
@@ -97,7 +96,6 @@ constexpr auto letter(sequence::Nucleotide const nucleotide) noexcept -> char {
 
 // in hundredths of kcal/mol; none if the step is not in the table
 [[nodiscard]] constexpr auto freier_1986_wobble_stack(Step const& step) noexcept -> std::optional<int> {
-    // NOLINTNEXTLINE(readability-qualified-auto): array iterators are pointers only in some libraries
     auto const found = std::ranges::find_if(freier_1986_wobble_table, [&step](WobbleStack const& entry) {
         return entry.step == step or entry.step == step.reversed();
     });
@@ -144,13 +142,15 @@ constexpr auto interpolate(LoopPenalty const& lower, LoopPenalty const& upper, s
         return std::nullopt;
     }
     auto const& table = freier_1986_hairpin_loop_table;
-    for (auto index = std::size_t{1}; index < table.size(); ++index) {
-        if (length <= table[index].length) {  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-            return detail::interpolate(table[index - 1], table[index], length);  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
-        }
+    // the first tabulated length not below this one (the first entry,
+    // 3, is the minimum)
+    auto const upper = std::ranges::find_if(
+        std::next(table.cbegin()), table.cend(), [length](LoopPenalty const& entry) { return length <= entry.length; });
+    if (upper != table.cend()) {
+        return detail::interpolate(*std::prev(upper), *upper, length);
     }
     // beyond the table: extrapolate the last segment
-    return detail::interpolate(table[table.size() - 2], table.back(), length);
+    return detail::interpolate(*std::prev(table.cend(), 2), table.back(), length);
 }
 
 }  // namespace primerpicker::thermo

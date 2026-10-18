@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/sequence/nucleotide.hpp"
+#include "core/thermo/nearest_neighbour_table.hpp"
 #include "core/thermo/units.hpp"
 
 #include <array>
@@ -26,7 +27,7 @@ struct PairParameters {
 // duplex stability from the base sequence. PNAS 83:3746-3750, Table 2.
 // Indexed by [5' nucleotide][3' nucleotide] of a pair on one strand,
 // in Nucleotide order (A, C, G, T); dissociation values (positive).
-constexpr auto breslauer_1986_table = std::array<std::array<PairParameters, 4>, 4>{{
+constexpr auto breslauer_1986_table = NearestNeighbourTable<PairParameters>{{
     // AA, AC, AG, AT
     {{{9.1, 24.0}, {6.5, 17.3}, {7.8, 20.8}, {8.6, 23.9}}},
     // CA, CC, CG, CT
@@ -41,12 +42,7 @@ namespace detail {
 
 constexpr auto pair_parameters(sequence::Nucleotide const first, sequence::Nucleotide const second) noexcept
     -> NearestNeighbourSums {
-    auto const row = static_cast<std::size_t>(first);
-    auto const column = static_cast<std::size_t>(second);
-    assert(row < breslauer_1986_table.size() and column < breslauer_1986_table.front().size());
-    // not at(): it may throw, and this function is noexcept; the
-    // indexes come from a four-value enum
-    auto const& parameters = breslauer_1986_table[row][column];  // NOLINT(cppcoreguidelines-pro-bounds-constant-array-index)
+    auto const& parameters = lookup(breslauer_1986_table, first, second);
     return {KilocaloriesPerMole{parameters.enthalpy_kcal_per_mol},
             CaloriesPerKelvinPerMole{parameters.entropy_cal_per_kelvin_per_mol}};
 }

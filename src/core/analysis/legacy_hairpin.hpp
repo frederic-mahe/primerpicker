@@ -24,7 +24,8 @@ struct Hairpin {
     constexpr auto centi_per_tenth = 10;
     constexpr auto tenths_per_unit = 10.0;
     // integer division truncates toward zero, as Primer Designer does
-    return thermo::KilocaloriesPerMole{(hairpin.energy_centi_kcal_per_mol / centi_per_tenth) / tenths_per_unit};  // NOLINT(bugprone-integer-division)
+    auto const tenths = hairpin.energy_centi_kcal_per_mol / centi_per_tenth;
+    return thermo::KilocaloriesPerMole{tenths / tenths_per_unit};
 }
 
 namespace detail {

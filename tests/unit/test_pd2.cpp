@@ -2,6 +2,8 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+#include <algorithm>
+#include <bit>
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
@@ -18,13 +20,15 @@ using primerpicker::io::Pd2Primer;
 using primerpicker::io::Pd2Result;
 
 auto read_bytes(std::filesystem::path const& path) -> std::vector<std::byte> {
-    auto bytes = std::vector<std::byte>(std::filesystem::file_size(path));
+    auto characters = std::vector<char>(std::filesystem::file_size(path));
     auto file = std::ifstream{path, std::ios::binary};
-    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast): binary input
-    file.read(reinterpret_cast<char*>(bytes.data()), std::ssize(bytes));
+    file.read(characters.data(), std::ssize(characters));
     if (not file) {
         throw std::runtime_error{"cannot read " + path.string()};
     }
+    auto bytes = std::vector<std::byte>{};
+    std::ranges::transform(characters, std::back_inserter(bytes),
+                           [](char const character) { return std::bit_cast<std::byte>(character); });
     return bytes;
 }
 

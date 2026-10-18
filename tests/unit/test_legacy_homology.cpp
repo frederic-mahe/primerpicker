@@ -98,10 +98,10 @@ TEST_CASE("homologous sites match the recorded screens", "[analysis][legacy]") {
         if (fields.size() != column_count) {
             throw std::runtime_error{"unexpected line: " + line};
         }
-        // cppcheck-suppress variableScope ; operator[] creates the key, even without a site
-        auto& sites = recorded[{fields[0], fields[1], fields[4]}];
+        // a screen without site still gets its (empty) entry
+        auto const entry = recorded.try_emplace({fields[0], fields[1], fields[4]}).first;
         if (fields[5] != "-") {
-            sites.push_back(std::format("{} {} {} {}", fields[5], fields[6], fields[7], fields[8]));
+            entry->second.push_back(std::format("{} {} {} {}", fields[5], fields[6], fields[7], fields[8]));
         }
     }
     REQUIRE(recorded.size() == 7);

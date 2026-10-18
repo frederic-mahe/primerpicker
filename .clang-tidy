@@ -13,7 +13,12 @@ Checks: >
   -misc-non-private-member-variables-in-classes,
   -modernize-use-designated-initializers,
   -modernize-use-trailing-return-type,
-  -readability-identifier-naming
+  -readability-identifier-naming,
+  -readability-qualified-auto
+# readability-qualified-auto is off: it asks for "auto const*" where
+# libc++ implements std::array iterators as pointers, which does not
+# compile with libstdc++ (and modernize-use-auto forbids spelling the
+# iterator type)
 # CLAUDE.md: avoid identifiers shorter than three letters
 CheckOptions:
   readability-identifier-length.MinimumVariableNameLength: 3
