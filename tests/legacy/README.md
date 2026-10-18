@@ -456,6 +456,21 @@ Rules that reproduce the list:
 - order: with all weights 1, the eight pairs without false-priming
   site are sorted by GC difference + Tm difference + max 3' dimers +
   max adjacent bases (ties: primer B's position); the two pairs whose
-  primer A has a false-priming site (Tm 21) come last. How false
-  priming enters the score, and how the weights scale each term, is
-  not determined yet.
+  primer A has a false-priming site (Tm 21) come last.
+
+`search/find_pair_weights.tsv`: the same search with other weights
+(set with F4 in the form; each weight field takes one digit and moves
+to the next field by itself, so no Enter is typed between them). The
+same 10 pairs are found; their order:
+- weights 0 0 0 0 1 (false priming only): the eight pairs without a
+  false-priming site first, in generation order (A, then B, by
+  position), then the two with one;
+- weights 0 5 0 0 1: by 5 x Tm difference, ties in generation order;
+  the pairs with a false-priming site come after pairs of score 45,
+  their own score being 30 or 45 plus the false-priming term.
+
+So the order is a stable sort, by increasing score, of the pairs in
+generation order, with score = sum of weight x term, the terms being
+GC difference, Tm difference, max 3' dimers and max adjacent bases;
+the false-priming term (weight 1) is above 15 for a site of Tm 21.
+Taking the site's Tm itself fits all three lists, but is not proven.
