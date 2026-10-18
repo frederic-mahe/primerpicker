@@ -17,7 +17,8 @@ namespace primerpicker::fuzz {
 // pointer and a size)
 inline auto bytes(std::uint8_t const* const data, std::size_t const size) noexcept
     -> std::span<std::uint8_t const> {
-    return {data, size};
+    auto const input = std::span<std::uint8_t const>(data, size);  // not {data, size}: cppcheck reads it as a list
+    return input;
 }
 
 // The fuzzer's bytes as text (a copy)

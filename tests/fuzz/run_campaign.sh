@@ -1,24 +1,42 @@
 #!/bin/sh
-# Run a fuzzing campaign: every libFuzzer harness, side by side, for a
-# given time, on this machine (proposal §3.10; not run in CI).
+# Run a fuzzing campaign: every libFuzzer harness, side by side, on this
+# machine (proposal §3.10; not run in CI).
 #
-# usage: sh tests/fuzz/run_campaign.sh HOURS [JOBS_PER_HARNESS]
-#   from the repository root; JOBS_PER_HARNESS defaults to 4
+# usage: sh tests/fuzz/run_campaign.sh MAX_HOURS [PLATEAU_MINUTES [WORKERS]]
+#   from the repository root
+#   MAX_HOURS: the campaign stops after this time at the latest
+#   PLATEAU_MINUTES: a harness stops earlier when its coverage features
+#     ("ft:" in the libFuzzer log) have not grown for this long
+#     (default 120); the campaign ends when every harness has stopped
+#   WORKERS: fuzzing processes in all (default: number of CPUs - 1),
+#     shared between harnesses by the weights below
+#   CHECK_SECONDS: how often coverage is checked (default 600)
 #
-# Builds the "fuzz" preset, seeds each corpus from tests/legacy/ (and
-# keeps corpora between campaigns in build/fuzz/corpus/), and writes
-# logs and crashing inputs to build/fuzz/campaigns/DATE/. A crashing
-# input is reproduced with: build/fuzz/tests/fuzz/HARNESS FILE
+# Each harness runs in libFuzzer's fork mode: it goes on after a crash,
+# a timeout or an out-of-memory input (each is saved), and merges new
+# inputs into its corpus. Corpora are kept between campaigns in
+# build/fuzz/corpus/ (seeded from tests/legacy/ the first time); logs
+# and crashing inputs go to build/fuzz/campaigns/DATE/HARNESS/. A
+# crashing input is replayed with: build/fuzz/tests/fuzz/HARNESS FILE
 set -eu
 export DEBUGINFOD_URLS=""  # symbolize from local files only
 
-hours=$1
-jobs=${2:-4}
-seconds=$(awk -v hours="$hours" 'BEGIN { printf "%d", hours * 3600 }')
+max_hours=$1
+plateau_minutes=${2:-120}
+workers=${3:-$(($(nproc) - 1))}
+check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
+
+# harness:weight (share of the workers)
+harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_pd2:1"
+total_weight=0
+for entry in $harnesses; do
+    total_weight=$((total_weight + ${entry#*:}))
+done
+
 root=$(pwd)
 build="$root/build/fuzz"
 campaign="$build/campaigns/$(date +%Y%m%d%H%M%S)"
-harnesses="fuzz_genbank fuzz_fasta fuzz_molecule_file fuzz_pd2 fuzz_site_search"
+max_seconds=$(awk -v hours="$max_hours" 'BEGIN { printf "%d", hours * 3600 }')
 
 cmake --preset fuzz > /dev/null
 cmake --build --preset fuzz -j > /dev/null
@@ -26,6 +44,7 @@ mkdir -p "$campaign"
 
 seed() {
     corpus="$build/corpus/$1"
+    [ -d "$corpus" ] && return
     mkdir -p "$corpus"
     case $1 in
         fuzz_pd2) find "$root/tests/legacy" -iname '*.pd2' -exec cp {} "$corpus/" \; ;;
@@ -33,28 +52,88 @@ seed() {
             printf 'GAATTC\nTTGAATTCGG\n' > "$corpus/ecori"
             printf 'GCCNNNNNGGC\nTTGCCATGCAGGCTT\n' > "$corpus/bgli"
             printf 'GGATC\nGGATCGATCC\n' > "$corpus/alwi" ;;
+        fuzz_cli)
+            printf 'find-pair\n/m\n150\n400' > "$corpus/find_pair"
+            printf 'find-pair\n--weights\n05001\n/m\n150\n400' > "$corpus/find_pair_weights"
+            printf 'find-enzymes\n--almost\n/m\nAluI' > "$corpus/find_enzymes"
+            printf 'analyze\n--extension\nGAATTC\nGTAAAACGACGGCCAGT' > "$corpus/analyze"
+            printf 'pair\nCCCTGTCATACCAATCTACCCC\nTGTTATGCGCGTGGGG' > "$corpus/pair" ;;
+        fuzz_find_pair)
+            # settings (targets 150 and 400, built-in defaults), then
+            # TEST600.GB, one byte per base
+            python3 -I - "$root/tests/legacy/pairs/TEST600.GB" "$corpus/test600" <<'EOP'
+import re, sys
+text = open(sys.argv[1]).read()
+sequence = ''.join(re.findall('[acgt]+', text.split('ORIGIN')[1])).upper()
+settings = bytes([150, 0, 100, 144, 1, 100, 12, 5, 10, 1, 1, 1, 1, 1])
+open(sys.argv[2], 'wb').write(settings + bytes('ACGT'.index(base) for base in sequence))
+EOP
+            ;;
         *) find "$root/tests/legacy" \( -iname '*.gb' -o -iname '*.fa' -o -iname '*.seq' -o -iname '*.emb' \) \
                -exec cp {} "$corpus/" \; ;;
     esac
 }
 
-for harness in $harnesses; do
+# a harness-specific option: a dictionary, or the longest useful input
+options() {
+    case $1 in
+        fuzz_genbank | fuzz_fasta | fuzz_molecule_file) printf '%s' "-dict=$root/tests/fuzz/genbank.dict" ;;
+        fuzz_cli) printf '%s' "-dict=$root/tests/fuzz/cli.dict" ;;
+        fuzz_find_pair) printf '%s' "-max_len=1214" ;;  # 14 bytes of settings, 1200 bases
+        *) printf '%s' "-max_len=65536" ;;
+    esac
+}
+
+# the coverage features of the last status line of a harness
+features() {
+    sed -n 's/.* ft: \([0-9]*\) .*/\1/p' "$campaign/$1/libfuzzer.log" 2>/dev/null | tail -n 1
+}
+
+for entry in $harnesses; do
+    harness=${entry%:*}
+    jobs=$(( (workers * ${entry#*:} + total_weight - 1) / total_weight ))
     seed "$harness"
     mkdir -p "$campaign/$harness"
-    dictionary=""
-    case $harness in
-        fuzz_genbank | fuzz_fasta | fuzz_molecule_file) dictionary="-dict=$root/tests/fuzz/genbank.dict" ;;
-    esac
-    (cd "$campaign/$harness" && "$build/tests/fuzz/$harness" ${dictionary:+"$dictionary"} \
-        -max_total_time="$seconds" -jobs="$jobs" -workers="$jobs" -max_len=65536 -rss_limit_mb=2048 \
-        -timeout=10 -artifact_prefix="$campaign/$harness/" "$build/corpus/$harness" \
+    (cd "$campaign/$harness" && exec "$build/tests/fuzz/$harness" "$(options "$harness")" \
+        -fork="$jobs" -ignore_crashes=1 -ignore_timeouts=1 -ignore_ooms=1 \
+        -max_total_time="$max_seconds" -rss_limit_mb=2048 -timeout=10 \
+        -artifact_prefix="$campaign/$harness/" "$build/corpus/$harness" \
         > "$campaign/$harness/libfuzzer.log" 2>&1) &
+    echo $! > "$campaign/$harness/pid"
+    echo "$(date +%H:%M) $harness: $jobs workers" | tee -a "$campaign/campaign.log"
+done
+
+# stop each harness when its coverage has reached a plateau
+elapsed=0
+while [ "$elapsed" -lt "$max_seconds" ]; do
+    sleep "$check_seconds"
+    elapsed=$((elapsed + check_seconds))
+    running=0
+    for entry in $harnesses; do
+        harness=${entry%:*}
+        pid=$(cat "$campaign/$harness/pid")
+        kill -0 "$pid" 2> /dev/null || continue
+        running=$((running + 1))
+        now=$(features "$harness")
+        echo "$(date +%H:%M) $harness ft ${now:-?}" >> "$campaign/$harness/features.log"
+        last_change_file="$campaign/$harness/last_change"
+        if [ ! -f "$last_change_file" ] || [ "$(cut -d' ' -f1 "$last_change_file")" != "${now:-?}" ]; then
+            echo "${now:-?} $elapsed" > "$last_change_file"
+        elif [ $((elapsed - $(cut -d' ' -f2 "$last_change_file"))) -ge $((plateau_minutes * 60)) ]; then
+            echo "$(date +%H:%M) $harness: no new coverage for $plateau_minutes min, stopped" | \
+                tee -a "$campaign/campaign.log"
+            kill -INT "$pid" 2> /dev/null || true
+        fi
+    done
+    [ "$running" -eq 0 ] && break
 done
 wait
 
-echo "campaign: $campaign"
-for harness in $harnesses; do
-    crashes=$(find "$campaign/$harness" -maxdepth 1 \( -name 'crash-*' -o -name 'leak-*' -o -name 'timeout-*' -o -name 'oom-*' \) | wc -l)
+echo "campaign: $campaign" | tee -a "$campaign/campaign.log"
+for entry in $harnesses; do
+    harness=${entry%:*}
+    found=$(find "$campaign/$harness" -maxdepth 1 \( -name 'crash-*' -o -name 'leak-*' -o -name 'timeout-*' -o -name 'oom-*' \) | wc -l)
     corpus=$(find "$build/corpus/$harness" -type f | wc -l)
-    printf '%-20s %3d crashing inputs, corpus of %d inputs\n' "$harness" "$crashes" "$corpus"
+    printf '%-20s %3d inputs found (crash, leak, timeout, oom), ft %s, corpus of %d inputs\n' \
+        "$harness" "$found" "$(features "$harness")" "$corpus" | tee -a "$campaign/campaign.log"
 done
