@@ -209,3 +209,44 @@ Every file that loads gives the same sequence (first line
 (%GC 50, Tm 66). The executable contains the strings `ID   `,
 `FT   ` and `SQ   `: EMBL may be written (Molecule-Ops -> Save) or
 read in a form not found yet.
+
+
+## Settings file `pd2.cfg` (recorded 2026-10-18)
+
+The program writes `PD2.CFG` (55 bytes) when it quits after System
+Defaults were changed ("System Defaults Changed But Not Saved! SAVE
+CURRENT DEFAULTS (Y/N) ?", answered Y).
+- `config/PD2_LENGTH25.CFG`: built-in defaults, primer length set to
+  25.
+- `config/PD2_CRITERIA.CFG`: primer length 20; criteria changed to GC
+  45-65 %, Tm 50-75 °C, hairpin cutoff -1.5 kcal, 3' dimers 4,
+  adjacent bases 8, runs 4 (the 3' GC run stayed at 3: the key was
+  lost); weights changed, but keys were lost there too.
+
+Layout (little-endian; int16 unless noted), confirmed by the two files:
+
+| Offset | Value | Default |
+|---|---|---|
+| 0 | unknown (4 bytes, zero in both files) | 0 |
+| 4 | primer length (incl. 5' extension) | 20 |
+| 6 | exclude Tm <= 0 °C (1 = Y) | 1 |
+| 8 | sort homologies by Tm (1 = Y) | 1 |
+| 10 | match GC to within ± (%) | 5 |
+| 12 | match Tm to within ± (°C) | 10 |
+| 14, 16 | Match Active Primer range: start -, end + (bases) | 50, 50 |
+| 18, 20 | Find Pair range: normal start -, complement end + | 100, 100 |
+| 22, 24 | GC min, max (%) | 50, 60 |
+| 26, 28 | Tm min, max (°C) | 55, 80 |
+| 30 | hairpin energy cutoff (float32, kcal) | 0.0 |
+| 34 | reject 3' dimers if >= | 3 |
+| 36 | reject adjacent homologous bases if >= | 7 |
+| 38 | reject runs if >= | 3 |
+| 40 | reject 3' G/C runs if >= | 3 |
+| 42-46 | five weights, one byte each (order not confirmed) | 1 |
+| 47-54 | zero in both files | 0 |
+
+Which of offsets 38 and 40 holds which run threshold is inferred from
+the screen order (only offset 38 changed). Navigation notes: in the
+settings forms the first digit typed clears a field; Enter on the
+last field completes the form, and the menu then reopens the same
+form by itself (Esc cancels that second pass).
