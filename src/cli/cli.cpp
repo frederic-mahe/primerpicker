@@ -68,10 +68,10 @@ constexpr auto usage = std::string_view{
     "         digits from 0 to 5, for GC mismatch, Tm mismatch, 3' dimers, any\n"
     "         dimers and false priming (default: 11111)\n"
     "find-enzymes\n"
-    "         sites of a restriction enzyme (REBASE name, commercially\n"
-    "         available enzymes) on both strands of a molecule file, as the True\n"
-    "         Sites screen; with --almost, sites with at most one mismatch, as the\n"
-    "         Almost Sites screen\n"};
+    "         sites of a restriction enzyme (REBASE name; old names such as\n"
+    "         Asp718 or Sau3A are accepted) on both strands of a molecule file,\n"
+    "         as the True Sites screen; with --almost, sites with at most one\n"
+    "         mismatch, as the Almost Sites screen\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -435,20 +435,47 @@ struct FindEnzymesArguments {
     std::string_view enzyme;
 };
 
+auto enzyme_list(std::vector<primerpicker::enzymes::Enzyme> const& enzymes) -> std::string {
+    auto list = std::string{};
+    for (auto const& enzyme : enzymes) {
+        list += (list.empty() ? "" : ", ") + std::string{enzyme.name};
+    }
+    return list.empty() ? std::string{"none"} : list;
+}
+
+// On stderr: what an old or unsold enzyme name stands for in REBASE,
+// and the commercially available enzymes with the same site
+auto note_enzyme(std::string_view const typed, primerpicker::enzymes::ResolvedEnzyme const& resolved) -> void {
+    using primerpicker::enzymes::Availability;
+    auto const& enzyme = resolved.enzyme;
+    if (typed != enzyme.name) {
+        std::cerr << std::format("{}: {} is {} in REBASE\n", program_name, typed, enzyme.name);
+    }
+    if (resolved.availability == Availability::commercial) {
+        return;
+    }
+    std::cerr << std::format("{}: {} is not commercially available; isoschizomers: {}; neoschizomers (other cuts): "
+                             "{}\n",
+                             program_name, enzyme.name,
+                             enzyme_list(primerpicker::enzymes::commercial_isoschizomers(enzyme)),
+                             enzyme_list(primerpicker::enzymes::commercial_neoschizomers(enzyme)));
+}
+
 auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
-    auto const enzyme = primerpicker::enzymes::find_rebase_enzyme(arguments.enzyme);
-    if (not enzyme.has_value()) {
-        return fail(std::format("enzyme: '{}' is not a commercially available REBASE enzyme (names are case "
-                                "sensitive, for instance EcoRI)",
+    auto const resolved = primerpicker::enzymes::resolve_enzyme(arguments.enzyme);
+    if (not resolved.has_value()) {
+        return fail(std::format("enzyme: '{}' is not a REBASE enzyme (names are case sensitive, for instance EcoRI)",
                                 arguments.enzyme));
     }
     auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
     if (not molecule.has_value()) {
         return EXIT_FAILURE;
     }
-    auto const report = enzyme_report(*enzyme, *molecule, arguments.mismatches);
+    note_enzyme(arguments.enzyme, *resolved);
+    auto const& enzyme = resolved->enzyme;
+    auto const report = enzyme_report(enzyme, *molecule, arguments.mismatches);
     if (not report.has_value()) {
-        return fail(std::format("enzyme {}: unexpected recognition sequence {}", enzyme->name, enzyme->site));
+        return fail(std::format("enzyme {}: unexpected recognition sequence {}", enzyme.name, enzyme.site));
     }
     std::cout << *report;
     return EXIT_SUCCESS;

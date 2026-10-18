@@ -87,6 +87,26 @@ for ENZYME in AlwI ApaI ; do
             failure "${DESCRIPTION}"
 done
 
+## old and unsold names: the same sites as the REBASE enzyme, and a
+## note on stderr
+DESCRIPTION="find-enzymes: an old name finds the sites of its REBASE enzyme"
+[[ $("${PRIMERPICKER}" find-enzymes "${TENZ}" Sau3A 2> /dev/null | tail -n +2) == \
+   $("${PRIMERPICKER}" find-enzymes "${TENZ}" Sau3AI | tail -n +2) ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-enzymes: an old name is explained on stderr"
+"${PRIMERPICKER}" find-enzymes "${TENZ}" Asp718 2>&1 > /dev/null | \
+    grep -q "Asp718 is Asp718I in REBASE" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-enzymes: an unsold enzyme gets its commercial isoschizomers"
+"${PRIMERPICKER}" find-enzymes "${TENZ}" Asp718 2>&1 > /dev/null | \
+    grep -q "isoschizomers: Acc65I;" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## circular molecule: a site across the origin, and sites on both
 ## strands at the same position
 TENZC="${LEGACY}/enzymes/TENZC.GB"
