@@ -531,3 +531,38 @@ equal scores:
 
 Not probed: lists of more than 1000 pairs or more than 100 sites
 (the program warns), and other targets or windows.
+
+
+## Restriction enzymes (recorded 2026-10-18)
+
+### Built-in enzyme table
+
+`enzymes/enzyme_table.tsv`: the enzyme table compiled into PRIMER.exe,
+extracted with `tools/extract_enzymes.py` (the executable is packed
+with Microsoft EXEPACK; the tool unpacks it). It is recorded here to
+compare search results with PRIMER.exe only: PrimerPicker ships
+enzymes from REBASE, not this table (proposal §3.6).
+
+- 359 enzymes in 28-byte records, in alphabetical order: name,
+  recognition sequence (135 with IUPAC letters or N), cut position,
+  overhang, length, and two flag bytes.
+- Cut and overhang were checked on a few well-known enzymes (AatII
+  GACGT^C: cut 5, overhang -4; EcoRI G^AATTC: 1, +4; AluI AG^CT: 2,
+  0; BglI GCCNNNN^NGGC: 7, -3). They are not shown on the enzyme
+  screens.
+- Flag 0x80 marks 89 enzymes: the first ten (AatII, AflII, AluI, AlwI,
+  ApaI, ApaLI, AscI, AseI, Asp718, AsuII) are exactly the first
+  screen of the Find Enzymes menu, which shows name and recognition
+  sequence. The other 270 are presumably the "ALL" list from which
+  enzymes can be added (not probed yet).
+
+### Find Enzymes
+
+Molecule-Ops -> Find Enzymes asks for a molecule (Load File), then
+offers "Almost Sites" (1 base mismatches to the recognition sequence)
+and "True Sites" (exact matches), then the enzyme menu (arrows or
+initial letter; PgDn does nothing). Keys are lost while the molecule
+map is drawn: type them 3 s apart.
+
+True Sites for AluI (AGCT) on `pairs/TEST600.GB`: "Number of Sites =
+1", position 322, the first base of the only AGCT of the top strand.
