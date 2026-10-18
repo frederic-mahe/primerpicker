@@ -1,0 +1,12 @@
+# molecule	primer_a_position	primer_a_strand	target	start_offset	end_offset	strand_b	length_b	position	bps_from_target	gc_percent	tm_celsius	self_dimer_3prime	self_dimer_any	inter_dimer_3prime	inter_dimer_any	runs	gc_run_3prime
+TEST600.GB	51	top	400	50	50	complement	20	371	29	55	73	1	4	2	5	2	2
+TEST600.GB	51	top	400	50	50	complement	20	375	25	50	71	2	2	2	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	376	24	55	73	1	2	2	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	378	22	55	73	2	3	2	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	379	21	55	73	1	3	2	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	380	20	55	71	2	3	2	3	2	1
+TEST600.GB	51	top	400	50	50	complement	20	381	19	55	72	1	3	2	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	387	13	55	75	1	4	1	3	2	0
+TEST600.GB	51	top	400	50	50	complement	20	389	11	50	70	2	4	1	3	2	2
+TEST600.GB	51	top	400	50	50	complement	20	413	13	50	63	1	2	2	4	2	2
+TEST600.GB	51	top	400	50	50	complement	20	414	14	50	63	1	2	2	4	2	1

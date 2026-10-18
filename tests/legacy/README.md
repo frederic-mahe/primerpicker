@@ -405,3 +405,28 @@ All 7 screens follow these rules:
   sites first among equal Tm).
 Not probed yet: the "exclude Tm <= 0" and "sort by Tm" settings set
 to N, and molecules with more sites than one screen holds.
+
+
+## Match Active Primer (recorded 2026-10-18)
+
+`search/match_active.tsv`: the Find Matching Primer list for primer A
+at position 51 of `pairs/TEST600.GB` (CTCAAAGGCTCAGACATCAG, GC 50 %,
+Tm 66 °C), with the form's defaults: target 400, search from target
+- 50 to target + 50, complement strand, length 20, no extension, GC
+within 5 % and Tm within 10 °C of primer A. Keys: as for a molecule
+primer, then s, down down enter (Match Active Primer), 400 enter, and
+enter for the 7 other fields; the list was scrolled with up and down
+to see all 11 entries.
+
+The list holds exactly the primers B (20 bases, complement strand,
+position = 5' end, from 350 to 450) that:
+- meet every single-primer criterion (see "Primer criteria");
+- have a GC % within 5 and a Tm within 10 °C of primer A (displayed
+  values);
+- have fewer A:B 3' end matches than the criterion's "reject if >="
+  (3); 371, with 5 adjacent homologous bases A:B, is listed, so the
+  A:B adjacent bases (all below 7 here) were not tested by this
+  recording.
+Entries are sorted by position; "bps from target" is the distance
+between the position and the target. Every primer of the window that
+passes these tests is listed, and no other.
