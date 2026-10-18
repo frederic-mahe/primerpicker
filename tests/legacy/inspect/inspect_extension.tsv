@@ -1,0 +1,5 @@
+# extension	primer	dimers_3prime	dimers_any	runs	gc_run_3prime	meets_no_hairpins	hairpin_kcal	hairpin_5prime	hairpin_pairs	hairpin_3prime
+CCCC	GTAAAACGACGGCCAGT	2	4	4	0	NO	-2.7	             5'-CCCCGTAAA	                  ::::   )	          3'-TGACCGGCAGCA
+AAAA	ACGTCAGTCGATCGTCAGCT	4	6	5	0	YES	-	-	-	-
+GAATTC	CAGTCAGACTGACAGTCAGT	6	6	2	0	NO	-.5	             5'-GAATTCCAGTCAGACTGACA	                             :::::  )	                          3'-TGACTGA
+GCGGCCGC	CAGTCAGACTGACAGTCAGT	6	8	2	0	NO	-.5	             5'-GCGGCCGCCAGTCAGACTGACA	                               :::::  )	                            3'-TGACTGA

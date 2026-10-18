@@ -323,3 +323,24 @@ All 36 follow these rules (`tests/unit/test_legacy_pair.cpp`):
   "reject if >= 3" (a value of 3 is not flagged here, while the
   Primer Analysis screen fails it). "Runs found" and "Hairpin(s)
   found" appear when either primer is flagged; hairpins show OK or !.
+
+
+## 5' extension and the criteria (recorded 2026-10-18)
+
+`inspect/inspect_extension.tsv`: four primers typed with a 5'
+extension (`tools/inspect_primer.sh WORKDIR PRIMER EXTENSION`), then
+Inspect, H and D; the first two columns are the extension and the
+primer, then as `inspect/inspect.tsv`. The extensions make a run
+across the boundary (AAAA + A...), a self-complementary site (GAATTC,
+GCGGCCGC), or a hairpin.
+
+Every criterion is computed on the whole sequence, extension
+included (GC %, runs, 3' GC run, dimers, hairpins; the dimer and
+hairpin drawings show the whole sequence), except the Tm, which uses
+the primer without its extension (see "Primer Tm"). Values on the
+Inspect screens: CCCC + GTAAAACGACGGCCAGT: GC 61 %, Tm 64 °C (as
+without the extension), hairpin -2.7, 3' dimers 2, dimers 4, runs 4;
+AAAA + ACGTCAGTCGATCGTCAGCT: GC 45 %, Tm 71 °C, no hairpin, 3' dimers
+4, dimers 6, runs 5; GAATTC + CAGTCAGACTGACAGTCAGT: GC 46 %, Tm
+59 °C, hairpin -0.5, 6, 6, runs 2; GCGGCCGC + CAGTCAGACTGACAGTCAGT:
+GC 64 %, Tm 59 °C, hairpin -0.5, 6, 8, runs 2.
