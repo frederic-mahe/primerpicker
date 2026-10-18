@@ -138,3 +138,18 @@ TEST_CASE("actual values work at compile time", "[analysis][legacy][constexpr]")
     constexpr auto gc_run = [] { return legacy_actual_values(to_nucleotides("GGCCTCCGCC").value()).gc_run_3prime; }();
     STATIC_CHECK(gc_run == 5);
 }
+
+TEST_CASE("a 5' extension counts in every value but the Tm", "[analysis][legacy]") {
+    // CCCC + GTAAAACGACGGCCAGT, Inspect screen (PRIMER.exe, inspect_extension.tsv)
+    auto const sequence = nucleotides("CCCCGTAAAACGACGGCCAGT");
+    auto const actual = legacy_actual_values(primerpicker::analysis::LegacyPrimer{.sequence = sequence, .extension_length = 4});
+    CHECK(actual.gc_percent == 61);
+    CHECK(actual.tm_celsius == 64);  // as without the extension
+    auto const hairpin = actual.hairpin.value_or(primerpicker::thermo::KilocaloriesPerMole{0.0});
+    CHECK(hairpin.kcal_per_mol < -2.65);  // -2.7
+    CHECK(hairpin.kcal_per_mol > -2.75);
+    CHECK(actual.dimer_3prime_matches == 2);
+    CHECK(actual.dimer_adjacent_bases == 4);
+    CHECK(actual.longest_run == 4);
+    CHECK(actual.gc_run_3prime == 0);
+}

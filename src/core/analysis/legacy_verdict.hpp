@@ -68,22 +68,38 @@ struct LegacyVerdict {
     return static_cast<int>((gc_count * percent) / std::ssize(primer));
 }
 
-// The "Actual" column for a primer (without 5' extension), computed
-// as Primer Designer does. Requires at least two nucleotides.
-[[nodiscard]] constexpr auto legacy_actual_values(std::span<sequence::Nucleotide const> const primer) noexcept
-    -> LegacyActualValues {
-    assert(primer.size() >= 2);
-    auto const hairpin = legacy_hairpin(primer);
+// A primer as Primer Designer keeps it: the whole sequence 5' to 3',
+// whose first extension_length nucleotides are the 5' extension
+struct LegacyPrimer {
+    std::span<sequence::Nucleotide const> sequence;
+    std::size_t extension_length;
+};
+
+// The "Actual" column for a primer, computed as Primer Designer does:
+// every value uses the whole sequence, except the Tm, which uses the
+// primer without its extension (tests/legacy/README.md, "5' extension
+// and the criteria"). Requires at least two nucleotides after the
+// extension.
+[[nodiscard]] constexpr auto legacy_actual_values(LegacyPrimer const& primer) noexcept -> LegacyActualValues {
+    assert(primer.extension_length + 2 <= primer.sequence.size());
+    auto const& sequence = primer.sequence;
+    auto const hairpin = legacy_hairpin(sequence);
+    auto const primer_tm = thermo::legacy_primer_tm(sequence.subspan(primer.extension_length)).degrees;
     // the Tm is truncated, and shown as 0 when not positive
-    auto const primer_tm = thermo::legacy_primer_tm(primer).degrees;
     auto const truncated_tm = static_cast<int>(primer_tm);  // toward zero: the floor when positive
-    return {.gc_percent = legacy_gc_percent(primer),
+    return {.gc_percent = legacy_gc_percent(sequence),
             .tm_celsius = primer_tm > 0.0 ? truncated_tm : 0,
             .hairpin = hairpin.has_value() ? std::optional{legacy_displayed_energy(*hairpin)} : std::nullopt,
-            .dimer_3prime_matches = self_dimer_at_3prime_end(primer),
-            .dimer_adjacent_bases = longest_self_complementary_run(primer),
-            .longest_run = longest_run_before_3prime_end(primer),
-            .gc_run_3prime = gc_run_at_3prime_end(primer)};
+            .dimer_3prime_matches = self_dimer_at_3prime_end(sequence),
+            .dimer_adjacent_bases = longest_self_complementary_run(sequence),
+            .longest_run = longest_run_before_3prime_end(sequence),
+            .gc_run_3prime = gc_run_at_3prime_end(sequence)};
+}
+
+// The same, for a primer without 5' extension
+[[nodiscard]] constexpr auto legacy_actual_values(std::span<sequence::Nucleotide const> const primer) noexcept
+    -> LegacyActualValues {
+    return legacy_actual_values(LegacyPrimer{.sequence = primer, .extension_length = 0});
 }
 
 // Range limits are inclusive (PRIMER.exe shows YES at 50 and 60 %, 55
