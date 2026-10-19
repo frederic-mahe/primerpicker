@@ -1,0 +1,67 @@
+# molecule	position	keys	line	text
+TEST600.GB	5	-	original	%GC: 30!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	5	-	O	 O                         S  F  -  M  D  N  H  L  L  R  I  L  M  S
+TEST600.GB	5	-	R	 R                        V  I  L  N  G  Q  P  S  I  E  N  T  H  V
+TEST600.GB	5	-	I	 I                       G  H  F  K  W  T  T  I  Y  -  E  Y  S  C
+TEST600.GB	5	-	molecule	                       GGTCATTTTAAATGGACAACCATCTATTGAGAATACTCATGTCA
+TEST600.GB	5	-	marker	 5'->3'                          --
+TEST600.GB	5	-	primer	                           ATTTTAAATGGACAACCATC
+TEST600.GB	5	-	M	 M                             F  K  W  T  T  I
+TEST600.GB	5	-	U	 U                           I  L  N  G  Q  P
+TEST600.GB	5	-	T	 T                            F  -  M  D  N  H
+TEST600.GB	5	-	mutated	%GC: 30!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	52	-	original	%GC: 50    Tm°C: 69    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	52	-	O	 O        I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V
+TEST600.GB	52	-	R	 R       N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G  -
+TEST600.GB	52	-	I	 I         Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L
+TEST600.GB	52	-	molecule	       AATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTAG
+TEST600.GB	52	-	marker	 5'->3'                          --
+TEST600.GB	52	-	primer	                           TCAAAGGCTCAGACATCAGG
+TEST600.GB	52	-	M	 M                           S  K  A  Q  T  S
+TEST600.GB	52	-	U	 U                            Q  R  L  R  H  Q
+TEST600.GB	52	-	T	 T                             K  G  S  D  I  R
+TEST600.GB	52	-	mutated	%GC: 50    Tm°C: 69    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	53	-	original	%GC: 55    Tm°C: 71    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	53	-	O	 O       I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V  S
+TEST600.GB	53	-	R	 R         T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G  -
+TEST600.GB	53	-	I	 I        Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L
+TEST600.GB	53	-	molecule	       ATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTAGT
+TEST600.GB	53	-	marker	 5'->3'                          --
+TEST600.GB	53	-	primer	                           CAAAGGCTCAGACATCAGGG
+TEST600.GB	53	-	M	 M                             K  A  Q  T  S  G
+TEST600.GB	53	-	U	 U                           Q  R  L  R  H  Q
+TEST600.GB	53	-	T	 T                            K  G  S  D  I  R
+TEST600.GB	53	-	mutated	%GC: 55    Tm°C: 71    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	575	-	original	%GC: 30!   Tm°C: 62    Hairpin: OK  Dimers: !   Runs: !
+TEST600.GB	575	-	O	 O       K  S  I  C  K  S  P  V  K  I  S  D  L  K  R
+TEST600.GB	575	-	R	 R         I  H  L  -  V  T  S  Q  D  F  R  F  K  A
+TEST600.GB	575	-	I	 I        N  P  S  V  S  H  Q  S  R  F  P  I  -  S  D
+TEST600.GB	575	-	molecule	       AAATCCATCTGTAAGTCACCAGTCAAGATTTCCGATTTAAAGCGAC
+TEST600.GB	575	-	marker	 5'->3'                          --
+TEST600.GB	575	-	primer	                           AGTCAAGATTTCCGATTTAA
+TEST600.GB	575	-	M	 M                             S  R  F  P  I  -
+TEST600.GB	575	-	U	 U                           S  Q  D  F  R  F
+TEST600.GB	575	-	T	 T                            V  K  I  S  D  L
+TEST600.GB	575	-	mutated	%GC: 30!   Tm°C: 62    Hairpin: OK  Dimers: !   Runs: !
+TEST600.GB	200	grightcrightrightrighttrighta	original	%GC: 40!   Tm°C: 66    Hairpin: !   Dimers: !   Runs: !
+TEST600.GB	200	grightcrightrightrighttrighta	O	 O       C  V  R  Q  M  P  P  V  F  I  -  S  E  P  V  L  T  F  I  S
+TEST600.GB	200	grightcrightrightrighttrighta	R	 R         R  A  S  N  A  S  R  F  H  L  E  R  T  G  P  Y  I  Y  F
+TEST600.GB	200	grightcrightrightrighttrighta	I	 I        A  C  V  K  C  L  P  F  S  F  R  A  N  R  S  L  H  L  F
+TEST600.GB	200	grightcrightrightrighttrighta	molecule	       TGCGTGCGTCAAATGCCTCCCGTTTTCATTTAGAGCGAACCGGTCCTTACATTTATTTCC
+TEST600.GB	200	grightcrightrightrighttrighta	marker	 5'->3'                          --
+TEST600.GB	200	grightcrightrightrighttrighta	primer	                           GCTTTACATTTAGAGCGAAC
+TEST600.GB	200	grightcrightrightrighttrighta	M	 M                             F  T  F  R  A  N
+TEST600.GB	200	grightcrightrightrighttrighta	U	 U                           A  L  H  L  E  R
+TEST600.GB	200	grightcrightrightrighttrighta	T	 T                            L  Y  I  -  S  E
+TEST600.GB	200	grightcrightrightrighttrighta	mutated	%GC: 40!   Tm°C: 63    Hairpin: !   Dimers: OK  Runs: !
+TEST600.GB	51	arightrightrighttrightg	original	%GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !
+TEST600.GB	51	arightrightrighttrightg	O	 O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V
+TEST600.GB	51	arightrightrighttrightg	R	 R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G
+TEST600.GB	51	arightrightrighttrightg	I	 I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L
+TEST600.GB	51	arightrightrighttrightg	molecule	       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA
+TEST600.GB	51	arightrightrighttrightg	marker	 5'->3'                          --
+TEST600.GB	51	arightrightrighttrightg	primer	                           ATCTGAGGCTCAGACATCAG
+TEST600.GB	51	arightrightrighttrightg	M	 M                            S  E  A  Q  T  S
+TEST600.GB	51	arightrightrighttrightg	U	 U                             L  R  L  R  H  Q
+TEST600.GB	51	arightrightrighttrightg	T	 T                           I  -  G  S  D  I
+TEST600.GB	51	arightrightrighttrightg	mutated	%GC: 50    Tm°C: 65    Hairpin: !   Dimers: !   Runs: OK

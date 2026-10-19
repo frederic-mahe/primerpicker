@@ -785,6 +785,37 @@ Not probed: lists of more than 1000 pairs or more than 100 sites
 (the program warns), and other targets or windows.
 
 
+## Mutagenize (recorded 2026-10-19)
+
+`mutagenize/mutagenize.tsv`: the Mutagenize Primer screen (Modify ->
+Mutagenize) of 20-base primers made from `pairs/TEST600.GB` at
+positions 5, 51, 52, 53, 200 and 575, two of them after edits,
+recorded with `tools/mutagenize.sh` (KEYS typed on the screen) and
+`tools/parse_mutagenize.py` (the lines inside the screen's box, the
+border column removed). Editing: the primer is typed over (overwrite
+mode); a typed base replaces the one under the edit highlight, which
+does not move; the arrow keys move it.
+
+All 6 screens follow these rules (`tests/unit/test_legacy_mutagenize.cpp`):
+- the molecule line shows the molecule from 20 bases before the
+  primer to 39 bases after its 5' end, cut at the molecule's ends; the
+  primer's first base is in column 27, under its molecule base;
+- three rows above (labelled O, R, I: "ORI"ginal) translate the
+  molecule with the standard genetic code (stop codons as `-`): each
+  amino acid under the third base of its codon, codons entirely
+  inside the molecule window, starting at positions of 0, 2 and 1
+  modulo 3 (O, R, I; 1-based positions);
+- three rows below the primer (M, U, T: "MUT"ated) translate the
+  edited primer: codons entirely inside the primer, starting at
+  positions of 1, 2 and 0 modulo 3;
+- the ORIGINAL and MUTATED lines give %GC and Tm (with `!` outside the
+  criteria), then Hairpin, Dimers (both dimer criteria) and Runs (both
+  run criteria) as OK or `!`;
+- the line under the molecule always reads `5'->3'` and `--` (in
+  columns 32-33, at every position recorded).
+Not recorded yet: F1 (the enzyme list), S (save), I (inspect), a
+complement-strand primer, a primer with a 5' extension.
+
 ## Restriction enzymes (recorded 2026-10-18)
 
 ### Built-in enzyme table
