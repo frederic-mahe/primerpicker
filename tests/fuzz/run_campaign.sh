@@ -122,7 +122,9 @@ while [ "$elapsed" -lt "$max_seconds" ]; do
         elif [ $((elapsed - $(cut -d' ' -f2 "$last_change_file"))) -ge $((plateau_minutes * 60)) ]; then
             echo "$(date +%H:%M) $harness: no new coverage for $plateau_minutes min, stopped" | \
                 tee -a "$campaign/campaign.log"
-            kill -INT "$pid" 2> /dev/null || true
+            # TERM, not INT: a background job of a non-interactive shell
+            # ignores SIGINT, and so does libFuzzer started from it
+            kill -TERM "$pid" 2> /dev/null || true
         fi
     done
     [ "$running" -eq 0 ] && break
