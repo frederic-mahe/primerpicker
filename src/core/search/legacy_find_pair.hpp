@@ -97,9 +97,11 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
                                            FindPairSettings const& settings, analysis::LegacyCriteria const& criteria)
     -> FindPairResult {
     auto const first_a = settings.target_a > settings.start_offset_a ? settings.target_a - settings.start_offset_a : 1;
-    auto const primers_a = detail::possible_primers(molecule, first_a, settings.target_a, sequence::Strand::top,
-                                                    settings.length, criteria);
-    auto const primers_b = detail::possible_primers(molecule, settings.target_b, settings.target_b + settings.end_offset_b,
+    auto const last_a = sequence::window_end(settings.target_a, 0, molecule.size());
+    auto const primers_a =
+        detail::possible_primers(molecule, first_a, last_a, sequence::Strand::top, settings.length, criteria);
+    auto const last_b = sequence::window_end(settings.target_b, settings.end_offset_b, molecule.size());
+    auto const primers_b = detail::possible_primers(molecule, settings.target_b, last_b,
                                                     sequence::Strand::complement, settings.length, criteria);
     auto result = FindPairResult{.possible_a = primers_a.size(), .possible_b = primers_b.size(), .pairs = {}};
     for (auto const& primer_a : primers_a) {

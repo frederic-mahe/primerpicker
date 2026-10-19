@@ -59,7 +59,7 @@ constexpr auto absolute_difference(int const lhs, int const rhs) noexcept -> int
     auto const& [molecule, primer_a] = input;
     auto const actual_a = analysis::legacy_actual_values(primer_a);
     auto const first = settings.target > settings.start_offset ? settings.target - settings.start_offset : 1;
-    auto const last = settings.target + settings.end_offset;
+    auto const last = sequence::window_end(settings.target, settings.end_offset, molecule.size());
     auto candidates = std::vector<MatchCandidate>{};
     for (auto position = first; position <= last; ++position) {
         auto primer_b = sequence::primer_at(

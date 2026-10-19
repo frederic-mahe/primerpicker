@@ -24,6 +24,17 @@ struct PrimerLocation {
     Strand strand;
 };
 
+// The last position of a search window that starts at target and
+// extends offset bases beyond it, within a molecule of molecule_size
+// bases (no primer lies beyond it); never overflows
+[[nodiscard]] constexpr auto window_end(std::size_t const target, std::size_t const offset,
+                                        std::size_t const molecule_size) noexcept -> std::size_t {
+    if (target >= molecule_size or offset >= molecule_size - target) {
+        return molecule_size;
+    }
+    return target + offset;
+}
+
 // The primer, 5' to 3'; none if it does not fit on the molecule. Not
 // noexcept: the vector allocates.
 [[nodiscard]] constexpr auto primer_at(std::span<Nucleotide const> const molecule, PrimerLocation const& location)
@@ -33,7 +44,7 @@ struct PrimerLocation {
         return std::nullopt;
     }
     if (strand == Strand::top) {
-        if (position - 1 + length > molecule.size()) {
+        if (position > molecule.size() or length > molecule.size() - (position - 1)) {  // no overflow
             return std::nullopt;
         }
         auto const stretch = molecule.subspan(position - 1, length);

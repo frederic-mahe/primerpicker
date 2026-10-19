@@ -55,6 +55,20 @@ DESCRIPTION="find-pair rejects fewer than five weights"
     failure "${DESCRIPTION}" || \
         success "${DESCRIPTION}"
 
+## targets far beyond the molecule (fuzz_cli findings, 2026-10-19: a
+## crash, and an endless search window): no primer, and no hang
+DESCRIPTION="find-pair: a target A beyond the molecule finds no primer"
+timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 18446744073709551615 400 | \
+    grep -qxE "Primer A: +0 possible primers" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-pair: a target B at the end of the size range does not hang"
+timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 16 18446744073709551515 | \
+    grep -qxE "Primer B: +0 possible primers" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## TEST600.GB, targets 150 and 400, built-in weights
 LIST=$("${PRIMERPICKER}" find-pair "${TEST600}" 150 400)
 
