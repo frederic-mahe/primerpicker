@@ -295,6 +295,12 @@ CURRENT DEFAULTS (Y/N) ?", answered Y).
   45-65 %, Tm 50-75 °C, hairpin cutoff -1.5 kcal, 3' dimers 4,
   adjacent bases 8, runs 4 (the 3' GC run stayed at 3: the key was
   lost); weights changed, but keys were lost there too.
+- `config/PD2_WEIGHTS12345.CFG` and `config/PD2_WEIGHTS35142.CFG`
+  (recorded 2026-10-19 with `tools/save_weights.sh`): built-in
+  defaults, with the weights of the form (GC mismatch, Tm mismatch,
+  3' dimers, any dimers, false priming) set to 1 2 3 4 5 and to 3 5 1
+  4 2. Bytes 42-46 hold 1 2 5 3 4 and 3 5 2 1 4: the false-priming
+  weight is stored third.
 
 Layout (little-endian; int16 unless noted), confirmed by the two files:
 
@@ -315,7 +321,7 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 | 36 | reject adjacent homologous bases if >= | 7 |
 | 38 | reject runs if >= | 3 |
 | 40 | reject 3' G/C runs if >= | 3 |
-| 42-46 | five weights, one byte each (order not confirmed) | 1 |
+| 42-46 | five weights, one byte each: GC mismatch, Tm mismatch, false priming, 3' dimers, any dimers (recorded 2026-10-19, below) | 1 |
 | 47-54 | zero in both files | 0 |
 
 Which of offsets 38 and 40 holds which run threshold is inferred from
