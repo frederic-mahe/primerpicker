@@ -345,11 +345,24 @@ auto find_pair_line(primerpicker::search::PairCandidate const& pair) -> std::str
                        site_tm(pair.false_priming_tm_a), site_tm(pair.false_priming_tm_b));
 }
 
+// the messages of Primer Designer 2.0 (tests/legacy/README.md, "Limits
+// on primers and pairs (recorded 2026-10-19)")
+constexpr auto too_many_primers_message =
+    std::string_view{"More than 100 sites found.  Suggest you redefine matching limits.\n"};
+constexpr auto pairs_capped_message = std::string_view{"More than 1000 possible pairs found!\n"};
+
 auto find_pair_report(primerpicker::search::FindPairResult const& result,
                       primerpicker::search::FindPairWeights const& weights) -> std::string {
+    if (result.limit == primerpicker::search::FindPairLimit::too_many_primers) {
+        return std::string{too_many_primers_message};
+    }
     auto report = std::format("Primer A: {} possible primers\n", result.possible_a);
     report += std::format("Primer B: {} possible primers\n", result.possible_b);
-    report += std::format("Pairs:    {} possible\n\n", result.pairs.size());
+    report += std::format("Pairs:    {} possible\n", result.pairs.size());
+    if (result.limit == primerpicker::search::FindPairLimit::pairs_capped) {
+        report += pairs_capped_message;
+    }
+    report += '\n';
     report += "   Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming\n";
     report += "     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB\n";
     auto const ranked = primerpicker::search::legacy_rank_pairs(result.pairs, weights);
