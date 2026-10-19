@@ -15,7 +15,8 @@
 # Each harness runs in libFuzzer's fork mode: it goes on after a crash,
 # a timeout or an out-of-memory input (each is saved), and merges new
 # inputs into its corpus. Corpora are kept between campaigns in
-# build/fuzz/corpus/ (seeded from tests/legacy/ the first time); logs
+# build/fuzz/corpus/ (seeded from tests/legacy/ the first time; the
+# hand-written seeds below are written at every campaign); logs
 # and crashing inputs go to build/fuzz/campaigns/DATE/HARNESS/. A
 # crashing input is replayed with: build/fuzz/tests/fuzz/HARNESS FILE
 set -eu
@@ -27,7 +28,7 @@ workers=${3:-$(($(nproc) - 1))}
 check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
 
 # harness:weight (share of the workers)
-harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_pd2:1"
+harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1"
 total_weight=0
 for entry in $harnesses; do
     total_weight=$((total_weight + ${entry#*:}))
@@ -42,12 +43,11 @@ cmake --preset fuzz > /dev/null
 cmake --build --preset fuzz -j > /dev/null
 mkdir -p "$campaign"
 
-seed() {
+# hand-written seeds, (re)written at every campaign so that seeds added
+# later reach existing corpora
+fixed_seeds() {
     corpus="$build/corpus/$1"
-    [ -d "$corpus" ] && return
-    mkdir -p "$corpus"
     case $1 in
-        fuzz_pd2) find "$root/tests/legacy" -iname '*.pd2' -exec cp {} "$corpus/" \; ;;
         fuzz_site_search)
             printf 'GAATTC\nTTGAATTCGG\n' > "$corpus/ecori"
             printf 'GCCNNNNNGGC\nTTGCCATGCAGGCTT\n' > "$corpus/bgli"
@@ -57,7 +57,37 @@ seed() {
             printf 'find-pair\n--weights\n05001\n/m\n150\n400' > "$corpus/find_pair_weights"
             printf 'find-enzymes\n--almost\n/m\nAluI' > "$corpus/find_enzymes"
             printf 'analyze\n--extension\nGAATTC\nGTAAAACGACGGCCAGT' > "$corpus/analyze"
-            printf 'pair\nCCCTGTCATACCAATCTACCCC\nTGTTATGCGCGTGGGG' > "$corpus/pair" ;;
+            printf 'pair\nCCCTGTCATACCAATCTACCCC\nTGTTATGCGCGTGGGG' > "$corpus/pair"
+            printf 'multi\nCTCAAAGGCTCAGACATCAG\nGATCCATGCAATGCTAGCTA\nACGTTGCAGGTCAAGCTTGC\nTTGGCCAAGTCGATCGGATC' \
+                > "$corpus/multi"
+            printf 'multi\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_empty_field" ;;
+        fuzz_multi_primer)
+            # fields A to D (0x0F), each 20 bases: the 4-primer recording
+            # of tests/legacy/multi/
+            python3 -I - "$corpus/multi_1234" <<'EOP'
+import sys
+primers = ['CTCAAAGGCTCAGACATCAG', 'GATCCATGCAATGCTAGCTA', 'ACGTTGCAGGTCAAGCTTGC', 'TTGGCCAAGTCGATCGGATC']
+data = bytes([0x0F])
+for primer in primers:
+    data += bytes([len(primer) - 2]) + bytes('ACGT'.index(base) for base in primer)
+open(sys.argv[1], 'wb').write(data)
+EOP
+            ;;
+        *) ;;
+    esac
+}
+
+seed() {
+    corpus="$build/corpus/$1"
+    if [ -d "$corpus" ]; then
+        fixed_seeds "$1"
+        return
+    fi
+    mkdir -p "$corpus"
+    fixed_seeds "$1"
+    case $1 in
+        fuzz_pd2) find "$root/tests/legacy" -iname '*.pd2' -exec cp {} "$corpus/" \; ;;
+        fuzz_site_search | fuzz_cli | fuzz_multi_primer) ;;
         fuzz_find_pair)
             # settings (targets 150 and 400, built-in defaults), then
             # TEST600.GB, one byte per base
@@ -80,6 +110,7 @@ options() {
         fuzz_genbank | fuzz_fasta | fuzz_molecule_file) printf '%s' "-dict=$root/tests/fuzz/genbank.dict" ;;
         fuzz_cli) printf '%s' "-dict=$root/tests/fuzz/cli.dict" ;;
         fuzz_find_pair) printf '%s' "-max_len=1214" ;;  # 14 bytes of settings, 1200 bases
+        fuzz_multi_primer) printf '%s' "-max_len=249" ;;  # 1 + 4 x (1 + 60)
         *) printf '%s' "-max_len=65536" ;;
     esac
 }
