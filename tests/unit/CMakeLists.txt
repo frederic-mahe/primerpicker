@@ -29,6 +29,7 @@ add_executable(unit_tests
   test_legacy_hairpin.cpp
   test_legacy_pair.cpp
   test_pd2.cpp
+  test_pd2_cfg.cpp
   test_legacy_homology.cpp
   test_legacy_match.cpp
   test_legacy_find_pair.cpp
