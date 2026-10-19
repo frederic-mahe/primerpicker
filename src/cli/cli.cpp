@@ -480,6 +480,9 @@ auto find_pair_line(primerpicker::search::PairCandidate const& pair) -> std::str
 constexpr auto too_many_primers_message =
     std::string_view{"More than 100 sites found.  Suggest you redefine matching limits.\n"};
 constexpr auto pairs_capped_message = std::string_view{"More than 1000 possible pairs found!\n"};
+// shown instead of an empty list (tests/legacy/README.md, "No Matching
+// Primers Found (recorded 2026-10-19)")
+constexpr auto no_pair_message = std::string_view{"No Matching Primers Found\n"};
 
 auto find_pair_report(primerpicker::search::FindPairResult const& result,
                       primerpicker::search::FindPairWeights const& weights) -> std::string {
@@ -493,6 +496,9 @@ auto find_pair_report(primerpicker::search::FindPairResult const& result,
         report += pairs_capped_message;
     }
     report += '\n';
+    if (result.pairs.empty()) {
+        return report + std::string{no_pair_message};
+    }
     report += "   Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming\n";
     report += "     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB\n";
     auto const ranked = primerpicker::search::legacy_rank_pairs(result.pairs, weights);

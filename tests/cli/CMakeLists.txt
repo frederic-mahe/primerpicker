@@ -21,3 +21,6 @@ add_test(NAME cli_multi
 add_test(NAME cli_options
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_options.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_find_pair_no_match
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_find_pair_no_match.sh $<TARGET_FILE:primerpicker>
+          ${PROJECT_SOURCE_DIR}/tests/legacy)
