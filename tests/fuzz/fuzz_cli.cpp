@@ -1,9 +1,9 @@
 // libFuzzer harness: the command line (src/cli/cli.cpp). The input is a
 // list of arguments separated by newlines (the program name is added
 // first). An argument containing '/' is replaced by a recorded molecule
-// file, and the harness runs in an empty directory: commands read that
-// molecule or find no file, never other files of the machine. Output
-// is discarded.
+// file, one containing '\\' by a recorded settings file (pd2.cfg), and
+// the harness runs in an empty directory: commands read those files or
+// find no file, never other files of the machine. Output is discarded.
 
 #include "cli/cli.hpp"
 #include "fuzz_input.hpp"
@@ -27,6 +27,7 @@ namespace {
 constexpr auto max_arguments = std::size_t{8};
 constexpr auto program_name = std::string_view{"primerpicker"};
 constexpr auto molecule_file = std::string_view{PRIMERPICKER_LEGACY_DIR "/pairs/TEST600.GB"};
+constexpr auto settings_file = std::string_view{PRIMERPICKER_LEGACY_DIR "/config/PD2_RELAXED.CFG"};
 
 // A stream buffer that discards what is written
 class NullBuffer : public std::streambuf {
@@ -39,7 +40,12 @@ auto arguments(std::string_view text) -> std::vector<std::string> {
     while (words.size() <= max_arguments) {
         auto const end = text.find('\n');
         auto word = std::string{text.substr(0, end)};
-        words.push_back(word.find('/') == std::string::npos ? std::move(word) : std::string{molecule_file});
+        if (word.find('/') != std::string::npos) {
+            word = molecule_file;
+        } else if (word.find('\\') != std::string::npos) {
+            word = settings_file;
+        }
+        words.push_back(std::move(word));
         if (end == std::string_view::npos) {
             break;
         }

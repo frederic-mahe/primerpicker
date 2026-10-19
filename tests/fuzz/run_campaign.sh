@@ -28,7 +28,7 @@ workers=${3:-$(($(nproc) - 1))}
 check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
 
 # harness:weight (share of the workers)
-harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1"
+harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1"
 total_weight=0
 for entry in $harnesses; do
     total_weight=$((total_weight + ${entry#*:}))
@@ -60,7 +60,8 @@ fixed_seeds() {
             printf 'pair\nCCCTGTCATACCAATCTACCCC\nTGTTATGCGCGTGGGG' > "$corpus/pair"
             printf 'multi\nCTCAAAGGCTCAGACATCAG\nGATCCATGCAATGCTAGCTA\nACGTTGCAGGTCAAGCTTGC\nTTGGCCAAGTCGATCGGATC' \
                 > "$corpus/multi"
-            printf 'multi\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_empty_field" ;;
+            printf 'multi\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_empty_field"
+            printf -- '--config\n\\cfg\nfind-pair\n--offsets\n40,40\n/m\n150\n400' > "$corpus/config_find_pair" ;;
         fuzz_multi_primer)
             # fields A to D (0x0F), each 20 bases: the 4-primer recording
             # of tests/legacy/multi/
@@ -87,6 +88,7 @@ seed() {
     fixed_seeds "$1"
     case $1 in
         fuzz_pd2) find "$root/tests/legacy" -iname '*.pd2' -exec cp {} "$corpus/" \; ;;
+        fuzz_pd2_cfg) find "$root/tests/legacy" -iname '*.cfg' -exec cp {} "$corpus/" \; ;;
         fuzz_site_search | fuzz_cli | fuzz_multi_primer) ;;
         fuzz_find_pair)
             # settings (targets 150 and 400, built-in defaults), then
@@ -111,6 +113,7 @@ options() {
         fuzz_cli) printf '%s' "-dict=$root/tests/fuzz/cli.dict" ;;
         fuzz_find_pair) printf '%s' "-max_len=1214" ;;  # 14 bytes of settings, 1200 bases
         fuzz_multi_primer) printf '%s' "-max_len=249" ;;  # 1 + 4 x (1 + 60)
+        fuzz_pd2_cfg) printf '%s' "-max_len=128" ;;  # the files have 55 bytes
         *) printf '%s' "-max_len=65536" ;;
     esac
 }
