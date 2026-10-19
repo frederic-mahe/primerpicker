@@ -1,0 +1,20 @@
+# file	recipe	bases	file_bytes	sequence_text_bytes	result
+ZS10000.GB	make_molecule.py ZS10000 7 0.5 10000	10000	12996	12837	loaded
+ZS40000.GB	make_molecule.py ZS40000 7 0.5 40000	40000	51496	51337	loaded
+ZS50000.GB	make_molecule.py ZS50000 7 0.5 50000	50000	64333	64174	loaded
+ZF63000.FA	make_molecule.py ZF63000 7 0.5 63000, as FASTA (60 bases per line, CRLF)	63000	65110	65100	loaded
+ZF50900.GB	make_molecule.py ZF50900 7 0.5 50900	50900	65488	65329	loaded
+ZF51000.GB	make_molecule.py ZF51000 7 0.5 51000	51000	65609	65450	loaded
+ZX65534.FA	make_sized_fasta.py ZX65534 65534	63420	65544	65534	insufficient_memory
+ZX65535.FA	make_sized_fasta.py ZX65535 65535	63421	65545	65535	insufficient_memory
+ZX65536.FA	make_sized_fasta.py ZX65536 65536	63422	65546	65536	too_large
+ZF63500.FA	make_molecule.py ZF63500 7 0.5 63500, as FASTA (60 bases per line, CRLF)	63500	65628	65618	too_large
+ZS52500.GB	make_molecule.py ZS52500 7 0.5 52500	52500	67534	67375	too_large
+ZS55000.GB	make_molecule.py ZS55000 7 0.5 55000	55000	70746	70587	too_large
+ZS57500.GB	make_molecule.py ZS57500 7 0.5 57500	57500	73958	73799	too_large
+ZS60000.GB	make_molecule.py ZS60000 7 0.5 60000	60000	77159	77000	too_large
+ZS65000.GB	make_molecule.py ZS65000 7 0.5 65000	65000	83583	83424	too_large
+ZS65535.GB	make_molecule.py ZS65535 7 0.5 65535	65535	84271	84112	too_large
+ZS65536.GB	make_molecule.py ZS65536 7 0.5 65536	65536	84272	84113	too_large
+ZS70000.GB	make_molecule.py ZS70000 7 0.5 70000	70000	89996	89837	too_large
+ZS140000.GB	make_molecule.py ZS140000 7 0.5 140000	140000	179834	179674	too_large

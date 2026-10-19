@@ -284,6 +284,33 @@ Every file that loads gives the same sequence (first line
 read in a form not found yet.
 
 
+## Molecule size (recorded 2026-10-19)
+
+`molecules/molecule_size.tsv`: molecule files of increasing size
+loaded with Primer/Create -> from Molecule -> Load File
+(`tools/load_molecule.sh`). The files are not kept: each row gives the
+command that writes it again (`tools/make_molecule.py`, one segment of
+GC 0.5, seed 7; `tools/make_sized_fasta.py`; or, for two FASTA rows,
+the `make_molecule.py` sequence written as FASTA, 60 bases per line,
+DOS line ends), its size, and the size of its sequence text (the
+lines after `ORIGIN`, or after the FASTA header line, line ends,
+spaces and numbers included).
+
+The limit is on the sequence text, not on the number of bases or on
+the file size:
+- 65,536 bytes of sequence text or more: "Sequence too large" (and
+  "Press any key to continue..."), the molecule is not loaded;
+- just below, the load may fail for lack of memory: 65,534 and 65,535
+  bytes give "Insufficient Memory Error" (DOSBox-X default memory
+  settings), 65,450 bytes and less load;
+- so the largest molecule depends on the format: about 51,000 bases
+  in a GenBank file (about 1.28 bytes of text per base: numbers and
+  spaces), about 63,000 bases in a FASTA file with DOS line ends.
+primerpicker does not reproduce this limit (decided 2026-10-19:
+documented, not reproduced; its own limits are in the top-level
+README, "Molecule size").
+
+
 ## Settings file `pd2.cfg` (recorded 2026-10-18)
 
 The program writes `PD2.CFG` (55 bytes) when it quits after System
