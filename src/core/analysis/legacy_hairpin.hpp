@@ -6,6 +6,8 @@
 
 #include <cassert>
 #include <cstddef>
+#include <string_view>
+#include <string>
 #include <optional>
 #include <span>
 
@@ -124,6 +126,70 @@ constexpr auto hairpin_at(std::span<sequence::Nucleotide const> const primer, st
         return std::nullopt;
     }
     return best;
+}
+
+// The drawing of a hairpin on the Primer Analysis screen of Primer
+// Designer 2.0 (and on the Multi Primer hairpin page), line by line, as
+// on the screen: the 5' part of the primer up to the middle of the loop
+// (the larger half of an odd loop), then the pairs (':' under each stem
+// pair, ')' one column after the 5' part), then the 3' part, reversed,
+// each base under its partner (the middle base of an odd loop is on
+// both lines). The 5' part starts at a fixed column; a long 3' part is
+// cut at the left edge (nothing is drawn left of column 1);
+// tests/legacy/inspect/*.tsv. Not noexcept: the strings allocate.
+struct HairpinDrawing {
+    std::string top;
+    std::string marks;
+    std::string bottom;
+};
+
+namespace detail {
+
+constexpr auto hairpin_drawing_column = std::size_t{16};  // the first base of the 5' part
+constexpr auto five_prime_label = std::string_view{"5'-"};
+constexpr auto three_prime_label = std::string_view{"3'-"};
+constexpr auto first_drawn_column = std::size_t{1};
+
+// TEXT starting at COLUMN (which may be left of the screen: negative),
+// with nothing drawn left of first_drawn_column
+constexpr auto clipped_line(std::string const& text, std::ptrdiff_t const column) -> std::string {
+    auto const first = static_cast<std::ptrdiff_t>(first_drawn_column);
+    if (column >= first) {
+        return std::string(static_cast<std::size_t>(column), ' ') + text;
+    }
+    auto const hidden = static_cast<std::size_t>(first - column);
+    return std::string(first_drawn_column, ' ') + (hidden < text.size() ? text.substr(hidden) : std::string{});
+}
+
+}  // namespace detail
+
+[[nodiscard]] constexpr auto legacy_hairpin_drawing(std::span<sequence::Nucleotide const> const primer,
+                                                    Hairpin const& hairpin) -> HairpinDrawing {
+    assert(hairpin.stem_start + (2 * hairpin.stem_length) + hairpin.loop_length <= primer.size());
+    auto const column = detail::hairpin_drawing_column;
+    auto const top_length = hairpin.stem_start + hairpin.stem_length + ((hairpin.loop_length + 1) / 2);
+    // a base of the 3' part shares the column of its partner: i + j is
+    // the same for every pair (i, j)
+    auto const pair_sum = (2 * hairpin.stem_start) + (2 * hairpin.stem_length) + hairpin.loop_length - 1;
+    auto const last = primer.size() - 1;
+    // the column of the 3' end (negative when cut at the left edge)
+    auto const bottom_column = static_cast<std::ptrdiff_t>(column + pair_sum) - static_cast<std::ptrdiff_t>(last);
+    auto const bottom_first = top_length - (hairpin.loop_length % 2);  // the middle base of an odd loop again
+
+    auto drawing = HairpinDrawing{};
+    drawing.top = std::string(column - detail::five_prime_label.size(), ' ') + std::string{detail::five_prime_label};
+    for (auto index = std::size_t{0}; index < top_length; ++index) {
+        drawing.top += sequence::to_letter(primer[index]);
+    }
+    drawing.marks = std::string(column + hairpin.stem_start, ' ') + std::string(hairpin.stem_length, ':') +
+                    std::string(top_length - hairpin.stem_start - hairpin.stem_length, ' ') + ')';
+    auto bottom = std::string{detail::three_prime_label};
+    for (auto index = last + 1; index > bottom_first; --index) {
+        bottom += sequence::to_letter(primer[index - 1]);
+    }
+    drawing.bottom = detail::clipped_line(
+        bottom, bottom_column - static_cast<std::ptrdiff_t>(detail::three_prime_label.size()));
+    return drawing;
 }
 
 }  // namespace primerpicker::analysis

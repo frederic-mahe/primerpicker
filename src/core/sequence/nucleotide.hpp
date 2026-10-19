@@ -25,6 +25,22 @@ enum struct Nucleotide : std::uint8_t { adenine, cytosine, guanine, thymine };
     }
 }
 
+// The upper-case letter of a nucleotide
+[[nodiscard]] constexpr auto to_letter(Nucleotide const nucleotide) noexcept -> char {
+    switch (nucleotide) {
+        case Nucleotide::adenine:
+            return 'A';
+        case Nucleotide::cytosine:
+            return 'C';
+        case Nucleotide::guanine:
+            return 'G';
+        case Nucleotide::thymine:
+            return 'T';
+        default:
+            return '?';  // unreachable: all enumerators are handled
+    }
+}
+
 // A, C, G or T, in either case; anything else has no value
 [[nodiscard]] constexpr auto to_nucleotide(char const letter) noexcept -> std::optional<Nucleotide> {
     switch (letter) {
