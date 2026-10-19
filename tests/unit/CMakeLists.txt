@@ -20,6 +20,7 @@ include(Catch)
 add_executable(unit_tests
   test_skeleton.cpp
   test_nucleotide.cpp
+  test_genetic_code.cpp
   test_breslauer_1986.cpp
   test_legacy_tm.cpp
   test_legacy_tm_primer3.cpp
@@ -29,6 +30,7 @@ add_executable(unit_tests
   test_legacy_hairpin.cpp
   test_legacy_hairpin_drawing.cpp
   test_legacy_dimer_drawing.cpp
+  test_legacy_mutagenize.cpp
   test_legacy_pair.cpp
   test_pd2.cpp
   test_pd2_cfg.cpp
