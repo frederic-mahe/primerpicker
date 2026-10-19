@@ -31,6 +31,9 @@ runs in 80x25 text mode (720x400 pixels).
   `tools/parse_homology.py` turns the screen into table rows.
 - `tools/find_pair.sh`: records the Find Primer Pair list for two
   targets on a molecule, with optional weights.
+- `tools/find_pair_limits.sh`: runs Find Primer Pair with chosen
+  search windows and settings file, and prints the counts and
+  messages (limits on primers and pairs).
 - `tools/pair_direct.sh`: types two primers with Direct Entry and
   records their Primer Pair Analysis screen; `tools/parse_pair.py`
   turns pair screens (from it or from `pair_product.sh`) into a table.
@@ -519,6 +522,49 @@ start (a file with another name is ignored). Find Pair on
   one emulator at a time.
 Keys typed during the search may interrupt it: type nothing after the
 last Enter of the form until the counts are final.
+
+### Limits on primers and pairs (recorded 2026-10-19)
+
+`search/find_pair_limits.tsv`: Find Pair on `enzymes/TLONG.GB` with
+chosen search windows, with `config/PD2_RELAXED.CFG` as `PD2.CFG`
+(nearly every primer meets the criteria) or the built-in criteria.
+Recorded with `tools/find_pair_limits.sh` (one emulator at a time,
+`PAUSE=4`; runs that lost keys were discarded). Offsets are those of
+the form ("Start search at: Target -", "Extend search to Target +");
+a window holds offset + 1 positions. "-": not shown (the message
+comes while the primers are counted). Outcomes:
+- `pairs_found`: the counts are final and "<Press key to display
+  possible pairs>" follows;
+- `too_many_sites`: while primer A, then primer B, are counted, a box
+  shows "More than 100 sites found.  Suggest you redefine matching
+  limits." and "Press any key to continue..."; a key closes it and
+  the constraints form is shown again, with no search;
+- `pairs_capped`: the pair count climbs to "Pairs:  1000 possible"
+  and stops; "<Press key to interrupt search>" stays on screen for
+  more than 40 minutes of emulated time, and keys (space, Esc, y,
+  Enter, sent 1 minute after the cap) change nothing: the program
+  hangs. A control run (41x41 windows, same delayed key) shows the
+  list, so the keys do reach the program;
+- `no_matching_primers`: a box "No Matching Primers Found" and "Press
+  any key to continue...", without the search screen.
+
+Rules:
+- the limit is on possible primers (those that meet every
+  criterion), not on window positions: 111 positions with 9 possible
+  primers A (built-in criteria) are searched; it applies to primer A
+  and to primer B;
+- the message appears at 100 possible primers, despite its wording:
+  99 possible primers A (relaxed, offset 98) are searched, 100
+  positions (offset 99, every primer possible with these settings)
+  give the message;
+- the pair count stops at 1000. The program holds the string "More
+  than 1000 possible pairs found!" but never showed it.
+Not known: what makes "No Matching Primers Found" appear (no
+possible primer A? no pair?); in both recorded cases no pair exists.
+Version 1 (decided 2026-10-19): the same 100-primer limit; at 1000
+pairs, the search stops, keeps the first 1000 pairs in generation
+order, ranks them, and warns "More than 1000 possible pairs found!"
+instead of hanging.
 
 ### The false-priming term of the score (recorded 2026-10-18)
 

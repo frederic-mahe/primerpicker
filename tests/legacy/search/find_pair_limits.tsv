@@ -1,0 +1,12 @@
+# settings	molecule	target_a	start_offset_a	target_b	end_offset_b	length	possible_a	possible_b	pairs	outcome
+PD2_RELAXED.CFG	TLONG.GB	400	40	800	40	20	41	41	626	pairs_found
+PD2_RELAXED.CFG	TLONG.GB	400	98	800	5	20	99	6	220	pairs_found
+PD2_RELAXED.CFG	TLONG.GB	400	99	800	5	20	-	-	-	too_many_sites
+PD2_RELAXED.CFG	TLONG.GB	400	100	800	5	20	-	-	-	too_many_sites
+PD2_RELAXED.CFG	TLONG.GB	400	110	800	5	20	-	-	-	too_many_sites
+PD2_RELAXED.CFG	TLONG.GB	400	5	800	110	20	6	-	-	too_many_sites
+PD2_RELAXED.CFG	TLONG.GB	400	54	800	54	20	55	55	1000	pairs_capped
+PD2_RELAXED.CFG	TLONG.GB	400	60	800	60	20	61	61	1000	pairs_capped
+built-in	TLONG.GB	200	110	800	50	20	9	16	48	pairs_found
+built-in	TLONG.GB	400	110	800	5	20	-	-	-	no_matching_primers
+built-in	TLONG.GB	400	110	800	50	20	-	-	-	no_matching_primers
