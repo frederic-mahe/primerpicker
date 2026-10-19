@@ -1,0 +1,22 @@
+# Citation metadata (https://citation-file-format.github.io/). A
+# release DOI (Zenodo) will be added with the first release.
+cff-version: 1.2.0
+message: "If you use primerpicker, please cite it as below."
+title: primerpicker
+abstract: >-
+  An interactive tool to design and check PCR and sequencing primers,
+  with a graphical and a command-line interface. Version 1 reproduces
+  the features, default values and results of Primer Designer 2.0
+  (Scientific & Educational Software, 1990-91).
+type: software
+authors:
+  - given-names: Frédéric
+    family-names: Mahé
+repository-code: "https://github.com/frederic-mahe/primerpicker"
+license: GPL-3.0-or-later
+version: 0.1.0
+keywords:
+  - PCR
+  - primer design
+  - sequencing primers
+  - bioinformatics
