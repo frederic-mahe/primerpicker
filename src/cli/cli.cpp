@@ -11,6 +11,7 @@
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
+#include "core/io/pd2_cfg.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -19,6 +20,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <charconv>
 #include <cstddef>
 #include <cstdlib>
@@ -47,6 +49,7 @@ using primerpicker::analysis::LegacyCriteria;
 using primerpicker::analysis::LegacyPrimer;
 using primerpicker::analysis::LegacyVerdict;
 using primerpicker::analysis::PrimerPair;
+using primerpicker::io::LegacySystemDefaults;
 using primerpicker::sequence::Nucleotide;
 
 constexpr auto program_name = std::string_view{"primerpicker"};
@@ -54,12 +57,16 @@ constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair PRIMER_A PRIMER_B\n"
     "       primerpicker multi PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
-    "       primerpicker find-pair [--weights WEIGHTS] MOLECULE TARGET_A TARGET_B\n"
+    "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
+    "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair ...\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
     "criteria and methods of Primer Designer 2.0.\n"
+    "--config a settings file of Primer Designer 2.0 (pd2.cfg): its criteria,\n"
+    "         tolerances, primer length, search ranges and weights replace\n"
+    "         the built-in defaults\n"
     "analyze  one primer, with an optional 5' extension, as the Primer\n"
     "         Analysis screen\n"
     "pair     two primers, as the Primer Pair Analysis screen\n"
@@ -68,10 +75,11 @@ constexpr auto usage = std::string_view{
     "find-pair\n"
     "         pairs of primers around two targets of a molecule file (GenBank,\n"
     "         FASTA or plain sequence), ranked as the Find Primer Pair list;\n"
-    "         primer A is searched from TARGET_A - 100 to TARGET_A, primer B\n"
-    "         (complement strand) from TARGET_B to TARGET_B + 100. WEIGHTS: five\n"
-    "         digits from 0 to 5, for GC mismatch, Tm mismatch, 3' dimers, any\n"
-    "         dimers and false priming (default: 11111)\n"
+    "         primer A is searched from TARGET_A - START to TARGET_A, primer B\n"
+    "         (complement strand) from TARGET_B to TARGET_B + END (default:\n"
+    "         100,100). WEIGHTS: five digits from 0 to 5, for GC mismatch, Tm\n"
+    "         mismatch, 3' dimers, any dimers and false priming (default:\n"
+    "         11111)\n"
     "find-enzymes\n"
     "         sites of a restriction enzyme (REBASE name; old names such as\n"
     "         Asp718 or Sau3A are accepted) on both strands of a molecule file,\n"
@@ -154,8 +162,7 @@ auto hairpin_line(LegacyActualValues const& actual) -> std::string {
     return std::format("Hairpin:       {:.1f} kcal\n", actual.hairpin->kcal_per_mol);
 }
 
-auto analysis_report(LegacyPrimer const& primer) -> std::string {
-    auto const criteria = LegacyCriteria{};
+auto analysis_report(LegacyPrimer const& primer, LegacyCriteria const& criteria) -> std::string {
     auto const actual = legacy_actual_values(primer);
     auto const verdict = evaluate(actual, criteria);
     auto const extension = primer.sequence.first(primer.extension_length);
@@ -191,7 +198,7 @@ struct AnalyzeArguments {
     std::string_view primer;
 };
 
-auto analyze(AnalyzeArguments const& arguments) -> int {
+auto analyze(AnalyzeArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
     auto const extension = parse_sequence(arguments.extension, "extension", 0);
     auto const primer = parse_sequence(arguments.primer, "primer", min_primer_length);
     if (not extension.has_value() or not primer.has_value()) {
@@ -199,7 +206,8 @@ auto analyze(AnalyzeArguments const& arguments) -> int {
     }
     auto sequence = *extension;
     sequence.insert(sequence.end(), primer->begin(), primer->end());
-    std::cout << analysis_report(LegacyPrimer{.sequence = sequence, .extension_length = extension->size()});
+    std::cout << analysis_report(LegacyPrimer{.sequence = sequence, .extension_length = extension->size()},
+                                 defaults.criteria);
     return EXIT_SUCCESS;
 }
 
@@ -220,8 +228,9 @@ auto difference_comment(int const difference, std::string_view const unit) -> st
     return difference == 0 ? std::string{} : std::format("{}{} difference", difference, unit);
 }
 
-auto pair_report(std::span<Nucleotide const> const primer_a, std::span<Nucleotide const> const primer_b) -> std::string {
-    auto const criteria = LegacyCriteria{};
+auto pair_report(PrimerPair const& primers, LegacyCriteria const& criteria) -> std::string {
+    auto const primer_a = primers.first;
+    auto const primer_b = primers.second;
     auto const actual_a = legacy_actual_values(primer_a);
     auto const actual_b = legacy_actual_values(primer_b);
     auto const cautions_a = primerpicker::analysis::legacy_pair_cautions(actual_a, criteria);
@@ -264,13 +273,13 @@ auto pair_report(std::span<Nucleotide const> const primer_a, std::span<Nucleotid
     return report;
 }
 
-auto pair(std::string_view const text_a, std::string_view const text_b) -> int {
+auto pair(std::string_view const text_a, std::string_view const text_b, LegacySystemDefaults const& defaults) -> int {
     auto const primer_a = parse_sequence(text_a, "primer A", min_primer_length);
     auto const primer_b = parse_sequence(text_b, "primer B", min_primer_length);
     if (not primer_a.has_value() or not primer_b.has_value()) {
         return EXIT_FAILURE;
     }
-    std::cout << pair_report(*primer_a, *primer_b);
+    std::cout << pair_report(PrimerPair{.first = *primer_a, .second = *primer_b}, defaults.criteria);
     return EXIT_SUCCESS;
 }
 
@@ -323,10 +332,11 @@ auto dimer_matrix(std::string_view const title, primerpicker::analysis::LegacyMu
     return matrix;
 }
 
-auto multi_report(primerpicker::analysis::MultiPrimerFields const& fields) -> std::string {
+auto multi_report(primerpicker::analysis::MultiPrimerFields const& fields, LegacyCriteria const& criteria)
+    -> std::string {
     using primerpicker::analysis::LegacyDimerCell;
     using primerpicker::analysis::LegacyMultiPrimerColumn;
-    auto const analysis = primerpicker::analysis::legacy_multi_primer(fields, LegacyCriteria{});
+    auto const analysis = primerpicker::analysis::legacy_multi_primer(fields, criteria);
     auto report = std::string{};
     for (auto index = std::size_t{0}; index < fields.size(); ++index) {
         auto const& field = fields.at(index);
@@ -365,7 +375,7 @@ auto multi_report(primerpicker::analysis::MultiPrimerFields const& fields) -> st
 }
 
 // PRIMER_A to PRIMER_D, '-' for an empty field
-auto multi(std::span<char const* const> const texts) -> int {
+auto multi(std::span<char const* const> const texts, LegacySystemDefaults const& defaults) -> int {
     auto primers = std::vector<std::vector<Nucleotide>>{};
     auto fields = primerpicker::analysis::MultiPrimerFields{};
     primers.reserve(texts.size());
@@ -385,7 +395,7 @@ auto multi(std::span<char const* const> const texts) -> int {
     if (primers.size() < min_primers) {
         return fail("multi needs at least two primers");
     }
-    std::cout << multi_report(fields);
+    std::cout << multi_report(fields, defaults.criteria);
     return EXIT_SUCCESS;
 }
 
@@ -492,28 +502,114 @@ auto find_pair_report(primerpicker::search::FindPairResult const& result,
                            });
 }
 
+struct SearchOffsets {
+    std::size_t start_a;  // primer A from target A - start_a
+    std::size_t end_b;    // primer B to target B + end_b
+};
+
+// "START,END", two numbers (0 or more), or none after printing why on
+// stderr
+auto parse_offsets(std::string_view const text) -> std::optional<SearchOffsets> {
+    auto const number = [](std::string_view const text_number) -> std::optional<std::size_t> {
+        auto const digits = std::string{text_number};
+        auto value = std::size_t{0};
+        auto const* const end = std::next(digits.data(), std::ssize(digits));
+        auto const [stop, error] = std::from_chars(digits.data(), end, value);
+        return error == std::errc{} and stop == end and not digits.empty() ? std::optional{value} : std::nullopt;
+    };
+    auto const comma = text.find(',');
+    auto const start = comma == std::string_view::npos ? std::nullopt : number(text.substr(0, comma));
+    auto const end = comma == std::string_view::npos ? std::nullopt : number(text.substr(comma + 1));
+    if (not start.has_value() or not end.has_value()) {
+        fail(std::format("offsets: '{}' is not two numbers START,END", text));
+        return std::nullopt;
+    }
+    return SearchOffsets{.start_a = *start, .end_b = *end};
+}
+
 struct FindPairArguments {
-    std::string_view weights;
+    std::optional<std::string_view> weights;  // the settings' weights when absent
+    std::optional<std::string_view> offsets;  // the settings' search ranges when absent
     std::string_view molecule;
     std::string_view target_a;
     std::string_view target_b;
 };
 
-auto find_pair(FindPairArguments const& arguments) -> int {
-    auto const weights = parse_weights(arguments.weights);
+auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
+    auto const weights = arguments.weights.has_value() ? parse_weights(*arguments.weights) : defaults.weights;
+    auto const offsets = arguments.offsets.has_value()
+                             ? parse_offsets(*arguments.offsets)
+                             : SearchOffsets{.start_a = defaults.find_pair_start_offset,
+                                             .end_b = defaults.find_pair_end_offset};
     auto const target_a = parse_position(arguments.target_a, "target A");
     auto const target_b = parse_position(arguments.target_b, "target B");
-    if (not weights.has_value() or not target_a.has_value() or not target_b.has_value()) {
+    if (not weights.has_value() or not offsets.has_value() or not target_a.has_value() or not target_b.has_value()) {
         return EXIT_FAILURE;
     }
     auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
     if (not molecule.has_value()) {
         return EXIT_FAILURE;
     }
-    auto const result = primerpicker::search::legacy_find_pair(
-        molecule->sequence, {.target_a = *target_a, .target_b = *target_b}, LegacyCriteria{});
+    auto const settings = primerpicker::search::FindPairSettings{.target_a = *target_a,
+                                                                 .start_offset_a = offsets->start_a,
+                                                                 .target_b = *target_b,
+                                                                 .end_offset_b = offsets->end_b,
+                                                                 .length = defaults.primer_length,
+                                                                 .gc_tolerance_percent = defaults.gc_tolerance_percent,
+                                                                 .tm_tolerance_celsius = defaults.tm_tolerance_celsius};
+    auto const result = primerpicker::search::legacy_find_pair(molecule->sequence, settings, defaults.criteria);
     std::cout << find_pair_report(result, *weights);
     return EXIT_SUCCESS;
+}
+
+// find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A
+// TARGET_B: the command's arguments, after its name
+auto find_pair_command(std::span<char const* const> arguments, LegacySystemDefaults const& defaults) -> int {
+    constexpr auto weights_option = std::string_view{"--weights"};
+    constexpr auto offsets_option = std::string_view{"--offsets"};
+    constexpr auto option_size = std::size_t{2};  // the option and its value
+    constexpr auto positional_count = std::size_t{3};
+    auto parsed = FindPairArguments{};
+    while (arguments.size() > positional_count) {
+        auto const option = std::string_view{arguments[0]};
+        auto const value = std::string_view{arguments[1]};
+        if (option == weights_option and not parsed.weights.has_value()) {
+            parsed.weights = value;
+        } else if (option == offsets_option and not parsed.offsets.has_value()) {
+            parsed.offsets = value;
+        } else {
+            std::cerr << usage;
+            return EXIT_FAILURE;
+        }
+        arguments = arguments.subspan(option_size);
+    }
+    if (arguments.size() != positional_count) {
+        std::cerr << usage;
+        return EXIT_FAILURE;
+    }
+    parsed.molecule = arguments[0];
+    parsed.target_a = arguments[1];
+    parsed.target_b = arguments[2];
+    return find_pair(parsed, defaults);
+}
+
+// The settings of a pd2.cfg file, or none after printing why on stderr
+auto read_config(std::filesystem::path const& path) -> std::optional<LegacySystemDefaults> {
+    auto const text = read_text_file(path);
+    if (not text.has_value()) {
+        fail(std::format("cannot read {}", path.string()));
+        return std::nullopt;
+    }
+    auto bytes = std::vector<std::byte>{};
+    bytes.reserve(text->size());
+    std::ranges::transform(*text, std::back_inserter(bytes), [](char const character) {
+        return std::bit_cast<std::byte>(character);
+    });
+    auto const result = primerpicker::io::parse_pd2_cfg(bytes);
+    if (not result.defaults.has_value()) {
+        fail(std::format("{}: not a Primer Designer 2.0 settings file (pd2.cfg)", path.string()));
+    }
+    return result.defaults;
 }
 
 // "....A": a dot per matching base, the molecule's base where it differs
@@ -614,69 +710,80 @@ auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
     return EXIT_SUCCESS;
 }
 
+// A command and its arguments (after the command's name)
+auto run_command(std::string_view const command, std::span<char const* const> const arguments,
+                 LegacySystemDefaults const& defaults) -> int {
+    constexpr auto analyze_count = std::size_t{1};
+    constexpr auto analyze_with_extension_count = std::size_t{3};
+    constexpr auto pair_count = std::size_t{2};
+    constexpr auto extension_option = std::string_view{"--extension"};
+    if (command == "analyze" and arguments.size() == analyze_count) {
+        return analyze({.extension = "", .primer = arguments[0]}, defaults);
+    }
+    if (command == "analyze" and arguments.size() == analyze_with_extension_count and
+        arguments[0] == extension_option) {
+        return analyze({.extension = arguments[1], .primer = arguments[2]}, defaults);
+    }
+    if (command == "pair" and arguments.size() == pair_count) {
+        return pair(arguments[0], arguments[1], defaults);
+    }
+    constexpr auto multi_min_count = std::size_t{2};
+    constexpr auto multi_max_count = primerpicker::analysis::legacy_multi_primer_fields;
+    if (command == "multi" and arguments.size() >= multi_min_count and arguments.size() <= multi_max_count) {
+        return multi(arguments, defaults);
+    }
+    if (command == "find-pair") {
+        return find_pair_command(arguments, defaults);
+    }
+    constexpr auto find_enzymes_count = std::size_t{2};
+    constexpr auto find_almost_enzymes_count = std::size_t{3};
+    constexpr auto almost_option = std::string_view{"--almost"};
+    if (command == "find-enzymes" and arguments.size() == find_enzymes_count) {
+        return find_enzymes(
+            {.mismatches = primerpicker::enzymes::Mismatches::none, .molecule = arguments[0], .enzyme = arguments[1]});
+    }
+    if (command == "find-enzymes" and arguments.size() == find_almost_enzymes_count and
+        arguments[0] == almost_option) {
+        return find_enzymes({.mismatches = primerpicker::enzymes::Mismatches::at_most_one,
+                             .molecule = arguments[1],
+                             .enzyme = arguments[2]});
+    }
+    std::cerr << usage;
+    return EXIT_FAILURE;
+}
+
 auto dispatch(std::span<char const* const> const arguments) -> int {
     if (arguments.size() < 2) {
         std::cerr << usage;
         return EXIT_FAILURE;
     }
-    auto const command = std::string_view{arguments[1]};
-    if (command == "--help") {
+    auto const first = std::string_view{arguments[1]};
+    if (first == "--help") {
         std::cout << usage;
         return EXIT_SUCCESS;
     }
-    if (command == "--version") {
+    if (first == "--version") {
         std::cout << program_name << ' ' << PRIMERPICKER_VERSION << '\n';
         return EXIT_SUCCESS;
     }
-    // program name, command, then the command's arguments
-    constexpr auto analyze_count = std::size_t{3};
-    constexpr auto analyze_with_extension_count = std::size_t{5};
-    constexpr auto pair_count = std::size_t{4};
-    constexpr auto extension_option = std::string_view{"--extension"};
-    if (command == "analyze" and arguments.size() == analyze_count) {
-        return analyze({.extension = "", .primer = arguments[2]});
+    // program name, [--config FILE,] command, then the command's arguments
+    constexpr auto config_option = std::string_view{"--config"};
+    constexpr auto config_size = std::size_t{2};  // the option and its file
+    auto rest = arguments.subspan(1);
+    auto defaults = LegacySystemDefaults{};
+    if (first == config_option) {
+        if (rest.size() <= config_size) {
+            std::cerr << usage;
+            return EXIT_FAILURE;
+        }
+        auto const config = read_config(std::filesystem::path{rest[1]});
+        if (not config.has_value()) {
+            return EXIT_FAILURE;
+        }
+        defaults = *config;
+        rest = rest.subspan(config_size);
     }
-    if (command == "analyze" and arguments.size() == analyze_with_extension_count and
-        arguments[2] == extension_option) {
-        return analyze({.extension = arguments[3], .primer = arguments[4]});
-    }
-    if (command == "pair" and arguments.size() == pair_count) {
-        return pair(arguments[2], arguments[3]);
-    }
-    constexpr auto multi_min_count = std::size_t{4};
-    constexpr auto multi_max_count = multi_min_count + 2;
-    if (command == "multi" and arguments.size() >= multi_min_count and arguments.size() <= multi_max_count) {
-        return multi(arguments.subspan(2));
-    }
-    constexpr auto find_pair_count = std::size_t{5};
-    constexpr auto find_pair_with_weights_count = std::size_t{7};
-    constexpr auto weights_option = std::string_view{"--weights"};
-    constexpr auto default_weights = std::string_view{"11111"};
-    if (command == "find-pair" and arguments.size() == find_pair_count) {
-        return find_pair(
-            {.weights = default_weights, .molecule = arguments[2], .target_a = arguments[3], .target_b = arguments[4]});
-    }
-    if (command == "find-pair" and arguments.size() == find_pair_with_weights_count and
-        arguments[2] == weights_option) {
-        auto const options = arguments.subspan(3);  // after "--weights"
-        return find_pair({.weights = options[0], .molecule = options[1], .target_a = options[2], .target_b = options[3]});
-    }
-    constexpr auto find_enzymes_count = std::size_t{4};
-    constexpr auto find_almost_enzymes_count = std::size_t{5};
-    constexpr auto almost_option = std::string_view{"--almost"};
-    if (command == "find-enzymes" and arguments.size() == find_enzymes_count) {
-        return find_enzymes({.mismatches = primerpicker::enzymes::Mismatches::none,
-                             .molecule = arguments[2],
-                             .enzyme = arguments[3]});
-    }
-    if (command == "find-enzymes" and arguments.size() == find_almost_enzymes_count and
-        arguments[2] == almost_option) {
-        return find_enzymes({.mismatches = primerpicker::enzymes::Mismatches::at_most_one,
-                             .molecule = arguments[3],
-                             .enzyme = arguments[4]});
-    }
-    std::cerr << usage;
-    return EXIT_FAILURE;
+    return run_command(rest[0], rest.subspan(1), defaults);
 }
 
 }  // namespace
