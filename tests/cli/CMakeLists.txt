@@ -16,3 +16,5 @@ add_test(NAME cli_find_pair
 add_test(NAME cli_find_enzymes
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_find_enzymes.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_multi
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_multi.sh $<TARGET_FILE:primerpicker>)

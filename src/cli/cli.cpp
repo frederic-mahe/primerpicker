@@ -4,6 +4,7 @@
 #include "cli/cli.hpp"
 
 #include "core/analysis/legacy_criteria.hpp"
+#include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/enzymes/enzyme.hpp"
@@ -17,6 +18,7 @@
 #include "core/sequence/topology.hpp"
 
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <cstddef>
 #include <cstdlib>
@@ -51,6 +53,7 @@ constexpr auto program_name = std::string_view{"primerpicker"};
 constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair PRIMER_A PRIMER_B\n"
+    "       primerpicker multi PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
     "       primerpicker find-pair [--weights WEIGHTS] MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker --help | --version\n"
@@ -60,6 +63,8 @@ constexpr auto usage = std::string_view{
     "analyze  one primer, with an optional 5' extension, as the Primer\n"
     "         Analysis screen\n"
     "pair     two primers, as the Primer Pair Analysis screen\n"
+    "multi    two to four primers, as the Multi Primer Analysis screen; '-'\n"
+    "         leaves a field empty (at least two primers)\n"
     "find-pair\n"
     "         pairs of primers around two targets of a molecule file (GenBank,\n"
     "         FASTA or plain sequence), ranked as the Find Primer Pair list;\n"
@@ -266,6 +271,121 @@ auto pair(std::string_view const text_a, std::string_view const text_b) -> int {
         return EXIT_FAILURE;
     }
     std::cout << pair_report(*primer_a, *primer_b);
+    return EXIT_SUCCESS;
+}
+
+using FieldTexts = std::array<std::string, primerpicker::analysis::legacy_multi_primer_fields>;
+
+constexpr auto field_names = std::string_view{"ABCD"};
+constexpr auto empty_field = std::string_view{"-"};
+constexpr auto below_diagonal = std::string_view{"."};
+
+auto multi_line(std::string_view const name, FieldTexts const& texts) -> std::string {
+    auto line = std::accumulate(texts.begin(), texts.end(), std::format("{:<26}", name),
+                                [](std::string text, std::string const& field) {
+                                    return std::move(text) + std::format("{:>6}  ", field);
+                                });
+    while (line.ends_with(' ')) {
+        line.pop_back();
+    }
+    return line + '\n';
+}
+
+// one line of the balance table: a text per filled field
+auto balance_line(std::string_view const name, primerpicker::analysis::LegacyMultiPrimer const& analysis,
+                  auto const& text) -> std::string {
+    auto texts = FieldTexts{};
+    std::ranges::transform(analysis.columns, texts.begin(), [&text](auto const& column) {
+        return column.has_value() ? text(*column) : std::string{};
+    });
+    return multi_line(name, texts);
+}
+
+// one dimer matrix ("3' end matches" or "Any adj homol bases")
+auto dimer_matrix(std::string_view const title, primerpicker::analysis::LegacyMultiPrimer const& analysis,
+                  auto const& text) -> std::string {
+    auto header = FieldTexts{};
+    std::ranges::transform(field_names, header.begin(), [](char const name) { return std::string{name}; });
+    auto matrix = multi_line(title, header);
+    for (auto row = std::size_t{0}; row < field_names.size(); ++row) {
+        auto texts = FieldTexts{};
+        for (auto column = std::size_t{0}; column < field_names.size(); ++column) {
+            auto const& cell = analysis.dimers.at(row).at(column);
+            auto const both_filled = analysis.columns.at(row).has_value() and analysis.columns.at(column).has_value();
+            if (cell.has_value()) {
+                texts.at(column) = text(*cell);
+            } else if (both_filled and column < row) {
+                texts.at(column) = below_diagonal;
+            }
+        }
+        matrix += multi_line(std::format("  {}", field_names.at(row)), texts);
+    }
+    return matrix;
+}
+
+auto multi_report(primerpicker::analysis::MultiPrimerFields const& fields) -> std::string {
+    using primerpicker::analysis::LegacyDimerCell;
+    using primerpicker::analysis::LegacyMultiPrimerColumn;
+    auto const analysis = primerpicker::analysis::legacy_multi_primer(fields, LegacyCriteria{});
+    auto report = std::string{};
+    for (auto index = std::size_t{0}; index < fields.size(); ++index) {
+        auto const& field = fields.at(index);
+        report += field.has_value() ? std::format("Primer {}:      5'-{}-3'\n", field_names.at(index), letters(*field))
+                                    : std::format("Primer {}:\n", field_names.at(index));
+    }
+    report += '\n';
+    report += multi_line("Primer balance", {"-A-", "-B-", "-C-", "-D-"});
+    report += balance_line("Length", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return std::to_string(column.length);
+    });
+    report += balance_line("% GC", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return flagged(column.actual.gc_percent, column.cautions.gc);
+    });
+    report += balance_line("Tm °C", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return flagged(column.actual.tm_celsius, column.cautions.tm);
+    });
+    report += balance_line("Runs of G/C at 3' end", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return flagged(column.actual.gc_run_3prime, column.cautions.gc_run_3prime);
+    });
+    report += balance_line("Runs of bases (any)", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return flagged(column.actual.longest_run, column.cautions.runs);
+    });
+    report += balance_line("Hairpins", analysis, [](LegacyMultiPrimerColumn const& column) {
+        return std::string{column.cautions.hairpin ? "!" : "OK"};
+    });
+    report += '\n';
+    report += dimer_matrix("3' end matches", analysis, [](LegacyDimerCell const& cell) {
+        return flagged(cell.dimer_3prime_matches, cell.flags.three_prime);
+    });
+    report += '\n';
+    report += dimer_matrix("Any adj homol bases", analysis, [](LegacyDimerCell const& cell) {
+        return flagged(cell.dimer_adjacent_bases, cell.flags.adjacent);
+    });
+    return report;
+}
+
+// PRIMER_A to PRIMER_D, '-' for an empty field
+auto multi(std::span<char const* const> const texts) -> int {
+    auto primers = std::vector<std::vector<Nucleotide>>{};
+    auto fields = primerpicker::analysis::MultiPrimerFields{};
+    primers.reserve(texts.size());
+    for (auto index = std::size_t{0}; index < texts.size(); ++index) {
+        auto const text = std::string_view{texts[index]};
+        if (text == empty_field) {
+            continue;
+        }
+        auto primer = parse_sequence(text, std::format("primer {}", field_names.at(index)), min_primer_length);
+        if (not primer.has_value()) {
+            return EXIT_FAILURE;
+        }
+        primers.push_back(std::move(*primer));
+        fields.at(index) = primers.back();
+    }
+    constexpr auto min_primers = std::size_t{2};
+    if (primers.size() < min_primers) {
+        return fail("multi needs at least two primers");
+    }
+    std::cout << multi_report(fields);
     return EXIT_SUCCESS;
 }
 
@@ -522,6 +642,11 @@ auto dispatch(std::span<char const* const> const arguments) -> int {
     }
     if (command == "pair" and arguments.size() == pair_count) {
         return pair(arguments[2], arguments[3]);
+    }
+    constexpr auto multi_min_count = std::size_t{4};
+    constexpr auto multi_max_count = multi_min_count + 2;
+    if (command == "multi" and arguments.size() >= multi_min_count and arguments.size() <= multi_max_count) {
+        return multi(arguments.subspan(2));
     }
     constexpr auto find_pair_count = std::size_t{5};
     constexpr auto find_pair_with_weights_count = std::size_t{7};
