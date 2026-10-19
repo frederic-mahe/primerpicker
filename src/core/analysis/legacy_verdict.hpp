@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_builtin_defaults.hpp"
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_hairpin.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -18,16 +19,16 @@ namespace primerpicker::analysis {
 // Default values: the built-in defaults of PRIMER.exe
 // (tests/legacy/README.md, "Built-in defaults").
 struct LegacyCriteria {
-    int gc_min_percent = 50;
-    int gc_max_percent = 60;
-    int tm_min_celsius = 55;
-    int tm_max_celsius = 80;
+    int gc_min_percent = builtin::gc_min_percent;
+    int gc_max_percent = builtin::gc_max_percent;
+    int tm_min_celsius = builtin::tm_min_celsius;
+    int tm_max_celsius = builtin::tm_max_celsius;
     // a hairpin with an energy below the cutoff fails the criterion
-    thermo::KilocaloriesPerMole hairpin_cutoff = thermo::KilocaloriesPerMole{0.0};
-    std::size_t reject_dimer_3prime_matches = 3;  // reject if >=
-    std::size_t reject_dimer_adjacent_bases = 7;  // reject if >=
-    std::size_t reject_run_length = 3;            // reject if >=
-    std::size_t reject_gc_run_3prime = 3;         // reject if >=
+    thermo::KilocaloriesPerMole hairpin_cutoff = thermo::KilocaloriesPerMole{builtin::hairpin_cutoff_kcal_per_mol};
+    std::size_t reject_dimer_3prime_matches = builtin::reject_dimer_3prime_matches;  // reject if >=
+    std::size_t reject_dimer_adjacent_bases = builtin::reject_dimer_adjacent_bases;  // reject if >=
+    std::size_t reject_run_length = builtin::reject_run_length;                      // reject if >=
+    std::size_t reject_gc_run_3prime = builtin::reject_gc_run_3prime;                // reject if >=
 };
 
 // The "Actual" column of the Primer Analysis screen

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_builtin_defaults.hpp"
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_verdict.hpp"
@@ -26,12 +27,12 @@ namespace primerpicker::search {
 // ends (see sequence::PrimerLocation).
 struct FindPairSettings {
     std::size_t target_a = 0;
-    std::size_t start_offset_a = 100;
+    std::size_t start_offset_a = analysis::builtin::find_pair_start_offset;
     std::size_t target_b = 0;
-    std::size_t end_offset_b = 100;
-    std::size_t length = 20;  // bases, without 5' extension here
-    int gc_tolerance_percent = 5;
-    int tm_tolerance_celsius = 10;
+    std::size_t end_offset_b = analysis::builtin::find_pair_end_offset;
+    std::size_t length = analysis::builtin::primer_length;  // bases, without 5' extension here
+    int gc_tolerance_percent = analysis::builtin::gc_tolerance_percent;
+    int tm_tolerance_celsius = analysis::builtin::tm_tolerance_celsius;
 };
 
 struct PairCandidate {
@@ -171,11 +172,11 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
 // 0 ignores a term, 1 to 5 weigh it. Defaults: the built-in system
 // defaults (tests/legacy/README.md, "Built-in defaults").
 struct FindPairWeights {
-    int gc_mismatch = 1;
-    int tm_mismatch = 1;
-    int dimer_3prime = 1;
-    int dimer_any = 1;
-    int false_priming = 1;
+    int gc_mismatch = analysis::builtin::find_pair_weight;
+    int tm_mismatch = analysis::builtin::find_pair_weight;
+    int dimer_3prime = analysis::builtin::find_pair_weight;
+    int dimer_any = analysis::builtin::find_pair_weight;
+    int false_priming = analysis::builtin::find_pair_weight;
 };
 
 namespace detail {

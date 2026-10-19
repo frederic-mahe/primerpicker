@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_builtin_defaults.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/io/pd2.hpp"
 #include "core/search/legacy_find_pair.hpp"
@@ -17,15 +18,15 @@ namespace primerpicker::io {
 // (tests/legacy/README.md, "Built-in defaults" and "Settings file
 // pd2.cfg"); the members' defaults are the built-in ones
 struct LegacySystemDefaults {
-    std::size_t primer_length = 20;  // bases, including the 5' extension
-    bool exclude_tm_at_most_zero = true;  // false priming and uniqueness
-    bool sort_homologies_by_tm = true;
-    int gc_tolerance_percent = 5;
-    int tm_tolerance_celsius = 10;
-    std::size_t match_start_offset = 50;  // Match Active Primer: target - offset
-    std::size_t match_end_offset = 50;    // to target + offset
-    std::size_t find_pair_start_offset = 100;  // Find Pair, primer A: target - offset
-    std::size_t find_pair_end_offset = 100;    // primer B: to target + offset
+    std::size_t primer_length = analysis::builtin::primer_length;  // bases, including the 5' extension
+    bool exclude_tm_at_most_zero = analysis::builtin::exclude_tm_at_most_zero;  // false priming and uniqueness
+    bool sort_homologies_by_tm = analysis::builtin::sort_homologies_by_tm;
+    int gc_tolerance_percent = analysis::builtin::gc_tolerance_percent;
+    int tm_tolerance_celsius = analysis::builtin::tm_tolerance_celsius;
+    std::size_t match_start_offset = analysis::builtin::match_start_offset;  // Match Active Primer: target - offset
+    std::size_t match_end_offset = analysis::builtin::match_end_offset;      // to target + offset
+    std::size_t find_pair_start_offset = analysis::builtin::find_pair_start_offset;  // Find Pair, primer A: target - offset
+    std::size_t find_pair_end_offset = analysis::builtin::find_pair_end_offset;      // primer B: to target + offset
     analysis::LegacyCriteria criteria;
     search::FindPairWeights weights;
 };

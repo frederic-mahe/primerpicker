@@ -37,6 +37,11 @@ struct Pd2Result {
 
 namespace detail {
 
+constexpr auto bits_per_byte = 8U;
+constexpr auto low_half_mask = 0xFFFFU;  // the low 16 bits of a 32-bit value
+constexpr auto half_shift = 16U;         // the high 16 bits of a 32-bit value
+constexpr auto low_byte_mask = 0xFFU;
+
 // Little-endian reads with bounds checks
 class ByteReader {
 public:
@@ -60,7 +65,7 @@ public:
         if (remaining() < 2) {
             return std::nullopt;
         }
-        auto const value = static_cast<std::uint16_t>(byte_at(0) | (byte_at(1) << 8U));
+        auto const value = static_cast<std::uint16_t>(byte_at(0) | (byte_at(1) << bits_per_byte));
         offset_ += 2;
         return value;
     }
@@ -72,7 +77,7 @@ public:
         }
         auto value = std::uint32_t{0};
         for (auto index = size; index > 0; --index) {
-            value = (value << 8U) | byte_at(index - 1);
+            value = (value << bits_per_byte) | byte_at(index - 1);
         }
         offset_ += size;
         return value;
@@ -114,11 +119,11 @@ enum struct NumberField : std::uint8_t {
 };
 
 constexpr auto low_half(std::uint32_t const value) noexcept -> int {
-    return static_cast<int>(static_cast<std::int16_t>(value & 0xFFFFU));
+    return static_cast<int>(static_cast<std::int16_t>(value & low_half_mask));
 }
 
 constexpr auto high_half(std::uint32_t const value) noexcept -> int {
-    return static_cast<int>(static_cast<std::int16_t>(value >> 16U));
+    return static_cast<int>(static_cast<std::int16_t>(value >> half_shift));
 }
 
 constexpr auto set_text(Pd2Primer& primer, TextField const field, std::string value) noexcept -> void {
@@ -197,8 +202,8 @@ constexpr auto set_number(Pd2Primer& primer, NumberField const field, std::uint3
         if (*tag == detail::pd2_end_tag) {
             break;
         }
-        auto const group = static_cast<unsigned>(*tag >> 8U);
-        auto const field = static_cast<std::uint8_t>(*tag & 0xFFU);
+        auto const group = static_cast<unsigned>(*tag >> detail::bits_per_byte);
+        auto const field = static_cast<std::uint8_t>(*tag & detail::low_byte_mask);
         if (group == detail::text_group) {
             auto const size = reader.u32();
             auto text = size.has_value() ? reader.text(*size) : std::nullopt;

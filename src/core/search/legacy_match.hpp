@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_builtin_defaults.hpp"
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -17,12 +18,12 @@ namespace primerpicker::search {
 // defaults") and the form's own (complement strand).
 struct MatchSettings {
     std::size_t target = 0;           // 1-based molecule position
-    std::size_t start_offset = 50;    // search from target - start_offset
-    std::size_t end_offset = 50;      // to target + end_offset
+    std::size_t start_offset = analysis::builtin::match_start_offset;  // search from target - start_offset
+    std::size_t end_offset = analysis::builtin::match_end_offset;      // to target + end_offset
     sequence::Strand strand = sequence::Strand::complement;
-    std::size_t length = 20;          // bases, without 5' extension here
-    int gc_tolerance_percent = 5;     // match GC % of primer A within
-    int tm_tolerance_celsius = 10;    // match Tm of primer A within
+    std::size_t length = analysis::builtin::primer_length;           // bases, without 5' extension here
+    int gc_tolerance_percent = analysis::builtin::gc_tolerance_percent;  // match GC % of primer A within
+    int tm_tolerance_celsius = analysis::builtin::tm_tolerance_celsius;  // match Tm of primer A within
 };
 
 // The molecule to search, and the active primer (primer A)
