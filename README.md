@@ -56,6 +56,32 @@ molecule (GenBank, FASTA, plain sequence) and primer (`.PD2`) files
 of Primer Designer.
 
 
+## Molecule size
+
+primerpicker has no fixed limit on the length of a molecule (Primer
+Designer refused a sequence text of 64 KB or more: about 51,000 bases
+in a GenBank file, `tests/legacy/README.md`). Positions are
+`std::size_t` throughout (64-bit on the supported platforms); the
+largest molecule tested has 4.3 billion bases,
+more than 2^32 (`tests/large/`, an opt-in test). In practice the limit
+is memory and time. Measured on an Intel Core Ultra 9 285 (release
+build, one thread):
+
+| Molecule | Reading + `find-enzymes` | Memory | `find-pair` | `find-pair`, 99 + 99 primers |
+|---|---|---|---|---|
+| 1 million bases | 0.01 s | 8 MB | 3 s | 28 s |
+| 10 million bases | 0.14 s | 40 MB | 29 s | 279 s |
+| 100 million bases | 1.3 s | 330 MB | 217 s | (not measured) |
+| 4.3 billion bases | 54 s | 12.7 GB | (not measured) | (not measured) |
+
+Memory is about 3 bytes per base while a molecule is read. `find-pair`
+searches the whole molecule for false-priming sites of each possible
+primer: its time grows with the molecule and with the number of
+possible primers (random molecules, targets 300 and 900, built-in
+criteria; last column: relaxed criteria, so that 99 primers qualify
+on each side, the most a search accepts).
+
+
 ## Example
 
 ```console

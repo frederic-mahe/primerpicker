@@ -26,6 +26,13 @@ if(BUILD_TESTING)
   add_subdirectory(tests/cli)
 endif()
 
+# Tests of the largest molecules (more than 2^32 bases: about 13 GB of
+# memory and 4.4 GB of disk); run with ctest -L large
+option(PRIMERPICKER_LARGE_TESTS "Add the tests of the largest molecules" OFF)
+if(BUILD_TESTING AND PRIMERPICKER_LARGE_TESTS)
+  add_subdirectory(tests/large)
+endif()
+
 option(PRIMERPICKER_FUZZ "Build the libFuzzer harnesses (clang only)" OFF)
 if(PRIMERPICKER_FUZZ)
   add_subdirectory(tests/fuzz)
