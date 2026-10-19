@@ -1,6 +1,6 @@
 """Turn Multi Primer Analysis recordings (multi_primer.sh) into tables.
 
-Usage: python3 -I parse_multi.py balance|dimers|hairpins RUN_DIR...
+Usage: python3 -I parse_multi.py balance|dimers|hairpins|duplexes RUN_DIR...
 
 Each RUN_DIR is named SELECTION_PRIMER1_PRIMER2... and holds
 screens.txt; the last Multi Primer Analysis screen is read.
@@ -12,7 +12,12 @@ screens.txt; the last Multi Primer Analysis screen is read.
 - hairpins: from the hairpin pages (H, then PgDn), one row per primer:
   the energy shown ("-" for "No Hairpins Found") and the three lines of
   the drawing, without the border column (then in the columns of
-  inspect/*.tsv).
+  inspect/*.tsv);
+- duplexes: from the dimer page (D, then the arrow keys), one row per
+  pair shown ("Interactions between primers X and Y"): the three lines
+  of its drawing, without the border column (from the first screen
+  where they are drawn and hold no '?', the blinking cursor: the
+  header changes after the next drawing).
 """
 import re
 import sys
@@ -103,12 +108,39 @@ def hairpins(run_dir):
             yield [field, *found[field]]
 
 
+INTERACTION = re.compile(r'Interactions between primers ([A-D]) and ([A-D])')
+
+
+def duplexes(run_dir):
+    screens = (Path(run_dir) / 'screens.txt').read_text().split('==== ')
+    found = {}
+    for screen in screens:
+        lines = screen.splitlines()
+        for index, line in enumerate(lines):
+            match = INTERACTION.search(line)
+            if not match:
+                continue
+            # the drawing follows one blank line
+            drawing = [drawing_line(lines[index + offset]) for offset in (2, 3, 4)]
+            # skip the screens being redrawn: a blinking cursor, or a
+            # duplex not drawn yet (empty top or bottom line); keep the
+            # first complete one (when the next cell is drawn, the header
+            # changes last)
+            complete = not any('?' in text for text in drawing) and drawing[0] and drawing[2]
+            key = (match.group(1), match.group(2))
+            if complete and key not in found:
+                found[key] = drawing
+    for key in sorted(found):
+        yield [*key, *found[key]]
+
+
 def main(kind, run_dirs):
     columns = {
         'balance': ['field', 'position', 'primer', 'length', 'gc_percent', 'tm_celsius', 'gc_run_3prime', 'runs',
                     'hairpins'],
         'dimers': ['row', 'column', 'dimer_3prime', 'dimer_any'],
         'hairpins': ['field', 'hairpin_kcal', 'hairpin_5prime', 'hairpin_pairs', 'hairpin_3prime'],
+        'duplexes': ['row', 'column', 'duplex_5prime', 'duplex_pairs', 'duplex_3prime'],
     }[kind]
     print('\t'.join(['# selection', 'list', *columns]))
     for run_dir in run_dirs:
@@ -116,8 +148,13 @@ def main(kind, run_dirs):
         # '_' in a selection (an empty field) also splits the name
         while listed and not re.fullmatch('[ACGT]+', listed[0]):
             selection += '_' + listed.pop(0)
+        # the name ends with the EXTRA keys, if any
+        while listed and not re.fullmatch('[ACGT]+', listed[-1]):
+            listed.pop()
         if kind == 'hairpins':
             rows = hairpins(run_dir)
+        elif kind == 'duplexes':
+            rows = duplexes(run_dir)
         else:
             lines = last_screen(Path(run_dir) / 'screens.txt')
             rows = balance(lines) if kind == 'balance' else dimers(lines)

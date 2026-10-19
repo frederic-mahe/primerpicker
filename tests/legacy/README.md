@@ -414,6 +414,31 @@ Analysis screen, one column further right (the table drops the
 border column, which gives the columns of `inspect/*.tsv`). The
 energies and drawings equal those of the Primer Analysis screen.
 
+### The dimer page (recorded 2026-10-19)
+
+`multi/multi_primer_duplexes.tsv`: the page behind D for the four
+4-primer selections of `multi/multi_primer_balance.tsv`, recorded with
+`tools/multi_primer.sh` (`EXTRA="d right right right down left left
+down right down"`: the highlight walks A:A, A:B, A:C, A:D, B:D, B:C,
+B:B, C:C; the last moves were cut by the run's time limit, so C:D
+and D:D are not recorded) and `tools/parse_multi.py duplexes`. The
+page repeats both matrices; the highlighted cell gets "Interactions
+between primers X and Y" and a drawing: the row primer 5' to 3'
+(`5'-...-3'`, first base in column 11), and the column primer 3' to
+5' below it (`3'-...-5'`), each base under its partner, with ':' under
+each pair of the duplex.
+
+All 32 drawings follow these rules
+(`tests/unit/test_legacy_dimer_drawing.cpp`):
+- the duplex is the alignment behind the "3' end" value: pairs counted
+  from a 3' end, the partner extending beyond it;
+- the row primer's 3' end is drawn, unless the column primer's 3'-end
+  count is larger (equal counts: the row primer);
+- among alignments of equal count, the one facing the partner position
+  farthest from the partner's 5' end (the largest position).
+When the next cell is drawn, the header changes last: the parser keeps
+the first complete screen after each header.
+
 ### Hairpin drawings (from the recordings of 2026-10-17 and 2026-10-18)
 
 The 168 hairpin drawings of `inspect/inspect.tsv`,
