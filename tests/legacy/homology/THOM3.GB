@@ -1,0 +1,15 @@
+LOCUS       THOM3        600 bp    DNA     linear
+DEFINITION  Random test molecule (seed 777, GC 0.5,0.5,0.5,0.5), copies ATCTGCATGT@200 ACATGCAGAT@399.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ctataaaatc ggtagattcc cgtttgaact agtctctaat ccttcccccc agcaatttga
+       61 tcatgcagat cctcacccgg accccctgat ccgtgctctc tcgtgccaga gcgtaacgcg
+      121 ggcaattatg atgaattaag ttgaactctt atcgttagcg gggaataggc ttgctaagcc
+      181 ttcgagcctt gtcagctcga tctgcatgtc gagtgtatat actcctggtg gcgttattgt
+      241 cgtatacctg tacacgacgt aaaaagtgta ccggtcctgg cgtacaggaa gactcctcga
+      301 gcatacgtgg gactacgcct ttagatcaga gattagacct tacaatctaa gtaaaatggg
+      361 gatgatctcc cgttagcgtt ctcgggcttt ttgggacgac atgcagatct gaagagtcca
+      421 tgttagccag cgcgaacgcg ggtcagtggg cactgcgacg ctttgtgctt ttacatcgac
+      481 tgcttactgg tcccgataaa tgcctgaacg tagtggcgtc catgatacaa aataaaaaga
+      541 tcgaacatgg tctacctcct gtagagaggt gaagcatggt aaccaagggc cgctaggccc
+//

@@ -475,6 +475,39 @@ Not probed yet: the "exclude Tm <= 0" and "sort by Tm" settings set
 to N, and molecules with more sites than one screen holds.
 
 
+### The homology settings (recorded 2026-10-19)
+
+`homology/homology_settings.tsv`: Uniqueness and False Priming screens
+(in screen order: `rank`) with the System Defaults "False priming and
+uniqueness search: exclude Tm <= 0" and "Sort homologies by Tm?" set
+to Y or N. The settings come from files loaded as `PD2.CFG`:
+`config/PD2_EXCLUDE_N.CFG`, `config/PD2_SORT_N.CFG` and
+`config/PD2_EXCLUDE_SORT_N.CFG` are not recordings, but inputs written
+by `tools/make_pd2_cfg.py` (built-in defaults and the changed flags;
+the tool reproduces `PD2_LENGTH25.CFG`, `PD2_WEIGHTS12345.CFG` and
+`PD2_WEIGHTS35142.CFG` byte for byte). Recorded with
+`tools/homology_screen.sh` (`CFG=...`) and `tools/parse_homology.py`.
+Molecules: `homology/TREP2.GB`, and three written for these probes
+with `tools/plant_sites.py` (the planted copies are in their
+DEFINITION line): `homology/THOM.GB` (copies of 6 to 9 bases of the 3'
+end of the primer at 51, GGGGTCGAGCAAGACCGTAT, on both strands),
+`homology/THOM2.GB` and `homology/THOM3.GB` (two copies of the 3' end
+of the primer at 51, AGCAATTTGATCATGCAGAT, on both strands; in
+`THOM3.GB` both copies give sites of 9 bases and Tm 10).
+
+All 17 screens follow these rules:
+- exclude Tm <= 0 set to N: sites whose Tm is not positive are listed
+  too, with Tm 0 (6- and 7-base false-priming sites, for instance);
+- sort by Tm set to N: false-priming sites are listed by molecule
+  position (the position shown), whatever their strand; uniqueness
+  sites are listed by strand (top strand first), then by position;
+- sort by Tm set to Y: that order, sorted by decreasing Tm, sites of
+  equal Tm keeping it. So false-priming sites of equal Tm are in
+  molecule order, whatever their strand (`THOM3.GB`: 208 (C) before
+  400): the rule "top-strand sites first among equal Tm" of the
+  section above holds for the recorded uniqueness lists, not for
+  false priming.
+
 ## Match Active Primer (recorded 2026-10-18)
 
 `search/match_active.tsv`: the Find Matching Primer list for primer A
@@ -609,6 +642,23 @@ Version 1 (decided 2026-10-19): the same 100-primer limit; at 1000
 pairs, the search stops, keeps the first 1000 pairs in generation
 order, ranks them, and warns "More than 1000 possible pairs found!"
 instead of hanging.
+
+### No Matching Primers Found (recorded 2026-10-19)
+
+`search/find_pair_no_match.tsv`: Find Pair on `enzymes/TLONG.GB` with
+built-in settings and the form's windows (100 and 100), recorded with
+`tools/find_pair_limits.sh`, for targets 120/300 (primers A but no
+possible primer B, as primerpicker computes them) and 500/1100
+(possible primers on both sides, but no pair within the GC and Tm
+tolerances). With the two `no_matching_primers` rows of
+`search/find_pair_limits.tsv` (no possible primer A), all three cases
+give the same box, "No Matching Primers Found" and "Press any key to
+continue...", without the search screen or any count. Rule: the
+message replaces the list whenever no pair is found. (The CLI keeps
+its count lines, which an existing test pins, and prints the message
+instead of the empty list.)
+Navigation: a target field takes at least 6 digits (it does not move
+on by itself after 4).
 
 ### The false-priming term of the score (recorded 2026-10-18)
 

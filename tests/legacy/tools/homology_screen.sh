@@ -4,6 +4,8 @@
 #
 # usage: PRIMER_EXE=/path/to/PRIMER.exe homology_screen.sh WORKDIR MOLECULE POSITION STRAND KIND
 #   STRAND: top or complement; KIND: uniqueness or false_priming
+#   CFG: a settings file copied as PD2.CFG (default: none, built-in
+#   settings); it is listed before the molecule, one more down
 #
 # The molecule file must be listed after PRIMER.EXE (alphabetical
 # order). Keys: space, enter (from Molecule), enter (Load File), down
@@ -35,11 +37,17 @@ case "$strand" in
 esac
 
 name=$(basename "$molecule")
-run="$workdir/${name}_${position}_${strand}_$kind"
+cfg=${CFG:-}
+run="$workdir/${name}_${position}_${strand}_$kind${cfg:+_$(basename "$cfg" .CFG)}"
 rm -rf "$run"
 mkdir -p "$run/c"
 cp "$PRIMER_EXE" "$run/c/PRIMER.EXE"
 cp "$molecule" "$run/c/$name"
+downs="down down"
+if [ -n "$cfg" ]; then
+    cp "$cfg" "$run/c/PD2.CFG"
+    downs="down down down"
+fi
 
 cat > "$run/run.conf" <<EOC
 [sdl]
@@ -52,7 +60,7 @@ cycles=max
 [autoexec]
 mount c c
 c:
-autotype -w 4 -p $pause space enter enter down down enter enter $(digits "$position") $after_position
+autotype -w 4 -p $pause space enter enter $downs enter enter $(digits "$position") $after_position
 dx-capture /V primer.exe
 exit
 EOC

@@ -1,0 +1,15 @@
+LOCUS       THOM         600 bp    DNA     linear
+DEFINITION  Random test molecule (seed 4242, GC 0.5,0.5,0.5,0.5), copies CCGTAT@150 GACCGTAT@250 CCGTAT@350 ACCGTAT@450 ATACGG@200 ATACGGTC@300 ATACGGT@400 ATACGG@500.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 tcccccgaga atgttcttgt gtgttcccgg aaagtattgt cattacgaac ggggtcgagc
+       61 aagaccgtat tcatcaacat caatgggaaa gcccttatcc gcttgtcccg gttggtcaag
+      121 cataacctga agcctcgcgt gatgctttac cgtatatcag tatcgtcttc taagggacag
+      181 ccagaaccgg tgcatcaata tacggtcata agcacgcgac ctagggcaaa cggctttcca
+      241 gacggggcag accgtatttt tcctaaaagg ggaccctttt gccgcaacga tgggccatga
+      301 tacggtcatt agctgtccat cttgaaagtc gatgtgacag cactcctgtc cgtatcatta
+      361 tggtgattta attttgaccc gttcacatgc gctaacgcaa tacggtctat atatcaagta
+      421 agttaccata ccgcgaggat gtgagcttta ccgtatcgag ccgctcacga atcagatgaa
+      481 cgagctgtca ttacaatcaa tacggatcct tgtagttcgg ctgacgactt gtttgcatca
+      541 actctgagac caattcatca acactcgcag gtgcacgcat tttcgacgca cccgggcgtt
+//
