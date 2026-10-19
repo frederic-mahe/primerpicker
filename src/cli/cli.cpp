@@ -221,13 +221,13 @@ auto pair_report(std::span<Nucleotide const> const primer_a, std::span<Nucleotid
     auto const actual_b = legacy_actual_values(primer_b);
     auto const cautions_a = primerpicker::analysis::legacy_pair_cautions(actual_a, criteria);
     auto const cautions_b = primerpicker::analysis::legacy_pair_cautions(actual_b, criteria);
-    auto const pair = primerpicker::analysis::legacy_pair_values(PrimerPair{.first = primer_a, .second = primer_b});
+    auto const values_ab = primerpicker::analysis::legacy_pair_values(PrimerPair{.first = primer_a, .second = primer_b});
     auto const dimer_flags = [&criteria](std::size_t const three_prime, std::size_t const adjacent) {
         return primerpicker::analysis::legacy_dimer_flags(three_prime, adjacent, criteria);
     };
     auto const flags_aa = dimer_flags(actual_a.dimer_3prime_matches, actual_a.dimer_adjacent_bases);
     auto const flags_bb = dimer_flags(actual_b.dimer_3prime_matches, actual_b.dimer_adjacent_bases);
-    auto const flags_ab = dimer_flags(pair.dimer_3prime_matches, pair.dimer_adjacent_bases);
+    auto const flags_ab = dimer_flags(values_ab.dimer_3prime_matches, values_ab.dimer_adjacent_bases);
     auto const either = [](bool const lhs, bool const rhs, std::string_view const comment) {
         return lhs or rhs ? std::string{comment} : std::string{};
     };
@@ -235,11 +235,11 @@ auto pair_report(std::span<Nucleotide const> const primer_a, std::span<Nucleotid
     report += std::format("Primer B:      5'-{}-3'\n\n", letters(primer_b));
     report += pair_line("Primer balance", "-A-", "-B-", "Comment");
     report += pair_line("Length", std::to_string(primer_a.size()), std::to_string(primer_b.size()),
-                        difference_comment(pair.length_difference, " base"));
+                        difference_comment(values_ab.length_difference, " base"));
     report += pair_line("% GC", flagged(actual_a.gc_percent, cautions_a.gc), flagged(actual_b.gc_percent, cautions_b.gc),
-                        difference_comment(pair.gc_difference_percent, " %"));
+                        difference_comment(values_ab.gc_difference_percent, " %"));
     report += pair_line("Tm °C", flagged(actual_a.tm_celsius, cautions_a.tm), flagged(actual_b.tm_celsius, cautions_b.tm),
-                        difference_comment(pair.tm_difference_celsius, "°C"));
+                        difference_comment(values_ab.tm_difference_celsius, "°C"));
     report += "\nPrimer cautions\n";
     report += pair_line("Runs of G/C at 3' end", flagged(actual_a.gc_run_3prime, cautions_a.gc_run_3prime),
                         flagged(actual_b.gc_run_3prime, cautions_b.gc_run_3prime),
@@ -252,10 +252,10 @@ auto pair_report(std::span<Nucleotide const> const primer_a, std::span<Nucleotid
     report += pair_line("Primer dimers", "A:A", "B:B", std::format("{:>6}", "A:B"));
     report += pair_line("3' end matches", flagged(actual_a.dimer_3prime_matches, flags_aa.three_prime),
                         flagged(actual_b.dimer_3prime_matches, flags_bb.three_prime),
-                        std::format("{:>6}", flagged(pair.dimer_3prime_matches, flags_ab.three_prime)));
+                        std::format("{:>6}", flagged(values_ab.dimer_3prime_matches, flags_ab.three_prime)));
     report += pair_line("Any adj homol bases", flagged(actual_a.dimer_adjacent_bases, flags_aa.adjacent),
                         flagged(actual_b.dimer_adjacent_bases, flags_bb.adjacent),
-                        std::format("{:>6}", flagged(pair.dimer_adjacent_bases, flags_ab.adjacent)));
+                        std::format("{:>6}", flagged(values_ab.dimer_adjacent_bases, flags_ab.adjacent)));
     return report;
 }
 
