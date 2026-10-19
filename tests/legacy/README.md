@@ -824,6 +824,40 @@ stop codons. It is the standard genetic code
 Not recorded yet: F1 (the enzyme list), S (save), I (inspect), a
 complement-strand primer, a primer with a 5' extension.
 
+## Reports (recorded 2026-10-19 and 2026-10-20)
+
+`reports/*.PRN`: the reports PRIMER.exe prints, written with P (or the
+Print menu of the Uniqueness and False Priming screens) -> Print
+Control -> Print to Disk, file name REPORT (the menu also offers
+Abandon Printing and Start Printing); `reports/reports.tsv` lists the
+screen and inputs of each file. Recorded with `tools/print_report.sh`
+(and `tools/multi_primer.sh` for the Multi Primer report). The files
+are kept as written: DOS line ends, code page 437 (the degree sign is
+byte F8), no form feed.
+
+What they hold (not reproduced by primerpicker yet):
+- every report starts with a title line ("Primer Design Report:  One
+  Primer", "...:  Multiple Primers", "...:  Find Pair", "Uniqueness of
+  Primer Report", "False Priming Report") and "Report Date: MM/DD/YY"
+  (the computer's date);
+- INSPECT.PRN (Primer Analysis): the primer, its length, 5' extension
+  and composition, the criteria table (setting, actual value, meets
+  criteria), then "LARGEST DUPLEXES REPORTED IN PRIMER DIMERS": the
+  self-dimer with 3' end involvement, and the other (longest) self-
+  dimer, drawn as on the dimer page but with the first base in
+  column 13;
+- PAIR.PRN (Primer Pair Analysis) and MULTI.PRN (Multi Primer): the
+  primers, the balance and cautions, the dimer matrices; the Multi
+  report prints % GC without the '!' of the screen (45 for primer B);
+- FINDPAIR.PRN: the source molecule and its size, the search
+  parameters, the criteria, then the best pairs (P first asks "N
+  Pairs found.  Print best: [N]") in the order of the list;
+- UNIQUE.PRN and FALSEPRI.PRN: the primer and its position, the
+  source molecule, the search criteria (with "Sites with melting
+  temperatures <= 0 C are not reported"), a text map of the molecule
+  (`P>` at the primer, `>` and `<` for sites on the top and
+  complement strands), and the sites as on the screen.
+
 ## Restriction enzymes (recorded 2026-10-18)
 
 ### Built-in enzyme table

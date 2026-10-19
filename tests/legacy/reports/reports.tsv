@@ -1,0 +1,7 @@
+# file	screen	inputs	recorded_with
+INSPECT.PRN	Primer Analysis (Inspect)	Direct Entry GTAAAACGACGGCCAGT	print_report.sh inspect GTAAAACGACGGCCAGT
+PAIR.PRN	Primer Pair Analysis	Direct Entry GTAAAACGACGGCCAGT (A), AACAGCTATGACCATG (B)	print_report.sh pair GTAAAACGACGGCCAGT AACAGCTATGACCATG
+MULTI.PRN	Multi Primer Analysis	selection 1234 of CTCAAAGGCTCAGACATCAG, GATCCATGCAATGCTAGCTA, ACGTTGCAGGTCAAGCTTGC, TTGGCCAAGTCGATCGGATC	multi_primer.sh with EXTRA="p , , down down enter , , r e p o r t enter , , , , , ,"
+FINDPAIR.PRN	Find Primer Pair list	pairs/TEST600.GB, targets 150 and 400, built-in settings, all 10 pairs	print_report.sh find_pair pairs/TEST600.GB 150 400
+FALSEPRI.PRN	False Priming	homology/TREP2.GB, primer at 51 (top strand, 20 bases)	print_report.sh homology homology/TREP2.GB 51 f
+UNIQUE.PRN	Uniqueness	homology/TREP2.GB, primer at 51 (top strand, 20 bases)	print_report.sh homology homology/TREP2.GB 51 u
