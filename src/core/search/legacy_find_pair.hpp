@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <optional>
 #include <span>
@@ -44,10 +45,29 @@ struct PairCandidate {
     std::optional<int> false_priming_tm_b;
 };
 
+// The limits of Find Pair in Primer Designer 2.0 (tests/legacy/README.md,
+// "Limits on primers and pairs (recorded 2026-10-19)"): a window with
+// this many possible primers stops the search, and the pair count stops
+// at this many pairs
+constexpr auto legacy_max_possible_primers = std::size_t{100};
+constexpr auto legacy_max_pairs = std::size_t{1000};
+
+enum struct FindPairLimit : std::uint8_t {
+    none,
+    // a window has legacy_max_possible_primers possible primers: no
+    // pair is searched ("More than 100 sites found.  Suggest you
+    // redefine matching limits.")
+    too_many_primers,
+    // more pairs match than legacy_max_pairs: the first ones are kept
+    // ("More than 1000 possible pairs found!"; PRIMER.exe hangs instead)
+    pairs_capped,
+};
+
 struct FindPairResult {
     std::size_t possible_a;  // primers A that meet every criterion
-    std::size_t possible_b;
+    std::size_t possible_b;  // 0 when primer A reached the limit
     std::vector<PairCandidate> pairs;  // by position of A, then of B
+    FindPairLimit limit = FindPairLimit::none;
 };
 
 namespace detail {
@@ -63,12 +83,13 @@ constexpr auto difference(int const lhs, int const rhs) noexcept -> int {
     return lhs > rhs ? lhs - rhs : rhs - lhs;
 }
 
-// The primers of a window that meet every criterion
+// The primers of a window that meet every criterion; the count stops at
+// legacy_max_possible_primers
 inline auto possible_primers(std::span<sequence::Nucleotide const> const molecule, std::size_t const first,
                              std::size_t const last, sequence::Strand const strand, std::size_t const length,
                              analysis::LegacyCriteria const& criteria) -> std::vector<Possible> {
     auto possible = std::vector<Possible>{};
-    for (auto position = first; position <= last; ++position) {
+    for (auto position = first; position <= last and possible.size() < legacy_max_possible_primers; ++position) {
         auto primer = sequence::primer_at(molecule, {.position = position, .length = length, .strand = strand});
         if (not primer.has_value()) {
             continue;
@@ -90,7 +111,8 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
 // Pair"): the possible primers A and B (every criterion met), and the
 // pairs whose GC % and Tm match within the tolerances and that have
 // fewer A:B 3' end matches than the criterion, in generation order;
-// legacy_rank_pairs sorts them as the Find Pair list. Not
+// legacy_rank_pairs sorts them as the Find Pair list. The search stops
+// at the limits of FindPairLimit. Not
 // constexpr: the false-priming search uses std::ranges::stable_sort;
 // not noexcept: vectors allocate.
 [[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
@@ -100,9 +122,18 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
     auto const last_a = sequence::window_end(settings.target_a, 0, molecule.size());
     auto const primers_a =
         detail::possible_primers(molecule, first_a, last_a, sequence::Strand::top, settings.length, criteria);
+    if (primers_a.size() == legacy_max_possible_primers) {
+        return {.possible_a = primers_a.size(), .possible_b = 0, .pairs = {}, .limit = FindPairLimit::too_many_primers};
+    }
     auto const last_b = sequence::window_end(settings.target_b, settings.end_offset_b, molecule.size());
     auto const primers_b = detail::possible_primers(molecule, settings.target_b, last_b,
                                                     sequence::Strand::complement, settings.length, criteria);
+    if (primers_b.size() == legacy_max_possible_primers) {
+        return {.possible_a = primers_a.size(),
+                .possible_b = primers_b.size(),
+                .pairs = {},
+                .limit = FindPairLimit::too_many_primers};
+    }
     auto result = FindPairResult{.possible_a = primers_a.size(), .possible_b = primers_b.size(), .pairs = {}};
     for (auto const& primer_a : primers_a) {
         for (auto const& primer_b : primers_b) {
@@ -114,6 +145,10 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
                 inter_3prime < criteria.reject_dimer_3prime_matches;
             if (not matches) {
                 continue;
+            }
+            if (result.pairs.size() == legacy_max_pairs) {
+                result.limit = FindPairLimit::pairs_capped;
+                return result;
             }
             auto const& actual_a = primer_a.actual;
             auto const& actual_b = primer_b.actual;
