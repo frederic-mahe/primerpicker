@@ -28,6 +28,7 @@ add_executable(unit_tests
   test_legacy_verdict.cpp
   test_legacy_hairpin.cpp
   test_legacy_hairpin_drawing.cpp
+  test_legacy_dimer_drawing.cpp
   test_legacy_pair.cpp
   test_pd2.cpp
   test_pd2_cfg.cpp
