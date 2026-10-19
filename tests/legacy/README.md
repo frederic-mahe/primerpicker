@@ -301,6 +301,13 @@ CURRENT DEFAULTS (Y/N) ?", answered Y).
   3' dimers, any dimers, false priming) set to 1 2 3 4 5 and to 3 5 1
   4 2. Bytes 42-46 hold 1 2 5 3 4 and 3 5 2 1 4: the false-priming
   weight is stored third.
+- `config/PD2_RUNS42.CFG` (recorded 2026-10-19 with
+  `tools/save_run_thresholds.sh`): built-in defaults, with "Reject
+  runs of >= 4 bases (any)" and "Reject runs of >= 2 G or C at 3'end".
+  Offset 38 holds 4 and offset 40 holds 2: the order inferred below is
+  confirmed. In the Criteria form the dimer fields take two digits
+  (Enter moves on) and the run fields one digit (they move on by
+  themselves; the last one completes the form).
 
 Layout (little-endian; int16 unless noted), confirmed by the two files:
 

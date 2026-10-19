@@ -30,6 +30,7 @@ add_executable(unit_tests
   test_legacy_pair.cpp
   test_pd2.cpp
   test_pd2_cfg.cpp
+  test_pd2_cfg_runs.cpp
   test_legacy_homology.cpp
   test_legacy_homology_settings.cpp
   test_legacy_match.cpp
