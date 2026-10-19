@@ -813,6 +813,13 @@ All 6 screens follow these rules (`tests/unit/test_legacy_mutagenize.cpp`):
   run criteria) as OK or `!`;
 - the line under the molecule always reads `5'->3'` and `--` (in
   columns 32-33, at every position recorded).
+`mutagenize/codon_table.tsv`: the codon table behind F2 (a scrolled
+list, opened on the amino acid under the edit highlight; `home` goes
+to the top), recorded with `KEYS="f2 , home , pagedown ..."`: the 20
+amino acids by three-letter name, with their one-letter code and
+codons (alternatives for the third base in parentheses), no line for
+stop codons. It is the standard genetic code
+(`tests/unit/test_codon_table.cpp` expands every line).
 Not recorded yet: F1 (the enzyme list), S (save), I (inspect), a
 complement-strand primer, a primer with a 5' extension.
 

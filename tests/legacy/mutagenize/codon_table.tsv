@@ -1,0 +1,21 @@
+# amino_acid	code	codons
+Ala	A	GC(ACGT)
+Arg	R	CG(ACGT),AG(AG)
+Asn	N	AA(CT)
+Asp	D	GA(CT)
+Cys	C	TG(CT)
+Gln	Q	CA(AG)
+Glu	E	GA(AG)
+Gly	G	GG(ACGT)
+His	H	CA(CT)
+Ile	I	AT(ACT)
+Leu	L	TT(AG),CT(ACGT)
+Lys	K	AA(AG)
+Met	M	ATG
+Phe	F	TT(CT)
+Pro	P	CC(ACGT)
+Ser	S	TC(ACGT),AG(CT)
+Thr	T	AC(ACGT)
+Trp	W	TGG
+Tyr	Y	TA(CT)
+Val	V	GT(ACGT)

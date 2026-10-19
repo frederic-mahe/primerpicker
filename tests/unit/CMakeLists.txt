@@ -21,6 +21,7 @@ add_executable(unit_tests
   test_skeleton.cpp
   test_nucleotide.cpp
   test_genetic_code.cpp
+  test_codon_table.cpp
   test_breslauer_1986.cpp
   test_legacy_tm.cpp
   test_legacy_tm_primer3.cpp
