@@ -402,6 +402,35 @@ for these primers), H (hairpins of A and B, PgDn for C and D) and D
 and P (print).
 
 
+### The hairpin page (recorded 2026-10-19)
+
+`multi/multi_primer_hairpins.tsv`: the pages behind H (PgUp: A and B,
+PgDn: C and D) for four primers with hairpins (from
+`inspect/hairpin_design.tsv` and `inspect/inspect.tsv`), recorded with
+`tools/multi_primer.sh` (`EXTRA="h , , pagedown , ,"`) and
+`tools/parse_multi.py hairpins`. Each primer shows "Hairpin Energy =
+N kcals" (or "No Hairpins Found") and the same drawing as the Primer
+Analysis screen, one column further right (the table drops the
+border column, which gives the columns of `inspect/*.tsv`). The
+energies and drawings equal those of the Primer Analysis screen.
+
+### Hairpin drawings (from the recordings of 2026-10-17 and 2026-10-18)
+
+The 168 hairpin drawings of `inspect/inspect.tsv`,
+`inspect/hairpin_design.tsv` and `inspect/inspect_2.tsv` (columns
+`hairpin_5prime`, `hairpin_pairs`, `hairpin_3prime`, leading spaces
+included) follow these rules (`tests/unit/test_legacy_hairpin_drawing.cpp`):
+- the 5' line shows `5'-` then the primer from its 5' end through the
+  stem and the larger half of the loop; its first base is always in
+  column 16;
+- the marks line has `:` under each stem pair (G.T pairs included),
+  then spaces, and `)` one column after the 5' line;
+- the 3' line shows `3'-` then the rest of the primer, reversed, each
+  base under its partner; the middle base of an odd loop ends the 5'
+  line and starts the 3' line;
+- nothing is drawn left of column 1: a long 3' tail loses its label
+  and its 3'-most bases (one recorded case).
+
 ## 5' extension and the criteria (recorded 2026-10-18)
 
 `inspect/inspect_extension.tsv`: four primers typed with a 5'

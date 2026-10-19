@@ -6,6 +6,9 @@
 #   per field: a list number (1 to 4) or '_' for an empty field (Enter),
 #   for instance 1234, 12__, or 1_2_ (A = 1, C = 2). All four fields are
 #   needed: the screen is shown after the last one
+#   EXTRA: autotype buttons typed after the selection, ',' being one
+#   more pause (for instance "h" or "d , right": the pages behind the
+#   screen); the run is named after them
 #
 # The primers are written as .PD2 files (make_pd2.py) and loaded with
 # Primer/Create -> Retrieve from disk: typing them with Direct Entry
@@ -30,7 +33,9 @@ if [ ${#selection} -ne 4 ]; then
 fi
 pause=${PAUSE:-1.8}
 
-run="$workdir/${selection}_$(printf '%s' "$*" | tr ' ' '_')"
+extra=${EXTRA:-}
+tag=$(printf '%s' "$extra" | tr -d ', ' )
+run="$workdir/${selection}_$(printf '%s' "$*" | tr ' ' '_')${tag:+_$tag}"
 rm -rf "$run"
 mkdir -p "$run/c"
 cp "$PRIMER_EXE" "$run/c/PRIMER.EXE"
@@ -44,7 +49,7 @@ for primer in "$@"; do
     number=$((number + 1))
 done
 fields=$(printf '%s' "$selection" | sed 's/./& /g; s/_/enter/g')
-line="autotype -w 4 -p $pause $keys right right down down enter $fields"
+line="autotype -w 4 -p $pause $keys right right down down enter $fields $extra"
 if [ ${#line} -gt 250 ]; then
     echo "autotype line too long (${#line} characters)" >&2
     exit 1

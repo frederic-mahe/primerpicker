@@ -1,6 +1,6 @@
 """Turn Multi Primer Analysis recordings (multi_primer.sh) into tables.
 
-Usage: python3 -I parse_multi.py balance|dimers RUN_DIR...
+Usage: python3 -I parse_multi.py balance|dimers|hairpins RUN_DIR...
 
 Each RUN_DIR is named SELECTION_PRIMER1_PRIMER2... and holds
 screens.txt; the last Multi Primer Analysis screen is read.
@@ -8,7 +8,11 @@ screens.txt; the last Multi Primer Analysis screen is read.
   then the Primer Balance and Cautions column (values as shown, with
   their '!' flags);
 - dimers: one row per cell of the upper triangle of the dimer
-  matrices (row <= column): 3' end matches, then any adjacent bases.
+  matrices (row <= column): 3' end matches, then any adjacent bases;
+- hairpins: from the hairpin pages (H, then PgDn), one row per primer:
+  the energy shown ("-" for "No Hairpins Found") and the three lines of
+  the drawing, without the border column (then in the columns of
+  inspect/*.tsv).
 """
 import re
 import sys
@@ -66,11 +70,45 @@ def dimers(lines):
                 yield [row, column, *values]
 
 
+HAIRPIN_HEADER = re.compile(r'PRIMER ([A-D])\s+(?:Hairpin Energy = (-?[\d.]+) kcals)?')
+
+
+def drawing_line(line):
+    """A drawing line without the border column: the hairpin page draws
+    one column further right than the Primer Analysis screen, so this
+    gives the columns of inspect/*.tsv."""
+    return line[1:].rstrip(' │')
+
+
+def hairpins(run_dir):
+    screens = (Path(run_dir) / 'screens.txt').read_text().split('==== ')
+    found = {}
+    for screen in screens:
+        if 'PRIMER HAIRPINS' not in screen:
+            continue
+        lines = screen.splitlines()
+        for index, line in enumerate(lines):
+            match = HAIRPIN_HEADER.search(line)
+            if not match or match.group(1) in found:
+                continue
+            if match.group(2) is None:
+                if 'No Hairpins Found' in lines[index + 1]:
+                    found[match.group(1)] = ['-', '-', '-', '-']
+                continue
+            # the drawing follows two blank lines
+            drawing = [drawing_line(lines[index + offset]) for offset in (3, 4, 5)]
+            found[match.group(1)] = [match.group(2), *drawing]
+    for field in FIELDS:
+        if field in found:
+            yield [field, *found[field]]
+
+
 def main(kind, run_dirs):
     columns = {
         'balance': ['field', 'position', 'primer', 'length', 'gc_percent', 'tm_celsius', 'gc_run_3prime', 'runs',
                     'hairpins'],
         'dimers': ['row', 'column', 'dimer_3prime', 'dimer_any'],
+        'hairpins': ['field', 'hairpin_kcal', 'hairpin_5prime', 'hairpin_pairs', 'hairpin_3prime'],
     }[kind]
     print('\t'.join(['# selection', 'list', *columns]))
     for run_dir in run_dirs:
@@ -78,8 +116,11 @@ def main(kind, run_dirs):
         # '_' in a selection (an empty field) also splits the name
         while listed and not re.fullmatch('[ACGT]+', listed[0]):
             selection += '_' + listed.pop(0)
-        lines = last_screen(Path(run_dir) / 'screens.txt')
-        rows = balance(lines) if kind == 'balance' else dimers(lines)
+        if kind == 'hairpins':
+            rows = hairpins(run_dir)
+        else:
+            lines = last_screen(Path(run_dir) / 'screens.txt')
+            rows = balance(lines) if kind == 'balance' else dimers(lines)
         for row in rows:
             print('\t'.join([selection, ','.join(listed), *row]))
 
