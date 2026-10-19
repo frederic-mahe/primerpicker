@@ -31,10 +31,12 @@ add_executable(unit_tests
   test_pd2.cpp
   test_pd2_cfg.cpp
   test_legacy_homology.cpp
+  test_legacy_homology_settings.cpp
   test_legacy_match.cpp
   test_legacy_find_pair.cpp
   test_legacy_find_pair_ranking.cpp
   test_legacy_find_pair_limits.cpp
+  test_legacy_find_pair_no_match.cpp
   test_legacy_multi_primer.cpp
   test_rebase_enzymes.cpp
   test_iupac.cpp
