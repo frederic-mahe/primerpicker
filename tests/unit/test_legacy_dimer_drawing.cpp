@@ -89,7 +89,7 @@ void check_duplex(RecordedDuplex const& recorded) {
 
 TEST_CASE("dimer drawings match every recorded duplex", "[analysis][legacy]") {
     auto const duplexes = recorded_duplexes();
-    REQUIRE(duplexes.size() == 32);
+    REQUIRE(duplexes.size() == 40);
     for (auto const& recorded : duplexes) {
         check_duplex(recorded);
     }

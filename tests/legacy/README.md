@@ -447,15 +447,16 @@ energies and drawings equal those of the Primer Analysis screen.
 4-primer selections of `multi/multi_primer_balance.tsv`, recorded with
 `tools/multi_primer.sh` (`EXTRA="d right right right down left left
 down right down"`: the highlight walks A:A, A:B, A:C, A:D, B:D, B:C,
-B:B, C:C; the last moves were cut by the run's time limit, so C:D
-and D:D are not recorded) and `tools/parse_multi.py duplexes`. The
+B:B, C:C, the last moves being cut by the run's time limit; then
+`EXTRA="d right right right down down down"` for C:D and D:D: all 10
+cells of each selection) and `tools/parse_multi.py duplexes`. The
 page repeats both matrices; the highlighted cell gets "Interactions
 between primers X and Y" and a drawing: the row primer 5' to 3'
 (`5'-...-3'`, first base in column 11), and the column primer 3' to
 5' below it (`3'-...-5'`), each base under its partner, with ':' under
 each pair of the duplex.
 
-All 32 drawings follow these rules
+All 40 drawings follow these rules
 (`tests/unit/test_legacy_dimer_drawing.cpp`):
 - the duplex is the alignment behind the "3' end" value: pairs counted
   from a 3' end, the partner extending beyond it;
