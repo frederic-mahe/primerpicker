@@ -31,6 +31,9 @@ runs in 80x25 text mode (720x400 pixels).
   `tools/parse_homology.py` turns the screen into table rows.
 - `tools/find_pair.sh`: records the Find Primer Pair list for two
   targets on a molecule, with optional weights.
+- `tools/multi_primer.sh`: loads up to four primers from `.PD2`
+  files (written by `tools/make_pd2.py`) and records the Multi Primer
+  Analysis screen; `tools/parse_multi.py` turns it into tables.
 - `tools/find_pair_limits.sh`: runs Find Primer Pair with chosen
   search windows and settings file, and prints the counts and
   messages (limits on primers and pairs).
@@ -349,6 +352,41 @@ All 36 follow these rules (`tests/unit/test_legacy_pair.cpp`):
   "reject if >= 3" (a value of 3 is not flagged here, while the
   Primer Analysis screen fails it). "Runs found" and "Hairpin(s)
   found" appear when either primer is flagged; hairpins show OK or !.
+
+
+## Multi Primer Analysis (recorded 2026-10-19)
+
+Analyze -> Multi Primer asks for "primer #s (from Active Primer
+List)" in four fields, Primer A to Primer D: each field takes one
+digit (the list holds up to 6 primers) and moves on by itself; Enter
+leaves a field empty; the screen appears after the fourth field. It
+shows each primer (with its molecule position; "bp 1" for a primer
+typed with Direct Entry or loaded from a file), "Primer Balance and
+Cautions" (length, % GC, Tm, runs of G/C at the 3' end, runs of
+bases, hairpins), and two "Primer Dimers" matrices, "3' end" and
+"Any" (number of adjacent bases in the largest duplex), with the
+self-dimers on the diagonal, the pairs above it, and dots below it.
+
+`multi/multi_primer_balance.tsv` and `multi/multi_primer_dimers.tsv`:
+that screen for 9 selections of 2 to 4 primers (one row per filled
+field, and one row per cell of the upper triangle), among them a
+field left empty (`1_2_`), the same list in another order (`2143`),
+and one primer in two fields (`11__`). Recorded with
+`tools/multi_primer.sh` (the primers are loaded from `.PD2` files
+written by `tools/make_pd2.py`: typing four primers with Direct Entry
+needs too many keys for one autotype line) and
+`tools/parse_multi.py`.
+
+Rules (`tests/unit/test_legacy_multi_primer.cpp`), the same as on the
+Primer Pair Analysis screen: the balance values and their "!" are
+those of "Primer pair analysis" (runs and G/C runs flagged from 4);
+a diagonal cell is the primer's self-dimer values, a cell above it
+the A:B values of the two primers (field order does not change
+them), with flags from 3 (3' end) and 7 (any).
+Not recorded: the pages behind M (molecule map: "not from molecule"
+for these primers), H (hairpins of A and B, PgDn for C and D) and D
+(the dimer matrices again, with the duplex of the highlighted cell),
+and P (print).
 
 
 ## 5' extension and the criteria (recorded 2026-10-18)
