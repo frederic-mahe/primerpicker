@@ -98,12 +98,28 @@ jobs:
             mingw-w64-ucrt-x86_64-cmake
             mingw-w64-ucrt-x86_64-ninja
             mingw-w64-ucrt-x86_64-qt6-base
+            mingw-w64-ucrt-x86_64-qt6-tools
+            zip
       - name: Configure
         run: cmake --preset release -DPRIMERPICKER_GUI=ON
       - name: Build
         run: cmake --build --preset release -j
       - name: Test
         run: ctest --preset release
+      # the graphical program with its DLLs, to try out (releases come
+      # from executables.yml)
+      - name: Gather the graphical program and its DLLs
+        run: |
+          folder=primerpicker-gui-$(git rev-parse --short HEAD)-windows-x86_64
+          sh packaging/windows/deploy-gui.sh build/release/src/gui/primerpicker-gui.exe "$folder"
+          cp LICENSE README.md "$folder/"
+          echo "GUI_FOLDER=$folder" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.GUI_FOLDER }}
+          path: ${{ env.GUI_FOLDER }}
+          retention-days: 14
+          if-no-files-found: error
 
   static-analysis:
     # the developers' tool versions (cppcheck 2.19, clang-tidy 20);
