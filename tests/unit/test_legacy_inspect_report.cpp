@@ -142,7 +142,7 @@ TEST_CASE("Inspect reports: every recorded report, byte for byte", "[report][leg
     REQUIRE(reports.size() >= 30);
     for (auto const& recorded : reports) {
         if (recorded.duplexes == "no-pairs") {
-            continue;  // a duplex without pairs: see the test below
+            continue;  // a duplex without pairs: not reproduced (test_report_no_pairs.cpp)
         }
         INFO(recorded.file);
         auto const expected = read_file(reports_dir / recorded.file);

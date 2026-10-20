@@ -895,7 +895,9 @@ spaces: for the 3'-end duplex, a marks line of 51121 spaces then a line
 `-5'`; for the other duplex, a marks line of 6990 (12 bases) or 7006
 (16 bases) spaces and a bottom line of about 29000 spaces before
 `3'-...-5'`. These reports (`duplexes` = `no-pairs`) are recorded, and
-not reproduced: what primerpicker prints there is not decided yet.
+not reproduced: decided with the developer on 2026-10-20, primerpicker
+draws the partner right under the primer (its `3'-` under the `5'-`)
+below an empty marks line (`tests/unit/test_report_no_pairs.cpp`).
 
 ### The Primer Pair report (recorded 2026-10-20)
 

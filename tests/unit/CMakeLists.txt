@@ -55,7 +55,8 @@ add_executable(unit_tests
   test_legacy_inspect_report.cpp
   test_legacy_pair_report.cpp
   test_legacy_multi_primer_report.cpp
-  test_legacy_find_pair_report.cpp)
+  test_legacy_find_pair_report.cpp
+  test_report_no_pairs.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE

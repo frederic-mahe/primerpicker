@@ -101,6 +101,15 @@ done < "${REPORTS}/inspect_reports.tsv"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}:${FAILED}"
 
+## a duplex without pairs: PRIMER.exe writes lines of tens of thousands
+## of spaces; primerpicker draws the partner under the primer (decided
+## on 2026-10-20)
+DESCRIPTION="analyze --report: no long line for a primer without pairs"
+"${PRIMERPICKER}" analyze --report "${REPORT}" AAAAAAAAAAAA > /dev/null && \
+    (( $(wc -L < "${REPORT}") <= 80 )) && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 ## the Primer Pair report
 
 DESCRIPTION="pair --report writes PAIR.PRN (but for the date)"

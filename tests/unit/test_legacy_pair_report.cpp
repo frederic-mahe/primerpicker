@@ -132,7 +132,7 @@ TEST_CASE("Pair reports: every recorded report, byte for byte", "[report][legacy
     REQUIRE(not reports.empty());
     for (auto const& recorded : reports) {
         if (recorded.duplexes == "no-pairs") {
-            continue;  // a duplex without pairs: not reproduced (README)
+            continue;  // a duplex without pairs: not reproduced (test_report_no_pairs.cpp)
         }
         INFO(recorded.file);
         auto const expected = read_file(reports_dir / recorded.file);

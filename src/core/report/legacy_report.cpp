@@ -151,11 +151,22 @@ auto second_primer_line(std::span<Nucleotide const> const second, std::ptrdiff_t
     return (hidden < reversed.size() ? reversed.substr(hidden) : std::string{}) + std::string{five_prime_end};
 }
 
+// A duplex without pairs: PRIMER.exe writes lines of tens of thousands
+// of spaces there (tests/legacy/README.md, "Duplexes without pairs").
+// Decided with the developer (2026-10-20): the partner goes right under
+// the primer, its "3'-" under the "5'-", below an empty marks line.
+constexpr auto no_pairs_3prime_column = static_cast<std::ptrdiff_t>(duplex_indent.size() + three_prime_label.size());
+
 auto duplex_lines(PrimerPair const& pair_of_primers, analysis::DuplexPlacement const& placement) -> std::string {
-    auto const marks_column = duplex_column + placement.marks_offset;
-    assert(marks_column >= 0);
     auto text = line(std::string{duplex_indent} + std::string{five_prime_label} + letters(pair_of_primers.first) +
                      std::string{three_prime_end});
+    if (placement.count == 0) {
+        text += legacy_line_end;
+        text += line(second_primer_line(pair_of_primers.second, no_pairs_3prime_column));
+        return text;
+    }
+    auto const marks_column = duplex_column + placement.marks_offset;
+    assert(marks_column >= 0);
     text += line(std::string(static_cast<std::size_t>(marks_column), ' ') + std::string(placement.count, ':'));
     text += line(second_primer_line(pair_of_primers.second, duplex_column + placement.second_3prime_offset));
     return text;
