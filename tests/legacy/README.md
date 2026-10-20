@@ -899,7 +899,7 @@ not reproduced: what primerpicker prints there is not decided yet.
 
 ### The Primer Pair report (recorded 2026-10-20)
 
-`reports/pair/*.PRN`: 39 more reports of the Primer Pair Analysis
+`reports/pair/*.PRN`: 44 more reports of the Primer Pair Analysis
 screen, for the pairs of `pairs/pair_screens.tsv` and
 `pairs/pair_screens_2.tsv` and a few others, written with
 `tools/print_report.sh pair` (Direct Entry) or `pair_files` (the
@@ -955,10 +955,11 @@ The report of selection `12__` was not written (keys lost).
 
 ### The Find Pair report (recorded 2026-10-20)
 
-`reports/find_pair/*.PRN`: 3 more reports of the Find Primer Pair
+`reports/find_pair/*.PRN`: 4 more reports of the Find Primer Pair
 list (`tools/print_report.sh find_pair`, with `CFG` for a settings
 file: the file is listed before the molecule, which takes one more
-down): `search/TFP.GB` (30 pairs, false-priming Tm values),
+down): `search/TFP.GB` and `search/TFP2.GB` (30 pairs each,
+false-priming Tm values),
 `pairs/TEST600.GB` with `config/PD2_CRITERIA.CFG` (1000 pairs: the pair
 limit; this search did not hang, and its best 20 pairs are those of the
 first 1000 pairs, ranked, as primerpicker keeps them) and with
@@ -981,8 +982,8 @@ for byte by `legacy_find_pair_report`
   F8); the rows are those of the screen, a false-priming Tm of B taking
   2 columns (`- /  6`), '-' when there is no site.
 Not recorded: reports of more than 20 pairs (whether PRIMER.exe breaks
-pages), a typed M, 4-digit molecule sizes. `search/TFP2.GB` and
-`config/PD2_LENGTH25.CFG` lost keys.
+pages), a typed M, 4-digit molecule sizes. `config/PD2_LENGTH25.CFG`
+lost keys twice.
 
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
