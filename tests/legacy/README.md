@@ -1219,6 +1219,69 @@ known (CLI `homology`, Find Pair); without it, it takes every
 full-length match for the primer's own site, as before (the earlier
 recordings have one copy only).
 
+## The Match Active Primer report (recorded 2026-10-20)
+
+`reports/match/TRUN_50_*.PRN` (`tools/print_report.sh match`) and
+`match_variations/*.PRN` (`tools/match_report.sh`, settings files
+written with `tools/make_pd2_cfg_match.py`; see
+`match_variations/README.txt`): reports of the Find Matching Primer
+list, on `search/TRUN.GB`, `homology/map/TMAP6600.GB` and
+`homology/map/TMAP50K.GB`; `reports/match_reports.tsv` lists those
+reproduced byte for byte by `legacy_match_report`
+(`tests/unit/test_legacy_match_report.cpp`, `tests/cli/test_match.sh`):
+- title "Primer Design Report:  Match Active Primer", the source
+  molecule (size right-aligned, as the Find Pair report), the search
+  ("Target bp pos:" in 6 columns, then " (Complementary strand)"; the
+  offsets as searched: the start cut so that the first primer fits,
+  printed as an unsigned 16-bit number when the target is shorter than
+  a primer (65526 for target 10), the end cut at the molecule's end),
+  the primer length and the GC and Tm tolerances;
+- primer A's row (position ending in column 5) and the list of primers
+  B (position ending in column 7, distance to the target in column
+  17), the values right-aligned in fixed columns; a value of primer A
+  that fails its criterion is followed by '!'; no page break (99 rows
+  recorded);
+- the list: as "Match Active Primer" above, with Find Pair's 3'-end run
+  rule, and also fewer A:B adjacent pairs than the criterion (primers B
+  with 8 are left out); the form keeps 2 digits of each tolerance (a
+  setting of 100 is shown and applied as 10);
+- no primer: a box "No Matching Primers Found"; more than 100 rows
+  within the tolerances: "More than 100 sites found.  Suggest you
+  redefine matching limits."; nothing is printed in both cases.
+Not reproduced yet: a top-strand primer B (`TRUN_50_600_top_strand.PRN`:
+"Target bp pos:   600" without strand, rows 552 to 609); one report in
+`reports/match_reports_pending.tsv`: primer B at 51 (25 bases,
+AGTCCTGCTCATATAGGCCATGTAT) is shown with Tm 73, while the primer Tm
+model gives 74.0003 with b = 60.699: PRIMER.exe's constant b is above
+60.69942 (and, from "Primer Tm", at most 60.7000).
+
+## Other items recorded on 2026-10-20
+
+Recorded with `tools/probe_keys.sh` (any key sequence) and the tools
+above; each directory has a `README.txt` with every run:
+- `mutagenize_f1/`: Mutagenize F1 opens the enzyme list (14 rows per
+  page, initial letter as fast key); Enter on an enzyme closes it with
+  no visible change; S shows "Primer Saved" and adds the mutated primer
+  to the Primer List (marked after its number, probably byte 7F, which
+  `screen_text.py` drops). What the selection is used for is not known.
+- `extension_paste/`: F1 in the 5'-extension field (Create Primer form,
+  or Modify -> 5'-extension) pastes the enzyme's site; the length,
+  extension included, stays 20 (the primer loses bases at its 3' end);
+  a second site is appended to the first; directly entered primers
+  cannot be modified ("Cannot Modify Directly Entered Primers"). The
+  analysis then equals `primerpicker analyze --extension`.
+- `multi_map/`: the Multi Primer map page draws the molecule as the
+  homology reports do (L / (L / 73 + 1) characters from screen column
+  4), one line per filled field, its letter in column 4 + P / s with
+  "A>" (top strand) or "<C" (complement).
+- `config_header/`: the first 4 bytes and bytes 47 to 54 of `pd2.cfg`
+  are read and written back unchanged when the defaults are saved; no
+  setting shows them, and no action was found that writes non-zero
+  values there.
+Note on the tools: `screen_text.py` prints each distinct screen once
+over a whole recording, so the last screen of `screens.txt` is not
+always the final state (check the decoded frames).
+
 ## Restriction enzymes (recorded 2026-10-18)
 
 ### Built-in enzyme table
