@@ -2,11 +2,13 @@
 
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_duplex.hpp"
+#include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <algorithm>
 #include <array>
@@ -30,7 +32,8 @@ using sequence::Nucleotide;
 constexpr auto title_width = std::size_t{54};  // "Report Date:" starts in this column
 constexpr auto lines_after_title = std::size_t{5};
 constexpr auto cp437_degree_sign = std::string_view{"\xF8"};  // the reports use code page 437
-constexpr auto molecule_name_width = std::size_t{36};  // the size follows in column 54
+constexpr auto molecule_name_width = std::size_t{34};
+constexpr auto molecule_size_width = std::size_t{5};  // right-aligned, ending in column 56
 constexpr auto years_per_century = 100;
 constexpr auto criteria_name_width = std::size_t{17};
 constexpr auto criteria_actual_end = std::size_t{56};  // right edge of the "Actual" column
@@ -408,6 +411,55 @@ auto named_duplex(std::string_view const name, PrimerPair const& pair_of_primers
     return line(name) + duplex_lines(pair_of_primers, placement) + blank_lines(2);
 }
 
+// The text map of the Uniqueness and False Priming reports: the molecule
+// drawn with one character per molecule_size / 73 + 1 bases
+constexpr auto map_scale_divisor = std::size_t{73};
+constexpr auto map_site_margin = std::size_t{3};  // the column of position 1
+constexpr auto homology_bases_width = std::size_t{19};  // dots, then the matching bases
+constexpr auto homology_position_end = std::size_t{53};  // one past the "Bp Pos" column
+constexpr auto homology_tm_width = std::size_t{10};
+
+auto bases_per_character(std::size_t const molecule_size) -> std::size_t {
+    return (molecule_size / map_scale_divisor) + 1;
+}
+
+// A line of site marks ('>' top strand, '<' complement), or a single
+// space when there is none
+auto map_marks(std::span<analysis::HomologySite const> const sites, sequence::Strand const strand,
+               std::size_t const scale) -> std::string {
+    auto canvas = Canvas{};
+    auto const mark = strand == sequence::Strand::top ? std::string_view{">"} : std::string_view{"<"};
+    for (auto const& site : sites) {
+        if (site.strand == strand) {
+            canvas.put(map_site_margin + ((site.position - 1) / scale), mark);
+        }
+    }
+    auto marks = canvas.line();
+    return marks == line("") ? line(" ") : marks;
+}
+
+auto homology_map(HomologyReport const& homology) -> std::string {
+    auto const scale = bases_per_character(homology.molecule_size);
+    auto const primer_column = homology.position / scale;
+    auto text = line(std::string(primer_column > 0 ? primer_column - 1 : 0, ' ') + "P>");
+    text += line(std::string(homology.molecule_size / scale, '='));
+    text += map_marks(homology.sites, sequence::Strand::top, scale);
+    text += map_marks(homology.sites, sequence::Strand::complement, scale);
+    return text;
+}
+
+// One site: the matching bases right-aligned after dots, "....3'" for a
+// uniqueness site (the match stops before the 3' end), the position,
+// "(C)" on the complement strand, the Tm
+auto homology_row(HomologyReport const& homology, analysis::HomologySite const& site) -> std::string {
+    auto const bases = letters(homology.primer.subspan(site.primer_start, site.length));
+    auto row = std::format("             5'{:.>{}}{}", bases, homology_bases_width,
+                           homology.kind == analysis::HomologyKind::uniqueness ? "....3'" : "      ");
+    row += std::format("{:>{}}", site.position, homology_position_end - row.size());
+    row += site.strand == sequence::Strand::complement ? " (C)" : "    ";
+    return line(std::format("{}{:>{}}   ", row, site.tm_celsius, homology_tm_width));
+}
+
 }  // namespace
 
 auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria,
@@ -586,8 +638,8 @@ auto legacy_find_pair_report(FindPairReport const& find_pair, analysis::LegacyCr
     auto const& settings = find_pair.settings;
     auto report = title_line("Primer Design Report:  Find Pair", date);
     report += blank_lines(2);
-    report += line(std::format("Source molecule:  {:<{}}{} bps", find_pair.molecule_name, molecule_name_width,
-                               find_pair.molecule_size));
+    report += line(std::format("Source molecule:  {:<{}}{:>{}} bps", find_pair.molecule_name, molecule_name_width,
+                               find_pair.molecule_size, molecule_size_width));
     report += blank_lines(2);
     report += line("Search parameters:");
     report += legacy_line_end;
@@ -611,6 +663,46 @@ auto legacy_find_pair_report(FindPairReport const& find_pair, analysis::LegacyCr
     report += legacy_line_end;
     for (auto const& pair : find_pair.best_pairs) {
         report += find_pair_row(pair);
+    }
+    return report;
+}
+
+
+auto legacy_homology_report(HomologyReport const& homology, std::chrono::year_month_day const& date) -> std::string {
+    assert(homology.molecule_size > 0);
+    auto const uniqueness = homology.kind == analysis::HomologyKind::uniqueness;
+    auto report = title_line(uniqueness ? "Uniqueness of Primer Report" : "False Priming Report", date);
+    report += blank_lines(2);
+    report += line(rule);
+    report += legacy_line_end;
+    report += line(std::format("Primer Sequence:  5'-{}-3'", letters(homology.primer)));
+    report += line(std::format("                  Bp pos:{:6}", homology.position));
+    report += legacy_line_end;
+    report += line(std::format("Source molecule:  {:<{}}{:>{}} bps", homology.molecule_name, molecule_name_width,
+                               homology.molecule_size, molecule_size_width));
+    report += blank_lines(2);
+    report += line(rule);
+    report += blank_lines(2);
+    report += line(uniqueness ? "Search criteria defined:" : "False priming site criteria defined:");
+    report += legacy_line_end;
+    report += line(uniqueness ? "     Regions of homology (>= 7 bases) between primer and template"
+                              : "     3' end homologies (>= 6 bases) between primer and template");
+    // an empty line when sites with Tm <= 0 are kept
+    report += line(homology.tm_filter == analysis::HomologyTmFilter::exclude_at_most_zero
+                       ? "     Sites with melting temperatures <= 0 C are not reported"
+                       : "");
+    report += blank_lines(3);
+    report += line(uniqueness ? "Molecule map with primer location (P) and homologous regions marked"
+                              : "Molecule map with primer location (P) and false priming sites marked");
+    report += legacy_line_end;
+    report += homology_map(homology);
+    report += blank_lines(3);
+    report += line(uniqueness ? "Regions of homology found:" : "False priming sites found:");
+    report += legacy_line_end;
+    report += line("             Homologous bases                   Bp Pos          Tm C");
+    report += legacy_line_end;
+    for (auto const& site : homology.sites) {
+        report += homology_row(homology, site);
     }
     return report;
 }

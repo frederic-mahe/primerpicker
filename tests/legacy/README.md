@@ -981,9 +981,9 @@ for byte by `legacy_find_pair_report`
 - P first asks "N Pairs found.  Print best: [M]", M being N up to 20
   (30 pairs: `[20  ]`); the recordings keep M (Enter): the report
   holds the best M pairs, in the order of the list;
-- "Source molecule:" then the molecule's name padded to 36 columns,
-  then its size and "bps" (column 54 for a 3-digit size; longer sizes
-  not recorded);
+- "Source molecule:" then the molecule's name, then its size
+  right-aligned to end in column 56, then "bps" (see "The Uniqueness
+  and False Priming reports" for sizes of 4 and 5 digits);
 - the search: targets in 6 columns, the offsets, the primer length (in
   4 columns after "Length:"), "5' Extension: - none -", the GC and Tm
   tolerances; the weights are not printed;
@@ -993,8 +993,64 @@ for byte by `legacy_find_pair_report`
   F8); the rows are those of the screen, a false-priming Tm of B taking
   2 columns (`- /  6`), '-' when there is no site.
 Not recorded: reports of more than 20 pairs (whether PRIMER.exe breaks
-pages), a typed M, 4-digit molecule sizes. `config/PD2_LENGTH25.CFG`
+pages), a typed M. `config/PD2_LENGTH25.CFG`
 lost keys twice.
+
+### The Uniqueness and False Priming reports (recorded 2026-10-20)
+
+`reports/homology/*.PRN`: 21 more Uniqueness and False Priming reports
+(`tools/print_report.sh homology MOLECULE POSITION u|f`, with `CFG`
+for a settings file), on molecules written for these probes with
+`tools/make_map_molecule.py` (`homology/map/`, inputs, not recordings):
+random sequences of 100 to 50,000 bases with copies of a 12-base
+stretch of the primer at 51 (55:66, or 59:70 with the 3' end for
+`TMAP660F.GB`) at chosen positions, on the top strand (t) or as
+reverse complements (c), as listed on their DEFINITION line. Primers at
+positions 1 to 900; settings files `PD2_LENGTH25.CFG`,
+`PD2_EXCLUDE_N.CFG`, `PD2_SORT_N.CFG`. `reports/homology_reports.tsv`
+lists every report (UNIQUE.PRN and FALSEPRI.PRN included).
+
+The molecule map (all 23 reports, 122 sites):
+- one character stands for s = L / 73 + 1 bases (integer division; L
+  is the molecule's length): 100 bases: 2; 600: 9; 660: 10; 730: 11
+  (not 10); 1000: 14; 6600: 91; 50,000: 685;
+- the line of `=` has L / s characters (50, 66, 71, 72, ...);
+- the line above it holds `P>`, starting in column max(0, P / s - 1),
+  P being the primer's position;
+- below it, a line for the top strand (`>`) and one for the complement
+  strand (`<`): each site is marked in column 3 + (Bp Pos - 1) / s,
+  Bp Pos being the position the site's row shows; sites in the same
+  column give one mark (`<<<` is three columns); a line without marks
+  is a single space.
+The rest of the report:
+- title, "Primer Sequence:", "Bp pos:" (6 columns), "Source
+  molecule:" (the size right-aligned, ending in column 56: `600`,
+  `1000`, `50000`), the criteria ("Regions of homology (>= 7 bases)"
+  or "3' end homologies (>= 6 bases)"), then "Sites with melting
+  temperatures <= 0 C are not reported", which is an empty line when
+  that setting is N;
+- one row per site, in the order of the screen: the matching bases
+  right-aligned after dots in a field of 19 characters (whatever the
+  primer length: 20 and 25 recorded), then `....3'` for a uniqueness
+  site or 6 spaces for a false-priming site, the position ending in
+  column 52, ` (C)` or 4 spaces, the Tm ending in column 66, and 3
+  spaces;
+- when there is no site, PRIMER.exe shows a box ("No false priming
+  found") and prints nothing.
+All are reproduced byte for byte by `legacy_homology_report`
+(`tests/unit/test_legacy_homology_report.cpp`), except one:
+
+**A site inside the primer's own site.** `TMAP1000.GB`, primer at 900
+(AAATTCAAAATTCATGTGAT, which repeats AAATTCA): PRIMER.exe lists
+AATTCAAAATTC at 901 (Tm 30), that is bases 2 to 13 of the primer facing
+its own site, while it excludes the full-length match (and primerpicker
+excludes that whole alignment). Not understood from this single case
+(`note` = `own-site-overlap`; not reproduced).
+
+Not recorded: a complement-strand primer (the tool makes top-strand
+primers only); a primer within 20 bases of the molecule's end (two
+runs froze); "Primer is unique" (the uniqueness box, presumably
+without report either).
 
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 

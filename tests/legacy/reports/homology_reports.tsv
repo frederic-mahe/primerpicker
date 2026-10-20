@@ -1,0 +1,24 @@
+# file	molecule	position	kind	config	note
+UNIQUE.PRN	homology/TREP2.GB	51	uniqueness	-	-
+FALSEPRI.PRN	homology/TREP2.GB	51	false_priming	-	-
+homology/TMAP1000_51_u.PRN	homology/map/TMAP1000.GB	51	uniqueness	-	-
+homology/TMAP1000_900_u.PRN	homology/map/TMAP1000.GB	900	uniqueness	-	own-site-overlap
+homology/TMAP100_51_u.PRN	homology/map/TMAP100.GB	51	uniqueness	-	-
+homology/TMAP50K_51_u.PRN	homology/map/TMAP50K.GB	51	uniqueness	-	-
+homology/TMAP600C_51_u.PRN	homology/map/TMAP600C.GB	51	uniqueness	-	-
+homology/TMAP600T_10_u.PRN	homology/map/TMAP600T.GB	10	uniqueness	-	-
+homology/TMAP600T_18_u.PRN	homology/map/TMAP600T.GB	18	uniqueness	-	-
+homology/TMAP600T_51_u.PRN	homology/map/TMAP600T.GB	51	uniqueness	-	-
+homology/TMAP600T_51_u_SORT_N.PRN	homology/map/TMAP600T.GB	51	uniqueness	PD2_SORT_N.CFG	-
+homology/TMAP600T_9_u.PRN	homology/map/TMAP600T.GB	9	uniqueness	-	-
+homology/TMAP6600_51_u.PRN	homology/map/TMAP6600.GB	51	uniqueness	-	-
+homology/TMAP660C_51_u.PRN	homology/map/TMAP660C.GB	51	uniqueness	-	-
+homology/TMAP660F_51_f_EXCLUDE_N.PRN	homology/map/TMAP660F.GB	51	false_priming	PD2_EXCLUDE_N.CFG	-
+homology/TMAP660F_51_u.PRN	homology/map/TMAP660F.GB	51	uniqueness	-	-
+homology/TMAP660T_1_u.PRN	homology/map/TMAP660T.GB	1	uniqueness	-	-
+homology/TMAP660T_2_u.PRN	homology/map/TMAP660T.GB	2	uniqueness	-	-
+homology/TMAP660T_300_u.PRN	homology/map/TMAP660T.GB	300	uniqueness	-	-
+homology/TMAP660T_51_u.PRN	homology/map/TMAP660T.GB	51	uniqueness	-	-
+homology/TMAP660T_51_u_LENGTH25.PRN	homology/map/TMAP660T.GB	51	uniqueness	PD2_LENGTH25.CFG	-
+homology/TMAP730_51_u.PRN	homology/map/TMAP730.GB	51	uniqueness	-	-
+homology/TMAP731_51_u.PRN	homology/map/TMAP731.GB	51	uniqueness	-	-

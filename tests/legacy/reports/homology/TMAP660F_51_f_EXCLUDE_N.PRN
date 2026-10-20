@@ -1,0 +1,44 @@
+False Priming Report                                  Report Date: 10/20/26
+
+
+---------------------------------------------------------------------------
+
+Primer Sequence:  5'-CTGGCAGTTCGTGTCTCGTG-3'
+                  Bp pos:    51
+
+Source molecule:  TMAP660F                            660 bps
+
+
+---------------------------------------------------------------------------
+
+
+False priming site criteria defined:
+
+     3' end homologies (>= 6 bases) between primer and template
+
+
+
+
+Molecule map with primer location (P) and false priming sites marked
+
+    P>
+==================================================================
+              >              >             >             >
+                       <             <             <             <
+
+
+
+False priming sites found:
+
+             Homologous bases                   Bp Pos          Tm C
+
+             5'.....GTTCGTGTCTCGTG                544            47   
+             5'......TTCGTGTCTCGTG                119            44   
+             5'.......TCGTGTCTCGTG                202 (C)        38   
+             5'.......TCGTGTCTCGTG                262            38   
+             5'.......TCGTGTCTCGTG                344 (C)        38   
+             5'.......TCGTGTCTCGTG                404            38   
+             5'.......TCGTGTCTCGTG                486 (C)        38   
+             5'.......TCGTGTCTCGTG                628 (C)        38   
+             5'.............CTCGTG                487 (C)         0   
+             5'.............CTCGTG                629 (C)         0   

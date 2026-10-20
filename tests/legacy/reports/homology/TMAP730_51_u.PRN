@@ -1,0 +1,40 @@
+Uniqueness of Primer Report                           Report Date: 10/20/26
+
+
+---------------------------------------------------------------------------
+
+Primer Sequence:  5'-GTCGCGACTCATCCTCCAAG-3'
+                  Bp pos:    51
+
+Source molecule:  TMAP730                             730 bps
+
+
+---------------------------------------------------------------------------
+
+
+Search criteria defined:
+
+     Regions of homology (>= 7 bases) between primer and template
+     Sites with melting temperatures <= 0 C are not reported
+
+
+
+Molecule map with primer location (P) and homologous regions marked
+
+   P>
+==================================================================
+           >                   >                                  >
+        <                      <        <
+
+
+
+Regions of homology found:
+
+             Homologous bases                   Bp Pos          Tm C
+
+             5'......GCGACTCATCCTC....3'           99            45   
+             5'......GCGACTCATCCTC....3'          699            45   
+             5'.......CGACTCATCCTC....3'          411 (C)        35   
+             5'..........TCGCGACTC....3'          316 (C)        24   
+             5'...........GTCGCGAC....3'           58 (C)        15   
+             5'............GTCGCGA....3'          310             7   
