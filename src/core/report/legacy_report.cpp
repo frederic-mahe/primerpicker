@@ -7,6 +7,7 @@
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/search/legacy_find_pair.hpp"
+#include "core/search/legacy_match.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 
@@ -478,6 +479,30 @@ auto homology_row(HomologyReport const& homology, analysis::HomologySite const& 
     return line(std::format("{}{:>{}}   ", row, site.tm_celsius, homology_tm_width));
 }
 
+// Match Active Primer report rows: values right-aligned (primer A's
+// position ends in column 5, primer B's in column 7)
+auto match_values(analysis::LegacyActualValues const& actual) -> std::string {
+    return std::format("{:>8}{:>6}{:>8}{:>5}", actual.gc_percent, actual.tm_celsius, actual.dimer_3prime_matches,
+                       actual.dimer_adjacent_bases);
+}
+
+auto match_runs(analysis::LegacyActualValues const& actual) -> std::string {
+    return std::format("{:>8}{:>6}", actual.longest_run, actual.gc_run_3prime);
+}
+
+auto match_primer_a_row(std::size_t const position, analysis::LegacyActualValues const& actual) -> std::string {
+    constexpr auto no_distance = std::string_view{"            "};
+    constexpr auto no_inter_dimers = std::string_view{"             "};
+    return line(std::format("{:>6}{}{}{}{}", position, no_distance, match_values(actual), no_inter_dimers,
+                            match_runs(actual)));
+}
+
+auto match_row(search::MatchCandidate const& candidate) -> std::string {
+    return line(std::format("{:>8}{:>10}{}{:>8}{:>5}{}", candidate.position, candidate.distance,
+                            match_values(candidate.actual), candidate.inter_dimer_3prime_matches,
+                            candidate.inter_dimer_adjacent_bases, match_runs(candidate.actual)));
+}
+
 }  // namespace
 
 auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria,
@@ -728,6 +753,40 @@ auto legacy_homology_report(HomologyReport const& homology, std::chrono::year_mo
     report += legacy_line_end;
     for (auto const& site : homology.sites) {
         report += homology_row(homology, site);
+    }
+    return report;
+}
+
+
+auto legacy_match_report(MatchReport const& match, std::chrono::year_month_day const& date) -> std::string {
+    auto const& settings = match.settings;
+    auto report = title_line("Primer Design Report:  Match Active Primer", date);
+    report += blank_lines(2);
+    report += line(std::format("Source molecule:  {:<{}}{:>{}} bps", match.molecule_name, molecule_name_width,
+                               match.molecule_size, molecule_size_width));
+    report += blank_lines(2);
+    report += line("Search parameters:");
+    report += line(std::format("   Target bp pos:{:6} (Complementary strand)", settings.target));
+    report += line(std::format("   Start: Target - {} bases;   End: Target + {} bases", settings.start_offset,
+                               settings.end_offset));
+    report += line(std::format("   Length:{:4}                 5' Extension: - none -", settings.length));
+    report += line(std::format("   GC Match:  +/- {:2} GC %      Tm Match:  +/- {:2} C", settings.gc_tolerance_percent,
+                               settings.tm_tolerance_celsius));
+    report += blank_lines(2);
+    report += line("Primer A (Original) Characteristics:");
+    report += line("                                       -- Self Dimers --        -- Runs --");
+    report += line(std::format("  Position              GC%   Tm{}C     3'  any                  any  3'G/C",
+                               cp437_degree_sign));
+    report += match_primer_a_row(match.primer_a_position, analysis::legacy_actual_values(match.primer_a));
+    report += blank_lines(2);
+    report += line("Primer B (Matching) List:");
+    report += line("                                         ---  Dimers  ---");
+    report += line("             bps from                  -Self-       -Inter-     -- Runs --");
+    report += line(std::format("  Position   Target     GC%   Tm{}C     3'  any      3'  any     any  3'G/C",
+                               cp437_degree_sign));
+    report += legacy_line_end;
+    for (auto const& candidate : match.list) {
+        report += match_row(candidate);
     }
     return report;
 }

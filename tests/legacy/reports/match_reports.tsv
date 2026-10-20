@@ -1,0 +1,5 @@
+# file	molecule	primer_a_position	target	config
+match/TRUN_50_620.PRN	search/TRUN.GB	50	620	-
+match/TRUN_50_1020.PRN	search/TRUN.GB	50	1020	-
+match/TRUN_50_1420.PRN	search/TRUN.GB	50	1420	-
+match/TRUN_50_1820.PRN	search/TRUN.GB	50	1820	-

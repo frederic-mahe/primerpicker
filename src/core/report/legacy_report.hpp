@@ -5,6 +5,7 @@
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/search/legacy_find_pair.hpp"
+#include "core/search/legacy_match.hpp"
 #include "core/sequence/nucleotide.hpp"
 
 #include <chrono>
@@ -81,6 +82,25 @@ struct HomologyReport {
 // noexcept: as above.
 // C++26 refactoring: make constexpr (std::format)
 [[nodiscard]] auto legacy_homology_report(HomologyReport const& homology, std::chrono::year_month_day const& date)
+    -> std::string;
+
+// What the Match Active Primer report shows: the molecule, primer A
+// (top strand, at its position), the search, and the list of primers B
+struct MatchReport {
+    std::string_view molecule_name;
+    std::size_t molecule_size;
+    std::span<sequence::Nucleotide const> primer_a;
+    std::size_t primer_a_position;
+    search::MatchSettings settings;
+    std::span<search::MatchCandidate const> list;
+};
+
+// "Primer Design Report:  Match Active Primer", the report of the Find
+// Matching Primer list (tests/legacy/README.md, "The Match Active Primer
+// report"). Primer A needs at least two nucleotides. Not noexcept: as
+// above.
+// C++26 refactoring: make constexpr (std::format)
+[[nodiscard]] auto legacy_match_report(MatchReport const& match, std::chrono::year_month_day const& date)
     -> std::string;
 
 }  // namespace primerpicker::report
