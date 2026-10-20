@@ -13,6 +13,7 @@
 #include <optional>
 #include <ranges>
 #include <span>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -146,6 +147,21 @@ constexpr auto site(std::size_t const offset, sequence::Strand const strand, Com
         }
     }
     return sites;
+}
+
+// The match column of the Almost Sites screen: a dot per base of the
+// site that matches, and the molecule's top-strand base where it
+// differs (across the origin of a circular molecule); a site of LENGTH
+// bases. Not noexcept: the string allocates.
+[[nodiscard]] constexpr auto site_match_text(Site const& site, std::span<sequence::Nucleotide const> const molecule,
+                                             std::size_t const length) -> std::string {
+    assert(site.position >= 1 and not molecule.empty());
+    auto text = std::string(length, '.');
+    if (site.mismatch_offset.has_value() and *site.mismatch_offset < length) {
+        auto const index = (site.position - 1 + *site.mismatch_offset) % molecule.size();
+        text.at(*site.mismatch_offset) = sequence::to_letter(molecule[index]);
+    }
+    return text;
 }
 
 }  // namespace primerpicker::enzymes
