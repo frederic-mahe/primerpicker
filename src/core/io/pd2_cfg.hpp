@@ -90,10 +90,12 @@ constexpr auto weight(ByteReader& reader) noexcept -> std::optional<int> {
     auto const sort = reader.u16();
     auto const gc_tolerance = detail::signed_value(reader);
     auto const tm_tolerance = detail::signed_value(reader);
-    auto const match_start = detail::count(reader);
+    // each search range is stored end first, then start (offsets 14 to
+    // 20; recorded 2026-10-20, match_variations/PD2_OFFSETS_11_22_33_44)
     auto const match_end = detail::count(reader);
-    auto const find_pair_start = detail::count(reader);
+    auto const match_start = detail::count(reader);
     auto const find_pair_end = detail::count(reader);
+    auto const find_pair_start = detail::count(reader);
     auto const gc_min = detail::signed_value(reader);
     auto const gc_max = detail::signed_value(reader);
     auto const tm_min = detail::signed_value(reader);
