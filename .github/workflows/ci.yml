@@ -110,7 +110,7 @@ jobs:
       # from executables.yml)
       - name: Gather the graphical program and its DLLs
         run: |
-          folder=primerpicker-gui-$(git rev-parse --short HEAD)-windows-x86_64
+          folder=primerpicker-gui-${GITHUB_SHA:0:7}-windows-x86_64
           sh packaging/windows/deploy-gui.sh build/release/src/gui/primerpicker-gui.exe "$folder"
           cp LICENSE README.md "$folder/"
           echo "GUI_FOLDER=$folder" >> "$GITHUB_ENV"
