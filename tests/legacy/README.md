@@ -861,18 +861,19 @@ What they hold (not reproduced by primerpicker yet):
 
 ### The One Primer report (recorded 2026-10-20)
 
-`reports/inspect/*.PRN`: 42 more reports of the Primer Analysis screen,
+`reports/inspect/*.PRN`: 46 more reports of the Primer Analysis screen,
 written with `tools/print_report.sh inspect PRIMER [EXTENSION]` (with
 `CFG=config/PD2_....CFG` for a settings file); `reports/inspect_reports.tsv`
 lists every One Primer report (INSPECT.PRN included): file, primer,
 5' extension, settings file, and whether both duplexes have pairs.
 Primers: those of `inspect/` with ties between duplexes, without
-complementary bases, with hairpins, of 8 to 46 bases; three
-extensions; `config/PD2_RELAXED.CFG` and `config/PD2_REPORT_NARROW.CFG`
-(GC 40-65 %, Tm 50-70 °C, hairpin cutoff -3.5 kcal, dimers 4 and 6,
-runs 4, 3' G/C runs 2; written with `tools/make_pd2_cfg.py --criteria`,
-an input, not a recording). `config/PD2_REPORT_WIDE.CFG` (3-digit Tm
-limits, cutoff -12.5) is written but not recorded yet (keys lost).
+complementary bases, with hairpins, of 8 to 46 bases; four
+extensions (1 to 12 bases); `config/PD2_RELAXED.CFG`,
+`config/PD2_REPORT_NARROW.CFG` (GC 40-65 %, Tm 50-70 °C, hairpin cutoff
+-3.5 kcal, dimers 4 and 6, runs 4, 3' G/C runs 2) and
+`config/PD2_REPORT_WIDE.CFG` (GC 5-100 %, Tm 100-120 °C, cutoff -12.5
+kcal, dimers 10 and 12, runs 9 and 9), written with
+`tools/make_pd2_cfg.py --criteria` (inputs, not recordings).
 
 Every report with pairs is reproduced byte for byte by
 `legacy_inspect_report` (`tests/unit/test_legacy_inspect_report.cpp`,
@@ -899,7 +900,7 @@ not reproduced: what primerpicker prints there is not decided yet.
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
 The One Primer report ends with "LARGEST DUPLEXES REPORTED IN PRIMER
-DIMERS": the primer with itself, drawn as on the dimer page (the first
+DIMERS": the primer (with its extension) with itself, drawn as on the dimer page (the first
 primer 5' to 3', first base in column 13; the second 3' to 5' below
 it; ':' under the pairs of the duplex):
 - "Primer-dimers with 3'end involvement": the duplex of the dimer page
@@ -908,8 +909,8 @@ it; ':' under the pairs of the duplex):
   alignment (its length is the "Dimers" value); among equally long
   runs, the first one in the order of the alignments, from both 5'
   ends facing each other on (second primer shifted to the right), then
-  from the first primer's 5' end. All 38 reports with pairs follow
-  this rule; 29 of them have tied runs to choose from.
+  from the first primer's 5' end. All 42 reports with pairs follow
+  this rule; most of them have tied runs to choose from.
 - the second primer's line: `3'-` is left out when it does not fit
   left of the 3' base (the bases keep their columns), and bases left
   of column 0 are cut (`AGTTTCTTTTGAGGCT-5'` with one leading space,

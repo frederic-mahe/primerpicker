@@ -163,7 +163,8 @@ auto duplex_lines(PrimerPair const& pair_of_primers, analysis::DuplexPlacement c
 constexpr auto pair_label_column = std::size_t{14};
 constexpr auto pair_first_value_end = std::size_t{40};  // one past the value of A
 constexpr auto pair_value_step = std::size_t{9};       // to the next primer
-constexpr auto pair_comment_gap = std::string_view{"     "};
+constexpr auto balance_comment_gap = std::string_view{"      "};  // after the value of B
+constexpr auto caution_comment_gap = std::string_view{"     "};
 constexpr auto pair_dimer_note_gap = std::string_view{"   "};
 
 auto flag(bool const flagged) -> char {
@@ -232,23 +233,32 @@ struct Balance {
     std::string_view unit;
 };
 
+// (no comment when the difference is zero)
 auto balance_row(Balance const& balance) -> std::string {
-    auto const values = std::array{FlaggedValue{.text = std::to_string(balance.value_a), .flagged = false},
-                                   FlaggedValue{.text = std::to_string(balance.value_b), .flagged = false}};
-    return line(std::format("{}{}{}{} difference", pair_row(balance.label, values), pair_comment_gap,
-                            balance.difference, balance.unit));
+    auto const row = std::format("{:{}}{}", "", pair_label_column, balance.label);
+    auto text = std::format("{}{:>{}}{:>{}}", row, balance.value_a, pair_first_value_end - row.size(), balance.value_b,
+                            pair_value_step);
+    if (balance.difference != 0) {
+        text += std::format("{}{}{} difference", balance_comment_gap, balance.difference, balance.unit);
+    }
+    return line(text);
 }
 
 auto caution_row(std::string_view const label, FlaggedValue const& first, FlaggedValue const& second) -> std::string {
     return line(pair_row(label, std::array{first, second}));
 }
 
-// "OK" or "!" for each primer, without flags (nothing after the last)
+// "OK" or "!" for each primer, without flags, then "Hairpin(s) found"
+// when either primer has one
 auto hairpin_row(bool const hairpin_a, bool const hairpin_b) -> std::string {
     auto const text = [](bool const hairpin) { return hairpin ? "!" : "OK"; };
     auto const row = std::format("{:{}}{}", "", pair_label_column, "Hairpins");
-    return line(std::format("{}{:>{}}{:>{}}", row, text(hairpin_a), pair_first_value_end - row.size(), text(hairpin_b),
-                            pair_value_step));
+    auto hairpins = std::format("{}{:>{}}{:>{}}", row, text(hairpin_a), pair_first_value_end - row.size(),
+                                text(hairpin_b), pair_value_step);
+    if (hairpin_a or hairpin_b) {
+        hairpins += std::format("{}Hairpin(s) found", caution_comment_gap);
+    }
+    return line(hairpins);
 }
 
 // Multi Primer report: text placed at columns of a line, which then

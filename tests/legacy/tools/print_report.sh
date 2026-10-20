@@ -6,6 +6,10 @@
 #   inspect PRIMER [EXTENSION]        Primer Analysis of a Direct Entry primer
 #                                     (with an optional 5' extension)
 #   pair PRIMER_A PRIMER_B            Primer Pair Analysis (Direct Entry)
+#   pair_files PRIMER_A PRIMER_B      the same, the primers loaded as .PD2
+#                                     files (Retrieve from disk, as
+#                                     multi_primer.sh): for primers too long
+#                                     to type within one autotype line
 #   find_pair MOLECULE TARGET_A TARGET_B
 #                                     the Find Primer Pair list
 #   homology MOLECULE POSITION KIND   Uniqueness (u) or False Priming (f)
@@ -30,6 +34,7 @@ pause=${PAUSE:-2}
 keys() { printf '%s' "$1" | tr 'A-Z' 'a-z' | sed 's/./& /g'; }
 to_disk="down down enter , , r e p o r t enter , , , ,"
 molecule=""
+pd2_files=""
 case "$kind" in
     inspect)
         path="space down enter $(keys "${2:-}") enter $(keys "$1") enter i"
@@ -37,6 +42,10 @@ case "$kind" in
     pair)
         path="space down enter enter $(keys "$1") enter s enter enter $(keys "$2") enter s right right down enter 1 enter 2 enter"
         print_keys=", , p , , $to_disk" ;;
+    pair_files)
+        pd2_files="$1 $2"
+        path="space down down down down down down enter down enter enter down down enter right right down enter 1 enter 2 enter"
+        print_keys=", , , , p , , $to_disk" ;;
     find_pair)
         molecule=$1
         path="space down down down enter enter down down enter enter $(keys "$2") enter enter enter enter $(keys "$3") enter enter enter enter enter enter , , , , space"
@@ -46,7 +55,7 @@ case "$kind" in
         path="space enter enter down down enter , , enter $(keys "$2") enter enter enter enter i , , $3"
         print_keys=", , right , , enter , , $to_disk" ;;
     *)
-        echo "KIND must be inspect, pair, find_pair or homology" >&2
+        echo "KIND must be inspect, pair, pair_files, find_pair or homology" >&2
         exit 1 ;;
 esac
 
@@ -58,6 +67,11 @@ cp "$PRIMER_EXE" "$run/c/PRIMER.EXE"
 if [ -n "$cfg" ]; then
     cp "$cfg" "$run/c/PD2.CFG"
 fi
+number=1
+for primer in $pd2_files; do
+    python3 -I "$tools/make_pd2.py" "$primer" > "$run/c/P$number.PD2"
+    number=$((number + 1))
+done
 if [ -n "$molecule" ]; then
     cp "$molecule" "$run/c/"
 fi
