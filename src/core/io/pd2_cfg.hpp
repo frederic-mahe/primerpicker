@@ -75,8 +75,9 @@ constexpr auto weight(ByteReader& reader) noexcept -> std::optional<int> {
 
 // Layout: tests/legacy/README.md, "Settings file pd2.cfg". The weights
 // are stored as GC mismatch, Tm mismatch, false priming, 3' dimers, any
-// dimers (recorded 2026-10-19); which of offsets 38 and 40 holds which
-// run threshold is inferred from the screen order.
+// dimers (recorded 2026-10-19); offset 38 holds the run threshold and
+// offset 40 the 3' G/C run threshold (config/PD2_RUNS42.CFG, recorded
+// 2026-10-19).
 [[nodiscard]] constexpr auto parse_pd2_cfg(std::span<std::byte const> const bytes) noexcept -> Pd2CfgResult {
     auto const failure = [](Pd2CfgError const error) { return Pd2CfgResult{.defaults = std::nullopt, .error = error}; };
     if (bytes.size() != detail::pd2_cfg_size) {

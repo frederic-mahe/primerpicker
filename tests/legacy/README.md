@@ -331,7 +331,7 @@ CURRENT DEFAULTS (Y/N) ?", answered Y).
 - `config/PD2_RUNS42.CFG` (recorded 2026-10-19 with
   `tools/save_run_thresholds.sh`): built-in defaults, with "Reject
   runs of >= 4 bases (any)" and "Reject runs of >= 2 G or C at 3'end".
-  Offset 38 holds 4 and offset 40 holds 2: the order inferred below is
+  Offset 38 holds 4 and offset 40 holds 2: the order below is
   confirmed. In the Criteria form the dimer fields take two digits
   (Enter moves on) and the run fields one digit (they move on by
   themselves; the last one completes the form).
@@ -358,8 +358,9 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 | 42-46 | five weights, one byte each: GC mismatch, Tm mismatch, false priming, 3' dimers, any dimers (recorded 2026-10-19, below) | 1 |
 | 47-54 | zero in both files | 0 |
 
-Which of offsets 38 and 40 holds which run threshold is inferred from
-the screen order (only offset 38 changed). Navigation notes: in the
+Which of offsets 38 and 40 holds which run threshold was first
+inferred from the screen order (only offset 38 changed);
+`config/PD2_RUNS42.CFG` confirms it (recorded 2026-10-19). Navigation notes: in the
 settings forms the first digit typed clears a field; Enter on the
 last field completes the form, and the menu then reopens the same
 form by itself (Esc cancels that second pass).
@@ -558,8 +559,10 @@ All 7 screens follow these rules:
   strand, and the Tm of the matching bases (the primer Tm formula,
   truncated);
 - sites with a Tm <= 0 are not listed (so 6-base false-priming sites
-  rarely appear), and sites are sorted by decreasing Tm (top-strand
-  sites first among equal Tm).
+  rarely appear), and sites are sorted by decreasing Tm (sites of
+  equal Tm: false-priming sites in molecule order, whatever their
+  strand; uniqueness sites top strand first; see "The homology
+  settings" below).
 Not probed yet: the "exclude Tm <= 0" and "sort by Tm" settings set
 to N, and molecules with more sites than one screen holds.
 
@@ -593,9 +596,7 @@ All 17 screens follow these rules:
 - sort by Tm set to Y: that order, sorted by decreasing Tm, sites of
   equal Tm keeping it. So false-priming sites of equal Tm are in
   molecule order, whatever their strand (`THOM3.GB`: 208 (C) before
-  400): the rule "top-strand sites first among equal Tm" of the
-  section above holds for the recorded uniqueness lists, not for
-  false priming.
+  400), as the section above states.
 
 ## Match Active Primer (recorded 2026-10-18)
 

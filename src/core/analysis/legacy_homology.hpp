@@ -134,7 +134,9 @@ inline auto sort_by_position(std::vector<HomologySite>& sites, HomologyKind cons
 // its default settings (tests/legacy/README.md, "Uniqueness and false
 // priming"): exact maximal matches on both strands, the primer's own
 // site excluded, sites with a Tm <= 0 °C excluded, sorted by decreasing
-// Tm (top-strand sites first among equal Tm). The primer must have at
+// Tm (sites of equal Tm in the order of sort_by_position: false-priming
+// sites by molecule position, uniqueness sites top strand first). The
+// primer must have at
 // least two nucleotides. Not noexcept: the vector allocates.
 // C++26 refactoring: make constexpr (std::ranges::stable_sort)
 // Other settings (tests/legacy/README.md, "Uniqueness and false
