@@ -1,0 +1,156 @@
+==== f07529.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  50          % GC:  55      Tm°C:  75          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             1000                     ║       │
+└───────║     Start search at:       Target - 200                      ║───────┘
+        ║     End   search at:       Target + 200                      ║
+        ║     Complement strand  (Y/N):       Y                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  10 GC %                  ║
+        ║     Match Tm of Primer A to within  ?9 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f07743.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  50          % GC:  55      Tm°C:  75          ║       │
+│       ║                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                        ║       │
+│       ║  Primer B (Matching):▒              ▒                        ║       │
+│       ║     Target bp positio▒ Searching... ▒000                     ║       │
+└───────║     Start search at: ▒              ▒00                      ║───────┘
+        ║     End   search at: ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒00                      ║
+        ║     Complement strand  (Y/N):       Y                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  10 GC %                  ║
+        ║     Match Tm of Primer A to within  99 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f07745.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│       50                55    75       1    4                    2     0     │
+│                                                                              │
+│ ───▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒──── │
+│    ▒                                                                   ▒     │
+│   P▒ More than 100 sites found.  Suggest you redefine matching limits. ▒     │
+│    ▒                                                                   ▒     │
+│    ▒                   Press any key to continue...                    ▒--   │
+│   P▒                                                                   ▒/C   │
+│    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒     │
+│      924        76      60    79       1    4       4    4       4     0     
+│      925        75      65    82       1    4       3    3       4     1     ░
+│      926        74      65    83       2    4       2    3       4     0     ▓
+│      936        64      65    82       1    6       2    3       3     1     ░
+│                                                                              
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f08797.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│       50                55    75       1    4                    2     0     │
+│                                                                              │
+│ ───▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒──── │
+│    ▒                                                                   ▒     │
+│   P▒ More than 100 sites found.  Suggest you redefine matching limits. ▒     │
+│    ▒                                                                   ▒     │
+│    ▒                   Press any key to continue...                    ▒--   │
+│   P▒                                                                   ▒/C   │
+│    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒     │
+│     ?????????????????????????????????????????????????????????????????????    
+│      925        75      65    82       1    4       3    3       4     1     ░
+│      926        74      65    83       2    4       2    3       4     0     ▓
+│      936        64      65    82       1    6       2    3       3     1     ░
+│                                                                              
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+?       Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f08798.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│       50                55    75       1    4                    2     0     │
+│                                                                              │
+│ ──────────────────────────────────────────────────────────────────────────── │
+│                                                                              │
+│   Primer B (Matching) List:                                                  │
+│                                          ---  Dimers  ---                    │
+│              bps from                  -Self-       -Inter-     -- Runs --   │
+│   Position   Target     GC%   Tm°C     3'  any      3'  any     any  3'G/C   │
+│                                                                              │
+│      924        76      60    79       1    4       4    4       4     0     
+│      925        75      65    82       1    4       3    3       4     1     ░
+│      926        74      65    83       2    4       2    3       4     0     ▓
+│      936        64      65    82       1    6       2    3       3     1     ░
+│                                                                              
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+?       Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f10494.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  50          % GC:  55      Tm°C:  75          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             ?000                     ║       │
+└───────║     Start search at:       Target - 200                      ║───────┘
+        ║     End   search at:       Target + 200                      ║
+        ║     Complement strand  (Y/N):       Y                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  10 GC %                  ║
+        ║     Match Tm of Primer A to within  99 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+

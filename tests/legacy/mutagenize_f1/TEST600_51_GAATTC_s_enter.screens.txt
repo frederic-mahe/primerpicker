@@ -1,0 +1,286 @@
+==== f05818.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+?                                                                      ?       ?
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f05819.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           CTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           L  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f06873.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           CTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           V  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f06874.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           V  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07087.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCA?ACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           V  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07301.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GACAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            T  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           D  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07729.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAAAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            K  K  A  Q  T  S                        │ P  Pro
+│ U                             K  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 65    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08156.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  K  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  -  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08584.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATTAGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  -  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  L  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f09011.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATTCGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  S  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  F  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 68    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f09646.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                │ G  Gly
+│ O         I  L  M  S ▒                              ▒  -  R  A  V    │ H  His
+│ R        N  T  H  V  ▒         Primer Saved         ▒ M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q▒                              ▒N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAA▒ Press any key to continue... ▒TGACGTGCGGTTA   │ L  Leu
+│ 5'->3'               ▒                              ▒                │ M  Met
+│                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                │ N  Asn
+│ M                            N  S  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  F  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 68    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).

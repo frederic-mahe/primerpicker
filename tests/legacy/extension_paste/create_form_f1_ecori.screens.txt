@@ -1,0 +1,260 @@
+==== f03261.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): ?0                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03688.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                       ┌────────────────────────┐  │
+│          ║  Base position for primer:    51      │                        │  │
+│          ║  Complement strand  (Y/N):    N       │ AatII    GACGTC          │
+│          ║  Primer length (incl 5' ext): 20      │ AflII    CTTAAG        ░  │
+│          ║  5' extension to be added:    ?       │ AluI     AGCT          ░  │
+│          ║                                       │ AlwI     GGATC         ░  │
+│          ║                 ─┘  To Complete      │ ApaI     GGGCCC        ░  │
+└──────────║  [ F1 = REnz ]               To Cancel│ ApaLI    GTGCAC        ░──┘
+┌──────────╚═══════════════════════════════════════│ AscI     GGCGCGCC      ▓──┐
+│                                                  │ AseI     ATTAAT        ░  │
+│                                                  │ Asp718   GGTACC        ░  │
+│                                                  │ AsuII    TTCGAA        ░  │
+│                                                  │ AvrII    CCTAGG        ░  │
+│                                                  │ BalI     TGGCCA        ░  │
+│ ══════════════════════╤═════════════════════╤════│ BamHI    GGATCC        ░  │
+│                       200                   400  │ BbeI     GGCGCC          │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+│                                                                              │
+                               Use Initial letter as fast key    ESC = Exit
+==== f04743.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                       ┌────────────────────────┐  │
+│          ║  Base position for primer:    51      │                        │  │
+│          ║  Complement strand  (Y/N):    N       │ Eco31    GGTCTC          │
+│          ║  Primer length (incl 5' ext): 20      │ Eco47-3  AGCGCT        ░  │
+│          ║  5' extension to be added:    ?       │ Eco57    CTGAAG        ░  │
+│          ║                                       │ Eco78    GGCGCC        ░  │
+│          ║                 ─┘  To Complete      │ EcoRI    GAATTC        ░  │
+└──────────║  [ F1 = REnz ]               To Cancel│ EcoRV    GATATC        ░──┘
+┌──────────╚═══════════════════════════════════════│ FokI     GGATG         ▓──┐
+│                                                  │ FspI     TGCGCA        ░  │
+│                                                  │ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│                                                  │ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│ ══════════════════════╤═════════════════════╤════│ HindIII  AAGCTT        ░  │
+│                       200                   400  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+│                                                                              │
+                               Use Initial letter as fast key    ESC = Exit
+==== f05811.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                       ┌────────────────────────┐  │
+│          ║  Base position for primer:    51      │                        │  │
+│          ║  Complement strand  (Y/N):    N       │ Eco31    GGTCTC          │
+│          ║  Primer length (incl 5' ext): 20      │ Eco47-3  AGCGCT        ░  │
+│          ║  5' extension to be added:            │ Eco57    CTGAAG        ░  │
+│          ║                                       │ Eco78    GGCGCC        ░  │
+│          ║                 ─┘  To Complete      │ EcoRI    GAATTC        ░  │
+└──────────║  [ F1 = REnz ]               To Cancel│ EcoRV    GATATC        ░──┘
+┌──────────╚═══════════════════════════════════════│ FokI     GGATG         ▓──┐
+│                                                  │ FspI     TGCGCA        ░  │
+│                                                  │ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│                                                  │ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│ ══════════════════════╤═════════════════════╤════│ HindIII  AAGCTT        ░  │
+│                       200                   400  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+│                                                   ?????????????????????????? │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05812.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:    GAATTC                   ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f06866.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:    GAATTC                   ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+????????????????????????????????????????????????????????????????????????????????
+│                                                                              │
+│ Pos: 51     %GC: 45!   Tm°C: 47!   Hairpin: OK  Dimers: OK  Runs: !          │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+ Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f06867.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600        5'extension: GAATTC             │
+│                                                                              │
+│                                                                  --         │
+│      1   GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   │
+│                                                                              │
+│     61   CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   │
+│                                                                              │
+│    121   GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   │
+│                                                                              │
+│    181   GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   │
+│                                                                              │
+│    241   AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                                                  │
+│                                                                              │
+│ Pos: 51     %GC: 45!   Tm°C: 47!   Hairpin: OK  Dimers: OK  Runs: !          │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+ Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f07921.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600        5'extension: GAATTC             │
+│                                                                              │
+│                                                                  --         │
+│      1   GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   │
+│                                                                              │
+│     61   CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   │
+│                                                                              │
+│    121   GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   │
+│                                                                              │
+│    181   GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   │
+?                                                                              ?
+│  No Hairpins     Energy cutoff  0.0 kcal             --          ???         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07922.png
+                        * * *   PRIMER ANALYSIS   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Sequence:       5'-GAATTCCTCAAAGGCTCAGA-3'                                  │
+│                  Length:  20      5' Ext: GAATTC                             │
+│                  Composition:  A:7   C:5   G:4   T:4                         │
+│                  From molecule:   TEST600             bp pos:  51            │
+│                                                                              │
+│                                                                              │
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07927.png
+                        * * *   PRIMER ANALYSIS   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Sequence:       5'-GAATTCCTCAAAGGCTCAGA-3'                                  │
+│                  Length:  20      5' Ext: GAATTC                             │
+│                  Composition:  A:7   C:5   G:4   T:4                         │
+│                  From molecule:   TEST600             bp pos:  51            │
+│                                                                              │
+│                                                                              │
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+?──────────────────────────────────────────────────────────────────────────────┘

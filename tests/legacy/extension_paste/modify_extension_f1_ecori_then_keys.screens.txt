@@ -1,0 +1,364 @@
+==== f05391.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+          ????????????????????????????????????????????????????????????
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05392.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:                                          ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f06446.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ AatII    GACGTC        
+          ║     Type over or DEL to edit;     ─┘  │ AflII    CTTAAG        ░
+          ║                                        │ AluI     AGCT          ░
+          ║  [ F1 = REnz ]                To Cancel│ AlwI     GGATC         ░
+          ╚════════════════════════════════════════│ ApaI     GGGCCC        ░
+                                                   │ ApaLI    GTGCAC        ░
+                           * * *  PRIMER LIST  * * │ AscI     GGCGCGCC      ▓
+┌──────────────────────────────────────────────────│ AseI     ATTAAT        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ Asp718   GGTACC        ░  │
+│                                                  │ AsuII    TTCGAA        ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ AvrII    CCTAGG        ░  │
+│                                                  │ BalI     TGGCCA        ░  │
+│                                                  │ BamHI    GGATCC        ░  │
+│                                                  │ BbeI     GGCGCC          │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f07501.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ Eco31    GGTCTC        
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f08569.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ Eco31    GGTCTC        
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  ??????????????????????????? │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f08570.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTC?                                 ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f09624.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTC?                                 ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│??????????????????????????????????????????????????????????????????????????????│
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f09625.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   GAATTC-CTCAAAGGCTCAGA                   │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f10680.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════╔═══════════════╗═══════════════════════════════════
+                            ║               ║
+                            ║ Active Primer ║
+                            ║ Primer Pair   ║
+                            ║ Multi Primer  ║
+                            ║               ║
+                            ╚═══════════════╝
+
+
+
+
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   GAATTC-CTCAAAGGCTCAGA                   │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f10893.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════╔═══════════════╗═══════════════════════════════════
+                            ║               ║
+                            ║ Active Primer ║
+                            ║ Primer Pair   ║
+                            ║ Multi Primer  ║
+                            ║               ║
+                            ╚═══════════════╝
+?                            ?????????????????                                 ?
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f10894.png
+                        * * *   PRIMER ANALYSIS   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Sequence:       5'-GAATTCCTCAAAGGCTCAGA-3'                                  │
+│                  Length:  20      5' Ext: GAATTC                             │
+│                  Composition:  A:7   C:5   G:4   T:4                         │
+│                  From molecule:   TEST600             bp pos:  51            │
+│                                                                              │
+│                                                                              │
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f10895.png
+                        * * *   PRIMER ANALYSIS   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Sequence:       5'-GAATTCCTCAAAGGCTCAGA-3'                                  │
+│                  Length:  20      5' Ext: GAATTC                             │
+│                  Composition:  A:7   C:5   G:4   T:4                         │
+│                  From molecule:   TEST600             bp pos:  51            │
+│                                                                              │
+│                                                                              │
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│  No Runs         Reject >=  3 base runs               3          NO          │
+│  No 3' GC runs   Reject >=  3 G or C at 3' end        0          YES         │
+│                                                                              │
+│                                                                              │
+│   U=Unique    F=FalsePri    H=HairPn    D=Dimers    P=Print      ESCape      │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f12368.png
+                        * * *   PRIMER ANALYSIS   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Sequence:       5'-GAATTCCTCAAAGGCTCAGA-3'                                  │
+│                  Length:  20      5' Ext: GAATTC                             │
+│                  Composition:  A:7   C:5   G:4   T:4                         │
+│                  From molecule:   TEST600             bp pos:  51            │
+│                                                                              │
+│                                                                              │
+│  Criteria        Criteria Setting                 Actual    Meets Criteria   │
+│  -----------     ------------------------         ------    --------------   │
+│  % GC            Min   50,    Max   60               45          NO          │
+│  Tm°C            Min   55,    Max   80               47          NO          │
+│                                                                              │
+│  No Hairpins     Energy cutoff  0.0 kcal             --          YES         │
+│                                                                              │
+│  No 3' Dimers    Reject >=  3 matches at 3' end       2          YES         │
+│  No Dimers       Reject >=  7 adj homol bases         6          YES         │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    Press ESCape to return to prior screen
+==== f12369.png
+                         * * *  PRIMER HAIRPINS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                     No Hairpins Found                                        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    Press ESCape to return to prior screen

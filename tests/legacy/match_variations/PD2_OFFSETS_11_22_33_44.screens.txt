@@ -1,0 +1,104 @@
+==== f02419.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ?                                                                ?
+       ║           Sort Homologies by Tm?    (Y/N)   ?                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 22    (bases        ║
+       ║                                  End   @ + 11     from         ║
+       ║           Find Pair  (normal)    Start @ - 44     target       ║
+       ║                    (complement)  End   @ + 33     position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f02420.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    20    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 22    (bases        ║
+       ║                                  End   @ + 11     from         ║
+       ║           Find Pair  (normal)    Start @ - 44     target       ║
+       ║                    (complement)  End   @ + 33     position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f02423.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    ?0    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 22    (bases        ║
+       ║                                  End   @ + 11     from         ║
+       ║           Find Pair  (normal)    Start @ - 44     target       ║
+       ║                    (complement)  End   @ + 33     position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f03298.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    20    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 22    (bases        ║
+       ║                                  End   @ + 11     from         ║
+       ║           Find Pair  (normal)    Start @ - 44     target       ║
+       ║                    (complement)  End   @ + 33     position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop??????????????????????????????????????????????????????????????????ved.

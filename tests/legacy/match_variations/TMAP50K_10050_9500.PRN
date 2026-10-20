@@ -1,0 +1,25 @@
+Primer Design Report:  Match Active Primer            Report Date: 10/20/26
+
+
+Source molecule:  TMAP50K                           50000 bps
+
+
+Search parameters:
+   Target bp pos:  9500 (Complementary strand)
+   Start: Target - 50 bases;   End: Target + 50 bases
+   Length:  20                 5' Extension: - none -
+   GC Match:  +/-  5 GC %      Tm Match:  +/- 10 C
+
+
+Primer A (Original) Characteristics:
+                                       -- Self Dimers --        -- Runs --
+  Position              GC%   TmøC     3'  any                  any  3'G/C
+ 10050                  55    70       1    4                    2     2
+
+
+Primer B (Matching) List:
+                                         ---  Dimers  ---
+             bps from                  -Self-       -Inter-     -- Runs --
+  Position   Target     GC%   TmøC     3'  any      3'  any     any  3'G/C
+
+    9452        48      55    71       2    4       2    4       2     2

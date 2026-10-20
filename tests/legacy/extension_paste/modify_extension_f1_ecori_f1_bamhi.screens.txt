@@ -1,0 +1,390 @@
+==== f05391.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+          ????????????????????????????????????????????????????????????
+          ║  5' extension:                                          ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05392.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:                                          ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f06446.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ AatII    GACGTC        
+          ║     Type over or DEL to edit;     ─┘  │ AflII    CTTAAG        ░
+          ║                                        │ AluI     AGCT          ░
+          ║  [ F1 = REnz ]                To Cancel│ AlwI     GGATC         ░
+          ╚════════════════════════════════════════│ ApaI     GGGCCC        ░
+                                                   │ ApaLI    GTGCAC        ░
+                           * * *  PRIMER LIST  * * │ AscI     GGCGCGCC      ▓
+┌──────────────────────────────────────────────────│ AseI     ATTAAT        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ Asp718   GGTACC        ░  │
+│                                                  │ AsuII    TTCGAA        ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ AvrII    CCTAGG        ░  │
+│                                                  │ BalI     TGGCCA        ░  │
+│                                                  │ BamHI    GGATCC        ░  │
+│                                                  │ BbeI     GGCGCC          │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f07500.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ AatII    GACGTC        
+          ║     Type over or DEL to edit;     ─┘  │ AflII    CTTAAG        ░
+          ║                                        │ AluI     AGCT          ░
+          ║  [ F1 = REnz ]                To Cancel│ AlwI     GGATC         ░
+          ╚════════════════════════════════════════│ ApaI     GGGCCC        ░
+                                        ?          │ ?????    ??????        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f07501.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ Eco31    GGTCTC        
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f07714.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:                         │                        │
+          ║                                        │ ?????▄▄▄▄??????▄▄▄▄▄▄▄ 
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f08569.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  ?                      │                        │
+          ║                                        │ Eco31    GGTCTC        
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * ???????????????????????????
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f08570.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTC?                                 ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f09624.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTC?                                 ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel???????????????????????????
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f09625.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  GAATTC?                │                        │
+          ║                                        │ Eco31    GGTCTC        
+          ║     Type over or DEL to edit;     ─┘  │ Eco47-3  AGCGCT        ░
+          ║                                        │ Eco57    CTGAAG        ░
+          ║  [ F1 = REnz ]                To Cancel│ Eco78    GGCGCC        ░
+          ╚════════════════════════════════════════│ EcoRI    GAATTC        ░
+                                                   │ EcoRV    GATATC        ░
+                           * * *  PRIMER LIST  * * │ FokI     GGATG         ▓
+┌──────────────────────────────────────────────────│ FspI     TGCGCA        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ GsuI     CTGGAG        ░  │
+│                                                  │ HaeIII   GGCC          ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ HgaI     GACGC         ░  │
+│                                                  │ HhaI     GCGC          ░  │
+│                                                  │ HindIII  AAGCTT        ░  │
+│                                                  │ HinPI    GCGC            │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f10679.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  GAATTC?                │                        │
+          ║                                        │ BalI     TGGCCA        
+          ║     Type over or DEL to edit;     ─┘  │ BamHI    GGATCC        ░
+          ║                                        │ BbeI     GGCGCC        ░
+          ║  [ F1 = REnz ]                To Cancel│ BbvI     GCAGC         ░
+          ╚════════════════════════════════════════│ BbvII    GAAGAC        ░
+                                                   │ BclI     TGATCA        ░
+                           * * *  PRIMER LIST  * * │ BglII    AGATCT        ▓
+┌──────────────────────────────────────────────────│ BsmI     GAATGC        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ BspHI    TCATGA        ░  │
+│                                                  │ BspMI    ACCTGC        ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ BspMII   TCCGGA        ░  │
+│                                                  │ BsrI     ACTGG         ░  │
+│                                                  │ BssHII   GCGCGC        ░  │
+│                                                  │ ClaI     ATCGAT          │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+                               Use Initial letter as fast key    ESC = Exit
+==== f11106.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                        ┌────────────────────────┐
+          ║  5' extension:  GAATTC                 │                        │
+          ║                                        │ BalI     TGGCCA        
+          ║     Type over or DEL to edit;     ─┘  │ BamHI    GGATCC        ░
+          ║                                        │ BbeI     GGCGCC        ░
+          ║  [ F1 = REnz ]                To Cancel│ BbvI     GCAGC         ░
+          ╚════════════════════════════════════════│ BbvII    GAAGAC        ░
+                                                   │ BclI     TGATCA        ░
+                           * * *  PRIMER LIST  * * │ BglII    AGATCT        ▓
+┌──────────────────────────────────────────────────│ BsmI     GAATGC        ░──┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if a│ BspHI    TCATGA        ░  │
+│                                                  │ BspMI    ACCTGC        ░  │
+│  1   TEST600       !     51     20   CTCAAAGGCTCA│ BspMII   TCCGGA        ░  │
+│                                                  │ BsrI     ACTGG         ░  │
+│                                                  │ BssHII   GCGCGC        ░  │
+│                                                  │ ClaI     ATCGAT          │
+│                                                  │                        │  │
+│                                                  └────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f11107.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTCGGATCC                            ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f12161.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+          ╔═════════════════════════════════════════════════════════╗
+          ║              * * * CHANGE 5' EXTENSION * * *            ║
+          ║                                                         ║
+          ║  5' extension:  GAATTCGGATCC                            ║
+          ║                                                         ║
+          ║     Type over or DEL to edit;     ─┘  To Complete      ║
+          ║                                                         ║
+          ║  [ F1 = REnz ]                To Cancel Press:  [ ESC ] ║
+          ╚═════════════════════════════════════════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│??????????????????????????????????????????????????????????????????????????????│
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f12162.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   GAATTCGGATCC-CTCAAAGG                   │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer

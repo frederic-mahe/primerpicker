@@ -1,0 +1,26 @@
+Primer Design Report:  Match Active Primer            Report Date: 10/20/26
+
+
+Source molecule:  TMAP6600                           6600 bps
+
+
+Search parameters:
+   Target bp pos:  1700 (Complementary strand)
+   Start: Target - 10 bases;   End: Target + 0 bases
+   Length:  20                 5' Extension: - none -
+   GC Match:  +/-  5 GC %      Tm Match:  +/- 10 C
+
+
+Primer A (Original) Characteristics:
+                                       -- Self Dimers --        -- Runs --
+  Position              GC%   TmøC     3'  any                  any  3'G/C
+  1234                  55    76       2    8!                   2     0
+
+
+Primer B (Matching) List:
+                                         ---  Dimers  ---
+             bps from                  -Self-       -Inter-     -- Runs --
+  Position   Target     GC%   TmøC     3'  any      3'  any     any  3'G/C
+
+    1691         9      50    69       2    4       2    3       2     0
+    1700         0      55    71       2    4       2    4       2     2

@@ -1,0 +1,39 @@
+Primer Design Report:  Match Active Primer            Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+   Target bp pos:    10 (Complementary strand)
+   Start: Target - 65526 bases;   End: Target + 50 bases
+   Length:  20                 5' Extension: - none -
+   GC Match:  +/- 10 GC %      Tm Match:  +/- 99 C
+
+
+Primer A (Original) Characteristics:
+                                       -- Self Dimers --        -- Runs --
+  Position              GC%   TmøC     3'  any                  any  3'G/C
+    50                  55    75       1    4                    2     0
+
+
+Primer B (Matching) List:
+                                         ---  Dimers  ---
+             bps from                  -Self-       -Inter-     -- Runs --
+  Position   Target     GC%   TmøC     3'  any      3'  any     any  3'G/C
+
+      20        10      50    71       1    4       2    3       3     5
+      21        11      45    69       4    4       3    3       4     4
+      22        12      45    66       2    4       2    3       4     3
+      23        13      45    65       2    4       2    3       4     2
+      47        37      45    64       2    4       1    4       2     0
+      48        38      50    68       1    4       2    4       2     0
+      49        39      50    69       4    4       2    4       2     1
+      50        40      50    67       2    4       3    4       2     0
+      51        41      50    68       2    4       2    4       2     0
+      52        42      55    67       4    4       2    4       2     4
+      53        43      50    66       2    4       2    4       2     3
+      54        44      45    63       3    4       1    5       2     2
+      58        48      45    63       2    4       2    9       2     0
+      59        49      50    68       2    4       4   10       2     0
+      60        50      50    69       4    4       3   11       2     0

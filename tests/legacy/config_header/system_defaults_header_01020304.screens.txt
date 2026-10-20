@@ -1,0 +1,364 @@
+==== f00461.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+
+
+        Please create or retrieve a primer:
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        Select From Molecule to create a primer using a sequence file.
+        Select Direct Entry to type in the sequence of a new primer.
+
+
+
+════════════════════════════════════════════════════════════════════════════════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+?   Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f01890.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ? ?????? ???????  ?
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ║                                                                ║
+       ║                                                                ║
+       ║      ┌─────────────┐                                           ║
+       ║      │ Defaults    │    Primer size and search ranges          ║
+       ║      │ Criteria    │    Individual Primer Criteria             ║
+       ║      │ Weights     │    Weighting Factors (Find Pair)          ║
+       ║      │ ESCape/Exit │    Exit from Modify System Defaults       ║
+       ║      └─────────────┘                                           ║
+       ║                                                                ║
+       ║                                                                ║
+       ╚════════════════════════════════════════════════════════════════╝
+
+
+
+════════════════════════════════════════════════════════════════════════════════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f01891.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ║                                                                ║
+       ║                                                                ║
+       ║      ┌─────────────┐                                           ║
+       ║      │ Defaults    │    Primer size and search ranges          ║
+       ║      │ Criteria    │    Individual Primer Criteria             ║
+       ║      │ Weights     │    Weighting Factors (Find Pair)          ║
+       ║      │ ESCape/Exit │    Exit from Modify System Defaults       ║
+       ║      └─────────────┘                                           ║
+       ║                                                                ║
+       ║                                                                ║
+       ╚════════════════════════════════════════════════════════════════╝
+
+
+
+════════════════════════════════════════════════════════════════════════════════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f02419.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ║                                                                ║
+       ║                                                                ║
+       ║      ┌─────────────┐                                           ║
+       ║      ?a?c??ng ?r??e??a:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 50    (bases        ║
+       ║                                  End   @ + 50     from         ║
+       ║           Find Pair  (normal)    Start @ - 100    target       ║
+       ║                    (complement)  End   @ + 100    position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f02420.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    20    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 50    (bases        ║
+       ║                                  End   @ + 50     from         ║
+       ║           Find Pair  (normal)    Start @ - 100    target       ║
+       ║                    (complement)  End   @ + 100    position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f02423.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    ?0    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ║                                                                ║
+       ║      Matching Criteria:                                        ║
+       ║           Match primer GC's to within  ±   5     GC %          ║
+       ║           Match primer Tm's to within  ±   10    C°            ║
+       ║                                                                ║
+       ║      Search Ranges:                                            ║
+       ║           Match Active Primer:   Start @ - 50    (bases        ║
+       ║                                  End   @ + 50     from         ║
+       ║           Find Pair  (normal)    Start @ - 100    target       ║
+       ║                    (complement)  End   @ + 100    position)    ║
+       ║                                                                ║
+       ║                                                                ║
+═══════║     [ ─┘ ] To Complete           To Cancel Press:  [ ESC ]    ║═══════
+       ║                                                                ║
+    Cop╚════════════════════════════════════════════════════════════════╝ved.
+==== f02948.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═══════╔════════════════════════════════════════════════════════════════╗═══════
+       ║                                                                ║
+       ║              * * *  CHANGE PROGRAM DEFAULTS  * * *             ║
+       ║                                                                ║
+       ║      Primer Length (incl 5' Extension):    20    bases         ║
+       ║                                                                ║
+       ║      False Priming and Uniqueness Search:                      ║
+       ║           Exclude Tm ≤ 0°C?         (Y/N)   Y                  ║
+       ║           Sort Homologies by Tm?    (Y/N)   Y                  ║
+       ??????????????????????????????????????????????????????????????????
+       ║      │?????????????│    Primer size and search ranges          ║
+       ║      │ Criteria    │    Individual Primer Criteria             ║
+       ║      │ Weights     │    Weighting Factors (Find Pair)          ║
+       ║      │ ESCape/Exit │    Exit from Modify System Defaults       ║
+       ║      └─────────────┘                                           ║
+       ║                                                                ║
+       ║                                                                ║
+       ╚════════════════════════════════════════════════════════════════╝
+
+
+
+════════════════════════════════════════════════════════════════════════════════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f03656.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ║                                                                ║
+       ║                                                                ║
+       ║      ┌─────────────┐                                           ║
+       ║  ?   ??????????▀▀▀▀?    ?????? ???? ??? ?????????????   ?   ?  ║
+       ║  ║     Energy cutoff:    0.0  kcal         │  primers   │   ║  ║
+       ║  ║                                         │            │   ║  ║
+       ║  ║   Dimers:                               └────────────┘   ║  ║
+       ║  ║     Reject if >=        3  matches at 3' end             ║  ║
+       ║  ║     Reject if >=        7  adjacent homologous bases     ║  ║
+       ║  ║                                                          ║  ║
+       ╚══║   Runs of bases:                                         ║══╝
+          ║     Reject runs of >=    4 bases (any)                   ║
+          ║     Reject runs of >=    2 G or C at 3'end               ║
+          ║                                                          ║
+══════════║   [ ─┘ ] To Complete;         To Cancel Press: [ ESC ]  ║══════════
+          ║                                                          ║
+?   Copyri╚══════════════════════════════════════════════════════════╝served.
+==== f03657.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+══════════╔══════════════════════════════════════════════════════════╗══════════
+          ║                                                          ║
+          ║          * * *   CHANGE CRITERIA DEFAULTS   * * *        ║
+          ║                                                          ║
+       ╔══║   % GC Range (min):    ?0  percent      ┌────────────┐   ║══╗
+       ║  ║              (max):    60  percent      │            │   ║  ║
+       ║  ║                                         │  Modify    │   ║  ║
+       ║  ║   Tm C Range (min):    55  ° C          │  criteria  │   ║  ║
+       ║  ║              (max):    80  ° C          │  used to   │   ║  ║
+       ║  ║                                         │  evaluate  │   ║  ║
+       ║  ║   Hairpins:                             │  single    │   ║  ║
+       ║  ║     Energy cutoff:    0.0  kcal         │  primers   │   ║  ║
+       ║  ║                                         │            │   ║  ║
+       ║  ║   Dimers:                               └────────────┘   ║  ║
+       ║  ║     Reject if >=        3  matches at 3' end             ║  ║
+       ║  ║     Reject if >=        7  adjacent homologous bases     ║  ║
+       ║  ║                                                          ║  ║
+       ╚══║   Runs of bases:                                         ║══╝
+          ║     Reject runs of >=    4 bases (any)                   ║
+          ║     Reject runs of >=    2 G or C at 3'end               ║
+          ║                                                          ║
+══════════║   [ ─┘ ] To Complete;         To Cancel Press: [ ESC ]  ║══════════
+          ║                                                          ║
+    Copyri╚══════════════════════════════════════════════════════════╝served.
+==== f03663.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+══════════╔══════════════════════════════════════════════════════════╗══════════
+          ║                                                          ║
+          ║          * * *   CHANGE CRITERIA DEFAULTS   * * *        ║
+          ║                                                          ║
+       ╔══║   % GC Range (min):    50  percent      ┌────────────┐   ║══╗
+       ║  ║              (max):    60  percent      │            │   ║  ║
+       ║  ║                                         │  Modify    │   ║  ║
+       ║  ║   Tm C Range (min):    55  ° C          │  criteria  │   ║  ║
+       ║  ║              (max):    80  ° C          │  used to   │   ║  ║
+       ║  ║                                         │  evaluate  │   ║  ║
+       ║  ║   Hairpins:                             │  single    │   ║  ║
+       ║  ║     Energy cutoff:    0.0  kcal         │  primers   │   ║  ║
+       ║  ║                                         │            │   ║  ║
+       ║  ║   Dimers:                               └────────────┘   ║  ║
+       ║  ║     Reject if >=        3  matches at 3' end             ║  ║
+       ║  ║     Reject if >=        7  adjacent homologous bases     ║  ║
+       ║  ║                                                          ║  ║
+       ╚══║   Runs of bases:                                         ║══╝
+          ║     Reject runs of >=    4 bases (any)                   ║
+          ║     Reject runs of >=    2 G or C at 3'end               ║
+          ║                                                          ║
+══════════║   [ ─┘ ] To Complete;         To Cancel Press: [ ESC ]  ║══════════
+          ║                                                          ║
+    Copyri╚══════════════════════════════════════════════════════════╝served.
+==== f04185.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+══════════╔══════════════════════════════════════════════════════════╗══════════
+          ║                                                          ║
+          ║          * * *   CHANGE CRITERIA DEFAULTS   * * *        ║
+          ║                                                          ║
+       ╔══║   % GC Range (min):    ?0  percent      ┌────────────┐   ║══╗
+       ║  ║              (max):    60  percent      │            │   ║  ║
+       ║  ║                                         │  Modify    │   ║  ║
+       ║  ║   Tm C Range (min):    55  ° C          │  criteria  │   ║  ║
+       ║  ║              (max):    80  ° C          │  used to   │   ║  ║
+       ║  ║                                         │  evaluate  │   ║  ║
+       ║  ║   Hairpins:                             │  single    │   ║  ║
+       ║  ║     Energy cutoff:    0.0  kcal         │  primers   │   ║  ║
+       ║  ║                                         │            │   ║  ║
+       ║  ║   Dimers:                               └────────────┘   ║  ║
+       ║  ║     Reject if >=        3  matches at 3' end             ║  ║
+       ║  ║     Reject if >=        7  adjacent homologous bases     ║  ║
+       ║  ║                                                          ║  ║
+       ╚══║   Runs of bases:                                         ║══╝
+          ????????????????????????????????????????????????????????????
+
+
+════════════════════════════════════════════════════════════════════════════════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f04893.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║              * * *  MODIFY SYSTEM DEFAULTS  * * *              ║
+       ║                                                                ║
+       ║                                                                ║
+       ║      ┌─────────────┐                                           ║
+       ║      │ Defaults    │    Primer size and search ranges          ║
+       ║      ???????????????    ? ?? ??? ? ? ?    ? ??en???y   ?       ║
+       ║        3'dimers penalty:         1        │  value of  │       ║
+       ║                                           │  1 to 5    │       ║
+       ║        Any dimers penalty:       1        │  (or 0 to  │       ║
+       ║                                           │  ignore)   │       ║
+       ║        False Priming penalty:    1        │            │       ║
+       ║                                           └────────────┘       ║
+       ║                                                                ║
+       ║      [ ─┘ ] To Complete;        To Cancel Press: [ ESC ]      ║
+       ║                                                                ║
+═══════╚════════════════════════════════════════════════════════════════╝═══════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+?   Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f04894.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║        * * *  CHANGE FIND-PAIR WEIGHTING FACTORS  * * *        ║
+       ║                                                                ║
+       ║                                                                ║
+       ║        GC Mismatch penalty:      ?        ┌────────────┐       ║
+       ║                                           │            │       ║
+       ║        Tm mismatch penalty:      1        │  Enter a   │       ║
+       ║                                           │  penalty   │       ║
+       ║        3'dimers penalty:         1        │  value of  │       ║
+       ║                                           │  1 to 5    │       ║
+       ║        Any dimers penalty:       1        │  (or 0 to  │       ║
+       ║                                           │  ignore)   │       ║
+       ║        False Priming penalty:    1        │            │       ║
+       ║                                           └────────────┘       ║
+       ║                                                                ║
+       ║      [ ─┘ ] To Complete;        To Cancel Press: [ ESC ]      ║
+       ║                                                                ║
+═══════╚════════════════════════════════════════════════════════════════╝═══════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.
+==== f04895.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+       ╔════════════════════════════════════════════════════════════════╗
+       ║                                                                ║
+       ║        * * *  CHANGE FIND-PAIR WEIGHTING FACTORS  * * *        ║
+       ║                                                                ║
+       ║                                                                ║
+       ║        GC Mismatch penalty:      1        ┌────────────┐       ║
+       ║                                           │            │       ║
+       ║        Tm mismatch penalty:      1        │  Enter a   │       ║
+       ║                                           │  penalty   │       ║
+       ║        3'dimers penalty:         1        │  value of  │       ║
+       ║                                           │  1 to 5    │       ║
+       ║        Any dimers penalty:       1        │  (or 0 to  │       ║
+       ║                                           │  ignore)   │       ║
+       ║        False Priming penalty:    1        │            │       ║
+       ║                                           └────────────┘       ║
+       ║                                                                ║
+       ║      [ ─┘ ] To Complete;        To Cancel Press: [ ESC ]      ║
+       ║                                                                ║
+═══════╚════════════════════════════════════════════════════════════════╝═══════
+             P R I M E R   D E S I G N E R   -   Version 2.0
+    Copyright 1990,91 Scientific & Educational Software. All rights reserved.

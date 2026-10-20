@@ -1,0 +1,130 @@
+==== f08818.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+        ╔══════════════════════════════════════════════════════════════╗
+        ║              * * *  MULTI PRIMER ANALYSIS  * * *             ║
+        ║                                                              ║
+        ║    Please enter primer #s (from Active Primer List, below)   ║
+        ║    to indicate which two primers to analyze.                 ║
+        ║                                                              ║
+        ║         Primer A: 1                                          ║
+        ║         Primer B: 2                                          ║
+        ║         Primer C:                                            ║
+        ║         Primer D:                                            ║
+        ║                                  To Cancel Press:  [ ESC ]   ║
+        ╚══════════════════════════════════════════════════════════════╝
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TMAP6600      OK  3300     20   GTACTGACCGCTCAGACTTA                    │
+│  2   TMAP6600      !   6500(C)  20   CGCCCCGCAGGAATTAGTGC                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?──────────────────────────────────────────────────────────────────────────────?
+==== f08819.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp  3300 ):  5'-GTACTGACCGCTCAGACTTA-3'                          │
+│   Primer B (bp  6500C):  5'-CGCCCCGCAGGAATTAGTGC-3'                          │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              20      20                           │
+│     % GC                                50      65!                          │
+│     Tm°C                                63      80                           │
+│     Runs of G/C at 3' end                0       2                           │
+│     Runs of bases (any)                  2       4!                          │
+│     Hairpins                            OK       !                           │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     2                   Any    A   4     3                    │
+│   end    B  ∙∙∙∙   3!                         B  ∙∙∙∙   4                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08823.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp  3300 ):  5'-GTACTGACCGCTCAGACTTA-3'                          │
+│   Primer B (bp  6500C):  5'-CGCCCCGCAGGAATTAGTGC-3'                          │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              20      20                           │
+│     % GC                                50      65!                          │
+│     Tm°C                                63      80                           │
+│     Runs of G/C at 3' end                0       2                           │
+│     Runs of bases (any)                  2       4!                          │
+│     Hairpins                            OK       !                           │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     2                   Any    A   4     3                    │
+│   end    B  ∙∙∙∙   3!                         B  ∙∙∙∙   4                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f09348.png
+                      * * *   ????? ?????? ????????  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Source molecule:  TMAP6600                          6600 bps               │
+│                                                                              │
+│                                                                              │
+│   Molecule map with primer locations and directions marked:                  │
+│                                                                              │
+│                                                                              │
+│   ════════════════════════════════════════════════════════════════════════   │
+│                                       A>                                     │
+│                                                                         <B   │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                Bp Pos.                                       │
+│                                                                              │
+│                    Primer A:    3300                                         │
+│                    Primer B:    6500 (C)                                     │
+│                    Primer C:  none                                           │
+│                    Primer D:  none                                           │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    Press ESCape to return to prior screen
+==== f09349.png
+                   * * *   MULTI-PRIMER MOLECULE MAP   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Source molecule:  TMAP6600                          6600 bps               │
+│                                                                              │
+│                                                                              │
+│   Molecule map with primer locations and directions marked:                  │
+│                                                                              │
+│                                                                              │
+│   ════════════════════════════════════════════════════════════════════════   │
+│                                       A>                                     │
+│                                                                         <B   │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                Bp Pos.                                       │
+│                                                                              │
+│                    Primer A:    3300                                         │
+│                    Primer B:    6500 (C)                                     │
+│                    Primer C:  none                                           │
+│                    Primer D:  none                                           │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    Press ESCape to return to prior screen

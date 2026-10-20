@@ -1,0 +1,130 @@
+==== f08703.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+        ╔══════════════════════════════════════════════════════════════╗
+        ║              * * *  MULTI PRIMER ANALYSIS  * * *             ║
+        ║                                                              ║
+        ║    Please enter primer #s (from Active Primer List, below)   ║
+        ║    to indicate which two primers to analyze.                 ║
+        ║                                                              ║
+        ║         Primer A: 1                                          ║
+?       ????????????????????2???????????????????????????????????????????       ?
+│     Tm°C                                66      74      66                   │
+│     Runs of G/C at 3' end                1       1       2                   │
+│     Runs of bases (any)                  3       3       2                   │
+│     Hairpins                            OK      OK       !                   │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     1     1             Any    A   2     3     3              │
+│   end    B  ∙∙∙∙   1     2                    B  ∙∙∙∙   2     3              │
+│          C  ∙∙∙∙∙∙∙∙∙∙   2                    C  ∙∙∙∙∙∙∙∙∙∙   4              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08704.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp    51 ):  5'-CTCAAAGGCTCAGACATCAG-3'                          │
+│   Primer B (bp   120 ):  5'-CGGCGAGGCAATAAACAAAC-3'                          │
+│   Primer C (bp   400C):  5'-TGTATCCAGGTAATGCAAGG-3'                          │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              20      20      20                   │
+│     % GC                                50      50      45!                  │
+│     Tm°C                                66      74      66                   │
+│     Runs of G/C at 3' end                1       1       2                   │
+│     Runs of bases (any)                  3       3       2                   │
+│     Hairpins                            OK      OK       !                   │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     1     1             Any    A   2     3     3              │
+│   end    B  ∙∙∙∙   1     2                    B  ∙∙∙∙   2     3              │
+│          C  ∙∙∙∙∙∙∙∙∙∙   2                    C  ∙∙∙∙∙∙∙∙∙∙   4              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08711.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp    51 ):  5'-CTCAAAGGCTCAGACATCAG-3'                          │
+│   Primer B (bp   120 ):  5'-CGGCGAGGCAATAAACAAAC-3'                          │
+│   Primer C (bp   400C):  5'-TGTATCCAGGTAATGCAAGG-3'                          │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              20      20      20                   │
+│     % GC                                50      50      45!                  │
+│     Tm°C                                66      74      66                   │
+│     Runs of G/C at 3' end                1       1       2                   │
+│     Runs of bases (any)                  3       3       2                   │
+│     Hairpins                            OK      OK       !                   │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     1     1             Any    A   2     3     3              │
+│   end    B  ∙∙∙∙   1     2                    B  ∙∙∙∙   2     3              │
+│          C  ∙∙∙∙∙∙∙∙∙∙   2                    C  ∙∙∙∙∙∙∙∙∙∙   4              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f09127.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp    51 ):  5'-CTCAAAGGCTCAGACATCAG-3'                          │
+│   Primer B (bp   120 ):  5'-CGGCGAGGCAATAAACAAAC-3'                          │
+│   Primer C (bp   400C):  5'-TGTATCCAGGTAATGCAAGG-3'                          │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              20      20      20                   │
+│     % GC                                50      50      45!                  │
+│     Tm°C                                66      74      66                   │
+│     ?     ? ? ???? ??   ?                ?       ?       ?                   │
+│                                              <C                              │
+│                                                                              │
+│                                                                              │
+│                                Bp Pos.                                       │
+│                                                                              │
+│                    Primer A:      51                                         │
+│                    Primer B:     120                                         │
+│                    Primer C:     400 (C)                                     │
+│                    Primer D:  none                                           │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?                   Press ESCape to return to prior screen
+==== f09128.png
+                   * * *   MULTI-PRIMER MOLECULE MAP   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Source molecule:  TEST600                           600 bps                │
+│                                                                              │
+│                                                                              │
+│   Molecule map with primer locations and directions marked:                  │
+│                                                                              │
+│                                                                              │
+│   ══════════════════════════════════════════════════════════════════         │
+│        A>                                                                    │
+│                B>                                                            │
+│                                              <C                              │
+│                                                                              │
+│                                                                              │
+│                                Bp Pos.                                       │
+│                                                                              │
+│                    Primer A:      51                                         │
+│                    Primer B:     120                                         │
+│                    Primer C:     400 (C)                                     │
+│                    Primer D:  none                                           │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?                   Press ESCape to return to prior screen
