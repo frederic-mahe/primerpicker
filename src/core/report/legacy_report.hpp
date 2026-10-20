@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 
 #include <chrono>
@@ -21,5 +22,12 @@ constexpr auto legacy_line_end = std::string_view{"\r\n"};
 [[nodiscard]] auto legacy_inspect_report(analysis::LegacyPrimer const& primer,
                                          analysis::LegacyCriteria const& criteria,
                                          std::chrono::year_month_day const& date) -> std::string;
+
+// "Primer Design Report:  Primer Pair", the report of the Primer Pair
+// Analysis screen (two pages, a form feed between them). Both primers
+// need at least two nucleotides. Not noexcept: as above.
+// C++26 refactoring: make constexpr (std::format)
+[[nodiscard]] auto legacy_pair_report(analysis::PrimerPair const& primers, analysis::LegacyCriteria const& criteria,
+                                      std::chrono::year_month_day const& date) -> std::string;
 
 }  // namespace primerpicker::report
