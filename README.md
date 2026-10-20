@@ -126,6 +126,34 @@ and the fuzzing harnesses (`fuzz`).
 Pre-compiled executables will be attached to the releases.
 
 
+## Related tools
+
+Other free tools for designing or checking primers, with other methods
+and more modern thermodynamic models:
+
+- [Primer3](https://github.com/primer3-org/primer3): the reference
+  open-source primer design library and command-line tools (`primer3_core`,
+  `oligotm`, `ntthal`); also available in Python as
+  [primer3-py](https://pypi.org/project/primer3-py/). primerpicker's
+  tests use Primer3 as a reference implementation.
+- [Primer3Plus](https://www.primer3plus.com/): a web interface to
+  Primer3.
+- [Primer-BLAST](https://www.ncbi.nlm.nih.gov/tools/primer-blast/)
+  (NCBI): primer design with a specificity check against sequence
+  databases.
+- [PerlPrimer](https://perlprimer.sourceforge.net/): a desktop
+  graphical program for PCR, bisulphite and real-time PCR primers (no
+  longer developed).
+- [MFEprimer](https://www.mfeprimer.com/)
+  ([source](https://github.com/quwubin/MFEprimer-3.0)): specificity,
+  dimers and hairpins of primer sets, on a web server or the command
+  line.
+- [OligoAnalyzer](https://www.idtdna.com/calc/analyzer) (IDT, free web
+  tool, proprietary): Tm, hairpins and dimers with salt corrections.
+- [REBASE](http://rebase.neb.com/rebase/rebase.html) and
+  [NEBcutter](https://nc3.neb.com/NEBcutter/) (New England Biolabs):
+  restriction enzymes and their sites.
+
 ## Citation
 
 See `CITATION.cff` (GitHub shows it as "Cite this repository").
