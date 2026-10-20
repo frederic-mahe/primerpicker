@@ -39,6 +39,13 @@ body () {
     tail -n +2 "${1}"
 }
 
+## whether two reports are the same but for their first line; bash
+## only (no cmp: MSYS2 does not install diffutils by default). The
+## final x keeps trailing line ends in the comparison
+same_body () {
+    [[ "$(body "${1}"; printf x)" == "$(body "${2}"; printf x)" ]]
+}
+
 ## errors
 
 DESCRIPTION="analyze --report needs a file name"
@@ -61,7 +68,7 @@ DESCRIPTION="analyze --report given twice is an error"
 DESCRIPTION="analyze --report writes INSPECT.PRN (but for the date)"
 rm -f "${REPORT}"
 "${PRIMERPICKER}" analyze --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null && \
-    cmp -s <(body "${REPORT}") <(body "${REPORTS}/INSPECT.PRN") && \
+    same_body "${REPORT}" "${REPORTS}/INSPECT.PRN" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -85,7 +92,7 @@ FIRST_LINE=$(head -n 1 "${REPORT}")
 DESCRIPTION="analyze --report: options in any order"
 rm -f "${REPORT}"
 "${PRIMERPICKER}" analyze --extension "" --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null && \
-    cmp -s <(body "${REPORT}") <(body "${REPORTS}/INSPECT.PRN") && \
+    same_body "${REPORT}" "${REPORTS}/INSPECT.PRN" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -98,7 +105,7 @@ while IFS=$'\t' read -r FILE PRIMER EXTENSION CONFIG DUPLEXES ; do
     OPTIONS+=(analyze --report "${REPORT}")
     [[ "${EXTENSION}" != "-" ]] && OPTIONS+=(--extension "${EXTENSION}")
     "${PRIMERPICKER}" "${OPTIONS[@]}" "${PRIMER}" > /dev/null && \
-        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+        same_body "${REPORT}" "${REPORTS}/${FILE}" || \
             FAILED="${FAILED} ${FILE}"
 done < "${REPORTS}/inspect_reports.tsv"
 [[ -z "${FAILED}" ]] && \
@@ -119,7 +126,7 @@ DESCRIPTION="analyze --report: no long line for a primer without pairs"
 DESCRIPTION="pair --report writes PAIR.PRN (but for the date)"
 rm -f "${REPORT}"
 "${PRIMERPICKER}" pair --report "${REPORT}" GTAAAACGACGGCCAGT AACAGCTATGACCATG > /dev/null && \
-    cmp -s <(body "${REPORT}") <(body "${REPORTS}/PAIR.PRN") && \
+    same_body "${REPORT}" "${REPORTS}/PAIR.PRN" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -136,7 +143,7 @@ while IFS=$'\t' read -r FILE PRIMER_A PRIMER_B CONFIG DUPLEXES ; do
     OPTIONS=()
     [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
     "${PRIMERPICKER}" "${OPTIONS[@]}" pair --report "${REPORT}" "${PRIMER_A}" "${PRIMER_B}" > /dev/null && \
-        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+        same_body "${REPORT}" "${REPORTS}/${FILE}" || \
             FAILED="${FAILED} ${FILE}"
 done < "${REPORTS}/pair_reports.tsv"
 [[ -z "${FAILED}" ]] && \
@@ -149,7 +156,7 @@ DESCRIPTION="multi --report writes MULTI.PRN (but for the date)"
 rm -f "${REPORT}"
 "${PRIMERPICKER}" multi --report "${REPORT}" CTCAAAGGCTCAGACATCAG GATCCATGCAATGCTAGCTA \
     ACGTTGCAGGTCAAGCTTGC TTGGCCAAGTCGATCGGATC > /dev/null && \
-    cmp -s <(body "${REPORT}") <(body "${REPORTS}/MULTI.PRN") && \
+    same_body "${REPORT}" "${REPORTS}/MULTI.PRN" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
@@ -161,7 +168,7 @@ while IFS=$'\t' read -r FILE SELECTION FIELD_A FIELD_B FIELD_C FIELD_D CONFIG ; 
     [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
     "${PRIMERPICKER}" "${OPTIONS[@]}" multi --report "${REPORT}" \
         "${FIELD_A}" "${FIELD_B}" "${FIELD_C}" "${FIELD_D}" > /dev/null && \
-        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+        same_body "${REPORT}" "${REPORTS}/${FILE}" || \
             FAILED="${FAILED} ${FILE}"
 done < "${REPORTS}/multi_reports.tsv"
 [[ -z "${FAILED}" ]] && \
@@ -178,7 +185,7 @@ while IFS=$'\t' read -r FILE MOLECULE TARGET_A TARGET_B CONFIG ; do
     [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
     "${PRIMERPICKER}" "${OPTIONS[@]}" find-pair --report "${REPORT}" "${LEGACY}/${MOLECULE}" "${TARGET_A}" \
         "${TARGET_B}" > /dev/null && \
-        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+        same_body "${REPORT}" "${REPORTS}/${FILE}" || \
             FAILED="${FAILED} ${FILE}"
 done < "${REPORTS}/find_pair_reports.tsv"
 [[ -z "${FAILED}" ]] && \
