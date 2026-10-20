@@ -72,5 +72,5 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
             }
         }
     }
-    CHECK(enabled == QList<QString>{u"&Direct Entry..."_s, u"&Active Primer"_s});
+    CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"&Active Primer"_s});
 }

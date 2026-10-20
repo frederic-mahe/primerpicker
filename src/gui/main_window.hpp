@@ -2,13 +2,16 @@
 
 #include "core/io/pd2_cfg.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/direct_entry_dialog.hpp"
+#include "gui/from_molecule_dialog.hpp"
 
 #include <QLabel>
 #include <QMainWindow>
 #include <QObject>
 #include <QStackedWidget>
+#include <QString>
 
 #include <cstddef>
 #include <optional>
@@ -23,6 +26,13 @@ struct ActivePrimer {
     std::size_t extension_length = 0;
 };
 
+// A molecule (template) loaded from a file
+struct LoadedMolecule {
+    QString name;
+    std::vector<sequence::Nucleotide> sequence;
+    sequence::Topology topology = sequence::Topology::linear;
+};
+
 // The main window: Primer Designer's main menu as a menu bar. Items
 // that are not implemented yet are disabled.
 class MainWindow final : public QMainWindow {
@@ -31,19 +41,29 @@ class MainWindow final : public QMainWindow {
 public:
     MainWindow();
 
+    // Loads a molecule file (GenBank, FASTA or plain sequence) as the
+    // molecule primers are made from; the error, if it was not loaded
+    [[nodiscard]] auto load_molecule(QString const& path) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void use_direct_entry();
+    auto ask_for_molecule() -> bool;
+    void create_from_molecule();
+    void use_from_molecule();
     void analyze_active_primer();
 
     io::LegacySystemDefaults defaults_;
     std::optional<ActivePrimer> active_primer_;
+    std::optional<LoadedMolecule> molecule_;
     // members are destroyed in reverse order: the pages before the
     // stack that holds them
     QStackedWidget pages_;
     QLabel no_primer_;
     AnalysisView analysis_;
+    QLabel molecule_label_;
     DirectEntryDialog direct_entry_;
+    FromMoleculeDialog from_molecule_;
 };
 
 }  // namespace primerpicker::gui

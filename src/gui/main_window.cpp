@@ -1,15 +1,30 @@
 #include "gui/main_window.hpp"
 
+#include "core/io/molecule_file.hpp"
+#include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
+#include "core/sequence/topology.hpp"
+
 #include <QAction>
 #include <QApplication>
 #include <QDialog>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QIODevice>
+#include <QMessageBox>
 #include <QMenu>
 #include <QMenuBar>
 #include <QObject>
 #include <QString>
+#include <QStatusBar>
 #include <QStringView>
 
+#include <cstddef>
 #include <initializer_list>
+#include <optional>
+#include <string_view>
+#include <utility>
 
 using namespace Qt::StringLiterals;
 
@@ -45,9 +60,20 @@ void add_disabled_items(QMenu& menu, std::initializer_list<QString> const texts)
     }
 }
 
+auto topology_name(sequence::Topology const topology) -> QString {
+    switch (topology) {
+        case sequence::Topology::linear:
+            return u"linear"_s;
+        case sequence::Topology::circular:
+            return u"circular"_s;
+        default:
+            return {};  // unreachable: all enumerators are handled
+    }
+}
+
 }  // namespace
 
-MainWindow::MainWindow() : direct_entry_{*this} {
+MainWindow::MainWindow() : direct_entry_{*this}, from_molecule_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
@@ -56,7 +82,10 @@ MainWindow::MainWindow() : direct_entry_{*this} {
     pages_.addWidget(&no_primer_);
     pages_.addWidget(&analysis_);
     setCentralWidget(&pages_);
+    molecule_label_.setObjectName(u"molecule_label"_s);
+    statusBar()->addWidget(&molecule_label_);
     QObject::connect(&direct_entry_, &QDialog::accepted, this, &MainWindow::use_direct_entry);
+    QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
 }
 
 // The menus of PRIMER.exe (proposal §1.1); & marks the Alt+letter
@@ -64,7 +93,8 @@ MainWindow::MainWindow() : direct_entry_{*this} {
 void MainWindow::add_legacy_menus() {
     auto& menu_bar = *menuBar();
     auto& primer_create = *menu_bar.addMenu(u"&Primer/Create"_s);
-    add_disabled_items(primer_create, {u"From &Molecule..."_s});
+    auto const& from_molecule = add_item(primer_create, {.text = u"From &Molecule...", .name = u"from_molecule"});
+    QObject::connect(&from_molecule, &QAction::triggered, this, &MainWindow::create_from_molecule);
     auto const& direct_entry = add_item(primer_create, {.text = u"&Direct Entry...", .name = u"direct_entry"});
     QObject::connect(&direct_entry, &QAction::triggered, &direct_entry_, &DirectEntryDialog::start);
     add_disabled_items(primer_create, {u"Match &Active Primer"_s, u"Find &Pair"_s, u"&Save Active Primer"_s,
@@ -87,6 +117,70 @@ void MainWindow::add_legacy_menus() {
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
+}
+
+auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
+    auto file = QFile{path};
+    if (not file.open(QIODevice::ReadOnly)) {
+        return u"cannot read %1"_s.arg(path);
+    }
+    auto const bytes = file.readAll();
+    auto const name = QFileInfo{path}.completeBaseName().toStdString();
+    auto const parsed = io::parse_molecule_file(
+        {.text = std::string_view{bytes.constData(), static_cast<std::size_t>(bytes.size())}, .name = name});
+    auto sequence = parsed.molecule.has_value() ? sequence::to_nucleotides(parsed.molecule->sequence) : std::nullopt;
+    if (not sequence.has_value()) {
+        return u"%1: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)"_s.arg(path);
+    }
+    molecule_ = LoadedMolecule{.name = QString::fromStdString(parsed.molecule->name),
+                               .sequence = std::move(*sequence),
+                               .topology = parsed.molecule->topology};
+    molecule_label_.setText(u"Molecule: %1, %2 bp, %3"_s.arg(molecule_->name)
+                                .arg(molecule_->sequence.size())
+                                .arg(topology_name(molecule_->topology)));
+    return std::nullopt;
+}
+
+// Load Molecule from Disk: a file chosen in a file dialog; whether a
+// molecule was loaded
+auto MainWindow::ask_for_molecule() -> bool {
+    auto const path = QFileDialog::getOpenFileName(this, u"Load Molecule from Disk"_s, {},
+                                                   u"Molecule files (*.gb *.gbk *.fa *.fasta *.seq *.txt);;"
+                                                   u"All files (*)"_s);
+    if (path.isEmpty()) {
+        return false;
+    }
+    if (auto const error = load_molecule(path); error.has_value()) {
+        QMessageBox::warning(this, u"Load Molecule"_s, *error);
+        return false;
+    }
+    return true;
+}
+
+// As PRIMER.exe, a loaded molecule is used again without asking
+void MainWindow::create_from_molecule() {
+    if (not molecule_.has_value() and not ask_for_molecule()) {
+        return;
+    }
+    if (molecule_.has_value()) {  // always, here
+        from_molecule_.start(molecule_->name);
+    }
+}
+
+void MainWindow::use_from_molecule() {
+    auto const position = from_molecule_.position();
+    auto primer = position.has_value() and molecule_.has_value()
+                      ? sequence::primer_at(molecule_->sequence, {.position = *position,
+                                                                  .length = defaults_.primer_length,
+                                                                  .strand = from_molecule_.strand()})
+                      : std::nullopt;
+    if (not primer.has_value()) {
+        from_molecule_.refuse_position();
+        return;
+    }
+    from_molecule_.accept();
+    active_primer_ = ActivePrimer{.sequence = std::move(*primer), .extension_length = 0};
+    analyze_active_primer();
 }
 
 void MainWindow::use_direct_entry() {
