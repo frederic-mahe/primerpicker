@@ -53,7 +53,7 @@ case "$kind" in
         print_keys=", , p , , enter , , $to_disk" ;;
     homology)
         molecule=$1
-        path="space enter enter down down enter , , enter $(keys "$2") enter enter enter enter i , , $3"
+        path="space enter enter down down ${CFG:+down }enter , , enter $(keys "$2") enter enter enter enter i , , $3"
         print_keys=", , right , , enter , , $to_disk" ;;
     *)
         echo "KIND must be inspect, pair, pair_files, find_pair or homology" >&2

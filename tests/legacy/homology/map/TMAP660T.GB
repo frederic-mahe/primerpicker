@@ -1,0 +1,16 @@
+LOCUS       TMAP660T     660 bp    DNA     linear
+DEFINITION  Random test molecule (seed 6601), copies of 55:66 at 100t 171t 242t 313t 384t 455t 526t 597t.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 cgttggatgc atccatattc cagcatttaa caattaaatt taccgcgtca gttgatcata
+       61 aacctcagcg tgttgactga aatccggccc gaaaacctga tcataaacct cgctcccgct
+      121 gattacagat gattctccaa aatcgattta gtacggtttt accaaatcgc atcataaacc
+      181 tctgggtgat aactctagcc ctcatgaagt tggttgcata aaaaatattc ctcgaaaccg
+      241 gatcataaac ctccgcttcc accctcggtg agaaatgcaa ggtcagcaat gcttgcgact
+      301 cgtccgcttt atatcataaa cctctgccat atgtcggcca gctgtagcag atcagtgtgg
+      361 gaggtaactg ggcgcaaccc atcatcataa acctcatacc atgcatctcc aatttgtttg
+      421 tccggcggaa tacgttccgg cacttacaac cttcatcata aacctctacc atttggccca
+      481 tcgagacggt gacattctaa cacattcgta ctccatgctc aaattatcat aaacctctct
+      541 ggggggagtc ggaggatccg ttatgagatt atggcctagc ctccggaaac agcaaaatca
+      601 taaacctccc catctgttac tgcgtcggat caaatcatgc agttaagcgt tcatagtgca
+//

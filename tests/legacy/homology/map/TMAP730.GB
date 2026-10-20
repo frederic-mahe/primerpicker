@@ -1,0 +1,18 @@
+LOCUS       TMAP730      730 bp    DNA     linear
+DEFINITION  Random test molecule (seed 7301), copies of 55:66 at 100t 400c 700t.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 gcaaatgtgt tgagtgagtc aataaatagc cttaatcaat ggcggtatag gtcgcgactc
+       61 atcctccaag gttcgagtct ggtataacgc tttccgtagc gactcatcct cagaaatcga
+      121 tccaccataa tctgcgggat cccattggtc attcctagtc cctactatga tggctcccta
+      181 tggcccgtta cattgacccc cctcgagtga atccagaaga tgtgacagaa tgttttacgc
+      241 tttacactcg gcctgttttc ataattacat gaagggacat ttgcccaaaa taattgtatc
+      301 tctgagagag tcgcgatgtt ttgttcgtct gactaatggg gcaccaggac ttaccctcga
+      361 tcaggtaaga acgccgacct ccttcctaac ttgtagcaag aggatgagtc gatgatctgt
+      421 ttaggtctcc ggctgtacta ctcagcaaag tgggtgcctg gccggcatag gcttactagc
+      481 tctggcctcc tcacggcagt aattggacct ttccatgatc aggttagcgg ctacacttgt
+      541 gaaacgtggt agtggctgcc cgccaacctt tcgttagccc aacagtgatg acgcgcaccg
+      601 atcgaaacgt cttgagagag agatgtctca gcgtaagaag atactggcca gaagcagaag
+      661 accccgaagg tgtaccgtgt cgaaatctac cgagttcggc gactcatcct ctgagaagaa
+      721 ggtgctgttg
+//

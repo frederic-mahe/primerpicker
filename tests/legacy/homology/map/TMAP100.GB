@@ -1,0 +1,7 @@
+LOCUS       TMAP100      100 bp    DNA     linear
+DEFINITION  Random test molecule (seed 1002), copies of 55:66 at 2t 25c 80t.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 tacagacgcc aagtgaaaac gggacttggc gtctgtgcga tgttttaatt ctctacagac
+       61 gccaagctca cgtaacacga cagacgccaa gccaatatgc
+//
