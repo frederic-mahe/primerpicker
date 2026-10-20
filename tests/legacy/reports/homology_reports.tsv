@@ -27,3 +27,7 @@ homology/TOWN_351_u.PRN	homology/map/TOWN.GB	351	uniqueness	-	own-site-overlap
 homology/TOWN_501_u.PRN	homology/map/TOWN.GB	501	uniqueness	-	own-site-overlap
 homology/TOWN_651_u.PRN	homology/map/TOWN.GB	651	uniqueness	-	own-site-overlap
 homology/TOWN_801_u.PRN	homology/map/TOWN.GB	801	uniqueness	-	-
+homology/TOWN2_351_u.PRN	homology/map/TOWN2.GB	351	uniqueness	-	own-site-overlap
+homology/TOWN2_801_u.PRN	homology/map/TOWN2.GB	801	uniqueness	-	own-site-overlap
+homology/TOWN2_651_u.PRN	homology/map/TOWN2.GB	651	uniqueness	-	own-site-overlap
+homology/TOWN2_651_f.PRN	homology/map/TOWN2.GB	651	false_priming	-	-

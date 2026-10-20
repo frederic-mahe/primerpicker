@@ -1040,33 +1040,49 @@ The rest of the report:
 All are reproduced byte for byte by `legacy_homology_report`
 (`tests/unit/test_legacy_homology_report.cpp`), except one:
 
-**Primers with an internal repeat.** `homology/map/TOWN.GB`
-(`tools/plant_sites.py`, 1000 bases) holds five 20-base primers with a
-direct repeat of r bases at primer offsets 0 and d (0-based), and a
-control without repeat (801); `TMAP1000.GB` at 900 is a sixth case.
-For every repeat primer, PRIMER.exe's Uniqueness list differs from a
-search of maximal matches (`note` = `own-site-overlap`; not reproduced,
-primerpicker lists the maximal matches):
+**Primers with an internal repeat.** `homology/map/TOWN.GB` and
+`homology/map/TOWN2.GB` (`tools/plant_sites.py`, 1000 bases each) hold
+20-base primers with a direct repeat of r bases at primer offsets a
+and a + d (0-based), an inverted repeat, and a control without repeat
+(TOWN at 801); `TMAP1000.GB` at 900 is one more case. PRIMER.exe's
+Uniqueness lists differ from a search of maximal matches for every
+primer with a direct repeat of 7 bases or more (`note` =
+`own-site-overlap`; not reproduced, primerpicker lists the maximal
+matches):
 
-| primer | r | d | listed: primer bases, at | not listed |
+| primer | r | a, d | listed: primer offsets, at | maximal matches not listed |
 |---|---|---|---|---|
-| TMAP1000 at 900, AAATTCAAAATTCATGTGAT | 7 | 7 | offsets 1-12, at 901 | |
-| TOWN at 201, ACGTTGCTAACGTTGCGAGT | 7 | 9 | 1-14, at 202 | AACGTTGC at 200 (shift -9) |
-| TOWN at 351, GATCCAGTACGATCCAGTTT | 8 | 10 | 2-15, at 353 | CGATCCAGT at 350 |
-| TOWN at 501, TGCAGGTCACTGCAGGTCAA | 9 | 10 | 3-15, at 504 | TGCAGGTCA at 501 and 511 (Tm 17) |
-| TOWN at 651, CCTAGTAGATTGTCCTAGTA | 7 | 13 | 1-18, at 652 | |
+| TMAP1000 at 900, AAATTCAAAATTCATGTGAT | 7 | 0, 7 | 1-12, at 901 | |
+| TOWN at 201, ACGTTGCTAACGTTGCGAGT | 7 | 0, 9 | 1-14, at 202 | AACGTTGC at 200 |
+| TOWN at 351, GATCCAGTACGATCCAGTTT | 8 | 0, 10 | 2-15, at 353 | CGATCCAGT at 350 |
+| TOWN at 501, TGCAGGTCACTGCAGGTCAA | 9 | 0, 10 | 3-15, at 504 | TGCAGGTCA at 501 and 511 (Tm 17) |
+| TOWN at 651, CCTAGTAGATTGTCCTAGTA | 7 | 0, 13 | 1-18, at 652 | |
+| TOWN2 at 351, GTCAGGACTTGTCAGGACTT | 10 | 0, 10 | 4-15, at 355 | TGTCAGGACTT at 350, GTCAGGACTT at 361 |
+| TOWN2 at 651, GATTCCGATTCAGATTCCGA | 8 | 0, 12 | 2-17, at 653 | GATTCCGAT at 663, GATTCCGA at 651, ATTCCGAT at 703 (C) |
+| TOWN2 at 801, TCAGCTTAGCAGCTTAGCTC | 9 | 1, 8 | 4-14, at 805 | CAGCTTAGC at 802 and 810 |
+| TOWN2 at 201, (ACGTC) x 4 | 15 | 0, 5 | none: "Primer is unique" | four matches of 10 and 15 bases |
 
 - the alignments of one copy of the repeat on the other, inside the
-  primer's own site, are never listed (even with a positive Tm);
-- instead, a stretch of the primer's own alignment is listed: from
-  offset r - 6 to offset d + 5, i.e. from the last 6-base window of
-  the first copy to the first 6-base window of the second (all five
-  cases). This suggests a search by 6-base windows whose own-site test
-  goes wrong for windows that occur twice in the primer; not proven.
-- the control primer (801) is listed as a maximal-match search does.
-Not probed yet: repeats of 6 bases, overlapping (tandem) repeats, long
-repeats, inverted repeats, and the False Priming list of these primers
-(two runs lost keys).
+  primer's own site, are not listed (even with a positive Tm);
+- a stretch of the primer's own alignment is listed instead: from
+  offset a + r - 6 to offset a + d + 5 (the last 6-base window of the
+  first copy to the first 6-base window of the second), when it has 7
+  bases or more; all 8 cases above (the tandem repeat gives 2 bases:
+  nothing). Predicted before recording for the four TOWN2 cases;
+- a repeat of 6 bases changes nothing (TOWN2 at 51,
+  GACCTATCGACCTACTGAGT, r = 6, d = 8: "Primer is unique", although the
+  rule above would give 14 bases); an inverted repeat neither (TOWN2 at
+  501: "Primer is unique", as primerpicker);
+- a site outside the own site can vanish too: ATTCCGAT at 703 (C), Tm
+  9, for TOWN2 at 651; its 6-base windows ATTCCG and TTCCGA occur
+  twice in the primer;
+- False Priming is not affected: TOWN2 at 651 lists GATTCCGA at 651
+  (the second copy, at the 3' end, on the first), as primerpicker does
+  (`reports/homology/TOWN2_651_f.PRN`, reproduced byte for byte); TOWN
+  at 651 and TOWN2 at 801: "No false priming found", as primerpicker.
+This suggests a search by 6-base windows whose own-site and
+duplicate-window handling goes wrong for windows that occur twice in
+the primer; no model tried so far reproduces every case.
 
 Not recorded: a complement-strand primer (the tool makes top-strand
 primers only); a primer within 20 bases of the molecule's end (two

@@ -1,0 +1,22 @@
+LOCUS       TOWN2        1000 bp    DNA     linear
+DEFINITION  Random test molecule (seed 7702, GC 0.5,0.5), copies GACCTATCGACCTACTGAGT@51 ACGTCACGTCACGTCACGTC@201 GTCAGGACTTGTCAGGACTT@351 ACCGTAGTTCACCTACGGTA@501 GATTCCGATTCAGATTCCGA@651 TCAGCTTAGCAGCTTAGCTC@801.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ggttatcccc cgcacggcca acactgattg tgtatgcatc ttgaccggac gacctatcga
+       61 cctactgagt agtacttggt ggcccgtccg gacatggatt ggcctgtcaa tggccgcggc
+      121 tgctcggcca ccctctcgat cgaaggtctg gtactaggac ggaccgatga agaattagac
+      181 tacctccgca gaagattaat acgtcacgtc acgtcacgtc tcacatcacc tattcagagg
+      241 agtaccagtg tcgcgcccag ttaatcattt actagcctgc aactcagcgg gacgtgattc
+      301 cggtgccagg ggggggcacg tccacactgc gatataaaca taaccgacgt gtcaggactt
+      361 gtcaggactt aaattgttac tatgcccatc ccaatacgcg gattcttagc ccttcgatgc
+      421 ggaagcccgc tgacagcctt gacgacctca agttcctggt gctctcagcg cgaattatgg
+      481 tacccgtcgg ctattatcac accgtagttc acctacggta ccttccacgc tactaaaggt
+      541 tcggccgaag gccactcgaa cagccggtag catatatttc aagagcgtac cctacatgtg
+      601 acagcaaccc ccacttgtaa tgcattattt gttgctgcgt acggctgtgg gattccgatt
+      661 cagattccga tgcggtctag tacatcgaga gtttcatcgg aataacagat gtctatattc
+      721 aatctcttgg ataatgcccc ggcggcacgc acacgcacgg aaactctacg gagggttcat
+      781 cggcctagat ctaacttatg tcagcttagc agcttagctc gcgaggcagg ataggctggc
+      841 gttacggaag ggttccaggg tcaagtattt aacaaatacc tggcagtgct aattgtattt
+      901 cttaaaagct caagttacga agcgttaata aaaaggaggt caaaaacatc tcgatgctgt
+      961 agctagcaac gcaacatttg aacaatagta tttaccgtta
+//
