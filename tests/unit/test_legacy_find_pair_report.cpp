@@ -20,6 +20,7 @@
 #include <string>
 #include <string_view>
 #include <system_error>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -43,7 +44,9 @@ auto read_file(std::filesystem::path const& path) -> std::string {
     if (not file) {
         throw std::runtime_error{"cannot read " + path.string()};
     }
-    return std::string{std::istreambuf_iterator<char>{file}, std::istreambuf_iterator<char>{}};
+    auto text = std::ostringstream{};
+    text << file.rdbuf();
+    return std::move(text).str();
 }
 
 auto defaults_from(std::string_view const config) -> LegacySystemDefaults {
