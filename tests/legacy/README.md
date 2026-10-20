@@ -1,7 +1,7 @@
 # Recorded behaviour of the legacy program
 
 Reference observations of *Primer Designer v2.0* (Scientific &
-Educational Software, 1990-91), `PRIMER.exe`. The executable itself
+Educational Software, 1990-1991), `PRIMER.exe`. The executable itself
 is proprietary and is not part of this repository.
 
 Recordings are made with DOSBox-X 2026.01.02, running headless:

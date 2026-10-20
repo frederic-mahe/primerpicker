@@ -7,7 +7,7 @@ abstract: >-
   An interactive tool to design and check PCR and sequencing primers,
   with a graphical and a command-line interface. Version 1 reproduces
   the features, default values and results of Primer Designer 2.0
-  (Scientific & Educational Software, 1990-91).
+  (Scientific & Educational Software, 1990-1991).
 type: software
 authors:
   - given-names: Frédéric

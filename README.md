@@ -7,7 +7,7 @@ graphical picker for DNA primers
 
 primerpicker designs and checks PCR and sequencing primers. It is
 inspired by *Primer Designer* v2.0 (Scientific & Educational Software,
-1990-91), a graphical tool for DOS that some laboratories still run in
+1990-1991), a graphical tool for DOS that some laboratories still run in
 an emulator. Version 1 reproduces its features, default values and
 results; later versions will add modern methods.
 
@@ -143,3 +143,4 @@ The restriction enzyme data come from REBASE (version 610, files in
 `data/rebase/`): Roberts RJ, Vincze T, Posfai J, Macelis D (2010)
 REBASE - a database for DNA restriction and modification: enzymes,
 genes and genomes. *Nucleic Acids Research* 38: D234-D236.
+[doi:10.1093/nar/gkp874](https://doi.org/10.1093/nar/gkp874)
