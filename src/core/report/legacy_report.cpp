@@ -168,7 +168,10 @@ auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::Legac
     report += blank_lines(lines_after_title);
     report += line("-----  P R I M E R   I N F O  --------------------------------------------");
     report += blank_lines(2);
-    report += line(std::format("Sequence:     5'-{}-3'", letters(sequence)));
+    // the extension, then a dash, then the primer
+    auto const shown = extension.empty() ? letters(sequence)
+                                         : letters(extension) + "-" + letters(sequence.subspan(extension.size()));
+    report += line(std::format("Sequence:     5'-{}-3'", shown));
     report += legacy_line_end;
     report += line(std::format("              Length: {:3};", sequence.size()));
     report += line(std::format("              5' Extension:   {}",

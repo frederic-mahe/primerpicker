@@ -1,0 +1,55 @@
+Primer Design Report:  One Primer                     Report Date: 10/20/26
+
+
+
+
+
+-----  P R I M E R   I N F O  --------------------------------------------
+
+
+Sequence:     5'-GAATTC-AACAGCTATGACCATG-3'
+
+              Length:  22;
+              5' Extension:   GAATTC
+              Composition:    A: 8  C: 5  G: 4  T: 5
+
+---------------------------------------------------------------------------
+
+
+
+PRIMER EVALUATION AND CRITERIA SETTINGS:
+
+
+Criteria         Criteria Setting                  Actual    Meets Criteria
+-------------    ----------------------------      ------    --------------
+
+% GC             Min   50,    Max   60                40           NO
+
+Tm C             Min   55,    Max   80                52           NO
+
+No Hairpins      Energy cutoff  0.0 kcal              --           YES
+
+No 3' Dimers     Reject >=  3 matches at 3' end        4           NO
+No Dimers        Reject >=  7 adj homol bases          6           YES
+
+No Runs          Reject >=  3 base runs                2           YES
+No 3'GC runs     Reject >=  3 G or C at 3' end         1           YES
+
+
+
+
+LARGEST DUPLEXES REPORTED IN PRIMER DIMERS (above)
+
+
+     Primer-dimers with 3'end involvement:
+
+          5'-GAATTCAACAGCTATGACCATG-3'
+                               ::::
+                            3'-GTACCAGTATCGACAACTTAAG-5'
+
+
+     Other Primer-Dimers:
+
+          5'-GAATTCAACAGCTATGACCATG-3'
+             ::::::
+CCAGTATCGACAACTTAAG-5'
