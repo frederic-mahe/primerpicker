@@ -1083,6 +1083,9 @@ matches):
 This suggests a search by 6-base windows whose own-site and
 duplicate-window handling goes wrong for windows that occur twice in
 the primer; no model tried so far reproduces every case.
+Version 1 (decided 2026-10-20): primerpicker keeps its search of
+maximal matches, which lists every real match; these recordings
+document a known deviation from PRIMER.exe.
 
 Not recorded: a complement-strand primer (the tool makes top-strand
 primers only); a primer within 20 bases of the molecule's end (two
