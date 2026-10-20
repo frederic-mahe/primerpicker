@@ -22,3 +22,8 @@ homology/TMAP660T_51_u.PRN	homology/map/TMAP660T.GB	51	uniqueness	-	-
 homology/TMAP660T_51_u_LENGTH25.PRN	homology/map/TMAP660T.GB	51	uniqueness	PD2_LENGTH25.CFG	-
 homology/TMAP730_51_u.PRN	homology/map/TMAP730.GB	51	uniqueness	-	-
 homology/TMAP731_51_u.PRN	homology/map/TMAP731.GB	51	uniqueness	-	-
+homology/TOWN_201_u.PRN	homology/map/TOWN.GB	201	uniqueness	-	own-site-overlap
+homology/TOWN_351_u.PRN	homology/map/TOWN.GB	351	uniqueness	-	own-site-overlap
+homology/TOWN_501_u.PRN	homology/map/TOWN.GB	501	uniqueness	-	own-site-overlap
+homology/TOWN_651_u.PRN	homology/map/TOWN.GB	651	uniqueness	-	own-site-overlap
+homology/TOWN_801_u.PRN	homology/map/TOWN.GB	801	uniqueness	-	-

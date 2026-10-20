@@ -1040,12 +1040,33 @@ The rest of the report:
 All are reproduced byte for byte by `legacy_homology_report`
 (`tests/unit/test_legacy_homology_report.cpp`), except one:
 
-**A site inside the primer's own site.** `TMAP1000.GB`, primer at 900
-(AAATTCAAAATTCATGTGAT, which repeats AAATTCA): PRIMER.exe lists
-AATTCAAAATTC at 901 (Tm 30), that is bases 2 to 13 of the primer facing
-its own site, while it excludes the full-length match (and primerpicker
-excludes that whole alignment). Not understood from this single case
-(`note` = `own-site-overlap`; not reproduced).
+**Primers with an internal repeat.** `homology/map/TOWN.GB`
+(`tools/plant_sites.py`, 1000 bases) holds five 20-base primers with a
+direct repeat of r bases at primer offsets 0 and d (0-based), and a
+control without repeat (801); `TMAP1000.GB` at 900 is a sixth case.
+For every repeat primer, PRIMER.exe's Uniqueness list differs from a
+search of maximal matches (`note` = `own-site-overlap`; not reproduced,
+primerpicker lists the maximal matches):
+
+| primer | r | d | listed: primer bases, at | not listed |
+|---|---|---|---|---|
+| TMAP1000 at 900, AAATTCAAAATTCATGTGAT | 7 | 7 | offsets 1-12, at 901 | |
+| TOWN at 201, ACGTTGCTAACGTTGCGAGT | 7 | 9 | 1-14, at 202 | AACGTTGC at 200 (shift -9) |
+| TOWN at 351, GATCCAGTACGATCCAGTTT | 8 | 10 | 2-15, at 353 | CGATCCAGT at 350 |
+| TOWN at 501, TGCAGGTCACTGCAGGTCAA | 9 | 10 | 3-15, at 504 | TGCAGGTCA at 501 and 511 (Tm 17) |
+| TOWN at 651, CCTAGTAGATTGTCCTAGTA | 7 | 13 | 1-18, at 652 | |
+
+- the alignments of one copy of the repeat on the other, inside the
+  primer's own site, are never listed (even with a positive Tm);
+- instead, a stretch of the primer's own alignment is listed: from
+  offset r - 6 to offset d + 5, i.e. from the last 6-base window of
+  the first copy to the first 6-base window of the second (all five
+  cases). This suggests a search by 6-base windows whose own-site test
+  goes wrong for windows that occur twice in the primer; not proven.
+- the control primer (801) is listed as a maximal-match search does.
+Not probed yet: repeats of 6 bases, overlapping (tandem) repeats, long
+repeats, inverted repeats, and the False Priming list of these primers
+(two runs lost keys).
 
 Not recorded: a complement-strand primer (the tool makes top-strand
 primers only); a primer within 20 bases of the molecule's end (two
