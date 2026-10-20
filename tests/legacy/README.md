@@ -899,7 +899,7 @@ not reproduced: what primerpicker prints there is not decided yet.
 
 ### The Primer Pair report (recorded 2026-10-20)
 
-`reports/pair/*.PRN`: 44 more reports of the Primer Pair Analysis
+`reports/pair/*.PRN`: 43 more reports of the Primer Pair Analysis
 screen, for the pairs of `pairs/pair_screens.tsv` and
 `pairs/pair_screens_2.tsv` and a few others, written with
 `tools/print_report.sh pair` (Direct Entry) or `pair_files` (the
