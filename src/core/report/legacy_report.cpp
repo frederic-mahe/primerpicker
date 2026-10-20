@@ -59,6 +59,14 @@ auto blank_lines(std::size_t const count) -> std::string {
     return text;
 }
 
+// The width that right-aligns TEXT_SIZE characters to end before column
+// END, USED columns being already written; at least one space when they
+// do not fit (long settings or sites, never recorded from PRIMER.exe)
+constexpr auto right_aligned_width(std::size_t const used, std::size_t const text_size,
+                                   std::size_t const end) noexcept -> std::size_t {
+    return used + text_size < end ? end - used : text_size + 1;
+}
+
 auto letters(std::span<Nucleotide const> const primer) -> std::string {
     auto text = std::string{};
     std::ranges::transform(primer, std::back_inserter(text), sequence::to_letter);
@@ -87,8 +95,8 @@ struct Criterion {
 // on criteria_actual_end, then the verdict
 auto criterion_line(Criterion const& criterion) -> std::string {
     auto const left = std::format("{:<{}}{}", criterion.name, criteria_name_width, criterion.setting);
-    assert(left.size() + criterion.actual.size() <= criteria_actual_end);
-    return line(std::format("{}{:>{}}{}{}", left, criterion.actual, criteria_actual_end - left.size(), verdict_gap,
+    return line(std::format("{}{:>{}}{}{}", left, criterion.actual,
+                            right_aligned_width(left.size(), criterion.actual.size(), criteria_actual_end), verdict_gap,
                             verdict_word(criterion.meets)));
 }
 
@@ -200,8 +208,8 @@ auto pair_row(std::string_view const label, std::span<FlaggedValue const> const 
     auto row = std::format("{:{}}{}", "", pair_label_column, label);
     auto end = pair_first_value_end;
     for (auto const& value : values) {
-        assert(row.size() + value.text.size() <= end);
-        row += std::format("{:>{}}{}", value.text, end - row.size(), flag(value.flagged));
+        row += std::format("{:>{}}{}", value.text, right_aligned_width(row.size(), value.text.size(), end),
+                           flag(value.flagged));
         end += pair_value_step;
     }
     return row;
@@ -455,7 +463,8 @@ auto homology_row(HomologyReport const& homology, analysis::HomologySite const& 
     auto const bases = letters(homology.primer.subspan(site.primer_start, site.length));
     auto row = std::format("             5'{:.>{}}{}", bases, homology_bases_width,
                            homology.kind == analysis::HomologyKind::uniqueness ? "....3'" : "      ");
-    row += std::format("{:>{}}", site.position, homology_position_end - row.size());
+    auto const position = std::to_string(site.position);
+    row += std::format("{:>{}}", position, right_aligned_width(row.size(), position.size(), homology_position_end));
     row += site.strand == sequence::Strand::complement ? " (C)" : "    ";
     return line(std::format("{}{:>{}}   ", row, site.tm_celsius, homology_tm_width));
 }
