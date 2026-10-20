@@ -859,6 +859,62 @@ What they hold (not reproduced by primerpicker yet):
   (`P>` at the primer, `>` and `<` for sites on the top and
   complement strands), and the sites as on the screen.
 
+### The One Primer report (recorded 2026-10-20)
+
+`reports/inspect/*.PRN`: 42 more reports of the Primer Analysis screen,
+written with `tools/print_report.sh inspect PRIMER [EXTENSION]` (with
+`CFG=config/PD2_....CFG` for a settings file); `reports/inspect_reports.tsv`
+lists every One Primer report (INSPECT.PRN included): file, primer,
+5' extension, settings file, and whether both duplexes have pairs.
+Primers: those of `inspect/` with ties between duplexes, without
+complementary bases, with hairpins, of 8 to 46 bases; three
+extensions; `config/PD2_RELAXED.CFG` and `config/PD2_REPORT_NARROW.CFG`
+(GC 40-65 %, Tm 50-70 °C, hairpin cutoff -3.5 kcal, dimers 4 and 6,
+runs 4, 3' G/C runs 2; written with `tools/make_pd2_cfg.py --criteria`,
+an input, not a recording). `config/PD2_REPORT_WIDE.CFG` (3-digit Tm
+limits, cutoff -12.5) is written but not recorded yet (keys lost).
+
+Every report with pairs is reproduced byte for byte by
+`legacy_inspect_report` (`tests/unit/test_legacy_inspect_report.cpp`,
+`tests/cli/test_report.sh`):
+- the sequence is printed `5'-EXTENSION-PRIMER-3'` (the extension, a
+  dash, the primer); Length counts both; "5' Extension:" shows the
+  extension or `--none--`;
+- the criteria rows: the setting starts in column 17, the actual value
+  ends in column 56 (a long setting, such as `-99.0 kcal`, pushes
+  nothing: the value keeps its right edge), then 11 spaces and YES or
+  NO; the hairpin row shows `--`, as on the screen; no trailing spaces;
+- the two duplexes, see "Duplexes of the reports" below.
+
+**Duplexes without pairs.** When a duplex has no pair (the 3' end of a
+primer pairs with nothing, or the primer has no complementary bases at
+all: AAAAAAAAAAAA, ACACACACACAC, TGTGTGTGTGTGTGTG, ACGCCGTTTTCGGTGT,
+ACTCCCTTTTGGGGGT), PRIMER.exe writes lines of tens of thousands of
+spaces: for the 3'-end duplex, a marks line of 51121 spaces then a line
+`-5'`; for the other duplex, a marks line of 6990 (12 bases) or 7006
+(16 bases) spaces and a bottom line of about 29000 spaces before
+`3'-...-5'`. These reports (`duplexes` = `no-pairs`) are recorded, and
+not reproduced: what primerpicker prints there is not decided yet.
+
+### Duplexes of the reports (from the recordings of 2026-10-20)
+
+The One Primer report ends with "LARGEST DUPLEXES REPORTED IN PRIMER
+DIMERS": the primer with itself, drawn as on the dimer page (the first
+primer 5' to 3', first base in column 13; the second 3' to 5' below
+it; ':' under the pairs of the duplex):
+- "Primer-dimers with 3'end involvement": the duplex of the dimer page
+  (see "The dimer page"); its length is the "3' Dimers" value;
+- "Other Primer-Dimers": the longest run of consecutive pairs in any
+  alignment (its length is the "Dimers" value); among equally long
+  runs, the first one in the order of the alignments, from both 5'
+  ends facing each other on (second primer shifted to the right), then
+  from the first primer's 5' end. All 38 reports with pairs follow
+  this rule; 29 of them have tied runs to choose from.
+- the second primer's line: `3'-` is left out when it does not fit
+  left of the 3' base (the bases keep their columns), and bases left
+  of column 0 are cut (`AGTTTCTTTTGAGGCT-5'` with one leading space,
+  `ATCCGGCGAAGTTAGCT-5'` from column 0).
+
 ## Restriction enzymes (recorded 2026-10-18)
 
 ### Built-in enzyme table
