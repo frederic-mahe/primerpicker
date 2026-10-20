@@ -17,3 +17,4 @@ match/TRUN_50_1820.PRN	search/TRUN.GB	50	1820	-
 ../match_variations/TRUN_50_1000_PD2_MATCH_ALL_TOL0_60_60.PRN	search/TRUN.GB	50	1000	../match_variations/PD2_MATCH_ALL_TOL0_60_60.CFG
 ../match_variations/TRUN_50_10_PD2_MATCH_ALL.PRN	search/TRUN.GB	50	10	../match_variations/PD2_MATCH_ALL.CFG
 ../match_variations/TRUN_50_30_PD2_MATCH_ALL.PRN	search/TRUN.GB	50	30	../match_variations/PD2_MATCH_ALL.CFG
+../match_variations/TRUN_50_30_PD2_MATCH_ALL_LENGTH25.PRN	search/TRUN.GB	50	30	../match_variations/PD2_MATCH_ALL_LENGTH25.CFG

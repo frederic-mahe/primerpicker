@@ -1,2 +1,1 @@
 # file	molecule	primer_a_position	target	config	reason
-../match_variations/TRUN_50_30_PD2_MATCH_ALL_LENGTH25.PRN	search/TRUN.GB	50	30	../match_variations/PD2_MATCH_ALL_LENGTH25.CFG	tm-constant

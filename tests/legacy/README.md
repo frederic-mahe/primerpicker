@@ -1249,11 +1249,14 @@ reproduced byte for byte by `legacy_match_report`
   within the tolerances: "More than 100 sites found.  Suggest you
   redefine matching limits."; nothing is printed in both cases.
 Not reproduced yet: a top-strand primer B (`TRUN_50_600_top_strand.PRN`:
-"Target bp pos:   600" without strand, rows 552 to 609); one report in
-`reports/match_reports_pending.tsv`: primer B at 51 (25 bases,
-AGTCCTGCTCATATAGGCCATGTAT) is shown with Tm 73, while the primer Tm
-model gives 74.0003 with b = 60.699: PRIMER.exe's constant b is above
-60.69942 (and, from "Primer Tm", at most 60.7000).
+"Target bp pos:   600" without strand, rows 552 to 609).
+**The Tm constant.** Primer B at 51 of `TRUN_50_30_PD2_MATCH_ALL_LENGTH25`
+(25 bases, AGTCCTGCTCATATAGGCCATGTAT) is shown with Tm 73, while the
+primer Tm model gives 74.0003 with b = 60.699: PRIMER.exe's constant b
+is above 60.69942 (and, from "Primer Tm", at most 60.7000).
+primerpicker now uses 60.6997 (decided 2026-10-20); the Primer3
+reference values (`../data/primer3_legacy_tm.*`) were regenerated for
+it (DNA 0.049611885111237056 nM).
 
 ## Other items recorded on 2026-10-20
 
