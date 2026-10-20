@@ -16,10 +16,11 @@ namespace detail {
 // Fitted on 186 primers recorded from PRIMER.exe: every displayed
 // value matches for b in [60.6983, 60.7000] cal/K/mol
 // (tests/legacy/tools/fit_tm.py). The origin of b is not known.
-// A Match Active Primer report (2026-10-20) narrows the interval to
-// (60.69942, 60.7000] (tests/legacy/README.md, "The Match Active Primer
-// report"): its middle is used.
-constexpr auto legacy_entropy_constant = CaloriesPerKelvinPerMole{60.6997};
+// Primers recorded on 2026-10-20 narrow it to (60.699732, 60.7]
+// (tests/legacy/README.md, "Primer Tm: the constant b"); 60.7 is
+// probably the original value, but its middle is used, so that a Tm
+// computed exactly on an integer is not truncated below it.
+constexpr auto legacy_entropy_constant = CaloriesPerKelvinPerMole{60.69987};
 // Primer3's oligotm gives the same Tm in Breslauer mode with a DNA
 // concentration C of 49.6 pM: b = 10.8 + R ln(4 / C), 10.8 being
 // Primer3's initiation entropy (tests/data/primer3_legacy_tm.sh)

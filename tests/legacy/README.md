@@ -125,6 +125,26 @@ Recording notes:
   the configuration file, not the current directory.
 
 
+### Primer Tm: the constant b (recorded 2026-10-20)
+
+`tm/tm_constant_probe.tsv` (`tools/tm_direct_entry.sh`, columns as
+`tm/direct_entry_tm.tsv`): 14 primers chosen, out of 3 million random
+ones, because their displayed Tm changes for a value of b inside the
+interval left by the recordings above, plus the primer of the Match
+Active Primer report that first narrowed it (Tm 74.0003 with b =
+60.699, shown 73). A displayed Tm of k means b <= b*, k - 1 means
+b > b*, b* being the value at which the Tm is exactly k. All 14 agree
+with one constant: b in (60.699732, 60.7] (lowest bound: three primers
+of 34 bases, b* = 22641/373 and 112598/1855; highest: two primers whose
+Tm is exactly 87 for b = 60.7 and that PRIMER.exe shows as 87). Two
+primers with the same b* but different float32 roundings show the same
+value: no sign of 32-bit arithmetic.
+60.7 is probably the original constant; but with b = 60.7, double
+arithmetic gives those two primers 86.99999999999989 (shown 86), so
+primerpicker uses the middle of the interval, 60.69987 (decided
+2026-10-20; `tests/unit/test_legacy_tm_constant.cpp`), and the Primer3
+reference table was regenerated for it (DNA 0.049607640692672386 nM).
+
 ### Primer3 equivalent (2026-10-18)
 
 Primer3's `oligotm` (2.6.1, Breslauer mode: `-tp 0 -sc 0 -dv 0 -n 0`)
@@ -1254,9 +1274,8 @@ Not reproduced yet: a top-strand primer B (`TRUN_50_600_top_strand.PRN`:
 (25 bases, AGTCCTGCTCATATAGGCCATGTAT) is shown with Tm 73, while the
 primer Tm model gives 74.0003 with b = 60.699: PRIMER.exe's constant b
 is above 60.69942 (and, from "Primer Tm", at most 60.7000).
-primerpicker now uses 60.6997 (decided 2026-10-20); the Primer3
-reference values (`../data/primer3_legacy_tm.*`) were regenerated for
-it (DNA 0.049611885111237056 nM).
+This report led to the probe described in "Primer Tm: the constant
+b": primerpicker uses b = 60.69987.
 
 ## Other items recorded on 2026-10-20
 
