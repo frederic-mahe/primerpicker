@@ -94,10 +94,7 @@ constexpr auto run_at_3prime_end(std::span<sequence::Nucleotide const> const pri
     return static_cast<std::size_t>(std::distance(primer.rbegin(), run));
 }
 
-// The primers of a window that meet every criterion, and whose 3'-end
-// run is shorter than the runs criterion: unlike the Primer Analysis
-// screen, Find Pair counts that run (tests/legacy/README.md, "Find Pair
-// and runs at the 3' end"); the count stops at
+// The primers of a window that meet every criterion; the count stops at
 // legacy_max_possible_primers
 inline auto possible_primers(std::span<sequence::Nucleotide const> const molecule, std::size_t const first,
                              std::size_t const last, sequence::Strand const strand, std::size_t const length,
@@ -109,6 +106,9 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
             continue;
         }
         auto const actual = analysis::legacy_actual_values(*primer);
+        // unlike the Primer Analysis screen, Find Pair also rejects a run
+        // at the 3' end that reaches the runs criterion
+        // (tests/legacy/README.md, "Find Pair and runs at the 3' end")
         if (not analysis::evaluate(actual, criteria).all() or run_at_3prime_end(*primer) >= criteria.reject_run_length) {
             continue;
         }
