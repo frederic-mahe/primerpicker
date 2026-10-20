@@ -1,4 +1,4 @@
-#include "core/analysis/legacy_criteria.hpp"
+#include "core/analysis/legacy_verdict.hpp"
 #include "core/report/legacy_report.hpp"
 #include "core/search/legacy_find_pair.hpp"
 
