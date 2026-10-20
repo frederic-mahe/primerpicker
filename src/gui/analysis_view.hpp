@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QModelIndex>
 #include <QObject>
+#include <QPushButton>
 #include <QString>
 #include <QTableView>
 #include <QVariant>
@@ -55,6 +56,10 @@ public:
 
     void show_primer(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria);
 
+Q_SIGNALS:
+    // Print to Disk was chosen (P, as on PRIMER.exe's screen)
+    void print_requested();
+
 private:
     // members are destroyed in reverse order: the widgets before the
     // layouts that hold them
@@ -69,6 +74,7 @@ private:
     QTableView criteria_table_;
     QLabel hairpin_;
     QLabel verdict_;
+    QPushButton print_;
 };
 
 }  // namespace primerpicker::gui

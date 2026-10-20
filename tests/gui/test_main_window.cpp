@@ -47,10 +47,10 @@ TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
     auto const window = MainWindow{};
     CHECK(texts(menu_titled(window, u"&Primer/Create"_s).actions()) ==
           QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Match &Active Primer"_s, u"Find &Pair"_s,
-                      u"&Save Active Primer"_s, u"&Retrieve from disk"_s});
+                      u"&Save Active Primer"_s, u"&Retrieve from disk..."_s});
     // the section title "Active Primer:" is a separator with a text
     CHECK(texts(menu_titled(window, u"&Modify"_s).actions()) ==
-          QList<QString>{u"---"_s, u"&Position"_s, u"&Length"_s, u"5'-&extension"_s, u"&Criteria"_s,
+          QList<QString>{u"---"_s, u"&Position"_s, u"&Length"_s, u"5'-&extension..."_s, u"&Criteria"_s,
                       u"M&utagenize"_s, u"---"_s, u"&System Defaults"_s,
                       u"---"_s, u"Colour Sc&heme"_s});
     CHECK(texts(menu_titled(window, u"&Analyze"_s).actions()) ==
@@ -73,6 +73,6 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
             }
         }
     }
-    CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Colour Sc&heme"_s,
-                                    u"&Active Primer"_s});
+    CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"&Retrieve from disk..."_s,
+                                    u"5'-&extension..."_s, u"Colour Sc&heme"_s, u"&Active Primer"_s});
 }

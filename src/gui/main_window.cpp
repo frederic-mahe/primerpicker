@@ -1,14 +1,20 @@
 #include "gui/main_window.hpp"
 
 #include "core/io/molecule_file.hpp"
+#include "core/io/pd2.hpp"
 #include "core/io/pd2_cfg.hpp"
+#include "core/report/legacy_report.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 #include "core/sequence/topology.hpp"
+#include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
+#include "gui/sequence_dialog.hpp"
 
 #include <QAction>
 #include <QAnyStringView>
+#include <QChar>
+#include <QDate>
 #include <QApplication>
 #include <QDialog>
 #include <QFile>
@@ -26,10 +32,12 @@
 #include <algorithm>
 #include <array>
 #include <bit>
+#include <chrono>
 #include <cstddef>
 #include <initializer_list>
 #include <iterator>
 #include <optional>
+#include <span>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -83,7 +91,11 @@ auto topology_name(sequence::Topology const topology) -> QString {
 
 }  // namespace
 
-MainWindow::MainWindow() : colour_schemes_{this}, direct_entry_{*this}, from_molecule_{*this} {
+MainWindow::MainWindow()
+    : colour_schemes_{this},
+      direct_entry_{*this, direct_entry_kind},
+      extension_{*this, extension_kind},
+      from_molecule_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
@@ -97,6 +109,8 @@ MainWindow::MainWindow() : colour_schemes_{this}, direct_entry_{*this}, from_mol
     settings_label_.setObjectName(u"settings_label"_s);
     statusBar()->addPermanentWidget(&settings_label_);
     QObject::connect(&direct_entry_, &QDialog::accepted, this, &MainWindow::use_direct_entry);
+    QObject::connect(&extension_, &QDialog::accepted, this, &MainWindow::use_extension);
+    QObject::connect(&analysis_, &AnalysisView::print_requested, this, &MainWindow::print_report);
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
 }
 
@@ -117,14 +131,17 @@ void MainWindow::add_legacy_menus() {
     auto const& from_molecule = add_item(primer_create, {.text = u"From &Molecule...", .name = u"from_molecule"});
     QObject::connect(&from_molecule, &QAction::triggered, this, &MainWindow::create_from_molecule);
     auto const& direct_entry = add_item(primer_create, {.text = u"&Direct Entry...", .name = u"direct_entry"});
-    QObject::connect(&direct_entry, &QAction::triggered, &direct_entry_, &DirectEntryDialog::start);
-    add_disabled_items(primer_create, {u"Match &Active Primer"_s, u"Find &Pair"_s, u"&Save Active Primer"_s,
-                                       u"&Retrieve from disk"_s});
+    QObject::connect(&direct_entry, &QAction::triggered, &direct_entry_, [this] { direct_entry_.start(); });
+    add_disabled_items(primer_create, {u"Match &Active Primer"_s, u"Find &Pair"_s, u"&Save Active Primer"_s});
+    auto const& retrieve = add_item(primer_create, {.text = u"&Retrieve from disk...", .name = u"retrieve_primer"});
+    QObject::connect(&retrieve, &QAction::triggered, this, &MainWindow::retrieve_primer);
 
     auto& modify = *menu_bar.addMenu(u"&Modify"_s);
     modify.addSection(u"Active Primer:"_s);
-    add_disabled_items(modify,
-                       {u"&Position"_s, u"&Length"_s, u"5'-&extension"_s, u"&Criteria"_s, u"M&utagenize"_s});
+    add_disabled_items(modify, {u"&Position"_s, u"&Length"_s});
+    auto const& extension = add_item(modify, {.text = u"5'-&extension...", .name = u"modify_extension"});
+    QObject::connect(&extension, &QAction::triggered, this, &MainWindow::modify_extension);
+    add_disabled_items(modify, {u"&Criteria"_s, u"M&utagenize"_s});
     modify.addSeparator();
     add_disabled_items(modify, {u"&System Defaults"_s});
     // not in PRIMER.exe: the window's colours (proposal §3.2)
@@ -252,13 +269,114 @@ void MainWindow::use_from_molecule() {
         return;
     }
     from_molecule_.accept();
-    active_primer_ = ActivePrimer{.sequence = std::move(*primer), .extension_length = 0};
+    make_active(std::move(*primer), 0);
+}
+
+// a new primer, with the System Defaults' criteria
+void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, std::size_t const extension_length) {
+    active_primer_ = ActivePrimer{
+        .sequence = std::move(sequence), .extension_length = extension_length, .criteria = defaults_.criteria};
     analyze_active_primer();
 }
 
 void MainWindow::use_direct_entry() {
-    active_primer_ = ActivePrimer{.sequence = direct_entry_.primer(), .extension_length = 0};
+    make_active(direct_entry_.sequence(), 0);
+}
+
+void MainWindow::modify_extension() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    auto const extension = std::span{active_primer_->sequence}.first(active_primer_->extension_length);
+    auto text = QString{};
+    for (auto const nucleotide : extension) {
+        text.append(QChar::fromLatin1(sequence::to_letter(nucleotide)));
+    }
+    extension_.start(text);
+}
+
+// the primer keeps its criteria
+void MainWindow::use_extension() {
+    if (not active_primer_.has_value()) {
+        return;
+    }
+    auto sequence = extension_.sequence();
+    auto const extension_length = sequence.size();
+    auto const primer = std::span{active_primer_->sequence}.subspan(active_primer_->extension_length);
+    sequence.insert(sequence.end(), primer.begin(), primer.end());
+    active_primer_->sequence = std::move(sequence);
+    active_primer_->extension_length = extension_length;
     analyze_active_primer();
+}
+
+auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
+    auto file = QFile{path};
+    if (not file.open(QIODevice::ReadOnly)) {
+        return u"cannot read %1"_s.arg(path);
+    }
+    auto const contents = file.readAll();
+    auto bytes = std::vector<std::byte>{};
+    bytes.reserve(static_cast<std::size_t>(contents.size()));
+    std::ranges::transform(contents, std::back_inserter(bytes),
+                           [](char const character) { return std::bit_cast<std::byte>(character); });
+    auto const parsed = io::parse_pd2(bytes);
+    auto const extension =
+        parsed.primer.has_value() ? sequence::to_nucleotides(parsed.primer->extension) : std::nullopt;
+    auto const primer = parsed.primer.has_value() ? sequence::to_nucleotides(parsed.primer->sequence) : std::nullopt;
+    constexpr auto min_primer_length = std::size_t{2};  // the analyses need two bases
+    if (not extension.has_value() or not primer.has_value() or primer->size() < min_primer_length) {
+        return u"%1: not a primer file of Primer Designer 2.0 (.PD2)"_s.arg(path);
+    }
+    auto sequence = *extension;
+    sequence.insert(sequence.end(), primer->begin(), primer->end());
+    active_primer_ = ActivePrimer{
+        .sequence = std::move(sequence), .extension_length = extension->size(), .criteria = parsed.primer->criteria};
+    analyze_active_primer();
+    return std::nullopt;
+}
+
+void MainWindow::retrieve_primer() {
+    auto const path = QFileDialog::getOpenFileName(this, u"Load Primer from Disk"_s, {},
+                                                   u"Primer files (*.pd2 *.PD2);;All files (*)"_s);
+    if (path.isEmpty()) {
+        return;
+    }
+    if (auto const error = load_primer(path); error.has_value()) {
+        QMessageBox::warning(this, u"Retrieve from disk"_s, *error);
+    }
+}
+
+auto MainWindow::print_report_to(QString const& path) -> std::optional<QString> {
+    if (not active_primer_.has_value()) {
+        return u"Please create or retrieve a primer"_s;
+    }
+    auto const today = QDate::currentDate();
+    auto const date = std::chrono::year_month_day{std::chrono::year{today.year()},
+                                                  std::chrono::month{static_cast<unsigned>(today.month())},
+                                                  std::chrono::day{static_cast<unsigned>(today.day())}};
+    auto const report = report::legacy_inspect_report(
+        {.sequence = active_primer_->sequence, .extension_length = active_primer_->extension_length},
+        active_primer_->criteria, date);
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or
+        file.write(report.data(), static_cast<qint64>(report.size())) != static_cast<qint64>(report.size())) {
+        return u"cannot write the report to %1"_s.arg(path);
+    }
+    return std::nullopt;
+}
+
+// Print Control -> Print to Disk: PRIMER.exe writes its report to a
+// text file
+void MainWindow::print_report() {
+    auto const path = QFileDialog::getSaveFileName(this, u"Print to Disk"_s, u"INSPECT.PRN"_s,
+                                                   u"Reports (*.prn *.PRN *.txt);;All files (*)"_s);
+    if (path.isEmpty()) {
+        return;
+    }
+    if (auto const error = print_report_to(path); error.has_value()) {
+        QMessageBox::warning(this, u"Print to Disk"_s, *error);
+    }
 }
 
 void MainWindow::analyze_active_primer() {
@@ -267,7 +385,7 @@ void MainWindow::analyze_active_primer() {
         return;
     }
     analysis_.show_primer({.sequence = active_primer_->sequence, .extension_length = active_primer_->extension_length},
-                          defaults_.criteria);
+                          active_primer_->criteria);
     pages_.setCurrentWidget(&analysis_);
 }
 

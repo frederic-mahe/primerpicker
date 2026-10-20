@@ -1,12 +1,13 @@
 #pragma once
 
+#include "core/analysis/legacy_verdict.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
-#include "gui/direct_entry_dialog.hpp"
 #include "gui/from_molecule_dialog.hpp"
+#include "gui/sequence_dialog.hpp"
 
 #include <QActionGroup>
 #include <QLabel>
@@ -25,10 +26,14 @@
 namespace primerpicker::gui {
 
 // The primer the analyses work on: the whole sequence 5' to 3', whose
-// first extension_length nucleotides are the 5' extension
+// first extension_length nucleotides are the 5' extension, and its
+// criteria. As in a .PD2 file, a primer has its own criteria (Modify ->
+// Active Primer: Criteria): the System Defaults' when it is made, the
+// saved ones when it is retrieved from disk.
 struct ActivePrimer {
     std::vector<sequence::Nucleotide> sequence;
     std::size_t extension_length = 0;
+    analysis::LegacyCriteria criteria;
 };
 
 // A molecule (template) loaded from a file
@@ -59,11 +64,25 @@ public:
     // if it was not loaded (the settings are then kept)
     [[nodiscard]] auto load_settings(QString const& path) -> std::optional<QString>;
 
+    // Retrieves a primer saved by Primer Designer (.PD2 file) as the
+    // active primer, and shows its analysis; the error, if it was not
+    // loaded (the active primer is then kept)
+    [[nodiscard]] auto load_primer(QString const& path) -> std::optional<QString>;
+
+    // Writes PRIMER.exe's One Primer report of the active primer (Print
+    // to Disk), dated today; the error, if it was not written
+    [[nodiscard]] auto print_report_to(QString const& path) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
     void choose_colour_scheme(ColourScheme scheme);
     void use_direct_entry();
+    void modify_extension();
+    void use_extension();
+    void retrieve_primer();
+    void print_report();
+    void make_active(std::vector<sequence::Nucleotide> sequence, std::size_t extension_length);
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
     void use_from_molecule();
@@ -81,7 +100,8 @@ private:
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;
-    DirectEntryDialog direct_entry_;
+    SequenceDialog direct_entry_;
+    SequenceDialog extension_;
     FromMoleculeDialog from_molecule_;
 };
 

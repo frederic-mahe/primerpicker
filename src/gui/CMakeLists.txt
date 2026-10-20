@@ -4,9 +4,9 @@
 add_library(primerpicker_gui
   analysis_view.cpp
   colour_scheme.cpp
-  direct_entry_dialog.cpp
   from_molecule_dialog.cpp
-  main_window.cpp)
+  main_window.cpp
+  sequence_dialog.cpp)
 set_target_properties(primerpicker_gui PROPERTIES AUTOMOC ON)
 target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets)
 target_compile_options(primerpicker_gui PRIVATE ${PRIMERPICKER_WARNING_FLAGS})

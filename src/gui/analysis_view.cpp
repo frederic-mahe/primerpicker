@@ -9,6 +9,8 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QModelIndex>
+#include <QObject>
+#include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
 #include <QVariant>
@@ -140,7 +142,7 @@ auto CriteriaModel::headerData(int const section, Qt::Orientation const orientat
     return QString::fromUtf16(headers.at(static_cast<std::size_t>(section)));
 }
 
-AnalysisView::AnalysisView() {
+AnalysisView::AnalysisView() : print_{u"&Print to Disk..."_s} {
     setObjectName(u"analysis_view"_s);
     sequence_.setObjectName(u"sequence_label"_s);
     length_.setObjectName(u"length_label"_s);
@@ -170,6 +172,9 @@ AnalysisView::AnalysisView() {
     layout_.addLayout(&primer_layout_);
     layout_.addWidget(&criteria_table_);
     layout_.addLayout(&result_layout_);
+    print_.setObjectName(u"print_button"_s);
+    QObject::connect(&print_, &QPushButton::clicked, this, &AnalysisView::print_requested);
+    layout_.addWidget(&print_, 0, Qt::AlignLeft);
     layout_.addStretch();
     setLayout(&layout_);
 }
@@ -179,7 +184,11 @@ void AnalysisView::show_primer(analysis::LegacyPrimer const& primer, analysis::L
     auto const verdict = analysis::evaluate(actual, criteria);
     auto const extension = primer.sequence.first(primer.extension_length);
     auto const counts = sequence::composition(primer.sequence);
-    sequence_.setText(from_utf8(std::format("5'-{}-3'", letters(primer.sequence))));
+    // as the One Primer report: 5'-EXTENSION-PRIMER-3'
+    auto const without_extension = primer.sequence.subspan(primer.extension_length);
+    sequence_.setText(from_utf8(extension.empty()
+                                    ? std::format("5'-{}-3'", letters(without_extension))
+                                    : std::format("5'-{}-{}-3'", letters(extension), letters(without_extension))));
     length_.setText(QString::number(primer.sequence.size()));
     extension_.setText(extension.empty() ? u"--none--"_s : from_utf8(letters(extension)));
     composition_.setText(from_utf8(std::format("A: {}  C: {}  G: {}  T: {}", counts.adenine, counts.cytosine,

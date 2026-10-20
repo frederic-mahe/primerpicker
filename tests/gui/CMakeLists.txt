@@ -22,6 +22,7 @@ add_executable(gui_tests
   test_direct_entry.cpp
   test_from_molecule.cpp
   test_settings.cpp
+  test_active_primer.cpp
   test_screenshots.cpp)
 target_link_libraries(gui_tests PRIVATE primerpicker_gui Qt6::Test Catch2::Catch2)
 target_compile_options(gui_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
