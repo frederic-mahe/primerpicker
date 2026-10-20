@@ -18,12 +18,40 @@ set(PRIMERPICKER_WARNING_FLAGS "" CACHE STRING
 
 include(CTest)
 
+# The graphical front-end (Qt 6 Widgets, 6.8 or later for the colour
+# scheme setting): AUTO builds it when Qt is found, ON requires it
+set(PRIMERPICKER_GUI "AUTO" CACHE STRING "Build the graphical front-end: AUTO, ON or OFF")
+set_property(CACHE PRIMERPICKER_GUI PROPERTY STRINGS AUTO ON OFF)
+set(PRIMERPICKER_QT_MINIMUM_VERSION 6.8)
+set(primerpicker_qt_components Widgets)
+if(BUILD_TESTING)
+  list(APPEND primerpicker_qt_components Test)
+endif()
+if(PRIMERPICKER_GUI STREQUAL "ON")
+  find_package(Qt6 ${PRIMERPICKER_QT_MINIMUM_VERSION} REQUIRED COMPONENTS ${primerpicker_qt_components})
+elseif(PRIMERPICKER_GUI STREQUAL "AUTO")
+  find_package(Qt6 ${PRIMERPICKER_QT_MINIMUM_VERSION} QUIET COMPONENTS ${primerpicker_qt_components})
+elseif(NOT PRIMERPICKER_GUI STREQUAL "OFF")
+  message(FATAL_ERROR "PRIMERPICKER_GUI must be AUTO, ON or OFF, not '${PRIMERPICKER_GUI}'")
+endif()
+if(Qt6_FOUND)
+  message(STATUS "Graphical front-end: built with Qt ${Qt6_VERSION}")
+else()
+  message(STATUS "Graphical front-end: not built (PRIMERPICKER_GUI=${PRIMERPICKER_GUI})")
+endif()
+
 add_subdirectory(src/core)
 add_subdirectory(src/cli)
+if(Qt6_FOUND)
+  add_subdirectory(src/gui)
+endif()
 
 if(BUILD_TESTING)
   add_subdirectory(tests/unit)
   add_subdirectory(tests/cli)
+  if(Qt6_FOUND)
+    add_subdirectory(tests/gui)
+  endif()
 endif()
 
 # Tests of the largest molecules (more than 2^32 bases: about 13 GB of

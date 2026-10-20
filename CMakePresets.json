@@ -83,7 +83,8 @@
         "CMAKE_CXX_COMPILER": "clang++-20",
         "CMAKE_CXX_FLAGS": "-stdlib=libc++ -fsanitize=address,undefined -fno-sanitize-recover=undefined -fno-omit-frame-pointer -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG",
         "CMAKE_EXE_LINKER_FLAGS": "-stdlib=libc++ -fsanitize=address,undefined",
-        "FETCHCONTENT_TRY_FIND_PACKAGE_MODE": "NEVER"
+        "FETCHCONTENT_TRY_FIND_PACKAGE_MODE": "NEVER",
+        "PRIMERPICKER_GUI": "OFF"
       }
     },
     {
@@ -95,7 +96,8 @@
       ],
       "toolchainFile": "${sourceDir}/cmake/mingw-w64-x86_64.cmake",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "PRIMERPICKER_GUI": "OFF"
       }
     },
     {
@@ -112,6 +114,7 @@
         "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,undefined",
         "BUILD_TESTING": "OFF",
         "PRIMERPICKER_FUZZ": "ON",
+        "PRIMERPICKER_GUI": "OFF",
         "CMAKE_CXX_FLAGS_RELWITHDEBINFO": "-O1 -g"
       }
     }
