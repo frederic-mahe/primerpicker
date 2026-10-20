@@ -57,3 +57,20 @@ TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
     CHECK(texts(menu_titled(window, u"M&olecule-Ops"_s).actions()) ==
           QList<QString>{u"Find &Enzymes"_s, u"&View/Edit"_s, u"&Save/Remove"_s});
 }
+
+TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]") {
+    auto const window = MainWindow{};
+    auto enabled = QList<QString>{};
+    for (auto const* const menu_action : window.menuBar()->actions()) {
+        auto const* const menu = menu_action->menu();
+        if (menu == nullptr) {
+            continue;
+        }
+        for (auto const* const action : menu->actions()) {
+            if (not action->isSeparator() and action->isEnabled()) {
+                enabled.append(action->text());
+            }
+        }
+    }
+    CHECK(enabled == QList<QString>{u"&Direct Entry..."_s, u"&Active Primer"_s});
+}

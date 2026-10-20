@@ -16,7 +16,8 @@ include(Catch)
 
 add_executable(gui_tests
   main.cpp
-  test_main_window.cpp)
+  test_main_window.cpp
+  test_direct_entry.cpp)
 target_link_libraries(gui_tests PRIVATE primerpicker_gui Qt6::Test Catch2::Catch2)
 target_compile_options(gui_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 

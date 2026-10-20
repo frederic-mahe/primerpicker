@@ -20,6 +20,8 @@ CheckOptions:
   readability-identifier-length.MinimumParameterNameLength: 3
   readability-identifier-length.MinimumLoopCounterNameLength: 3
   readability-implicit-bool-conversion.AllowPointerConditions: false
-  misc-include-cleaner.IgnoreHeaders: 'catch2/.*'
+  # Qt's public headers (QTest, QObject...) provide symbols declared in
+  # internal headers (qnamespace.h, qtestkeyboard.h): no mapping exists
+  misc-include-cleaner.IgnoreHeaders: 'catch2/.*;.*/Qt[A-Za-z]+/q[a-z0-9_]+\.h'
 HeaderFilterRegex: 'src/core/.*'
 WarningsAsErrors: ''
