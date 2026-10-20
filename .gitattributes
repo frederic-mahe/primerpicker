@@ -1,0 +1,13 @@
+# Line ends. Sources, scripts and tables keep LF on every platform (a
+# Windows checkout would otherwise turn them into CRLF, which breaks the
+# shell tests); the files PRIMER.exe reads and writes (DOS text, CRLF)
+# are kept byte for byte.
+* text=auto eol=lf
+*.PRN -text
+*.GB -text
+*.FA -text
+*.EMB -text
+*.SEQ -text
+*.CFG -text
+*.PD2 -text
+*.png binary
