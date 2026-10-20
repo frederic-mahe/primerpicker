@@ -1,14 +1,18 @@
 // libFuzzer harness: the command line (src/cli/cli.cpp). The input is a
 // list of arguments separated by newlines (the program name is added
 // first). An argument containing '/' is replaced by a recorded molecule
-// file, one containing '\\' by a recorded settings file (pd2.cfg), and
-// the harness runs in an empty directory: commands read those files or
-// find no file, never other files of the machine. Output is discarded.
+// file (the number of '/' chooses which), one containing '\\' by a
+// recorded settings file (pd2.cfg), and the argument after "--report"
+// by a file name in the harness's directory, which starts empty:
+// commands read those files or find no file, never other files of the
+// machine, and write reports only there (never over a recorded file).
+// Output is discarded.
 
 #include "cli/cli.hpp"
 #include "fuzz_input.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -26,8 +30,17 @@ namespace {
 
 constexpr auto max_arguments = std::size_t{8};
 constexpr auto program_name = std::string_view{"primerpicker"};
-constexpr auto molecule_file = std::string_view{PRIMERPICKER_LEGACY_DIR "/pairs/TEST600.GB"};
+// TEST600 (one '/'), then molecules with homology sites, a short one
+// and a circular one
+constexpr auto molecule_files = std::array{
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/pairs/TEST600.GB"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/TREP2.GB"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/map/TMAP660F.GB"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/map/TMAP100.GB"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/enzymes/TENZC.GB"}};
 constexpr auto settings_file = std::string_view{PRIMERPICKER_LEGACY_DIR "/config/PD2_RELAXED.CFG"};
+constexpr auto report_option = std::string_view{"--report"};
+constexpr auto report_file = std::string_view{"report.prn"};  // in the harness's directory
 
 // A stream buffer that discards what is written
 class NullBuffer : public std::streambuf {
@@ -40,8 +53,11 @@ auto arguments(std::string_view text) -> std::vector<std::string> {
     while (words.size() <= max_arguments) {
         auto const end = text.find('\n');
         auto word = std::string{text.substr(0, end)};
-        if (word.find('/') != std::string::npos) {
-            word = molecule_file;
+        auto const slashes = static_cast<std::size_t>(std::ranges::count(word, '/'));
+        if (words.back() == report_option) {
+            word = report_file;
+        } else if (slashes > 0) {
+            word = molecule_files.at((slashes - 1) % molecule_files.size());
         } else if (word.find('\\') != std::string::npos) {
             word = settings_file;
         }

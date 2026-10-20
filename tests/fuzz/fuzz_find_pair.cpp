@@ -5,16 +5,20 @@
 // max_molecule_length bases.
 
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/report/legacy_report.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "fuzz_input.hpp"
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
 #include <span>
+#include <string>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -99,5 +103,21 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
                   (previous.position_a == current.position_a and previous.position_b < current.position_b));
         }
     }
+
+    // the report: CR LF line ends, one row per printed pair after the
+    // list's header
+    if (ranked.empty()) {
+        return 0;
+    }
+    auto const best = std::min(ranked.size(), primerpicker::report::legacy_report_best_pairs);
+    auto const report = primerpicker::report::legacy_find_pair_report(
+        {.molecule_name = "FUZZ", .molecule_size = molecule.size(), .settings = settings, .best_pairs = std::span{ranked}.first(best)},
+        primerpicker::analysis::LegacyCriteria{},
+        std::chrono::year_month_day{std::chrono::year{2026}, std::chrono::October, std::chrono::day{20}});
+    check(primerpicker::fuzz::is_crlf_text(report));
+    auto const header_end = report.find("TmA/TmB\r\n\r\n");
+    check(header_end != std::string::npos);
+    auto const rows = report.substr(header_end + std::string{"TmA/TmB\r\n\r\n"}.size());
+    check(std::cmp_equal(std::ranges::count(rows, '\n'), best));
     return 0;
 }

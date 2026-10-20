@@ -42,4 +42,18 @@ inline auto is_upper_case_letters(std::string_view const sequence) noexcept -> b
     return std::ranges::all_of(sequence, [](char const letter) { return letter >= 'A' and letter <= 'Z'; });
 }
 
+// A legacy report: not empty, and every line ends with CR LF (no lone
+// LF, no missing final line end)
+inline auto is_crlf_text(std::string_view const text) noexcept -> bool {
+    if (not text.ends_with("\r\n")) {
+        return false;
+    }
+    for (auto index = text.find('\n'); index != std::string_view::npos; index = text.find('\n', index + 1)) {
+        if (index == 0 or text[index - 1] != '\r') {
+            return false;
+        }
+    }
+    return true;
+}
+
 }  // namespace primerpicker::fuzz

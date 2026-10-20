@@ -7,16 +7,20 @@
 
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/report/legacy_report.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "fuzz_input.hpp"
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <iterator>
 #include <optional>
 #include <span>
+#include <string>
+#include <string_view>
 #include <vector>
 
 namespace {
@@ -87,6 +91,14 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
         auto const& self = analysis.dimers.at(row).at(row);
         check(self.has_value() and self->dimer_3prime_matches == column->actual.dimer_3prime_matches and
               self->dimer_adjacent_bases == column->actual.dimer_adjacent_bases);
+    }
+
+    // the report: one section per field, CR LF line ends
+    auto const report = primerpicker::report::legacy_multi_primer_report(
+        fields, criteria, std::chrono::year_month_day{std::chrono::year{2026}, std::chrono::October, std::chrono::day{20}});
+    check(primerpicker::fuzz::is_crlf_text(report));
+    for (auto const name : std::string_view{"ABCD"}) {
+        check(report.find(std::string{"P R I M E R   "} + name) != std::string::npos);
     }
 
     // the fields in reverse order give the same cells, mirrored

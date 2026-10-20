@@ -28,7 +28,7 @@ workers=${3:-$(($(nproc) - 1))}
 check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
 
 # harness:weight (share of the workers)
-harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1"
+harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1 fuzz_homology_report:2"
 total_weight=0
 for entry in $harnesses; do
     total_weight=$((total_weight + ${entry#*:}))
@@ -61,7 +61,13 @@ fixed_seeds() {
             printf 'multi\nCTCAAAGGCTCAGACATCAG\nGATCCATGCAATGCTAGCTA\nACGTTGCAGGTCAAGCTTGC\nTTGGCCAAGTCGATCGGATC' \
                 > "$corpus/multi"
             printf 'multi\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_empty_field"
-            printf -- '--config\n\\cfg\nfind-pair\n--offsets\n40,40\n/m\n150\n400' > "$corpus/config_find_pair" ;;
+            printf -- '--config\n\\cfg\nfind-pair\n--offsets\n40,40\n/m\n150\n400' > "$corpus/config_find_pair"
+            printf 'homology\n//m\n51' > "$corpus/homology"
+            printf 'homology\n--false-priming\n--report\nr\n///m\n51' > "$corpus/homology_report"
+            printf 'analyze\n--report\nr\nGTAAAACGACGGCCAGT' > "$corpus/analyze_report"
+            printf 'pair\n--report\nr\nAAAAAAAAAAAA\nCCCCCCCCCCCC' > "$corpus/pair_report"
+            printf 'multi\n--report\nr\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_report"
+            printf 'find-pair\n--report\nr\n/m\n150\n400' > "$corpus/find_pair_report" ;;
         fuzz_multi_primer)
             # fields A to D (0x0F), each 20 bases: the 4-primer recording
             # of tests/legacy/multi/
