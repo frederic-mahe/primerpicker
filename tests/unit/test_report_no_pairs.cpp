@@ -100,6 +100,10 @@ TEST_CASE("Reports: a pair of primers without pairs between them", "[report]") {
 // column, and the padding width wrapped around (a 2 GB allocation). Not
 // recorded from PRIMER.exe: primerpicker keeps at least one space before
 // the position.
+// Since then, PRIMER.exe's layout of sites of 20 and 21 bases was
+// recorded (" 5'" in column 1, the bases ending in column 33;
+// tests/legacy/README.md, "Copies of the primer elsewhere"): this
+// longer site follows it, with at least one space.
 TEST_CASE("Reports: a homology site longer than the bases field", "[report]") {
     using primerpicker::analysis::HomologyKind;
     using primerpicker::analysis::HomologySite;
@@ -116,7 +120,7 @@ TEST_CASE("Reports: a homology site longer than the bases field", "[report]") {
                                                                       .tm_filter = HomologyTmFilter::exclude_at_most_zero,
                                                                       .sites = sites},
                                                                      date);
-    CHECK(report.ends_with("             5'ACGTACGGTCAGTCCATGCAAGTCGATTGCAGTCCA....3' 330            80   \r\n"));
+    CHECK(report.ends_with(" 5' ACGTACGGTCAGTCCATGCAAGTCGATTGCAGTCCA....3'    330            80   \r\n"));
 }
 
 // The same wrap-around, in the criteria rows: a settings file may hold

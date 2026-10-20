@@ -914,7 +914,10 @@ auto homology(HomologyArguments const& arguments, LegacySystemDefaults const& de
         .tm_filter = defaults.exclude_tm_at_most_zero ? HomologyTmFilter::exclude_at_most_zero
                                                       : HomologyTmFilter::keep_all,
         .order = defaults.sort_homologies_by_tm ? HomologyOrder::by_tm : HomologyOrder::by_position};
-    auto const sites = primerpicker::analysis::legacy_homology_sites(primer, molecule->sequence, arguments.kind, settings);
+    auto const own_site = primerpicker::sequence::PrimerLocation{
+        .position = *position, .length = length, .strand = primerpicker::sequence::Strand::top};
+    auto const sites =
+        primerpicker::analysis::legacy_homology_sites(primer, molecule->sequence, own_site, arguments.kind, settings);
     auto const report = primerpicker::report::HomologyReport{.molecule_name = molecule->name,
                                                              .molecule_size = molecule->sequence.size(),
                                                              .primer = primer,

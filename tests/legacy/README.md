@@ -1173,15 +1173,14 @@ Predicted before recording from the TLIN case, for both settings.
 5 TRUN reports and both circular reports are reproduced byte for byte.
 
 **Primers with a copy elsewhere.** Where primers A and B have the same
-sequence (regions 1, 3 and 4), some primers have a second full-length
-(or 19-base) match in the molecule, at the other primer's site: there,
-PRIMER.exe's lists differ (two runs: the primer B count, the pair count;
-three reports: the order of the pairs). primerpicker's homology search
-leaves out every full-length match as the primer's own site, which
-these recordings suggest is not what PRIMER.exe does (see "Copies of
-the primer elsewhere"; `note` = `full-length-copy` in
-`find_pair_3prime_runs.tsv`; reports in
-`reports/find_pair_reports_pending.tsv`).
+sequence (regions 1, 3 and 4), primers have full-length (or 19-base)
+copies at the other primer's site, which count as false-priming sites
+(see "Copies of the primer elsewhere"): with that, all 8 TRUN reports
+are reproduced byte for byte. Two counts with criterion 4 remain
+unexplained (`note` = `full-length-copy` in
+`find_pair_3prime_runs.tsv`): region 3, 282 pairs where primerpicker
+finds 300 (same primers A and B); region 4, 24 primers B and 117 pairs
+where primerpicker finds 25 and 118.
 
 **Match Active Primer** applies the same rule: the Find Matching Primer
 lists of primer A at 50 (CTCAATGACGTGCGGTCGAA) for targets 1020 and
@@ -1191,6 +1190,34 @@ the primers B at 1019 (AAAA), 1020 (AAA), 1819 (AAAA), 1820 and 1860
 (AAA), as predicted; `search/match_3prime_runs.tsv` lists the positions
 (`tests/unit/test_legacy_match_3prime_runs.cpp`). The format of the
 Match Active Primer report is recorded, not reproduced yet.
+
+## Copies of the primer elsewhere (recorded 2026-10-20)
+
+`homology/map/TCOPY.GB` (1000 bases): the primer CTCAATGACGTGCGGTTAGT
+at 51, and full-length copies at 300 and 699 (top strand) and 500 to
+519 and 850 to 869 (complement strand; the copies of 19 bases planted
+at 700 and 850 became full-length by chance, the neighbouring base
+completing them); `homology/map/TCOPY2.GB`: the same primer at 51,
+copies of its last 19 bases at 700 (top) and 850 to 868 (complement),
+and of its last 18 at 401, each with a different neighbouring base.
+Uniqueness and False Priming reports of the primers at 51 and 300, and
+with `config/PD2_LENGTH25.CFG` (a 25-base primer at 51);
+`reports/homology_reports_copies.tsv` lists them, all reproduced byte
+for byte (`tests/unit/test_legacy_homology_copies.cpp`,
+`tests/cli/test_homology_copies.sh`):
+- only the primer's own site (its position, its strand) is left out:
+  every other full-length match is listed, on both strands, in
+  Uniqueness and in False Priming (for the primer at 300, the copy at
+  51 is listed); the False Priming term of Find Pair counts them too
+  (this reproduces the Find Pair reports of `search/TRUN.GB`, see "Find
+  Pair and runs at the 3' end");
+- a site of 19 bases fills the 19-character field (no dots); a longer
+  site is printed with ` 5'` in column 1, then spaces, the bases still
+  ending in column 33 (20 and 21 bases recorded).
+primerpicker's homology search takes the primer's location where it is
+known (CLI `homology`, Find Pair); without it, it takes every
+full-length match for the primer's own site, as before (the earlier
+recordings have one copy only).
 
 ## Restriction enzymes (recorded 2026-10-18)
 

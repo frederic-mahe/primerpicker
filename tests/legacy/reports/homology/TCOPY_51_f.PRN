@@ -1,0 +1,38 @@
+False Priming Report                                  Report Date: 10/20/26
+
+
+---------------------------------------------------------------------------
+
+Primer Sequence:  5'-CTCAATGACGTGCGGTTAGT-3'
+                  Bp pos:    51
+
+Source molecule:  TCOPY                              1000 bps
+
+
+---------------------------------------------------------------------------
+
+
+False priming site criteria defined:
+
+     3' end homologies (>= 6 bases) between primer and template
+     Sites with melting temperatures <= 0 C are not reported
+
+
+
+Molecule map with primer location (P) and false priming sites marked
+
+  P>
+=======================================================================
+                        >                           >
+                                        <                        <
+
+
+
+False priming sites found:
+
+             Homologous bases                   Bp Pos          Tm C
+
+ 5'           CTCAATGACGTGCGGTTAGT                300            69   
+ 5'           CTCAATGACGTGCGGTTAGT                519 (C)        69   
+ 5'           CTCAATGACGTGCGGTTAGT                699            69   
+ 5'           CTCAATGACGTGCGGTTAGT                869 (C)        69   

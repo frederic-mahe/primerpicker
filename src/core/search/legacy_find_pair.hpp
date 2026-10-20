@@ -102,7 +102,9 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
         if (not analysis::evaluate(actual, criteria).all() or analysis::run_at_3prime_end(*primer) >= criteria.reject_run_length) {
             continue;
         }
-        auto const sites = analysis::legacy_homology_sites(*primer, molecule, analysis::HomologyKind::false_priming);
+        auto const sites = analysis::legacy_homology_sites(
+            *primer, molecule, {.position = position, .length = length, .strand = strand},
+            analysis::HomologyKind::false_priming);
         auto const highest_tm = sites.empty() ? std::nullopt : std::optional{sites.front().tm_celsius};
         possible.push_back({.position = position, .sequence = std::move(*primer), .actual = actual, .false_priming_tm = highest_tm});
     }

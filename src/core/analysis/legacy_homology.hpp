@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <optional>
 #include <span>
 #include <vector>
 
@@ -78,8 +79,24 @@ constexpr auto truncated_tm(std::span<sequence::Nucleotide const> const stretch)
 
 // Maximal matches of the primer on one strand, in primer then molecule
 // order
+// The primer's own site, when its location is known: the full-length
+// match there is left out, and full-length matches elsewhere are listed
+// (tests/legacy/README.md, "Copies of the primer elsewhere"); without
+// it, every full-length match is taken for the own site
+struct OwnSite {
+    std::optional<sequence::PrimerLocation> location;
+
+    [[nodiscard]] constexpr auto is(std::size_t const length, std::size_t const primer_length, Strand const strand,
+                                    std::size_t const position) const noexcept -> bool {
+        if (length != primer_length) {
+            return false;
+        }
+        return not location.has_value() or (location->strand == strand and location->position == position);
+    }
+};
+
 constexpr auto append_sites(std::span<sequence::Nucleotide const> const primer, StrandView const& strand,
-                            HomologyKind const kind, HomologyTmFilter const tm_filter,
+                            HomologyKind const kind, HomologyTmFilter const tm_filter, OwnSite const& own_site,
                             std::vector<HomologySite>& sites) -> void {
     auto const min_length = kind == HomologyKind::uniqueness ? min_uniqueness_length : min_false_priming_length;
     for (auto start = std::size_t{0}; start < primer.size(); ++start) {
@@ -95,7 +112,7 @@ constexpr auto append_sites(std::span<sequence::Nucleotide const> const primer, 
             }
             auto const reaches_3prime_end = start + length == primer.size();
             // a full-length match is the primer's own site
-            if (length < min_length or length == primer.size() or
+            if (length < min_length or own_site.is(length, primer.size(), strand.strand(), strand.position(offset)) or
                 (kind == HomologyKind::false_priming and not reaches_3prime_end)) {
                 continue;
             }
@@ -130,6 +147,26 @@ inline auto sort_by_position(std::vector<HomologySite>& sites, HomologyKind cons
 
 }  // namespace detail
 
+namespace detail {
+
+inline auto homology_sites(std::span<sequence::Nucleotide const> const primer,
+                           std::span<sequence::Nucleotide const> const molecule, detail::OwnSite const& own_site,
+                           HomologyKind const kind, HomologySettings const& settings) -> std::vector<HomologySite> {
+    auto sites = std::vector<HomologySite>{};
+    for (auto const strand : {Strand::top, Strand::complement}) {
+        detail::append_sites(primer, detail::StrandView{molecule, strand}, kind, settings.tm_filter, own_site, sites);
+    }
+    detail::sort_by_position(sites, kind);
+    if (settings.order == HomologyOrder::by_tm) {
+        std::ranges::stable_sort(sites, [](HomologySite const& lhs, HomologySite const& rhs) {
+            return lhs.tm_celsius > rhs.tm_celsius;
+        });
+    }
+    return sites;
+}
+
+}  // namespace detail
+
 // The Uniqueness or False Priming sites of Primer Designer 2.0, with
 // its default settings (tests/legacy/README.md, "Uniqueness and false
 // priming"): exact maximal matches on both strands, the primer's own
@@ -146,17 +183,20 @@ inline auto sort_by_position(std::vector<HomologySite>& sites, HomologyKind cons
                                                    std::span<sequence::Nucleotide const> const molecule,
                                                    HomologyKind const kind, HomologySettings const& settings = {})
     -> std::vector<HomologySite> {
-    auto sites = std::vector<HomologySite>{};
-    for (auto const strand : {Strand::top, Strand::complement}) {
-        detail::append_sites(primer, detail::StrandView{molecule, strand}, kind, settings.tm_filter, sites);
-    }
-    detail::sort_by_position(sites, kind);
-    if (settings.order == HomologyOrder::by_tm) {
-        std::ranges::stable_sort(sites, [](HomologySite const& lhs, HomologySite const& rhs) {
-            return lhs.tm_celsius > rhs.tm_celsius;
-        });
-    }
-    return sites;
+    return detail::homology_sites(primer, molecule, detail::OwnSite{.location = std::nullopt}, kind, settings);
+}
+
+// The same, for a primer whose location on the molecule is known: only
+// the full-length match at that location is the primer's own site;
+// copies of the primer elsewhere are listed (tests/legacy/README.md,
+// "Copies of the primer elsewhere"). Not noexcept: as above.
+// C++26 refactoring: make constexpr (std::ranges::stable_sort)
+[[nodiscard]] inline auto legacy_homology_sites(std::span<sequence::Nucleotide const> const primer,
+                                                   std::span<sequence::Nucleotide const> const molecule,
+                                                   sequence::PrimerLocation const& own_site, HomologyKind const kind,
+                                                   HomologySettings const& settings = {})
+    -> std::vector<HomologySite> {
+    return detail::homology_sites(primer, molecule, detail::OwnSite{.location = own_site}, kind, settings);
 }
 
 }  // namespace primerpicker::analysis

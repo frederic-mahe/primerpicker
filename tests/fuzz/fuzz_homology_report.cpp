@@ -7,6 +7,7 @@
 #include "core/analysis/legacy_homology.hpp"
 #include "core/report/legacy_report.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 #include "fuzz_input.hpp"
 
 #include <algorithm>
@@ -74,7 +75,9 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
         .order = (flags & 4U) == 0 ? HomologyOrder::by_tm : HomologyOrder::by_position};
 
     auto const primer = std::span{molecule}.subspan(position - 1, length);
-    auto const sites = primerpicker::analysis::legacy_homology_sites(primer, molecule, kind, settings);
+    auto const own_site = primerpicker::sequence::PrimerLocation{
+        .position = position, .length = length, .strand = primerpicker::sequence::Strand::top};
+    auto const sites = primerpicker::analysis::legacy_homology_sites(primer, molecule, own_site, kind, settings);
     auto const report = primerpicker::report::legacy_homology_report(
         {.molecule_name = "FUZZ",
          .molecule_size = molecule.size(),

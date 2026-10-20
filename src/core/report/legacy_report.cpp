@@ -425,6 +425,8 @@ constexpr auto map_scale_divisor = std::size_t{73};
 constexpr auto map_site_margin = std::size_t{3};  // the column of position 1
 constexpr auto homology_bases_width = std::size_t{19};  // dots, then the matching bases
 constexpr auto homology_position_end = std::size_t{53};  // one past the "Bp Pos" column
+constexpr auto homology_bases_end = std::size_t{34};      // one past the bases' last column
+constexpr auto long_site_prefix = std::string_view{" 5'"};
 constexpr auto homology_tm_width = std::size_t{10};
 
 auto bases_per_character(std::size_t const molecule_size) -> std::size_t {
@@ -461,8 +463,15 @@ auto homology_map(HomologyReport const& homology) -> std::string {
 // "(C)" on the complement strand, the Tm
 auto homology_row(HomologyReport const& homology, analysis::HomologySite const& site) -> std::string {
     auto const bases = letters(homology.primer.subspan(site.primer_start, site.length));
-    auto row = std::format("             5'{:.>{}}{}", bases, homology_bases_width,
-                           homology.kind == analysis::HomologyKind::uniqueness ? "....3'" : "      ");
+    auto const three_prime = homology.kind == analysis::HomologyKind::uniqueness ? std::string_view{"....3'"}
+                                                                              : std::string_view{"      "};
+    // a site longer than the field: " 5'" in column 1, the bases still
+    // ending in the field's last column (20 and 21 bases recorded)
+    auto row = bases.size() <= homology_bases_width
+                   ? std::format("             5'{:.>{}}{}", bases, homology_bases_width, three_prime)
+                   : std::format(" 5'{:>{}}{}", bases, right_aligned_width(long_site_prefix.size(), bases.size(),
+                                                                         homology_bases_end),
+                                 three_prime);
     auto const position = std::to_string(site.position);
     row += std::format("{:>{}}", position, right_aligned_width(row.size(), position.size(), homology_position_end));
     row += site.strand == sequence::Strand::complement ? " (C)" : "    ";

@@ -1,0 +1,7 @@
+# file	molecule	position	kind	config
+homology/TCOPY_51_u.PRN	homology/map/TCOPY.GB	51	uniqueness	-
+homology/TCOPY_51_f.PRN	homology/map/TCOPY.GB	51	false_priming	-
+homology/TCOPY_300_u.PRN	homology/map/TCOPY.GB	300	uniqueness	-
+homology/TCOPY_51_u_LENGTH25.PRN	homology/map/TCOPY.GB	51	uniqueness	PD2_LENGTH25.CFG
+homology/TCOPY2_51_u.PRN	homology/map/TCOPY2.GB	51	uniqueness	-
+homology/TCOPY2_51_f.PRN	homology/map/TCOPY2.GB	51	false_priming	-
