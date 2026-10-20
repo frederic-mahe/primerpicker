@@ -7,6 +7,11 @@
 // commands read those files or find no file, never other files of the
 // machine, and write reports only there (never over a recorded file).
 // Output is discarded.
+// The commands get copies of the recorded files, made in the harness's
+// directory at start-up, and each argument ends at its first NUL byte,
+// as the command line sees it: an argument "--report<NUL>x" made the
+// next argument a recorded file's path, and a report was written over
+// that file (found 2026-10-20).
 
 #include "cli/cli.hpp"
 #include "fuzz_input.hpp"
@@ -48,18 +53,24 @@ protected:
     auto overflow(int_type const character) -> int_type override { return traits_type::not_eof(character); }
 };
 
+// The name of the copy of a recorded file, in the harness's directory
+auto copy_name(std::string_view const recorded) -> std::string {
+    return std::filesystem::path{recorded}.filename().string();
+}
+
 auto arguments(std::string_view text) -> std::vector<std::string> {
     auto words = std::vector<std::string>{std::string{program_name}};
     while (words.size() <= max_arguments) {
         auto const end = text.find('\n');
-        auto word = std::string{text.substr(0, end)};
+        auto const line = text.substr(0, end);
+        auto word = std::string{line.substr(0, line.find('\0'))};
         auto const slashes = static_cast<std::size_t>(std::ranges::count(word, '/'));
         if (words.back() == report_option) {
             word = report_file;
         } else if (slashes > 0) {
-            word = molecule_files.at((slashes - 1) % molecule_files.size());
+            word = copy_name(molecule_files.at((slashes - 1) % molecule_files.size()));
         } else if (word.find('\\') != std::string::npos) {
-            word = settings_file;
+            word = copy_name(settings_file);
         }
         words.push_back(std::move(word));
         if (end == std::string_view::npos) {
@@ -79,6 +90,11 @@ extern "C" auto LLVMFuzzerInitialize(int* /*argc*/, char*** /*argv*/) -> int {
     auto const empty = std::filesystem::temp_directory_path() / "primerpicker_fuzz_cli";
     std::filesystem::create_directories(empty);
     std::filesystem::current_path(empty);
+    for (auto const recorded : molecule_files) {
+        std::filesystem::copy_file(recorded, copy_name(recorded), std::filesystem::copy_options::overwrite_existing);
+    }
+    std::filesystem::copy_file(settings_file, copy_name(settings_file),
+                               std::filesystem::copy_options::overwrite_existing);
     return 0;
 }
 
