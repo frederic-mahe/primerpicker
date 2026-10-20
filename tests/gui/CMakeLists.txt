@@ -4,13 +4,15 @@
 
 # Catch2 is set up by tests/unit. A system Catch2 is found again here
 # (imported targets are local to a directory), and puts its CMake
-# module (Catch.cmake) on the module path; a downloaded one is global.
+# module (Catch.cmake) on the module path; a downloaded one is global,
+# and its module is in its sources.
 if(NOT TARGET Catch2::Catch2)
   find_package(Catch2 3 REQUIRED)
-endif()
-if(NOT COMMAND catch_discover_tests)
+else()
   FetchContent_GetProperties(Catch2)
-  list(APPEND CMAKE_MODULE_PATH "${catch2_SOURCE_DIR}/extras")
+  if(catch2_SOURCE_DIR)
+    list(APPEND CMAKE_MODULE_PATH "${catch2_SOURCE_DIR}/extras")
+  endif()
 endif()
 include(Catch)
 
