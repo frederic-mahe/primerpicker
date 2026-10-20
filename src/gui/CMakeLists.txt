@@ -3,6 +3,7 @@
 # computed by the core library.
 add_library(primerpicker_gui
   analysis_view.cpp
+  colour_scheme.cpp
   direct_entry_dialog.cpp
   from_molecule_dialog.cpp
   main_window.cpp)
@@ -24,3 +25,4 @@ add_executable(primerpicker-gui WIN32 MACOSX_BUNDLE
   main.cpp)
 target_link_libraries(primerpicker-gui PRIVATE primerpicker_gui)
 target_compile_options(primerpicker-gui PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
+target_compile_definitions(primerpicker-gui PRIVATE PRIMERPICKER_VERSION="${PROJECT_VERSION}")

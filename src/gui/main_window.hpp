@@ -4,16 +4,21 @@
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
+#include "gui/colour_scheme.hpp"
 #include "gui/direct_entry_dialog.hpp"
 #include "gui/from_molecule_dialog.hpp"
 
+#include <QActionGroup>
 #include <QLabel>
 #include <QMainWindow>
+#include <QMenu>
 #include <QObject>
+#include <QSettings>
 #include <QStackedWidget>
 #include <QString>
 
 #include <cstddef>
+#include <functional>
 #include <optional>
 #include <vector>
 
@@ -34,25 +39,37 @@ struct LoadedMolecule {
 };
 
 // The main window: Primer Designer's main menu as a menu bar. Items
-// that are not implemented yet are disabled.
+// that are not implemented yet are disabled. With settings, the window
+// keeps its own preferences there (the colour scheme); Primer
+// Designer's settings come from a pd2.cfg file (load_settings).
 class MainWindow final : public QMainWindow {
     Q_OBJECT
 
 public:
+    // without settings: preferences are not kept
     MainWindow();
+    explicit MainWindow(QSettings& settings);
 
     // Loads a molecule file (GenBank, FASTA or plain sequence) as the
     // molecule primers are made from; the error, if it was not loaded
     [[nodiscard]] auto load_molecule(QString const& path) -> std::optional<QString>;
 
+    // Loads Primer Designer's settings from a pd2.cfg file (criteria,
+    // primer length, tolerances, search ranges and weights); the error,
+    // if it was not loaded (the settings are then kept)
+    [[nodiscard]] auto load_settings(QString const& path) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
+    void add_colour_scheme_menu(QMenu& parent);
+    void choose_colour_scheme(ColourScheme scheme);
     void use_direct_entry();
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
     void use_from_molecule();
     void analyze_active_primer();
 
+    std::optional<std::reference_wrapper<QSettings>> settings_;
     io::LegacySystemDefaults defaults_;
     std::optional<ActivePrimer> active_primer_;
     std::optional<LoadedMolecule> molecule_;
@@ -62,6 +79,8 @@ private:
     QLabel no_primer_;
     AnalysisView analysis_;
     QLabel molecule_label_;
+    QLabel settings_label_;
+    QActionGroup colour_schemes_;
     DirectEntryDialog direct_entry_;
     FromMoleculeDialog from_molecule_;
 };

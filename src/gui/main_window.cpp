@@ -1,11 +1,14 @@
 #include "gui/main_window.hpp"
 
 #include "core/io/molecule_file.hpp"
+#include "core/io/pd2_cfg.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 #include "core/sequence/topology.hpp"
+#include "gui/colour_scheme.hpp"
 
 #include <QAction>
+#include <QAnyStringView>
 #include <QApplication>
 #include <QDialog>
 #include <QFile>
@@ -20,11 +23,16 @@
 #include <QStatusBar>
 #include <QStringView>
 
+#include <algorithm>
+#include <array>
+#include <bit>
 #include <cstddef>
 #include <initializer_list>
+#include <iterator>
 #include <optional>
 #include <string_view>
 #include <utility>
+#include <vector>
 
 using namespace Qt::StringLiterals;
 
@@ -60,6 +68,8 @@ void add_disabled_items(QMenu& menu, std::initializer_list<QString> const texts)
     }
 }
 
+constexpr auto colour_scheme_key = QAnyStringView{u"appearance/colour_scheme"};
+
 auto topology_name(sequence::Topology const topology) -> QString {
     switch (topology) {
         case sequence::Topology::linear:
@@ -73,7 +83,7 @@ auto topology_name(sequence::Topology const topology) -> QString {
 
 }  // namespace
 
-MainWindow::MainWindow() : direct_entry_{*this}, from_molecule_{*this} {
+MainWindow::MainWindow() : colour_schemes_{this}, direct_entry_{*this}, from_molecule_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
@@ -84,8 +94,19 @@ MainWindow::MainWindow() : direct_entry_{*this}, from_molecule_{*this} {
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
+    settings_label_.setObjectName(u"settings_label"_s);
+    statusBar()->addPermanentWidget(&settings_label_);
     QObject::connect(&direct_entry_, &QDialog::accepted, this, &MainWindow::use_direct_entry);
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
+}
+
+MainWindow::MainWindow(QSettings& settings) : MainWindow() {
+    settings_ = settings;
+    auto const scheme = colour_scheme_from_name(settings.value(colour_scheme_key).toString());
+    for (auto* const action : colour_schemes_.actions()) {
+        action->setChecked(action->data().toString() == colour_scheme_name(scheme));
+    }
+    apply_colour_scheme(scheme);
 }
 
 // The menus of PRIMER.exe (proposal §1.1); & marks the Alt+letter
@@ -106,6 +127,9 @@ void MainWindow::add_legacy_menus() {
                        {u"&Position"_s, u"&Length"_s, u"5'-&extension"_s, u"&Criteria"_s, u"M&utagenize"_s});
     modify.addSeparator();
     add_disabled_items(modify, {u"&System Defaults"_s});
+    // not in PRIMER.exe: the window's colours (proposal §3.2)
+    modify.addSeparator();
+    add_colour_scheme_menu(modify);
 
     auto& analyze = *menu_bar.addMenu(u"&Analyze"_s);
     auto const& active_primer = add_item(analyze, {.text = u"&Active Primer", .name = u"analyze_active_primer"});
@@ -117,6 +141,55 @@ void MainWindow::add_legacy_menus() {
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
+}
+
+void MainWindow::add_colour_scheme_menu(QMenu& parent) {
+    auto& menu = *parent.addMenu(u"Colour Sc&heme"_s);
+    struct SchemeItem {
+        QStringView text;
+        ColourScheme scheme = ColourScheme::system;
+    };
+    constexpr auto items = std::array{SchemeItem{.text = u"&System", .scheme = ColourScheme::system},
+                                      SchemeItem{.text = u"&Light", .scheme = ColourScheme::light},
+                                      SchemeItem{.text = u"&Dark", .scheme = ColourScheme::dark}};
+    for (auto const& item : items) {
+        auto& action = *menu.addAction(item.text.toString());
+        auto const name = colour_scheme_name(item.scheme);
+        action.setObjectName(u"colour_scheme_"_s + name);
+        action.setData(name);
+        action.setCheckable(true);
+        action.setChecked(item.scheme == ColourScheme::system);
+        colour_schemes_.addAction(&action);
+        QObject::connect(&action, &QAction::triggered, this, [this, scheme = item.scheme] {
+            choose_colour_scheme(scheme);
+        });
+    }
+}
+
+void MainWindow::choose_colour_scheme(ColourScheme const scheme) {
+    apply_colour_scheme(scheme);
+    if (settings_.has_value()) {
+        settings_->get().setValue(colour_scheme_key, colour_scheme_name(scheme));
+    }
+}
+
+auto MainWindow::load_settings(QString const& path) -> std::optional<QString> {
+    auto file = QFile{path};
+    if (not file.open(QIODevice::ReadOnly)) {
+        return u"cannot read %1"_s.arg(path);
+    }
+    auto const contents = file.readAll();
+    auto bytes = std::vector<std::byte>{};
+    bytes.reserve(static_cast<std::size_t>(contents.size()));
+    std::ranges::transform(contents, std::back_inserter(bytes),
+                           [](char const character) { return std::bit_cast<std::byte>(character); });
+    auto const parsed = io::parse_pd2_cfg(bytes);
+    if (not parsed.defaults.has_value()) {
+        return u"%1: not a Primer Designer 2.0 settings file (pd2.cfg)"_s.arg(path);
+    }
+    defaults_ = *parsed.defaults;
+    settings_label_.setText(u"Settings: %1"_s.arg(QFileInfo{path}.fileName()));
+    return std::nullopt;
 }
 
 auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
