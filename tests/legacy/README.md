@@ -1178,10 +1178,19 @@ sequence (regions 1, 3 and 4), some primers have a second full-length
 PRIMER.exe's lists differ (two runs: the primer B count, the pair count;
 three reports: the order of the pairs). primerpicker's homology search
 leaves out every full-length match as the primer's own site, which
-these recordings suggest is not what PRIMER.exe does. Not probed
-further (`note` = `full-length-copy` in `find_pair_3prime_runs.tsv`;
-reports in `reports/find_pair_reports_pending.tsv`). Not probed either:
-whether Match Active Primer applies the same 3'-end rule.
+these recordings suggest is not what PRIMER.exe does (see "Copies of
+the primer elsewhere"; `note` = `full-length-copy` in
+`find_pair_3prime_runs.tsv`; reports in
+`reports/find_pair_reports_pending.tsv`).
+
+**Match Active Primer** applies the same rule: the Find Matching Primer
+lists of primer A at 50 (CTCAATGACGTGCGGTCGAA) for targets 1020 and
+1820 of `search/TRUN.GB` (`tools/print_report.sh match`, form
+defaults), printed to disk (`reports/match/TRUN_50_*.PRN`), leave out
+the primers B at 1019 (AAAA), 1020 (AAA), 1819 (AAAA), 1820 and 1860
+(AAA), as predicted; `search/match_3prime_runs.tsv` lists the positions
+(`tests/unit/test_legacy_match_3prime_runs.cpp`). The format of the
+Match Active Primer report is recorded, not reproduced yet.
 
 ## Restriction enzymes (recorded 2026-10-18)
 

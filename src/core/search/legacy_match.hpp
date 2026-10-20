@@ -71,7 +71,11 @@ constexpr auto absolute_difference(int const lhs, int const rhs) noexcept -> int
         auto const actual_b = analysis::legacy_actual_values(*primer_b);
         auto const pair = analysis::PrimerPair{.first = primer_a, .second = *primer_b};
         auto const inter_3prime = analysis::dimer_at_3prime_end(pair);
+        // as Find Pair, also a run at the 3' end that reaches the runs
+        // criterion (tests/legacy/README.md, "Find Pair and runs at the 3'
+        // end")
         auto const matches = analysis::evaluate(actual_b, criteria).all() and
+                             analysis::run_at_3prime_end(*primer_b) < criteria.reject_run_length and
                              detail::absolute_difference(actual_a.gc_percent, actual_b.gc_percent) <=
                                  settings.gc_tolerance_percent and
                              detail::absolute_difference(actual_a.tm_celsius, actual_b.tm_celsius) <=

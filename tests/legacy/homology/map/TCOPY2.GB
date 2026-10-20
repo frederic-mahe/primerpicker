@@ -1,0 +1,22 @@
+LOCUS       TCOPY2       1000 bp    DNA     linear
+DEFINITION  Random test molecule (seed 7704, GC 0.5,0.5), copies CTCAATGACGTGCGGTTAGT@51 ATCAATGACGTGCGGTTAGT@699 ACTAACCGCACGTCATTGAT@850 ACAATGACGTGCGGTTAGT@400.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ctctactaag agtaacgttt tgaatacggt atgtctaagt acgaagacct ctcaatgacg
+       61 tgcggttagt ttgacagttc gataacagtg aacaggttgg acacagcatt cattccggta
+      121 gctaatagga ttgacctaac taaatctcat gcaccgaacg tcgcgttgct ctgcattcca
+      181 atcaagtttc atagtataat gctgggaggg gaacgttcag ctctaagtca tactaccatg
+      241 tacccatttt aacatgtgtt gaattgaaag catcgaggcg gaaattcaat ttgctggtag
+      301 ggttatttgt gtatctctac gcttaagatt ccttacacgt ctattcatga gcgcatgact
+      361 atttgagctc taacgtgaac agcggtgtct tactagtgca caatgacgtg cggttagtct
+      421 gaatgtgcga tgaatagctc acctacccta ataaaacttg aagagataat agtatcccga
+      481 gttttcgaga aacgacacaa attcagtacc tagatgctaa cacttgcgca atgaggtaga
+      541 cgctgttgcg aattcgcaac gccatacaaa cgccctcacg ctttgcagca taccgtacac
+      601 gggaaacccg gggataatcc agacggatat cgaccaacac cctaggaacg ggagcttatc
+      661 cagcactatt agcagaaatc cccacgccaa cgggaagcat caatgacgtg cggttagtgg
+      721 tgggacagtc tcggagcggt ggccacctag ggctcttcga caggaatcag atgggaaggg
+      781 cgggcaagta accagcgcga ttgatgccct catgggtgga aaaggaatat cgcattgtaa
+      841 gcgcgtgcta ctaaccgcac gtcattgatc ctaactttcc taatgcaccg agcaacgctc
+      901 cgcgctcttt tgacgggaac aactctcggg tgtggcgttc atcactatcg ctatcagttg
+      961 aaaagctaca aaattatggc tccctcctcg accttcctaa
+//

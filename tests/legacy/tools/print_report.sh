@@ -14,6 +14,9 @@
 #                                     the Find Primer Pair list
 #   homology MOLECULE POSITION KIND   Uniqueness (u) or False Priming (f)
 #                                     of a top-strand primer at POSITION
+#   match MOLECULE POSITION TARGET    the Find Matching Primer list of the
+#                                     top-strand primer at POSITION, for
+#                                     TARGET (the form's other defaults)
 #
 # The keys reaching each screen are those of inspect_primer.sh,
 # pair_direct.sh, find_pair.sh and homology_screen.sh; then p (the Find
@@ -47,6 +50,10 @@ case "$kind" in
         pd2_files="$1 $2"
         path="space down down down down down down enter down enter enter down down enter right right down enter 1 enter 2 enter"
         print_keys=", , , , p , , $to_disk" ;;
+    match)
+        molecule=$1
+        path="space enter enter down down ${CFG:+down }enter , , enter $(keys "$2") enter enter enter enter s , , down down enter $(keys "$3") enter enter enter enter enter enter enter enter , , , ,"
+        print_keys=", , p , , $to_disk" ;;
     find_pair)
         molecule=$1
         path="space down down down enter enter down down ${CFG:+down }enter enter $(keys "$2") enter enter enter enter $(keys "$3") enter enter enter enter enter enter , , , , space"
@@ -56,7 +63,7 @@ case "$kind" in
         path="space enter enter down down ${CFG:+down }enter , , enter $(keys "$2") enter enter enter enter i , , $3"
         print_keys=", , right , , enter , , $to_disk" ;;
     *)
-        echo "KIND must be inspect, pair, pair_files, find_pair or homology" >&2
+        echo "KIND must be inspect, pair, pair_files, find_pair, homology or match" >&2
         exit 1 ;;
 esac
 

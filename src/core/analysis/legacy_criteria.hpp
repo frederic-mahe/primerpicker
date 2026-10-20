@@ -105,6 +105,20 @@ constexpr auto directional_dimer_at_3prime_end(PrimerPair const& pair_of_primers
                         PrimerPair{.first = pair_of_primers.second, .second = pair_of_primers.first}));
 }
 
+// The run of one nucleotide at the 3' end of a primer (1 when the last
+// two nucleotides differ): Find Pair and Match Active Primer reject a
+// primer whose 3'-end run reaches the runs criterion
+// (tests/legacy/README.md, "Find Pair and runs at the 3' end"). Requires
+// a non-empty primer.
+[[nodiscard]] constexpr auto run_at_3prime_end(std::span<sequence::Nucleotide const> const primer) noexcept
+    -> std::size_t {
+    assert(not primer.empty());
+    auto const last = primer.back();
+    auto const run = std::ranges::find_if(primer.rbegin(), primer.rend(),
+                                          [last](sequence::Nucleotide const nucleotide) { return nucleotide != last; });
+    return static_cast<std::size_t>(std::distance(primer.rbegin(), run));
+}
+
 // "Runs": the longest run of one nucleotide, not counting the run at
 // the 3' end (zero for a homopolymer)
 [[nodiscard]] constexpr auto longest_run_before_3prime_end(std::span<sequence::Nucleotide const> const primer) noexcept -> std::size_t {

@@ -84,16 +84,6 @@ constexpr auto difference(int const lhs, int const rhs) noexcept -> int {
     return lhs > rhs ? lhs - rhs : rhs - lhs;
 }
 
-// The run of one base at the 3' end of a primer (1 when the last two
-// bases differ). Requires a non-empty primer.
-constexpr auto run_at_3prime_end(std::span<sequence::Nucleotide const> const primer) noexcept -> std::size_t {
-    assert(not primer.empty());
-    auto const last = primer.back();
-    auto const run = std::ranges::find_if(primer.rbegin(), primer.rend(),
-                                          [last](sequence::Nucleotide const nucleotide) { return nucleotide != last; });
-    return static_cast<std::size_t>(std::distance(primer.rbegin(), run));
-}
-
 // The primers of a window that meet every criterion; the count stops at
 // legacy_max_possible_primers
 inline auto possible_primers(std::span<sequence::Nucleotide const> const molecule, std::size_t const first,
@@ -109,7 +99,7 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
         // unlike the Primer Analysis screen, Find Pair also rejects a run
         // at the 3' end that reaches the runs criterion
         // (tests/legacy/README.md, "Find Pair and runs at the 3' end")
-        if (not analysis::evaluate(actual, criteria).all() or run_at_3prime_end(*primer) >= criteria.reject_run_length) {
+        if (not analysis::evaluate(actual, criteria).all() or analysis::run_at_3prime_end(*primer) >= criteria.reject_run_length) {
             continue;
         }
         auto const sites = analysis::legacy_homology_sites(*primer, molecule, analysis::HomologyKind::false_priming);
