@@ -59,7 +59,7 @@ constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker analyze --report FILE [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair [--report FILE] PRIMER_A PRIMER_B\n"
-    "       primerpicker multi PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
+    "       primerpicker multi [--report FILE] PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
     "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair ...\n"
@@ -76,7 +76,8 @@ constexpr auto usage = std::string_view{
     "pair     two primers, as the Primer Pair Analysis screen; --report also\n"
     "         writes the report PRIMER.exe prints to disk (Primer Pair)\n"
     "multi    two to four primers, as the Multi Primer Analysis screen; '-'\n"
-    "         leaves a field empty (at least two primers)\n"
+    "         leaves a field empty (at least two primers); --report also\n"
+    "         writes the report PRIMER.exe prints to disk (Multiple Primers)\n"
     "find-pair\n"
     "         pairs of primers around two targets of a molecule file (GenBank,\n"
     "         FASTA or plain sequence), ranked as the Find Primer Pair list;\n"
@@ -446,7 +447,8 @@ auto multi_report(primerpicker::analysis::MultiPrimerFields const& fields, Legac
 }
 
 // PRIMER_A to PRIMER_D, '-' for an empty field
-auto multi(std::span<char const* const> const texts, LegacySystemDefaults const& defaults) -> int {
+auto multi(std::span<char const* const> const texts, std::optional<std::string_view> const report,
+           LegacySystemDefaults const& defaults) -> int {
     auto primers = std::vector<std::vector<Nucleotide>>{};
     auto fields = primerpicker::analysis::MultiPrimerFields{};
     primers.reserve(texts.size());
@@ -465,6 +467,11 @@ auto multi(std::span<char const* const> const texts, LegacySystemDefaults const&
     constexpr auto min_primers = std::size_t{2};
     if (primers.size() < min_primers) {
         return fail("multi needs at least two primers");
+    }
+    if (report.has_value() and
+        not write_report(std::filesystem::path{*report},
+                         primerpicker::report::legacy_multi_primer_report(fields, defaults.criteria, today()))) {
+        return EXIT_FAILURE;
     }
     std::cout << multi_report(fields, defaults.criteria);
     return EXIT_SUCCESS;
@@ -805,7 +812,12 @@ auto run_command(std::string_view const command, std::span<char const* const> co
     constexpr auto multi_min_count = std::size_t{2};
     constexpr auto multi_max_count = primerpicker::analysis::legacy_multi_primer_fields;
     if (command == "multi" and arguments.size() >= multi_min_count and arguments.size() <= multi_max_count) {
-        return multi(arguments, defaults);
+        return multi(arguments, std::nullopt, defaults);
+    }
+    constexpr auto report_size = std::size_t{2};  // the option and its file
+    if (command == "multi" and arguments.size() >= multi_min_count + report_size and
+        arguments.size() <= multi_max_count + report_size and arguments[0] == report_option) {
+        return multi(arguments.subspan(report_size), arguments[1], defaults);
     }
     if (command == "find-pair") {
         return find_pair_command(arguments, defaults);

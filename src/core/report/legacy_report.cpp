@@ -502,8 +502,8 @@ auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields, analy
     auto report = title_line("Primer Design Report:  Multiple Primers", date);
     report += blank_lines(2);
     for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
-        if (fields.at(index).has_value()) {
-            report += multi_primer_section(index, *fields.at(index));
+        if (auto const& field = fields.at(index); field.has_value()) {
+            report += multi_primer_section(index, *field);
         }
     }
     report += line(rule);

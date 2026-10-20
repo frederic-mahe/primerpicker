@@ -130,4 +130,29 @@ done < "${REPORTS}/pair_reports.tsv"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}:${FAILED}"
 
+## the Multiple Primers report
+
+DESCRIPTION="multi --report writes MULTI.PRN (but for the date)"
+rm -f "${REPORT}"
+"${PRIMERPICKER}" multi --report "${REPORT}" CTCAAAGGCTCAGACATCAG GATCCATGCAATGCTAGCTA \
+    ACGTTGCAGGTCAAGCTTGC TTGGCCAAGTCGATCGGATC > /dev/null && \
+    cmp -s <(body "${REPORT}") <(body "${REPORTS}/MULTI.PRN") && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="multi --report: every recorded Multi Primer report"
+FAILED=""
+while IFS=$'\t' read -r FILE SELECTION FIELD_A FIELD_B FIELD_C FIELD_D CONFIG ; do
+    [[ "${FILE}" == \#* ]] && continue
+    OPTIONS=()
+    [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
+    "${PRIMERPICKER}" "${OPTIONS[@]}" multi --report "${REPORT}" \
+        "${FIELD_A}" "${FIELD_B}" "${FIELD_C}" "${FIELD_D}" > /dev/null && \
+        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+            FAILED="${FAILED} ${FILE}"
+done < "${REPORTS}/multi_reports.tsv"
+[[ -z "${FAILED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}:${FAILED}"
+
 exit 0
