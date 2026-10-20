@@ -58,7 +58,7 @@ constexpr auto program_name = std::string_view{"primerpicker"};
 constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
     "       primerpicker analyze --report FILE [--extension EXTENSION] PRIMER\n"
-    "       primerpicker pair PRIMER_A PRIMER_B\n"
+    "       primerpicker pair [--report FILE] PRIMER_A PRIMER_B\n"
     "       primerpicker multi PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
     "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
@@ -73,7 +73,8 @@ constexpr auto usage = std::string_view{
     "analyze  one primer, with an optional 5' extension, as the Primer\n"
     "         Analysis screen; --report also writes the report PRIMER.exe\n"
     "         prints to disk (One Primer) into FILE\n"
-    "pair     two primers, as the Primer Pair Analysis screen\n"
+    "pair     two primers, as the Primer Pair Analysis screen; --report also\n"
+    "         writes the report PRIMER.exe prints to disk (Primer Pair)\n"
     "multi    two to four primers, as the Multi Primer Analysis screen; '-'\n"
     "         leaves a field empty (at least two primers)\n"
     "find-pair\n"
@@ -331,13 +332,25 @@ auto pair_report(PrimerPair const& primers, LegacyCriteria const& criteria) -> s
     return report;
 }
 
-auto pair(std::string_view const text_a, std::string_view const text_b, LegacySystemDefaults const& defaults) -> int {
-    auto const primer_a = parse_sequence(text_a, "primer A", min_primer_length);
-    auto const primer_b = parse_sequence(text_b, "primer B", min_primer_length);
+struct PairArguments {
+    std::optional<std::string_view> report;
+    std::string_view primer_a;
+    std::string_view primer_b;
+};
+
+auto pair(PairArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
+    auto const primer_a = parse_sequence(arguments.primer_a, "primer A", min_primer_length);
+    auto const primer_b = parse_sequence(arguments.primer_b, "primer B", min_primer_length);
     if (not primer_a.has_value() or not primer_b.has_value()) {
         return EXIT_FAILURE;
     }
-    std::cout << pair_report(PrimerPair{.first = *primer_a, .second = *primer_b}, defaults.criteria);
+    auto const primers = PrimerPair{.first = *primer_a, .second = *primer_b};
+    if (arguments.report.has_value() and
+        not write_report(std::filesystem::path{*arguments.report},
+                         primerpicker::report::legacy_pair_report(primers, defaults.criteria, today()))) {
+        return EXIT_FAILURE;
+    }
+    std::cout << pair_report(primers, defaults.criteria);
     return EXIT_SUCCESS;
 }
 
@@ -778,11 +791,16 @@ auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
 auto run_command(std::string_view const command, std::span<char const* const> const arguments,
                  LegacySystemDefaults const& defaults) -> int {
     constexpr auto pair_count = std::size_t{2};
+    constexpr auto pair_with_report_count = std::size_t{4};
+    constexpr auto report_option = std::string_view{"--report"};
     if (command == "analyze") {
         return analyze_command(arguments, defaults);
     }
     if (command == "pair" and arguments.size() == pair_count) {
-        return pair(arguments[0], arguments[1], defaults);
+        return pair({.report = std::nullopt, .primer_a = arguments[0], .primer_b = arguments[1]}, defaults);
+    }
+    if (command == "pair" and arguments.size() == pair_with_report_count and arguments[0] == report_option) {
+        return pair({.report = arguments[1], .primer_a = arguments[2], .primer_b = arguments[3]}, defaults);
     }
     constexpr auto multi_min_count = std::size_t{2};
     constexpr auto multi_max_count = primerpicker::analysis::legacy_multi_primer_fields;

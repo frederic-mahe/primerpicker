@@ -101,4 +101,33 @@ done < "${REPORTS}/inspect_reports.tsv"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}:${FAILED}"
 
+## the Primer Pair report
+
+DESCRIPTION="pair --report writes PAIR.PRN (but for the date)"
+rm -f "${REPORT}"
+"${PRIMERPICKER}" pair --report "${REPORT}" GTAAAACGACGGCCAGT AACAGCTATGACCATG > /dev/null && \
+    cmp -s <(body "${REPORT}") <(body "${REPORTS}/PAIR.PRN") && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="pair --report fails when the file cannot be written"
+"${PRIMERPICKER}" pair --report "${WORKDIR}/missing/REPORT" GTAAAACGACGGCCAGT AACAGCTATGACCATG \
+    > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+DESCRIPTION="pair --report: every recorded Primer Pair report with pairs"
+FAILED=""
+while IFS=$'\t' read -r FILE PRIMER_A PRIMER_B CONFIG DUPLEXES ; do
+    [[ "${FILE}" == \#* || "${DUPLEXES}" == "no-pairs" ]] && continue
+    OPTIONS=()
+    [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
+    "${PRIMERPICKER}" "${OPTIONS[@]}" pair --report "${REPORT}" "${PRIMER_A}" "${PRIMER_B}" > /dev/null && \
+        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+            FAILED="${FAILED} ${FILE}"
+done < "${REPORTS}/pair_reports.tsv"
+[[ -z "${FAILED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}:${FAILED}"
+
 exit 0

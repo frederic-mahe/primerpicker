@@ -221,12 +221,21 @@ auto primer_summary(char const name, std::span<Nucleotide const> const primer, a
     return text;
 }
 
-// "N base difference", "N % difference", "N C difference"
-auto balance_row(std::string_view const label, int const first, int const second, int const difference,
-                 std::string_view const unit) -> std::string {
-    auto const values = std::array{FlaggedValue{.text = std::to_string(first), .flagged = false},
-                                   FlaggedValue{.text = std::to_string(second), .flagged = false}};
-    return line(std::format("{}{}{}{} difference", pair_row(label, values), pair_comment_gap, difference, unit));
+// A row of the primer balance: both values, then "N base difference",
+// "N % difference" or "N C difference"
+struct Balance {
+    std::string_view label;
+    int value_a;
+    int value_b;
+    int difference;
+    std::string_view unit;
+};
+
+auto balance_row(Balance const& balance) -> std::string {
+    auto const values = std::array{FlaggedValue{.text = std::to_string(balance.value_a), .flagged = false},
+                                   FlaggedValue{.text = std::to_string(balance.value_b), .flagged = false}};
+    return line(std::format("{}{}{}{} difference", pair_row(balance.label, values), pair_comment_gap,
+                            balance.difference, balance.unit));
 }
 
 auto caution_row(std::string_view const label, FlaggedValue const& first, FlaggedValue const& second) -> std::string {
@@ -324,10 +333,21 @@ auto legacy_pair_report(PrimerPair const& primers, analysis::LegacyCriteria cons
     report += legacy_line_end;
     report += line("Primer Balance:                      -A-      -B-      Comment");
     report += legacy_line_end;
-    report += balance_row("Length", static_cast<int>(primer_a.size()), static_cast<int>(primer_b.size()),
-                          values_ab.length_difference, " base");
-    report += balance_row("% GC", actual_a.gc_percent, actual_b.gc_percent, values_ab.gc_difference_percent, " %");
-    report += balance_row("Tm C", actual_a.tm_celsius, actual_b.tm_celsius, values_ab.tm_difference_celsius, " C");
+    report += balance_row({.label = "Length",
+                           .value_a = static_cast<int>(primer_a.size()),
+                           .value_b = static_cast<int>(primer_b.size()),
+                           .difference = values_ab.length_difference,
+                           .unit = " base"});
+    report += balance_row({.label = "% GC",
+                           .value_a = actual_a.gc_percent,
+                           .value_b = actual_b.gc_percent,
+                           .difference = values_ab.gc_difference_percent,
+                           .unit = " %"});
+    report += balance_row({.label = "Tm C",
+                           .value_a = actual_a.tm_celsius,
+                           .value_b = actual_b.tm_celsius,
+                           .difference = values_ab.tm_difference_celsius,
+                           .unit = " C"});
     report += legacy_line_end;
     report += line("Primer Cautions:");
     report += legacy_line_end;
