@@ -928,6 +928,31 @@ for byte by `legacy_pair_report` (`tests/unit/test_legacy_pair_report.cpp`,
 AAAAAAAAAAAA with CCCCCCCCCCCC (no pair at all) writes the long lines
 of spaces described above (`duplexes` = `no-pairs`; not reproduced).
 
+### The Multiple Primers report (recorded 2026-10-20)
+
+`reports/multi/*.PRN`: 6 more reports of the Multi Primer Analysis
+screen, for the selections of `multi/multi_primer_balance.tsv`
+(`tools/multi_primer.sh` with `EXTRA="p , , down down enter , , r e p o
+r t enter , , , , , ,"`; the run keeps the report as `c/REPORT`);
+`reports/multi_reports.tsv` lists every Multiple Primers report (fields
+A to D, '-' for an empty field). All are reproduced byte for byte by
+`legacy_multi_primer_report` (`tests/unit/test_legacy_multi_primer_report.cpp`,
+`tests/cli/test_report.sh`):
+- one section per field, A to D; an empty field's section holds
+  `     none` instead of its sequence, source molecule and length;
+  "Source molecule:  none" for primers that do not come from a molecule
+  (all recordings so far);
+- Primer Balance and Cautions: the label, then four columns of 8
+  characters, values right-aligned, no '!' flag (the hairpin '!'
+  replaces OK); an empty field leaves its column blank, trailing spaces
+  included;
+- Primer Dimers: the "3' end" and "Any" matrices side by side, values
+  with their '!' flag, dots below the diagonal; an empty field leaves
+  its row (no dots) and its column blank; these lines have no trailing
+  spaces;
+- no duplex drawings.
+The report of selection `12__` was not written (keys lost).
+
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
 The One Primer report ends with "LARGEST DUPLEXES REPORTED IN PRIMER

@@ -299,10 +299,16 @@ constexpr auto matrix_dots_column = std::size_t{13};
 constexpr auto matrix_dots_shorter = std::size_t{2};       // than the cells they cover
 constexpr auto matrix_offset = std::size_t{37};            // from the "3' end" matrix to the "Any" one
 
-auto multi_primer_section(std::size_t const index, std::span<Nucleotide const> const primer) -> std::string {
+// A field's section: its primer, or "none" for an empty field
+auto multi_primer_section(std::size_t const index, analysis::MultiPrimerFields const& fields) -> std::string {
     auto text = line(std::format("-----  P R I M E R   {}  ---------------------------------------------------",
                                  multi_names.at(index)));
     text += legacy_line_end;
+    auto const& field = fields.at(index);
+    if (not field.has_value()) {
+        return text + line("     none") + std::string{legacy_line_end};
+    }
+    auto const primer = *field;
     text += line(std::format("Sequence:     5'-{}-3'", letters(primer)));
     text += legacy_line_end;
     text += line("              Source molecule:  none");
@@ -311,23 +317,21 @@ auto multi_primer_section(std::size_t const index, std::span<Nucleotide const> c
     return text;
 }
 
-// A row of "Primer Balance and Cautions": one value per primer, no flag
+// A row of "Primer Balance and Cautions": one value per primer, no
+// flag; an empty field leaves its column blank (trailing spaces kept)
 template <typename Value>
 auto multi_balance_row(std::string_view const label, analysis::LegacyMultiPrimer const& analysis, Value const value)
     -> std::string {
-    auto canvas = Canvas{};
-    canvas.put(multi_label_column, label);
-    for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
-        auto const& column = analysis.columns.at(index);
-        if (column.has_value()) {
-            canvas.put_right(multi_first_value_last + (index * multi_value_step), value(*column));
-        }
+    auto row = std::format("{:{}}{:<{}}", "", multi_label_column, label,
+                           multi_first_value_last + 1 - multi_value_step - multi_label_column);
+    for (auto const& column : analysis.columns) {
+        row += std::format("{:>{}}", column.has_value() ? value(*column) : std::string{}, multi_value_step);
     }
-    return canvas.line();
+    return line(row);
 }
 
 // Row ROW of both dimer matrices: dots below the diagonal, values with
-// their '!' flag on and above it
+// their '!' flag on and above it; an empty field's row has neither
 auto matrix_row(std::size_t const row, analysis::LegacyMultiPrimer const& analysis) -> std::string {
     constexpr auto three_prime_labels = std::array{std::string_view{"3'"}, std::string_view{"end"}};
     constexpr auto label_column = std::size_t{3};
@@ -342,7 +346,7 @@ auto matrix_row(std::size_t const row, analysis::LegacyMultiPrimer const& analys
     auto const name = std::string(1, multi_names.at(row));
     for (auto const offset : {std::size_t{0}, matrix_offset}) {
         canvas.put(matrix_row_name_column + offset, name);
-        if (row > 0) {
+        if (row > 0 and analysis.columns.at(row).has_value()) {
             canvas.put(matrix_dots_column + offset, std::string((row * matrix_cell_step) - matrix_dots_shorter, '.'));
         }
     }
@@ -512,9 +516,7 @@ auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields, analy
     auto report = title_line("Primer Design Report:  Multiple Primers", date);
     report += blank_lines(2);
     for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
-        if (auto const& field = fields.at(index); field.has_value()) {
-            report += multi_primer_section(index, *field);
-        }
+        report += multi_primer_section(index, fields);
     }
     report += line(rule);
     report += blank_lines(2);

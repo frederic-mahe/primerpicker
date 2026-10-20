@@ -1,0 +1,46 @@
+Primer Design Report:  Multiple Primers               Report Date: 10/20/26
+
+
+-----  P R I M E R   A  ---------------------------------------------------
+
+Sequence:     5'-CTCGATCCGTTCCTAAT-3'
+
+              Source molecule:  none
+              Length:  17;
+
+-----  P R I M E R   B  ---------------------------------------------------
+
+     none
+
+-----  P R I M E R   C  ---------------------------------------------------
+
+Sequence:     5'-CGGGGCTCATTGCACTC-3'
+
+              Source molecule:  none
+              Length:  17;
+
+-----  P R I M E R   D  ---------------------------------------------------
+
+     none
+
+---------------------------------------------------------------------------
+
+
+    Primer Balance and Cautions:              -A-     -B-     -C-     -D-
+
+      Length                                   17              17        
+      % GC                                     47              64        
+      Tm C                                     60              70        
+      Runs of G/C at 3' end                     0               1        
+      Runs of bases (any)                       2               4        
+      Hairpins                                 OK              OK        
+
+
+   Primer Dimers: (number of adjacent bases in largest duplex)
+
+              A     B     C     D                  A     B     C     D
+
+   3'     A   2           3!            Any    A   4           3
+   end    B                                    B
+          C  ..........   1                    C  ..........   4
+          D                                    D
