@@ -18,8 +18,9 @@ namespace detail {
 // (tests/legacy/tools/fit_tm.py). The origin of b is not known.
 // Primers recorded on 2026-10-20 narrow it to (60.699732, 60.7]
 // (tests/legacy/README.md, "Primer Tm: the constant b"); 60.7 is
-// probably the original value, but its middle is used, so that a Tm
-// computed exactly on an integer is not truncated below it.
+// probably the original value, but the middle of the interval
+// (60.69987) is used, so that a Tm computed exactly on an integer is
+// not truncated below it.
 constexpr auto legacy_entropy_constant = CaloriesPerKelvinPerMole{60.69987};
 // Primer3's oligotm gives the same Tm in Breslauer mode with a DNA
 // concentration C of 49.6 pM: b = 10.8 + R ln(4 / C), 10.8 being
