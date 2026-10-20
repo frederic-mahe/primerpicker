@@ -958,9 +958,11 @@ The report of selection `12__` was not written (keys lost).
 `reports/find_pair/*.PRN`: 3 more reports of the Find Primer Pair
 list (`tools/print_report.sh find_pair`, with `CFG` for a settings
 file: the file is listed before the molecule, which takes one more
-down): `search/TFP.GB` (false-priming Tm values), `pairs/TEST600.GB`
-with `config/PD2_CRITERIA.CFG` (30 pairs) and with
-`config/PD2_WEIGHTS35142.CFG`; `reports/find_pair_reports.tsv` lists
+down): `search/TFP.GB` (30 pairs, false-priming Tm values),
+`pairs/TEST600.GB` with `config/PD2_CRITERIA.CFG` (1000 pairs: the pair
+limit; this search did not hang, and its best 20 pairs are those of the
+first 1000 pairs, ranked, as primerpicker keeps them) and with
+`config/PD2_WEIGHTS35142.CFG` (10 pairs); `reports/find_pair_reports.tsv` lists
 every Find Pair report (FINDPAIR.PRN included). All are reproduced byte
 for byte by `legacy_find_pair_report`
 (`tests/unit/test_legacy_find_pair_report.cpp`, `tests/cli/test_report.sh`):
