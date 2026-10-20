@@ -1036,6 +1036,7 @@ auto match(MatchArguments const& arguments, LegacySystemDefaults const& defaults
                                                           .primer_a = primer_a,
                                                           .primer_a_position = *position,
                                                           .settings = settings,
+                                                          .criteria = defaults.criteria,
                                                           .list = list};
     if (arguments.report.has_value() and
         not write_report(std::filesystem::path{*arguments.report},

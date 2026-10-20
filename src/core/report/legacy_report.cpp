@@ -22,6 +22,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <utility>
 
 namespace primerpicker::report {
 
@@ -490,11 +491,48 @@ auto match_runs(analysis::LegacyActualValues const& actual) -> std::string {
     return std::format("{:>8}{:>6}", actual.longest_run, actual.gc_run_3prime);
 }
 
-auto match_primer_a_row(std::size_t const position, analysis::LegacyActualValues const& actual) -> std::string {
+// Primer A's row: a value that fails its criterion is followed by '!'
+// (in the column after it)
+auto match_primer_a_row(std::size_t const position, analysis::LegacyActualValues const& actual,
+                        analysis::LegacyCriteria const& criteria) -> std::string {
     constexpr auto no_distance = std::string_view{"            "};
     constexpr auto no_inter_dimers = std::string_view{"             "};
-    return line(std::format("{:>6}{}{}{}{}", position, no_distance, match_values(actual), no_inter_dimers,
-                            match_runs(actual)));
+    // the last column of each value
+    constexpr auto gc_end = std::size_t{25};
+    constexpr auto tm_end = std::size_t{31};
+    constexpr auto dimer_3prime_end = std::size_t{39};
+    constexpr auto dimer_any_end = std::size_t{44};
+    constexpr auto runs_end = std::size_t{65};
+    constexpr auto gc_run_end = std::size_t{71};
+    auto row = std::format("{:>6}{}{}{}{}", position, no_distance, match_values(actual), no_inter_dimers,
+                           match_runs(actual));
+    auto const verdict = analysis::evaluate(actual, criteria);
+    auto const flags = std::array{std::pair{gc_end, verdict.gc}, std::pair{tm_end, verdict.tm},
+                                  std::pair{dimer_3prime_end, verdict.no_3prime_dimer},
+                                  std::pair{dimer_any_end, verdict.no_dimer}, std::pair{runs_end, verdict.no_runs},
+                                  std::pair{gc_run_end, verdict.no_3prime_gc_run}};
+    for (auto const& [end, meets] : flags) {
+        if (not meets) {
+            row.resize(std::max(row.size(), end + 2), ' ');
+            row[end + 1] = '!';
+        }
+    }
+    return line(row);
+}
+
+// The offsets as searched (complement strand): the start cut so that the
+// first primer fits (printed as an unsigned 16-bit number when the
+// target is shorter than a primer: 65526 for target 10), the end cut at
+// the molecule's end
+auto match_offsets(MatchReport const& match) -> std::pair<std::size_t, std::size_t> {
+    constexpr auto sixteen_bits = std::size_t{65536};
+    auto const& settings = match.settings;
+    auto const start = settings.target >= settings.length + settings.start_offset
+                           ? settings.start_offset
+                           : (settings.target + sixteen_bits - settings.length) % sixteen_bits;
+    auto const end = std::min(settings.end_offset,
+                              match.molecule_size > settings.target ? match.molecule_size - settings.target : 0);
+    return {start, end};
 }
 
 auto match_row(search::MatchCandidate const& candidate) -> std::string {
@@ -767,17 +805,19 @@ auto legacy_match_report(MatchReport const& match, std::chrono::year_month_day c
     report += blank_lines(2);
     report += line("Search parameters:");
     report += line(std::format("   Target bp pos:{:6} (Complementary strand)", settings.target));
-    report += line(std::format("   Start: Target - {} bases;   End: Target + {} bases", settings.start_offset,
-                               settings.end_offset));
+    auto const [start_offset, end_offset] = match_offsets(match);
+    report += line(std::format("   Start: Target - {} bases;   End: Target + {} bases", start_offset, end_offset));
     report += line(std::format("   Length:{:4}                 5' Extension: - none -", settings.length));
-    report += line(std::format("   GC Match:  +/- {:2} GC %      Tm Match:  +/- {:2} C", settings.gc_tolerance_percent,
-                               settings.tm_tolerance_celsius));
+    report += line(std::format("   GC Match:  +/- {:2} GC %      Tm Match:  +/- {:2} C",
+                               search::detail::form_field(settings.gc_tolerance_percent),
+                               search::detail::form_field(settings.tm_tolerance_celsius)));
     report += blank_lines(2);
     report += line("Primer A (Original) Characteristics:");
     report += line("                                       -- Self Dimers --        -- Runs --");
     report += line(std::format("  Position              GC%   Tm{}C     3'  any                  any  3'G/C",
                                cp437_degree_sign));
-    report += match_primer_a_row(match.primer_a_position, analysis::legacy_actual_values(match.primer_a));
+    report += match_primer_a_row(match.primer_a_position, analysis::legacy_actual_values(match.primer_a),
+                                 match.criteria);
     report += blank_lines(2);
     report += line("Primer B (Matching) List:");
     report += line("                                         ---  Dimers  ---");

@@ -149,6 +149,7 @@ auto report_for(RecordedReport const& recorded, std::chrono::year_month_day cons
                                 .primer_a = primer_a,
                                 .primer_a_position = recorded.primer_a_position,
                                 .settings = settings,
+                                .criteria = defaults.criteria,
                                 .list = list},
                                date);
 }

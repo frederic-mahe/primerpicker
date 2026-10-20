@@ -92,6 +92,7 @@ struct MatchReport {
     std::span<sequence::Nucleotide const> primer_a;
     std::size_t primer_a_position;
     search::MatchSettings settings;
+    analysis::LegacyCriteria criteria;  // for primer A's '!' flags
     std::span<search::MatchCandidate const> list;
 };
 

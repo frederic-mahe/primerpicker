@@ -43,6 +43,18 @@ struct MatchCandidate {
 
 namespace detail {
 
+// The form of Match Active Primer holds 2 digits per tolerance: a larger
+// setting keeps its first two digits (100 is shown and applied as 10;
+// tests/legacy/README.md, "The Match Active Primer report")
+constexpr auto form_field(int value) noexcept -> int {
+    constexpr auto field_limit = 100;
+    constexpr auto decimal = 10;
+    while (value >= field_limit) {
+        value /= decimal;
+    }
+    return value;
+}
+
 constexpr auto absolute_difference(int const lhs, int const rhs) noexcept -> int {
     return lhs > rhs ? lhs - rhs : rhs - lhs;
 }
@@ -77,10 +89,13 @@ constexpr auto absolute_difference(int const lhs, int const rhs) noexcept -> int
         auto const matches = analysis::evaluate(actual_b, criteria).all() and
                              analysis::run_at_3prime_end(*primer_b) < criteria.reject_run_length and
                              detail::absolute_difference(actual_a.gc_percent, actual_b.gc_percent) <=
-                                 settings.gc_tolerance_percent and
+                                 detail::form_field(settings.gc_tolerance_percent) and
                              detail::absolute_difference(actual_a.tm_celsius, actual_b.tm_celsius) <=
-                                 settings.tm_tolerance_celsius and
-                             inter_3prime < criteria.reject_dimer_3prime_matches;
+                                 detail::form_field(settings.tm_tolerance_celsius) and
+                             inter_3prime < criteria.reject_dimer_3prime_matches and
+                             // and fewer A:B adjacent pairs than the criterion
+                             // (match_variations, recorded 2026-10-20)
+                             analysis::longest_complementary_run(pair) < criteria.reject_dimer_adjacent_bases;
         if (not matches) {
             continue;
         }

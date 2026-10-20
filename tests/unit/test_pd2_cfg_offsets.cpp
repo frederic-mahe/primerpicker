@@ -10,7 +10,6 @@
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
-#include <string>
 #include <utility>
 #include <vector>
 
@@ -40,9 +39,13 @@ auto read_bytes(std::filesystem::path const& path) -> std::vector<std::byte> {
 TEST_CASE("pd2.cfg: the search offsets, end before start", "[pd2_cfg][legacy]") {
     auto const result = primerpicker::io::parse_pd2_cfg(read_bytes(
         std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "match_variations" / "PD2_OFFSETS_11_22_33_44.CFG"));
-    REQUIRE(result.defaults.has_value());
-    CHECK(result.defaults->match_start_offset == 22);
-    CHECK(result.defaults->match_end_offset == 11);
-    CHECK(result.defaults->find_pair_start_offset == 44);
-    CHECK(result.defaults->find_pair_end_offset == 33);
+    if (not result.defaults.has_value()) {
+        FAIL("cannot parse PD2_OFFSETS_11_22_33_44.CFG");
+        return;
+    }
+    auto const& defaults = *result.defaults;
+    CHECK(defaults.match_start_offset == 22);
+    CHECK(defaults.match_end_offset == 11);
+    CHECK(defaults.find_pair_start_offset == 44);
+    CHECK(defaults.find_pair_end_offset == 33);
 }

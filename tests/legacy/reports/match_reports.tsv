@@ -3,3 +3,17 @@ match/TRUN_50_620.PRN	search/TRUN.GB	50	620	-
 match/TRUN_50_1020.PRN	search/TRUN.GB	50	1020	-
 match/TRUN_50_1420.PRN	search/TRUN.GB	50	1420	-
 match/TRUN_50_1820.PRN	search/TRUN.GB	50	1820	-
+../match_variations/TMAP50K_10050_10500.PRN	homology/map/TMAP50K.GB	10050	10500	-
+../match_variations/TMAP50K_10050_10500_PD2_MATCH_200_200.PRN	homology/map/TMAP50K.GB	10050	10500	../match_variations/PD2_MATCH_200_200.CFG
+../match_variations/TMAP50K_10050_9500.PRN	homology/map/TMAP50K.GB	10050	9500	-
+../match_variations/TMAP50K_937_12000.PRN	homology/map/TMAP50K.GB	937	12000	-
+../match_variations/TMAP6600_1234_1700.PRN	homology/map/TMAP6600.GB	1234	1700	-
+../match_variations/TMAP6600_1234_1700_PD2_MATCH_0_10.PRN	homology/map/TMAP6600.GB	1234	1700	../match_variations/PD2_MATCH_0_10.CFG
+../match_variations/TMAP6600_1234_1700_PD2_MATCH_100_150.PRN	homology/map/TMAP6600.GB	1234	1700	../match_variations/PD2_MATCH_100_150.CFG
+../match_variations/TMAP6600_1234_1700_PD2_MATCH_GC10_TM20.PRN	homology/map/TMAP6600.GB	1234	1700	../match_variations/PD2_MATCH_GC10_TM20.CFG
+../match_variations/TMAP6600_129_500.PRN	homology/map/TMAP6600.GB	129	500	-
+../match_variations/TRUN_1500_1990_PD2_MATCH_ALL.PRN	search/TRUN.GB	1500	1990	../match_variations/PD2_MATCH_ALL.CFG
+../match_variations/TRUN_50_1000_PD2_MATCH_ALL99_49_49.PRN	search/TRUN.GB	50	1000	../match_variations/PD2_MATCH_ALL99_49_49.CFG
+../match_variations/TRUN_50_1000_PD2_MATCH_ALL_TOL0_60_60.PRN	search/TRUN.GB	50	1000	../match_variations/PD2_MATCH_ALL_TOL0_60_60.CFG
+../match_variations/TRUN_50_10_PD2_MATCH_ALL.PRN	search/TRUN.GB	50	10	../match_variations/PD2_MATCH_ALL.CFG
+../match_variations/TRUN_50_30_PD2_MATCH_ALL.PRN	search/TRUN.GB	50	30	../match_variations/PD2_MATCH_ALL.CFG
