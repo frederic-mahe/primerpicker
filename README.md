@@ -49,6 +49,12 @@ Command-line interface (`primerpicker --help`):
 - **`--config`**: the criteria, tolerances, search windows and weights
   of a Primer Designer settings file (`pd2.cfg`).
 
+Graphical interface (`primerpicker-gui`, first steps): the menu bar of
+Primer Designer (items not available yet are greyed out), Direct Entry
+and From Molecule (GenBank, FASTA or plain-sequence files), the Primer
+Analysis of the active primer, `--config` for a `pd2.cfg` file, and a
+System / Light / Dark colour scheme.
+
 Also in the core library, for the graphical interface: Match Active
 Primer (a partner for a given primer), uniqueness and false priming
 on the template, PCR product Tm and annealing temperature, and the
@@ -109,7 +115,11 @@ Meets criteria: NO
 
 Requirements: CMake 3.28 or later, Ninja, and a C++20 compiler (GCC 13
 or later, clang 18 or later, or Apple clang). Catch2 3 is used when it
-is installed, and downloaded otherwise.
+is installed, and downloaded otherwise. The graphical interface needs
+Qt 6.8 or later (Widgets; and Test for its tests; on Debian and
+Ubuntu: `qt6-base-dev`): it is built when Qt is found
+(`-DPRIMERPICKER_GUI=AUTO`, the default; `ON` requires it, `OFF` skips
+it).
 
 ```sh
 cmake --preset release
@@ -117,8 +127,9 @@ cmake --build --preset release
 ctest --preset release
 ```
 
-The `release` preset builds with GCC; the program is
-`build/release/src/cli/primerpicker`. Other presets
+The `release` preset builds with GCC; the programs are
+`build/release/src/cli/primerpicker` and
+`build/release/src/gui/primerpicker-gui`. Other presets
 (`CMakePresets.json`) build with sanitizers (`debug`), with clang and
 libc++ (`clang-debug`), for Windows with MinGW-w64 (`mingw-release`),
 and the fuzzing harnesses (`fuzz`).
