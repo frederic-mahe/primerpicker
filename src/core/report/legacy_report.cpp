@@ -2,6 +2,7 @@
 
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_duplex.hpp"
+#include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -250,6 +251,108 @@ auto hairpin_row(bool const hairpin_a, bool const hairpin_b) -> std::string {
                             pair_value_step));
 }
 
+// Multi Primer report: text placed at columns of a line, which then
+// loses its trailing spaces
+class Canvas {
+public:
+    auto put(std::size_t const column, std::string_view const text) -> Canvas& {
+        if (text_.size() < column + text.size()) {
+            text_.resize(column + text.size(), ' ');
+        }
+        text_.replace(column, text.size(), text);
+        return *this;
+    }
+
+    // TEXT ending in column LAST
+    auto put_right(std::size_t const last, std::string_view const text) -> Canvas& {
+        assert(text.size() <= last + 1);
+        return put(last + 1 - text.size(), text);
+    }
+
+    [[nodiscard]] auto line() const -> std::string {
+        auto const end = text_.find_last_not_of(' ');
+        return report::line(end == std::string::npos ? std::string_view{} : std::string_view{text_}.substr(0, end + 1));
+    }
+
+private:
+    std::string text_;
+};
+
+constexpr auto multi_names = std::string_view{"ABCD"};
+constexpr auto multi_label_column = std::size_t{6};
+constexpr auto multi_first_value_last = std::size_t{48};  // last column of primer A's values
+constexpr auto multi_value_step = std::size_t{8};
+constexpr auto matrix_cell_step = std::size_t{6};
+constexpr auto matrix_row_name_column = std::size_t{10};
+constexpr auto matrix_first_value_last = std::size_t{14};  // "3' end" matrix, column A
+constexpr auto matrix_dots_column = std::size_t{13};
+constexpr auto matrix_dots_shorter = std::size_t{2};       // than the cells they cover
+constexpr auto matrix_offset = std::size_t{37};            // from the "3' end" matrix to the "Any" one
+
+auto multi_primer_section(std::size_t const index, std::span<Nucleotide const> const primer) -> std::string {
+    auto text = line(std::format("-----  P R I M E R   {}  ---------------------------------------------------",
+                                 multi_names.at(index)));
+    text += legacy_line_end;
+    text += line(std::format("Sequence:     5'-{}-3'", letters(primer)));
+    text += legacy_line_end;
+    text += line("              Source molecule:  none");
+    text += line(std::format("              Length: {:3};", primer.size()));
+    text += legacy_line_end;
+    return text;
+}
+
+// A row of "Primer Balance and Cautions": one value per primer, no flag
+template <typename Value>
+auto multi_balance_row(std::string_view const label, analysis::LegacyMultiPrimer const& analysis, Value const value)
+    -> std::string {
+    auto canvas = Canvas{};
+    canvas.put(multi_label_column, label);
+    for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
+        auto const& column = analysis.columns.at(index);
+        if (column.has_value()) {
+            canvas.put_right(multi_first_value_last + (index * multi_value_step), value(*column));
+        }
+    }
+    return canvas.line();
+}
+
+// Row ROW of both dimer matrices: dots below the diagonal, values with
+// their '!' flag on and above it
+auto matrix_row(std::size_t const row, analysis::LegacyMultiPrimer const& analysis) -> std::string {
+    constexpr auto three_prime_labels = std::array{std::string_view{"3'"}, std::string_view{"end"}};
+    constexpr auto label_column = std::size_t{3};
+    constexpr auto any_label_column = std::size_t{40};
+    auto canvas = Canvas{};
+    if (row < three_prime_labels.size()) {
+        canvas.put(label_column, three_prime_labels.at(row));
+    }
+    if (row == 0) {
+        canvas.put(any_label_column, "Any");
+    }
+    auto const name = std::string(1, multi_names.at(row));
+    for (auto const offset : {std::size_t{0}, matrix_offset}) {
+        canvas.put(matrix_row_name_column + offset, name);
+        if (row > 0) {
+            canvas.put(matrix_dots_column + offset, std::string((row * matrix_cell_step) - matrix_dots_shorter, '.'));
+        }
+    }
+    for (auto column = row; column < analysis::legacy_multi_primer_fields; ++column) {
+        auto const& cell = analysis.dimers.at(row).at(column);
+        if (not cell.has_value()) {
+            continue;
+        }
+        auto const last = matrix_first_value_last + (column * matrix_cell_step);
+        auto const flagged = [](std::size_t const value, bool const is_flagged) {
+            return std::to_string(value) + (is_flagged ? "!" : "");
+        };
+        canvas.put(last + 1 - std::to_string(cell->dimer_3prime_matches).size(),
+                   flagged(cell->dimer_3prime_matches, cell->flags.three_prime));
+        canvas.put(last + matrix_offset + 1 - std::to_string(cell->dimer_adjacent_bases).size(),
+                   flagged(cell->dimer_adjacent_bases, cell->flags.adjacent));
+    }
+    return canvas.line();
+}
+
 // A duplex of page 2, under its name ("A:B")
 auto named_duplex(std::string_view const name, PrimerPair const& pair_of_primers,
                   analysis::DuplexPlacement const& placement) -> std::string {
@@ -389,6 +492,44 @@ auto legacy_pair_report(PrimerPair const& primers, analysis::LegacyCriteria cons
     report += named_duplex("B:B", self_b, analysis::legacy_longest_duplex(self_b));
     report += named_duplex("A:B", primers, analysis::legacy_longest_duplex(primers));
     report += line(rule);
+    return report;
+}
+
+
+auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields, analysis::LegacyCriteria const& criteria,
+                                std::chrono::year_month_day const& date) -> std::string {
+    auto const analysis = analysis::legacy_multi_primer(fields, criteria);
+    auto report = title_line("Primer Design Report:  Multiple Primers", date);
+    report += blank_lines(2);
+    for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
+        if (fields.at(index).has_value()) {
+            report += multi_primer_section(index, *fields.at(index));
+        }
+    }
+    report += line(rule);
+    report += blank_lines(2);
+    report += line("    Primer Balance and Cautions:              -A-     -B-     -C-     -D-");
+    report += legacy_line_end;
+    using Column = analysis::LegacyMultiPrimerColumn;
+    report += multi_balance_row("Length", analysis, [](Column const& column) { return std::to_string(column.length); });
+    report += multi_balance_row("% GC", analysis,
+                                [](Column const& column) { return std::to_string(column.actual.gc_percent); });
+    report += multi_balance_row("Tm C", analysis,
+                                [](Column const& column) { return std::to_string(column.actual.tm_celsius); });
+    report += multi_balance_row("Runs of G/C at 3' end", analysis,
+                                [](Column const& column) { return std::to_string(column.actual.gc_run_3prime); });
+    report += multi_balance_row("Runs of bases (any)", analysis,
+                                [](Column const& column) { return std::to_string(column.actual.longest_run); });
+    report += multi_balance_row("Hairpins", analysis,
+                                [](Column const& column) { return std::string{column.cautions.hairpin ? "!" : "OK"}; });
+    report += blank_lines(2);
+    report += line("   Primer Dimers: (number of adjacent bases in largest duplex)");
+    report += legacy_line_end;
+    report += line("              A     B     C     D                  A     B     C     D");
+    report += legacy_line_end;
+    for (auto row = std::size_t{0}; row < analysis::legacy_multi_primer_fields; ++row) {
+        report += matrix_row(row, analysis);
+    }
     return report;
 }
 
