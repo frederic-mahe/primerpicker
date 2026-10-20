@@ -359,6 +359,13 @@ auto pair(PairArguments const& arguments, LegacySystemDefaults const& defaults) 
 
 using FieldTexts = std::array<std::string, primerpicker::analysis::legacy_multi_primer_fields>;
 
+// Empty texts. A function, not FieldTexts{} in the templates below:
+// MinGW-w64 GCC 13 crashes on that (internal compiler error in
+// check_noexcept_r)
+auto no_field_texts() -> FieldTexts {
+    return FieldTexts{};
+}
+
 constexpr auto field_names = std::string_view{"ABCD"};
 constexpr auto empty_field = std::string_view{"-"};
 constexpr auto below_diagonal = std::string_view{"."};
@@ -377,7 +384,7 @@ auto multi_line(std::string_view const name, FieldTexts const& texts) -> std::st
 // one line of the balance table: a text per filled field
 auto balance_line(std::string_view const name, primerpicker::analysis::LegacyMultiPrimer const& analysis,
                   auto const& text) -> std::string {
-    auto texts = FieldTexts{};
+    auto texts = no_field_texts();
     std::ranges::transform(analysis.columns, texts.begin(), [&text](auto const& column) {
         return column.has_value() ? text(*column) : std::string{};
     });
@@ -387,11 +394,11 @@ auto balance_line(std::string_view const name, primerpicker::analysis::LegacyMul
 // one dimer matrix ("3' end matches" or "Any adj homol bases")
 auto dimer_matrix(std::string_view const title, primerpicker::analysis::LegacyMultiPrimer const& analysis,
                   auto const& text) -> std::string {
-    auto header = FieldTexts{};
+    auto header = no_field_texts();
     std::ranges::transform(field_names, header.begin(), [](char const name) { return std::string{name}; });
     auto matrix = multi_line(title, header);
     for (auto row = std::size_t{0}; row < field_names.size(); ++row) {
-        auto texts = FieldTexts{};
+        auto texts = no_field_texts();
         for (auto column = std::size_t{0}; column < field_names.size(); ++column) {
             auto const& cell = analysis.dimers.at(row).at(column);
             auto const both_filled = analysis.columns.at(row).has_value() and analysis.columns.at(column).has_value();
