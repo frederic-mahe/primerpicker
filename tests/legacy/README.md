@@ -953,6 +953,35 @@ A to D, '-' for an empty field). All are reproduced byte for byte by
 - no duplex drawings.
 The report of selection `12__` was not written (keys lost).
 
+### The Find Pair report (recorded 2026-10-20)
+
+`reports/find_pair/*.PRN`: 3 more reports of the Find Primer Pair
+list (`tools/print_report.sh find_pair`, with `CFG` for a settings
+file: the file is listed before the molecule, which takes one more
+down): `search/TFP.GB` (false-priming Tm values), `pairs/TEST600.GB`
+with `config/PD2_CRITERIA.CFG` (30 pairs) and with
+`config/PD2_WEIGHTS35142.CFG`; `reports/find_pair_reports.tsv` lists
+every Find Pair report (FINDPAIR.PRN included). All are reproduced byte
+for byte by `legacy_find_pair_report`
+(`tests/unit/test_legacy_find_pair_report.cpp`, `tests/cli/test_report.sh`):
+- P first asks "N Pairs found.  Print best: [M]", M being N up to 20
+  (30 pairs: `[20  ]`); the recordings keep M (Enter): the report
+  holds the best M pairs, in the order of the list;
+- "Source molecule:" then the molecule's name padded to 36 columns,
+  then its size and "bps" (column 54 for a 3-digit size; longer sizes
+  not recorded);
+- the search: targets in 6 columns, the offsets, the primer length (in
+  4 columns after "Length:"), "5' Extension: - none -", the GC and Tm
+  tolerances; the weights are not printed;
+- the criteria in short form, as the Primer Pair report ("Hairpin
+  cutoff:" then the cutoff in 4 columns: `cutoff:-1.5`);
+- the header of the list has the degree sign of code page 437 (byte
+  F8); the rows are those of the screen, a false-priming Tm of B taking
+  2 columns (`- /  6`), '-' when there is no site.
+Not recorded: reports of more than 20 pairs (whether PRIMER.exe breaks
+pages), a typed M, 4-digit molecule sizes. `search/TFP2.GB` and
+`config/PD2_LENGTH25.CFG` lost keys.
+
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
 The One Primer report ends with "LARGEST DUPLEXES REPORTED IN PRIMER

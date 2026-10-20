@@ -155,4 +155,29 @@ done < "${REPORTS}/multi_reports.tsv"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}:${FAILED}"
 
+## the Find Pair report
+
+DESCRIPTION="find-pair --report: every recorded Find Pair report"
+FAILED=""
+while IFS=$'\t' read -r FILE MOLECULE TARGET_A TARGET_B CONFIG ; do
+    [[ "${FILE}" == \#* ]] && continue
+    OPTIONS=()
+    [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
+    "${PRIMERPICKER}" "${OPTIONS[@]}" find-pair --report "${REPORT}" "${LEGACY}/${MOLECULE}" "${TARGET_A}" \
+        "${TARGET_B}" > /dev/null && \
+        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+            FAILED="${FAILED} ${FILE}"
+done < "${REPORTS}/find_pair_reports.tsv"
+[[ -z "${FAILED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}:${FAILED}"
+
+## tests/legacy/search/find_pair_no_match.tsv: no matching primers
+DESCRIPTION="find-pair --report writes no report when no pair is found"
+rm -f "${REPORT}"
+"${PRIMERPICKER}" find-pair --report "${REPORT}" "${LEGACY}/enzymes/TLONG.GB" 120 300 > /dev/null 2>&1
+[[ ! -e "${REPORT}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
 exit 0

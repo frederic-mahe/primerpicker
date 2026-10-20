@@ -60,7 +60,8 @@ constexpr auto usage = std::string_view{
     "       primerpicker analyze --report FILE [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair [--report FILE] PRIMER_A PRIMER_B\n"
     "       primerpicker multi [--report FILE] PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
-    "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A TARGET_B\n"
+    "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] [--report FILE]\n"
+    "                              MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair ...\n"
     "       primerpicker --help | --version\n"
@@ -85,7 +86,8 @@ constexpr auto usage = std::string_view{
     "         (complement strand) from TARGET_B to TARGET_B + END (default:\n"
     "         100,100). WEIGHTS: five digits from 0 to 5, for GC mismatch, Tm\n"
     "         mismatch, 3' dimers, any dimers and false priming (default:\n"
-    "         11111)\n"
+    "         11111). --report also writes the report PRIMER.exe prints to\n"
+    "         disk (Find Pair), with the best pairs, at most 20\n"
     "find-enzymes\n"
     "         sites of a restriction enzyme (REBASE name; old names such as\n"
     "         Asp718 or Sau3A are accepted) on both strands of a molecule file,\n"
@@ -488,6 +490,7 @@ auto read_text_file(std::filesystem::path const& path) -> std::optional<std::str
 }
 
 struct LoadedMolecule {
+    std::string name;
     std::vector<Nucleotide> sequence;
     primerpicker::sequence::Topology topology;
 };
@@ -508,7 +511,8 @@ auto read_molecule(std::filesystem::path const& path) -> std::optional<LoadedMol
         fail(std::format("{}: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)", path.string()));
         return std::nullopt;
     }
-    return LoadedMolecule{.sequence = std::move(*sequence), .topology = parsed.molecule->topology};
+    return LoadedMolecule{
+        .name = parsed.molecule->name, .sequence = std::move(*sequence), .topology = parsed.molecule->topology};
 }
 
 // A position typed on the command line (1 or more), or none after
@@ -614,10 +618,26 @@ auto parse_offsets(std::string_view const text) -> std::optional<SearchOffsets> 
 struct FindPairArguments {
     std::optional<std::string_view> weights;  // the settings' weights when absent
     std::optional<std::string_view> offsets;  // the settings' search ranges when absent
+    std::optional<std::string_view> report;   // the report's file, if any
     std::string_view molecule;
     std::string_view target_a;
     std::string_view target_b;
 };
+
+// The report of the Find Primer Pair list, with the best pairs PRIMER.exe
+// proposes to print; none when no pair was found (a note on stderr).
+// False after printing why on stderr.
+auto write_find_pair_report(std::string_view const path, primerpicker::report::FindPairReport report,
+                            std::vector<primerpicker::search::PairCandidate> const& ranked,
+                            LegacyCriteria const& criteria) -> bool {
+    if (ranked.empty()) {
+        std::cerr << program_name << ": no pair found, no report written\n";
+        return true;
+    }
+    report.best_pairs = std::span{ranked}.first(std::min(ranked.size(), primerpicker::report::legacy_report_best_pairs));
+    return write_report(std::filesystem::path{path},
+                        primerpicker::report::legacy_find_pair_report(report, criteria, today()));
+}
 
 auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
     auto const weights = arguments.weights.has_value() ? parse_weights(*arguments.weights) : defaults.weights;
@@ -642,6 +662,15 @@ auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& d
                                                                  .gc_tolerance_percent = defaults.gc_tolerance_percent,
                                                                  .tm_tolerance_celsius = defaults.tm_tolerance_celsius};
     auto const result = primerpicker::search::legacy_find_pair(molecule->sequence, settings, defaults.criteria);
+    if (arguments.report.has_value() and
+        not write_find_pair_report(*arguments.report,
+                                   {.molecule_name = molecule->name,
+                                    .molecule_size = molecule->sequence.size(),
+                                    .settings = settings,
+                                    .best_pairs = {}},
+                                   primerpicker::search::legacy_rank_pairs(result.pairs, *weights), defaults.criteria)) {
+        return EXIT_FAILURE;
+    }
     std::cout << find_pair_report(result, *weights);
     return EXIT_SUCCESS;
 }
@@ -651,6 +680,7 @@ auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& d
 auto find_pair_command(std::span<char const* const> arguments, LegacySystemDefaults const& defaults) -> int {
     constexpr auto weights_option = std::string_view{"--weights"};
     constexpr auto offsets_option = std::string_view{"--offsets"};
+    constexpr auto report_option = std::string_view{"--report"};
     constexpr auto option_size = std::size_t{2};  // the option and its value
     constexpr auto positional_count = std::size_t{3};
     auto parsed = FindPairArguments{};
@@ -661,6 +691,8 @@ auto find_pair_command(std::span<char const* const> arguments, LegacySystemDefau
             parsed.weights = value;
         } else if (option == offsets_option and not parsed.offsets.has_value()) {
             parsed.offsets = value;
+        } else if (option == report_option and not parsed.report.has_value()) {
+            parsed.report = value;
         } else {
             std::cerr << usage;
             return EXIT_FAILURE;

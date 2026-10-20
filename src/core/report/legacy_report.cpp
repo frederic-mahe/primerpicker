@@ -5,12 +5,14 @@
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/nucleotide.hpp"
 
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <chrono>
+#include <optional>
 #include <cstddef>
 #include <format>
 #include <iterator>
@@ -27,6 +29,8 @@ using sequence::Nucleotide;
 
 constexpr auto title_width = std::size_t{54};  // "Report Date:" starts in this column
 constexpr auto lines_after_title = std::size_t{5};
+constexpr auto cp437_degree_sign = std::string_view{"\xF8"};  // the reports use code page 437
+constexpr auto molecule_name_width = std::size_t{36};  // the size follows in column 54
 constexpr auto years_per_century = 100;
 constexpr auto criteria_name_width = std::size_t{17};
 constexpr auto criteria_actual_end = std::size_t{56};  // right edge of the "Actual" column
@@ -189,6 +193,33 @@ auto pair_row(std::string_view const label, std::span<FlaggedValue const> const 
     return row;
 }
 
+// The criteria in short form (Primer Pair and Find Pair reports)
+auto short_criteria(analysis::LegacyCriteria const& criteria) -> std::string {
+    auto text = line(std::format("Criteria:     % GC:  Min {:3}, Max {:3};    Tm C:  Min {:3}, Max {:3}",
+                                 criteria.gc_min_percent, criteria.gc_max_percent, criteria.tm_min_celsius,
+                                 criteria.tm_max_celsius));
+    text += line(std::format("              Hairpin cutoff:{:4.1f} kcal;", criteria.hairpin_cutoff.kcal_per_mol));
+    text += line(std::format("              Reject >= {} matches at 3' end;  >= {} adj homol bases",
+                             criteria.reject_dimer_3prime_matches, criteria.reject_dimer_adjacent_bases));
+    text += line(std::format("              Reject >= {} base runs;  >= {} G/C at 3' end", criteria.reject_run_length,
+                             criteria.reject_gc_run_3prime));
+    return text;
+}
+
+// A false-priming Tm of the Find Pair list: '-' when there is no site
+auto site_tm(std::optional<int> const tm_celsius, std::size_t const width) -> std::string {
+    return tm_celsius.has_value() ? std::format("{:>{}}", *tm_celsius, width) : std::string{"-"};
+}
+
+auto find_pair_row(search::PairCandidate const& pair) -> std::string {
+    constexpr auto tm_b_width = std::size_t{2};
+    return line(std::format("{:>8}{:>10}{:>8} / {:<2}{:>6} / {:<2}{:>8}{:>5}{:>9} / {}", pair.position_a,
+                            pair.position_b, pair.primer_a.gc_percent, pair.primer_b.gc_percent,
+                            pair.primer_a.tm_celsius, pair.primer_b.tm_celsius, pair.max_dimer_3prime_matches,
+                            pair.max_dimer_adjacent_bases, site_tm(pair.false_priming_tm_a, 0),
+                            site_tm(pair.false_priming_tm_b, tm_b_width)));
+}
+
 auto primer_header(char const name) -> std::string {
     if (name == 'A') {
         return "-----  P R I M E R   A  ---------------------------------------------------";
@@ -210,14 +241,7 @@ auto primer_summary(char const name, std::span<Nucleotide const> const primer, a
                              actual.gc_percent, actual.tm_celsius, count(Nucleotide::adenine),
                              count(Nucleotide::cytosine), count(Nucleotide::guanine), count(Nucleotide::thymine)));
     text += legacy_line_end;
-    text += line(std::format("Criteria:     % GC:  Min {:3}, Max {:3};    Tm C:  Min {:3}, Max {:3}",
-                             criteria.gc_min_percent, criteria.gc_max_percent, criteria.tm_min_celsius,
-                             criteria.tm_max_celsius));
-    text += line(std::format("              Hairpin cutoff: {:.1f} kcal;", criteria.hairpin_cutoff.kcal_per_mol));
-    text += line(std::format("              Reject >= {} matches at 3' end;  >= {} adj homol bases",
-                             criteria.reject_dimer_3prime_matches, criteria.reject_dimer_adjacent_bases));
-    text += line(std::format("              Reject >= {} base runs;  >= {} G/C at 3' end", criteria.reject_run_length,
-                             criteria.reject_gc_run_3prime));
+    text += short_criteria(criteria);
     text += line(std::format("              Meets criteria selected:  {}", verdict_word(verdict.all())));
     text += legacy_line_end;
     return text;
@@ -541,6 +565,41 @@ auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields, analy
     report += legacy_line_end;
     for (auto row = std::size_t{0}; row < analysis::legacy_multi_primer_fields; ++row) {
         report += matrix_row(row, analysis);
+    }
+    return report;
+}
+
+
+auto legacy_find_pair_report(FindPairReport const& find_pair, analysis::LegacyCriteria const& criteria,
+                             std::chrono::year_month_day const& date) -> std::string {
+    auto const& settings = find_pair.settings;
+    auto report = title_line("Primer Design Report:  Find Pair", date);
+    report += blank_lines(2);
+    report += line(std::format("Source molecule:  {:<{}}{} bps", find_pair.molecule_name, molecule_name_width,
+                               find_pair.molecule_size));
+    report += blank_lines(2);
+    report += line("Search parameters:");
+    report += legacy_line_end;
+    report += line(std::format("   Primer A (normal strand): Target bp:{:6};   Start: Target - {} bases",
+                               settings.target_a, settings.start_offset_a));
+    report += line(std::format("            Length:{:4}      5' Extension: - none -", settings.length));
+    report += line(std::format("   Primer B (compl. strand): Target bp:{:6};   End:   Target + {} bases",
+                               settings.target_b, settings.end_offset_b));
+    report += line(std::format("            Length:{:4}      5' Extension: - none -", settings.length));
+    report += legacy_line_end;
+    report += line(std::format("   Primer Balance:           GC Match: +/- {} GC %     TM Match: +/- {} C",
+                               settings.gc_tolerance_percent, settings.tm_tolerance_celsius));
+    report += legacy_line_end;
+    report += short_criteria(criteria);
+    report += legacy_line_end;
+    report += line("Primer pairs requested:");
+    report += legacy_line_end;
+    report += line(std::format("       Position          GC(%)      Tm({}C)     Max Dimers   FalsePriming",
+                               cp437_degree_sign));
+    report += line("     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB");
+    report += legacy_line_end;
+    for (auto const& pair : find_pair.best_pairs) {
+        report += find_pair_row(pair);
     }
     return report;
 }
