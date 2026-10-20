@@ -340,14 +340,14 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 
 | Offset | Value | Default |
 |---|---|---|
-| 0 | unknown (4 bytes, zero in both files) | 0 |
+| 0 | unknown (4 bytes, zero in both files; kept unchanged when the defaults are saved: `config_header/`, 2026-10-20) | 0 |
 | 4 | primer length (incl. 5' extension) | 20 |
 | 6 | exclude Tm <= 0 °C (1 = Y) | 1 |
 | 8 | sort homologies by Tm (1 = Y) | 1 |
 | 10 | match GC to within ± (%) | 5 |
 | 12 | match Tm to within ± (°C) | 10 |
-| 14, 16 | Match Active Primer range: start -, end + (bases) | 50, 50 |
-| 18, 20 | Find Pair range: normal start -, complement end + | 100, 100 |
+| 14, 16 | Match Active Primer range: end +, start - (bases; corrected 2026-10-20 with `match_variations/PD2_OFFSETS_11_22_33_44.CFG`: 11, 22 show as "Start @ - 22", "End @ + 11") | 50, 50 |
+| 18, 20 | Find Pair range: complement end +, normal start - (corrected 2026-10-20: 33, 44 show as "(normal) Start @ - 44", "(complement) End @ + 33") | 100, 100 |
 | 22, 24 | GC min, max (%) | 50, 60 |
 | 26, 28 | Tm min, max (°C) | 55, 80 |
 | 30 | hairpin energy cutoff (float32, kcal) | 0.0 |
@@ -356,7 +356,7 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 | 38 | reject runs if >= | 3 |
 | 40 | reject 3' G/C runs if >= | 3 |
 | 42-46 | five weights, one byte each: GC mismatch, Tm mismatch, false priming, 3' dimers, any dimers (recorded 2026-10-19, below) | 1 |
-| 47-54 | zero in both files | 0 |
+| 47-54 | zero in both files (kept unchanged when the defaults are saved: `config_header/`, 2026-10-20) | 0 |
 
 Which of offsets 38 and 40 holds which run threshold was first
 inferred from the screen order (only offset 38 changed);
