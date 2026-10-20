@@ -27,3 +27,6 @@ add_test(NAME cli_find_pair_no_match
 add_test(NAME cli_report
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_report.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_homology
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_homology.sh $<TARGET_FILE:primerpicker>
+          ${PROJECT_SOURCE_DIR}/tests/legacy)

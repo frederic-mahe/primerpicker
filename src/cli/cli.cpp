@@ -4,6 +4,7 @@
 #include "cli/cli.hpp"
 
 #include "core/analysis/legacy_criteria.hpp"
+#include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
@@ -64,7 +65,8 @@ constexpr auto usage = std::string_view{
     "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] [--report FILE]\n"
     "                              MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
-    "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair ...\n"
+    "       primerpicker homology [--false-priming] [--report FILE] MOLECULE POSITION\n"
+    "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair|homology ...\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
@@ -93,7 +95,12 @@ constexpr auto usage = std::string_view{
     "         sites of a restriction enzyme (REBASE name; old names such as\n"
     "         Asp718 or Sau3A are accepted) on both strands of a molecule file,\n"
     "         as the True Sites screen; with --almost, sites with at most one\n"
-    "         mismatch, as the Almost Sites screen\n"};
+    "         mismatch, as the Almost Sites screen\n"
+    "homology the Uniqueness screen of the primer at POSITION (top strand) of a\n"
+    "         molecule file: its regions of homology (7 bases or more) on both\n"
+    "         strands; with --false-priming, the False Priming screen (3' end\n"
+    "         homologies of 6 bases or more). --report also writes the report\n"
+    "         PRIMER.exe prints to disk\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -853,6 +860,112 @@ auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
     return EXIT_SUCCESS;
 }
 
+// homology [--false-priming] [--report FILE] MOLECULE POSITION
+struct HomologyArguments {
+    primerpicker::analysis::HomologyKind kind = primerpicker::analysis::HomologyKind::uniqueness;
+    std::optional<std::string_view> report;
+    std::string_view molecule;
+    std::string_view position;
+};
+
+// the messages of Primer Designer 2.0 when there is no site
+// (tests/legacy/README.md, "Uniqueness and false priming")
+constexpr auto unique_message = std::string_view{"Primer is unique\n"};
+constexpr auto no_false_priming_message = std::string_view{"No false priming found\n"};
+
+auto homology_screen(primerpicker::report::HomologyReport const& homology) -> std::string {
+    using primerpicker::analysis::HomologyKind;
+    auto const uniqueness = homology.kind == HomologyKind::uniqueness;
+    auto text = std::format("Primer:    5'-{}-3', position {}\n", letters(homology.primer), homology.position);
+    text += std::format("Molecule:  {}, {} bases\n", homology.molecule_name, homology.molecule_size);
+    text += uniqueness ? "Sites:     regions of homology (>= 7 bases) between primer and template\n\n"
+                       : "Sites:     3' end homologies (>= 6 bases) between primer and template\n\n";
+    if (homology.sites.empty()) {
+        return text + std::string{uniqueness ? unique_message : no_false_priming_message};
+    }
+    text += std::format("{:<24}{:>8}{:4}{:>6}\n", "Homologous bases", "Bp Pos", "", "Tm °C");
+    for (auto const& site : homology.sites) {
+        auto const bases = homology.primer.subspan(site.primer_start, site.length);
+        text += std::format("{:<24}{:>8}{:4}{:>6}\n", letters(bases), site.position,
+                            site.strand == primerpicker::sequence::Strand::complement ? " (C)" : "",
+                            site.tm_celsius);
+    }
+    return text;
+}
+
+auto homology(HomologyArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
+    using primerpicker::analysis::HomologyOrder;
+    using primerpicker::analysis::HomologyTmFilter;
+    auto const position = parse_position(arguments.position, "position");
+    if (not position.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
+    if (not molecule.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const length = defaults.primer_length;
+    if (length > molecule->sequence.size() or *position > molecule->sequence.size() - length + 1) {
+        return fail(std::format("position: a primer of {} bases at {} goes beyond the molecule ({} bases)", length,
+                                *position, molecule->sequence.size()));
+    }
+    auto const primer = std::span{molecule->sequence}.subspan(*position - 1, length);
+    auto const settings = primerpicker::analysis::HomologySettings{
+        .tm_filter = defaults.exclude_tm_at_most_zero ? HomologyTmFilter::exclude_at_most_zero
+                                                      : HomologyTmFilter::keep_all,
+        .order = defaults.sort_homologies_by_tm ? HomologyOrder::by_tm : HomologyOrder::by_position};
+    auto const sites = primerpicker::analysis::legacy_homology_sites(primer, molecule->sequence, arguments.kind, settings);
+    auto const report = primerpicker::report::HomologyReport{.molecule_name = molecule->name,
+                                                             .molecule_size = molecule->sequence.size(),
+                                                             .primer = primer,
+                                                             .position = *position,
+                                                             .kind = arguments.kind,
+                                                             .tm_filter = settings.tm_filter,
+                                                             .sites = sites};
+    if (arguments.report.has_value()) {
+        if (sites.empty()) {
+            // PRIMER.exe shows a box and prints nothing
+            std::cerr << program_name << ": no site found, no report written\n";
+        } else if (not write_report(std::filesystem::path{*arguments.report},
+                                    primerpicker::report::legacy_homology_report(report, today()))) {
+            return EXIT_FAILURE;
+        }
+    }
+    std::cout << homology_screen(report);
+    return EXIT_SUCCESS;
+}
+
+// homology [--false-priming] [--report FILE] MOLECULE POSITION: the
+// command's arguments, after its name
+auto homology_command(std::span<char const* const> arguments, LegacySystemDefaults const& defaults) -> int {
+    constexpr auto false_priming_option = std::string_view{"--false-priming"};
+    constexpr auto report_option = std::string_view{"--report"};
+    constexpr auto positional_count = std::size_t{2};
+    auto parsed = HomologyArguments{};
+    auto false_priming_seen = false;
+    while (arguments.size() > positional_count) {
+        auto const option = std::string_view{arguments[0]};
+        if (option == false_priming_option and not false_priming_seen) {
+            false_priming_seen = true;
+            parsed.kind = primerpicker::analysis::HomologyKind::false_priming;
+            arguments = arguments.subspan(1);
+        } else if (option == report_option and not parsed.report.has_value()) {
+            parsed.report = arguments[1];
+            arguments = arguments.subspan(2);
+        } else {
+            std::cerr << usage;
+            return EXIT_FAILURE;
+        }
+    }
+    if (arguments.size() != positional_count) {
+        std::cerr << usage;
+        return EXIT_FAILURE;
+    }
+    parsed.molecule = arguments[0];
+    parsed.position = arguments[1];
+    return homology(parsed, defaults);
+}
+
 // A command and its arguments (after the command's name)
 auto run_command(std::string_view const command, std::span<char const* const> const arguments,
                  LegacySystemDefaults const& defaults) -> int {
@@ -880,6 +993,9 @@ auto run_command(std::string_view const command, std::span<char const* const> co
     }
     if (command == "find-pair") {
         return find_pair_command(arguments, defaults);
+    }
+    if (command == "homology") {
+        return homology_command(arguments, defaults);
     }
     constexpr auto find_enzymes_count = std::size_t{2};
     constexpr auto find_almost_enzymes_count = std::size_t{3};
