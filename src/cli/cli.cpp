@@ -12,6 +12,7 @@
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/io/pd2_cfg.hpp"
+#include "core/report/legacy_report.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -22,6 +23,7 @@
 #include <array>
 #include <bit>
 #include <charconv>
+#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <exception>
@@ -55,6 +57,7 @@ using primerpicker::sequence::Nucleotide;
 constexpr auto program_name = std::string_view{"primerpicker"};
 constexpr auto usage = std::string_view{
     "Usage: primerpicker analyze [--extension EXTENSION] PRIMER\n"
+    "       primerpicker analyze --report FILE [--extension EXTENSION] PRIMER\n"
     "       primerpicker pair PRIMER_A PRIMER_B\n"
     "       primerpicker multi PRIMER_A PRIMER_B [PRIMER_C [PRIMER_D]]\n"
     "       primerpicker find-pair [--weights WEIGHTS] [--offsets START,END] MOLECULE TARGET_A TARGET_B\n"
@@ -68,7 +71,8 @@ constexpr auto usage = std::string_view{
     "         tolerances, primer length, search ranges and weights replace\n"
     "         the built-in defaults\n"
     "analyze  one primer, with an optional 5' extension, as the Primer\n"
-    "         Analysis screen\n"
+    "         Analysis screen; --report also writes the report PRIMER.exe\n"
+    "         prints to disk (One Primer) into FILE\n"
     "pair     two primers, as the Primer Pair Analysis screen\n"
     "multi    two to four primers, as the Multi Primer Analysis screen; '-'\n"
     "         leaves a field empty (at least two primers)\n"
@@ -194,21 +198,75 @@ auto parse_sequence(std::string_view const text, std::string_view const what, st
 }
 
 struct AnalyzeArguments {
-    std::string_view extension;
+    std::optional<std::string_view> extension;
+    std::optional<std::string_view> report;
     std::string_view primer;
 };
 
+// Today's date (UTC), for the reports
+auto today() -> std::chrono::year_month_day {
+    return std::chrono::year_month_day{std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now())};
+}
+
+// TEXT written to PATH as is (a report: CR LF line ends), or false
+// after printing why on stderr
+auto write_report(std::filesystem::path const& path, std::string_view const text) -> bool {
+    auto file = std::ofstream{path, std::ios::binary};
+    file << text;
+    file.close();
+    if (not file) {
+        fail(std::format("cannot write the report to {}", path.string()));
+        return false;
+    }
+    return true;
+}
+
 auto analyze(AnalyzeArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
-    auto const extension = parse_sequence(arguments.extension, "extension", 0);
+    auto const extension = parse_sequence(arguments.extension.value_or(""), "extension", 0);
     auto const primer = parse_sequence(arguments.primer, "primer", min_primer_length);
     if (not extension.has_value() or not primer.has_value()) {
         return EXIT_FAILURE;
     }
     auto sequence = *extension;
     sequence.insert(sequence.end(), primer->begin(), primer->end());
-    std::cout << analysis_report(LegacyPrimer{.sequence = sequence, .extension_length = extension->size()},
-                                 defaults.criteria);
+    auto const primer_with_extension = LegacyPrimer{.sequence = sequence, .extension_length = extension->size()};
+    if (arguments.report.has_value() and
+        not write_report(std::filesystem::path{*arguments.report},
+                         primerpicker::report::legacy_inspect_report(primer_with_extension, defaults.criteria,
+                                                                     today()))) {
+        return EXIT_FAILURE;
+    }
+    std::cout << analysis_report(primer_with_extension, defaults.criteria);
     return EXIT_SUCCESS;
+}
+
+// analyze [--extension EXTENSION] [--report FILE] PRIMER: the command's
+// arguments, after its name
+auto analyze_command(std::span<char const* const> arguments, LegacySystemDefaults const& defaults) -> int {
+    constexpr auto extension_option = std::string_view{"--extension"};
+    constexpr auto report_option = std::string_view{"--report"};
+    constexpr auto option_size = std::size_t{2};  // the option and its value
+    constexpr auto positional_count = std::size_t{1};
+    auto parsed = AnalyzeArguments{};
+    while (arguments.size() > positional_count) {
+        auto const option = std::string_view{arguments[0]};
+        auto const value = std::string_view{arguments[1]};
+        if (option == extension_option and not parsed.extension.has_value()) {
+            parsed.extension = value;
+        } else if (option == report_option and not parsed.report.has_value()) {
+            parsed.report = value;
+        } else {
+            std::cerr << usage;
+            return EXIT_FAILURE;
+        }
+        arguments = arguments.subspan(option_size);
+    }
+    if (arguments.size() != positional_count) {
+        std::cerr << usage;
+        return EXIT_FAILURE;
+    }
+    parsed.primer = arguments[0];
+    return analyze(parsed, defaults);
 }
 
 auto flagged(auto const value, bool const flag) -> std::string {
@@ -719,16 +777,9 @@ auto find_enzymes(FindEnzymesArguments const& arguments) -> int {
 // A command and its arguments (after the command's name)
 auto run_command(std::string_view const command, std::span<char const* const> const arguments,
                  LegacySystemDefaults const& defaults) -> int {
-    constexpr auto analyze_count = std::size_t{1};
-    constexpr auto analyze_with_extension_count = std::size_t{3};
     constexpr auto pair_count = std::size_t{2};
-    constexpr auto extension_option = std::string_view{"--extension"};
-    if (command == "analyze" and arguments.size() == analyze_count) {
-        return analyze({.extension = "", .primer = arguments[0]}, defaults);
-    }
-    if (command == "analyze" and arguments.size() == analyze_with_extension_count and
-        arguments[0] == extension_option) {
-        return analyze({.extension = arguments[1], .primer = arguments[2]}, defaults);
+    if (command == "analyze") {
+        return analyze_command(arguments, defaults);
     }
     if (command == "pair" and arguments.size() == pair_count) {
         return pair(arguments[0], arguments[1], defaults);

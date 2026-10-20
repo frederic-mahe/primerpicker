@@ -1,0 +1,104 @@
+#!/bin/bash -
+# shellcheck disable=SC2015
+
+## Black-box tests of "--report FILE": the text reports of PRIMER.exe
+## (Print to Disk), byte for byte but for the date. Expected files come
+## from PRIMER.exe (tests/legacy/reports/; tests/legacy/README.md,
+## "Reports").
+## Usage: test_report.sh /path/to/primerpicker /path/to/tests/legacy
+
+
+## Print a header
+SCRIPT_NAME="Test reports"
+LINE=$(printf '%.0s-' {1..76})
+printf "# %s %s\n" "${LINE:${#SCRIPT_NAME}}" "${SCRIPT_NAME}"
+
+## Declare a color code for test results
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NO_COLOR="\033[0m"
+
+failure () {
+    printf "%bFAIL%b: %s\n" "${RED}" "${NO_COLOR}" "${1}"
+    exit 1
+}
+
+success () {
+    printf "%bPASS%b: %s\n" "${GREEN}" "${NO_COLOR}" "${1}"
+}
+
+PRIMERPICKER="${1}"
+LEGACY="${2}"
+REPORTS="${LEGACY}/reports"
+WORKDIR=$(mktemp -d)
+trap 'rm -rf "${WORKDIR}"' EXIT
+REPORT="${WORKDIR}/REPORT"
+
+## the report without its first line (the date)
+body () {
+    tail -n +2 "${1}"
+}
+
+## errors
+
+DESCRIPTION="analyze --report needs a file name"
+"${PRIMERPICKER}" analyze --report > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report fails when the file cannot be written"
+"${PRIMERPICKER}" analyze --report "${WORKDIR}/missing/REPORT" GTAAAACGACGGCCAGT > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report given twice is an error"
+"${PRIMERPICKER}" analyze --report "${REPORT}" --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null 2>&1 && \
+    failure "${DESCRIPTION}" || \
+        success "${DESCRIPTION}"
+
+## the One Primer report
+
+DESCRIPTION="analyze --report writes INSPECT.PRN (but for the date)"
+rm -f "${REPORT}"
+"${PRIMERPICKER}" analyze --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null && \
+    cmp -s <(body "${REPORT}") <(body "${REPORTS}/INSPECT.PRN") && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report still prints the analysis"
+"${PRIMERPICKER}" analyze --report "${REPORT}" GTAAAACGACGGCCAGT | \
+    grep -q "^Sequence:      5'-GTAAAACGACGGCCAGT-3'$" && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report: the first line holds today's date (MM/DD/YY)"
+"${PRIMERPICKER}" analyze --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null
+TODAY=$(date -u +%m/%d/%y)
+[[ $(head -n 1 "${REPORT}") == "Primer Design Report:  One Primer                     Report Date: ${TODAY}"$'\r' ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report: options in any order"
+rm -f "${REPORT}"
+"${PRIMERPICKER}" analyze --extension "" --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null && \
+    cmp -s <(body "${REPORT}") <(body "${REPORTS}/INSPECT.PRN") && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="analyze --report: every recorded Inspect report with pairs"
+FAILED=""
+while IFS=$'\t' read -r FILE PRIMER EXTENSION CONFIG DUPLEXES ; do
+    [[ "${FILE}" == \#* || "${DUPLEXES}" == "no-pairs" ]] && continue
+    OPTIONS=()
+    [[ "${CONFIG}" != "-" ]] && OPTIONS+=(--config "${LEGACY}/config/${CONFIG}")
+    OPTIONS+=(analyze --report "${REPORT}")
+    [[ "${EXTENSION}" != "-" ]] && OPTIONS+=(--extension "${EXTENSION}")
+    "${PRIMERPICKER}" "${OPTIONS[@]}" "${PRIMER}" > /dev/null && \
+        cmp -s <(body "${REPORT}") <(body "${REPORTS}/${FILE}") || \
+            FAILED="${FAILED} ${FILE}"
+done < "${REPORTS}/inspect_reports.tsv"
+[[ -z "${FAILED}" ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}:${FAILED}"
+
+exit 0
