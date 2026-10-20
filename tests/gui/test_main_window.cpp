@@ -56,7 +56,7 @@ TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
     CHECK(texts(menu_titled(window, u"&Analyze"_s).actions()) ==
           QList<QString>{u"&Active Primer"_s, u"Primer &Pair"_s, u"&Multi Primer"_s});
     CHECK(texts(menu_titled(window, u"M&olecule-Ops"_s).actions()) ==
-          QList<QString>{u"Find &Enzymes"_s, u"&View/Edit"_s, u"&Save/Remove"_s});
+          QList<QString>{u"Find &Enzymes..."_s, u"&View/Edit"_s, u"&Save/Remove"_s});
 }
 
 TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]") {
@@ -74,5 +74,6 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
         }
     }
     CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"&Retrieve from disk..."_s,
-                                    u"5'-&extension..."_s, u"Colour Sc&heme"_s, u"&Active Primer"_s});
+                                    u"5'-&extension..."_s, u"Colour Sc&heme"_s, u"&Active Primer"_s,
+                                    u"Find &Enzymes..."_s});
 }

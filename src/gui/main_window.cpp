@@ -1,5 +1,7 @@
 #include "gui/main_window.hpp"
 
+#include "core/enzymes/rebase_enzymes.hpp"
+#include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/io/pd2.hpp"
 #include "core/io/pd2_cfg.hpp"
@@ -9,6 +11,7 @@
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
+#include "gui/find_enzymes_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
 
 #include <QAction>
@@ -95,7 +98,8 @@ MainWindow::MainWindow()
     : colour_schemes_{this},
       direct_entry_{*this, direct_entry_kind},
       extension_{*this, extension_kind},
-      from_molecule_{*this} {
+      from_molecule_{*this},
+      find_enzymes_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
@@ -103,6 +107,7 @@ MainWindow::MainWindow()
     no_primer_.setAlignment(Qt::AlignCenter);
     pages_.addWidget(&no_primer_);
     pages_.addWidget(&analysis_);
+    pages_.addWidget(&sites_);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -110,6 +115,7 @@ MainWindow::MainWindow()
     statusBar()->addPermanentWidget(&settings_label_);
     QObject::connect(&direct_entry_, &QDialog::accepted, this, &MainWindow::use_direct_entry);
     QObject::connect(&extension_, &QDialog::accepted, this, &MainWindow::use_extension);
+    QObject::connect(&find_enzymes_, &FindEnzymesDialog::enzyme_entered, this, &MainWindow::use_find_enzymes);
     QObject::connect(&analysis_, &AnalysisView::print_requested, this, &MainWindow::print_report);
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
 }
@@ -154,7 +160,9 @@ void MainWindow::add_legacy_menus() {
     add_disabled_items(analyze, {u"Primer &Pair"_s, u"&Multi Primer"_s});
 
     auto& molecule_ops = *menu_bar.addMenu(u"M&olecule-Ops"_s);
-    add_disabled_items(molecule_ops, {u"Find &Enzymes"_s, u"&View/Edit"_s, u"&Save/Remove"_s});
+    auto const& find_enzymes = add_item(molecule_ops, {.text = u"Find &Enzymes...", .name = u"find_enzymes"});
+    QObject::connect(&find_enzymes, &QAction::triggered, this, &MainWindow::open_find_enzymes);
+    add_disabled_items(molecule_ops, {u"&View/Edit"_s, u"&Save/Remove"_s});
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
@@ -245,6 +253,39 @@ auto MainWindow::ask_for_molecule() -> bool {
         return false;
     }
     return true;
+}
+
+auto MainWindow::find_enzyme(QString const& name, enzymes::Mismatches const mismatches) -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Please load a molecule"_s;
+    }
+    auto const resolved = enzymes::resolve_enzyme(name.toStdString());
+    if (not resolved.has_value()) {
+        return u"Unknown enzyme: %1"_s.arg(name);
+    }
+    auto const pattern = enzymes::parse_site(resolved->enzyme.site);
+    if (not pattern.has_value()) {
+        return u"%1: unexpected recognition sequence"_s.arg(name);
+    }
+    auto const sites = enzymes::find_sites(molecule_->sequence, *pattern, mismatches, molecule_->topology);
+    sites_.show_sites({.enzyme = resolved->enzyme, .mismatches = mismatches, .molecule = molecule_->sequence}, sites);
+    pages_.setCurrentWidget(&sites_);
+    return std::nullopt;
+}
+
+void MainWindow::open_find_enzymes() {
+    if (not molecule_.has_value() and not ask_for_molecule()) {
+        return;
+    }
+    find_enzymes_.start();
+}
+
+void MainWindow::use_find_enzymes() {
+    if (auto const error = find_enzyme(find_enzymes_.enzyme(), find_enzymes_.mismatches()); error.has_value()) {
+        find_enzymes_.refuse(*error);
+        return;
+    }
+    find_enzymes_.accept();
 }
 
 // As PRIMER.exe, a loaded molecule is used again without asking

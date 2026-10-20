@@ -1,13 +1,16 @@
 #pragma once
 
 #include "core/analysis/legacy_verdict.hpp"
+#include "core/enzymes/site_search.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
+#include "gui/find_enzymes_dialog.hpp"
 #include "gui/from_molecule_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
+#include "gui/sites_view.hpp"
 
 #include <QActionGroup>
 #include <QLabel>
@@ -73,6 +76,10 @@ public:
     // to Disk), dated today; the error, if it was not written
     [[nodiscard]] auto print_report_to(QString const& path) -> std::optional<QString>;
 
+    // Molecule-Ops -> Find Enzymes on the loaded molecule: shows the true
+    // or almost sites of an enzyme; the error, if there was no search
+    [[nodiscard]] auto find_enzyme(QString const& name, enzymes::Mismatches mismatches) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -81,6 +88,8 @@ private:
     void modify_extension();
     void use_extension();
     void retrieve_primer();
+    void open_find_enzymes();
+    void use_find_enzymes();
     void print_report();
     void make_active(std::vector<sequence::Nucleotide> sequence, std::size_t extension_length);
     auto ask_for_molecule() -> bool;
@@ -97,12 +106,14 @@ private:
     QStackedWidget pages_;
     QLabel no_primer_;
     AnalysisView analysis_;
+    SitesView sites_;
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;
     SequenceDialog direct_entry_;
     SequenceDialog extension_;
     FromMoleculeDialog from_molecule_;
+    FindEnzymesDialog find_enzymes_;
 };
 
 }  // namespace primerpicker::gui

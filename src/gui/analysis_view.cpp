@@ -10,32 +10,25 @@
 #include <QFontDatabase>
 #include <QHeaderView>
 #include <QLabel>
-#include <QModelIndex>
+#include <QList>
 #include <QObject>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
-#include <QVariant>
 
 #include <algorithm>
 #include <array>
 #include <cstddef>
-#include <cstdint>
 #include <format>
 #include <iterator>
 #include <span>
 #include <string>
-#include <utility>
-#include <vector>
 
 using namespace Qt::StringLiterals;
 
 namespace primerpicker::gui {
 
 namespace {
-
-enum struct CriteriaColumn : std::uint8_t { criterion, setting, actual, meets };
-constexpr auto criteria_column_count = 4;
 
 auto from_utf8(std::string const& text) -> QString {
     return QString::fromStdString(text);
@@ -51,12 +44,22 @@ auto letters(std::span<sequence::Nucleotide const> const nucleotides) -> std::st
     return text;
 }
 
+// A row of the criteria table: criterion, setting, actual value and
+// whether the primer meets it
+struct CriterionRow {
+    QString criterion;
+    QString setting;
+    QString actual;
+    bool meets = false;
+};
+
 // The labels and settings of PRIMER.exe's One Primer report
 // (tests/legacy/reports/INSPECT.PRN)
 auto criteria_rows(analysis::LegacyActualValues const& actual, analysis::LegacyCriteria const& criteria,
-                   analysis::LegacyVerdict const& verdict) -> std::vector<CriterionRow> {
+                   analysis::LegacyVerdict const& verdict) -> QList<QList<QString>> {
     auto const count = [](std::size_t const value) { return QString::number(value); };
-    return {
+    constexpr auto criterion_count = std::size_t{7};
+    auto const rows = std::array<CriterionRow, criterion_count>{{
         {.criterion = u"% GC"_s,
          .setting = from_utf8(std::format("Min {}, Max {}", criteria.gc_min_percent, criteria.gc_max_percent)),
          .actual = QString::number(actual.gc_percent),
@@ -87,7 +90,12 @@ auto criteria_rows(analysis::LegacyActualValues const& actual, analysis::LegacyC
          .setting = from_utf8(std::format("Reject >= {} G or C at 3' end", criteria.reject_gc_run_3prime)),
          .actual = count(actual.gc_run_3prime),
          .meets = verdict.no_3prime_gc_run},
-    };
+    }};
+    auto table = QList<QList<QString>>{};
+    for (auto const& row : rows) {
+        table.append({row.criterion, row.setting, row.actual, verdict_word(row.meets)});
+    }
+    return table;
 }
 
 auto hairpin_text(analysis::LegacyActualValues const& actual) -> QString {
@@ -110,52 +118,9 @@ auto hairpin_drawing_text(std::span<sequence::Nucleotide const> const sequence) 
 
 }  // namespace
 
-void CriteriaModel::set_rows(std::vector<CriterionRow> rows) {
-    beginResetModel();
-    rows_ = std::move(rows);
-    endResetModel();
-}
-
-auto CriteriaModel::rowCount(QModelIndex const& parent) const -> int {
-    return parent.isValid() ? 0 : static_cast<int>(rows_.size());
-}
-
-auto CriteriaModel::columnCount(QModelIndex const& parent) const -> int {
-    return parent.isValid() ? 0 : criteria_column_count;
-}
-
-auto CriteriaModel::data(QModelIndex const& index, int const role) const -> QVariant {
-    if (role != Qt::DisplayRole or not index.isValid() or std::cmp_greater_equal(index.row(), rows_.size())) {
-        return {};
-    }
-    auto const& row = rows_.at(static_cast<std::size_t>(index.row()));
-    switch (static_cast<CriteriaColumn>(index.column())) {
-        case CriteriaColumn::criterion:
-            return row.criterion;
-        case CriteriaColumn::setting:
-            return row.setting;
-        case CriteriaColumn::actual:
-            return row.actual;
-        case CriteriaColumn::meets:
-            return verdict_word(row.meets);
-        default:
-            return {};
-    }
-}
-
-auto CriteriaModel::headerData(int const section, Qt::Orientation const orientation, int const role) const
-    -> QVariant {
-    if (role != Qt::DisplayRole or orientation != Qt::Horizontal) {
-        return {};
-    }
-    constexpr auto headers = std::array{u"Criteria", u"Criteria Setting", u"Actual", u"Meets Criteria"};
-    if (section < 0 or section >= criteria_column_count) {
-        return {};
-    }
-    return QString::fromUtf16(headers.at(static_cast<std::size_t>(section)));
-}
-
-AnalysisView::AnalysisView() : print_{u"&Print to Disk..."_s} {
+AnalysisView::AnalysisView()
+    : criteria_model_{{u"Criteria"_s, u"Criteria Setting"_s, u"Actual"_s, u"Meets Criteria"_s}},
+      print_{u"&Print to Disk..."_s} {
     setObjectName(u"analysis_view"_s);
     sequence_.setObjectName(u"sequence_label"_s);
     length_.setObjectName(u"length_label"_s);
