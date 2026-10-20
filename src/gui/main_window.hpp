@@ -8,6 +8,8 @@
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
 #include "gui/find_enzymes_dialog.hpp"
+#include "gui/find_pair_dialog.hpp"
+#include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
@@ -80,6 +82,11 @@ public:
     // or almost sites of an enzyme; the error, if there was no search
     [[nodiscard]] auto find_enzyme(QString const& name, enzymes::Mismatches mismatches) -> std::optional<QString>;
 
+    // Primer/Create -> Find Pair on the loaded molecule, with the
+    // settings' criteria, primer length, tolerances and weights: shows
+    // the ranked pairs; the error, if there was no search
+    [[nodiscard]] auto find_pair(FindPairRequest const& request) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -90,6 +97,8 @@ private:
     void retrieve_primer();
     void open_find_enzymes();
     void use_find_enzymes();
+    void open_find_pair();
+    void use_find_pair();
     void print_report();
     void make_active(std::vector<sequence::Nucleotide> sequence, std::size_t extension_length);
     auto ask_for_molecule() -> bool;
@@ -107,6 +116,7 @@ private:
     QLabel no_primer_;
     AnalysisView analysis_;
     SitesView sites_;
+    FindPairView pairs_;
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;
@@ -114,6 +124,7 @@ private:
     SequenceDialog extension_;
     FromMoleculeDialog from_molecule_;
     FindEnzymesDialog find_enzymes_;
+    FindPairDialog find_pair_;
 };
 
 }  // namespace primerpicker::gui

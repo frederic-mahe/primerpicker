@@ -5,6 +5,8 @@ add_library(primerpicker_gui
   analysis_view.cpp
   colour_scheme.cpp
   find_enzymes_dialog.cpp
+  find_pair_dialog.cpp
+  find_pair_view.cpp
   from_molecule_dialog.cpp
   main_window.cpp
   sequence_dialog.cpp

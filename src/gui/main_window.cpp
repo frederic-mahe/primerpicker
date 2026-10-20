@@ -3,6 +3,7 @@
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
+#include "core/search/legacy_find_pair.hpp"
 #include "core/io/pd2.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/report/legacy_report.hpp"
@@ -12,6 +13,7 @@
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
 #include "gui/find_enzymes_dialog.hpp"
+#include "gui/find_pair_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
 
 #include <QAction>
@@ -99,7 +101,8 @@ MainWindow::MainWindow()
       direct_entry_{*this, direct_entry_kind},
       extension_{*this, extension_kind},
       from_molecule_{*this},
-      find_enzymes_{*this} {
+      find_enzymes_{*this},
+      find_pair_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
@@ -108,6 +111,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&no_primer_);
     pages_.addWidget(&analysis_);
     pages_.addWidget(&sites_);
+    pages_.addWidget(&pairs_);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -116,6 +120,7 @@ MainWindow::MainWindow()
     QObject::connect(&direct_entry_, &QDialog::accepted, this, &MainWindow::use_direct_entry);
     QObject::connect(&extension_, &QDialog::accepted, this, &MainWindow::use_extension);
     QObject::connect(&find_enzymes_, &FindEnzymesDialog::enzyme_entered, this, &MainWindow::use_find_enzymes);
+    QObject::connect(&find_pair_, &FindPairDialog::search_entered, this, &MainWindow::use_find_pair);
     QObject::connect(&analysis_, &AnalysisView::print_requested, this, &MainWindow::print_report);
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
 }
@@ -138,7 +143,10 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&from_molecule, &QAction::triggered, this, &MainWindow::create_from_molecule);
     auto const& direct_entry = add_item(primer_create, {.text = u"&Direct Entry...", .name = u"direct_entry"});
     QObject::connect(&direct_entry, &QAction::triggered, &direct_entry_, [this] { direct_entry_.start(); });
-    add_disabled_items(primer_create, {u"Match &Active Primer"_s, u"Find &Pair"_s, u"&Save Active Primer"_s});
+    add_disabled_items(primer_create, {u"Match &Active Primer"_s});
+    auto const& find_pair_item = add_item(primer_create, {.text = u"Find &Pair...", .name = u"find_pair"});
+    QObject::connect(&find_pair_item, &QAction::triggered, this, &MainWindow::open_find_pair);
+    add_disabled_items(primer_create, {u"&Save Active Primer"_s});
     auto const& retrieve = add_item(primer_create, {.text = u"&Retrieve from disk...", .name = u"retrieve_primer"});
     QObject::connect(&retrieve, &QAction::triggered, this, &MainWindow::retrieve_primer);
 
@@ -271,6 +279,43 @@ auto MainWindow::find_enzyme(QString const& name, enzymes::Mismatches const mism
     sites_.show_sites({.enzyme = resolved->enzyme, .mismatches = mismatches, .molecule = molecule_->sequence}, sites);
     pages_.setCurrentWidget(&sites_);
     return std::nullopt;
+}
+
+auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Please load a molecule"_s;
+    }
+    auto const settings = search::FindPairSettings{.target_a = request.target_a,
+                                                   .start_offset_a = request.start_offset_a,
+                                                   .target_b = request.target_b,
+                                                   .end_offset_b = request.end_offset_b,
+                                                   .length = defaults_.primer_length,
+                                                   .gc_tolerance_percent = defaults_.gc_tolerance_percent,
+                                                   .tm_tolerance_celsius = defaults_.tm_tolerance_celsius};
+    auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria);
+    pairs_.show_pairs(result, defaults_.weights);
+    pages_.setCurrentWidget(&pairs_);
+    return std::nullopt;
+}
+
+void MainWindow::open_find_pair() {
+    if (not molecule_.has_value() and not ask_for_molecule()) {
+        return;
+    }
+    find_pair_.start(defaults_.find_pair_start_offset, defaults_.find_pair_end_offset);
+}
+
+void MainWindow::use_find_pair() {
+    auto const request = find_pair_.request();
+    if (not request.has_value()) {
+        find_pair_.refuse(u"Invalid Position"_s);
+        return;
+    }
+    if (auto const error = find_pair(*request); error.has_value()) {
+        find_pair_.refuse(*error);
+        return;
+    }
+    find_pair_.accept();
 }
 
 void MainWindow::open_find_enzymes() {
