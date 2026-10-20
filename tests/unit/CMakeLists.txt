@@ -64,7 +64,9 @@ add_executable(unit_tests
   test_legacy_homology_copies.cpp
   test_legacy_match_report.cpp
   test_pd2_cfg_offsets.cpp
-  test_legacy_tm_constant.cpp)
+  test_legacy_tm_constant.cpp
+  test_direct_entry.cpp
+  test_composition.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
