@@ -36,6 +36,7 @@
 #include <optional>
 #include <span>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -207,9 +208,28 @@ struct AnalyzeArguments {
     std::string_view primer;
 };
 
-// Today's date (UTC), for the reports
+// The local date, if the standard library has time zones (not libc++
+// 20, nor MinGW-w64 GCC 13) and finds a time zone database
+auto local_date([[maybe_unused]] std::chrono::system_clock::time_point const now)
+    -> std::optional<std::chrono::year_month_day> {
+#if defined(__cpp_lib_chrono) && __cpp_lib_chrono >= 201907L
+    try {
+        auto const local = std::chrono::zoned_time{std::chrono::current_zone(), now}.get_local_time();
+        return std::chrono::year_month_day{std::chrono::floor<std::chrono::local_days::duration>(local)};
+    } catch (std::runtime_error const&) {  // no time zone database
+        return std::nullopt;
+    }
+#else
+    return std::nullopt;
+#endif
+}
+
+// Today's date for the reports: the local date, as PRIMER.exe printed
+// the computer's date, or else the UTC date
 auto today() -> std::chrono::year_month_day {
-    return std::chrono::year_month_day{std::chrono::floor<std::chrono::sys_days::duration>(std::chrono::system_clock::now())};
+    auto const now = std::chrono::system_clock::now();
+    return local_date(now).value_or(
+        std::chrono::year_month_day{std::chrono::floor<std::chrono::sys_days::duration>(now)});
 }
 
 // TEXT written to PATH as is (a report: CR LF line ends), or false

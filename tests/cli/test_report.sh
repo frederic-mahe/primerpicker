@@ -71,10 +71,14 @@ DESCRIPTION="analyze --report still prints the analysis"
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
+## the local date, or the UTC date where the standard library has no
+## time zones (libc++)
 DESCRIPTION="analyze --report: the first line holds today's date (MM/DD/YY)"
 "${PRIMERPICKER}" analyze --report "${REPORT}" GTAAAACGACGGCCAGT > /dev/null
-TODAY=$(date -u +%m/%d/%y)
-[[ $(head -n 1 "${REPORT}") == "Primer Design Report:  One Primer                     Report Date: ${TODAY}"$'\r' ]] && \
+TITLE="Primer Design Report:  One Primer                     Report Date: "
+FIRST_LINE=$(head -n 1 "${REPORT}")
+[[ "${FIRST_LINE}" == "${TITLE}$(date +%m/%d/%y)"$'\r' || \
+       "${FIRST_LINE}" == "${TITLE}$(date -u +%m/%d/%y)"$'\r' ]] && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
