@@ -3,7 +3,8 @@
 # to Disk, file name REPORT) and keep it as WORKDIR/RUN/REPORT.
 #
 # usage: PRIMER_EXE=/path/to/PRIMER.exe print_report.sh WORKDIR KIND ARGUMENTS...
-#   inspect PRIMER                    Primer Analysis of a Direct Entry primer
+#   inspect PRIMER [EXTENSION]        Primer Analysis of a Direct Entry primer
+#                                     (with an optional 5' extension)
 #   pair PRIMER_A PRIMER_B            Primer Pair Analysis (Direct Entry)
 #   find_pair MOLECULE TARGET_A TARGET_B
 #                                     the Find Primer Pair list
@@ -30,7 +31,7 @@ to_disk="down down enter , , r e p o r t enter , , , ,"
 molecule=""
 case "$kind" in
     inspect)
-        path="space down enter enter $(keys "$1") enter i"
+        path="space down enter $(keys "${2:-}") enter $(keys "$1") enter i"
         print_keys=", , p , , $to_disk" ;;
     pair)
         path="space down enter enter $(keys "$1") enter s enter enter $(keys "$2") enter s right right down enter 1 enter 2 enter"
