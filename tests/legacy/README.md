@@ -726,6 +726,12 @@ Rules:
   give the message;
 - the pair count stops at 1000. The program holds the string "More
   than 1000 possible pairs found!" but never showed it.
+- the hang does not happen every time: on 2026-10-20, Find Pair on
+  `pairs/TEST600.GB` (targets 150 and 400, offsets 100, with
+  `config/PD2_CRITERIA.CFG`: 37 possible primers A, 45 B) also stopped
+  at "Pairs:  1000 possible", then showed its list and printed it
+  (`reports/find_pair/TEST600_150_400_CRITERIA.PRN`, see "The Find Pair
+  report"); what makes the recorded runs above hang is not known.
 Not known: what makes "No Matching Primers Found" appear (no
 possible primer A? no pair?); in both recorded cases no pair exists.
 Version 1 (decided 2026-10-19): the same 100-primer limit; at 1000
@@ -834,9 +840,12 @@ Abandon Printing and Start Printing); `reports/reports.tsv` lists the
 screen and inputs of each file. Recorded with `tools/print_report.sh`
 (and `tools/multi_primer.sh` for the Multi Primer report). The files
 are kept as written: DOS line ends, code page 437 (the degree sign is
-byte F8), no form feed.
+byte F8); PAIR.PRN has CR and a form feed (bytes 0D 0C) before its page
+2, the other reports none.
 
-What they hold (not reproduced by primerpicker yet):
+What they hold (One Primer, Primer Pair, Multiple Primers and Find Pair
+are now reproduced by primerpicker, see the sections below; Uniqueness
+and False Priming are not yet):
 - every report starts with a title line ("Primer Design Report:  One
   Primer", "...:  Multiple Primers", "...:  Find Pair", "Uniqueness of
   Primer Report", "False Priming Report") and "Report Date: MM/DD/YY"
