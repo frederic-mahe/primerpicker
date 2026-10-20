@@ -5,9 +5,11 @@
 #include "core/sequence/nucleotide.hpp"
 
 #include <QAbstractItemView>
+#include <QAbstractScrollArea>
 #include <QHeaderView>
 #include <QLabel>
 #include <QModelIndex>
+#include <QSizePolicy>
 #include <QString>
 #include <QVariant>
 
@@ -153,6 +155,11 @@ AnalysisView::AnalysisView() {
     criteria_table_.setSelectionMode(QAbstractItemView::NoSelection);
     criteria_table_.verticalHeader()->hide();
     criteria_table_.horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    criteria_table_.horizontalHeader()->setStretchLastSection(true);
+    // as tall as its rows
+    criteria_table_.setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    criteria_table_.setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    criteria_table_.setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
     primer_layout_.addRow(u"Sequence:"_s, &sequence_);
     primer_layout_.addRow(u"Length:"_s, &length_);
@@ -163,6 +170,7 @@ AnalysisView::AnalysisView() {
     layout_.addLayout(&primer_layout_);
     layout_.addWidget(&criteria_table_);
     layout_.addLayout(&result_layout_);
+    layout_.addStretch();
     setLayout(&layout_);
 }
 
