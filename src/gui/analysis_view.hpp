@@ -73,6 +73,7 @@ private:
     CriteriaModel criteria_model_;
     QTableView criteria_table_;
     QLabel hairpin_;
+    QLabel hairpin_drawing_;
     QLabel verdict_;
     QPushButton print_;
 };
