@@ -120,7 +120,9 @@ auto hairpin_drawing_text(std::span<sequence::Nucleotide const> const sequence) 
 
 AnalysisView::AnalysisView()
     : criteria_model_{{u"Criteria"_s, u"Criteria Setting"_s, u"Actual"_s, u"Meets Criteria"_s}},
-      print_{u"&Print to Disk..."_s} {
+      print_{u"&Print to Disk..."_s},
+      uniqueness_{u"&Uniqueness"_s},
+      false_priming_{u"&False Priming"_s} {
     setObjectName(u"analysis_view"_s);
     sequence_.setObjectName(u"sequence_label"_s);
     length_.setObjectName(u"length_label"_s);
@@ -155,8 +157,16 @@ AnalysisView::AnalysisView()
     layout_.addWidget(&criteria_table_);
     layout_.addLayout(&result_layout_);
     print_.setObjectName(u"print_button"_s);
+    uniqueness_.setObjectName(u"uniqueness_button"_s);
+    false_priming_.setObjectName(u"false_priming_button"_s);
     QObject::connect(&print_, &QPushButton::clicked, this, &AnalysisView::print_requested);
-    layout_.addWidget(&print_, 0, Qt::AlignLeft);
+    QObject::connect(&uniqueness_, &QPushButton::clicked, this, &AnalysisView::uniqueness_requested);
+    QObject::connect(&false_priming_, &QPushButton::clicked, this, &AnalysisView::false_priming_requested);
+    buttons_layout_.addWidget(&print_);
+    buttons_layout_.addWidget(&uniqueness_);
+    buttons_layout_.addWidget(&false_priming_);
+    buttons_layout_.addStretch();
+    layout_.addLayout(&buttons_layout_);
     layout_.addStretch();
     setLayout(&layout_);
 }

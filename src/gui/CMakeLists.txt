@@ -8,6 +8,7 @@ add_library(primerpicker_gui
   find_pair_dialog.cpp
   find_pair_view.cpp
   from_molecule_dialog.cpp
+  homology_view.cpp
   main_window.cpp
   sequence_dialog.cpp
   sites_view.cpp

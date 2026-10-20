@@ -1,9 +1,11 @@
 #pragma once
 
+#include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
@@ -11,6 +13,7 @@
 #include "gui/find_pair_dialog.hpp"
 #include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
+#include "gui/homology_view.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
 
@@ -34,11 +37,13 @@ namespace primerpicker::gui {
 // first extension_length nucleotides are the 5' extension, and its
 // criteria. As in a .PD2 file, a primer has its own criteria (Modify ->
 // Active Primer: Criteria): the System Defaults' when it is made, the
-// saved ones when it is retrieved from disk.
+// saved ones when it is retrieved from disk. A primer made from the
+// loaded molecule has its location there (without its extension).
 struct ActivePrimer {
     std::vector<sequence::Nucleotide> sequence;
     std::size_t extension_length = 0;
     analysis::LegacyCriteria criteria;
+    std::optional<sequence::PrimerLocation> location;
 };
 
 // A molecule (template) loaded from a file
@@ -87,6 +92,11 @@ public:
     // the ranked pairs; the error, if there was no search
     [[nodiscard]] auto find_pair(FindPairRequest const& request) -> std::optional<QString>;
 
+    // The Uniqueness or False Priming screen of the active primer, made
+    // from the loaded molecule (its 5' extension aside), with the
+    // settings' homology options; the error, if there was no search
+    [[nodiscard]] auto homology(analysis::HomologyKind kind) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -100,7 +110,9 @@ private:
     void open_find_pair();
     void use_find_pair();
     void print_report();
-    void make_active(std::vector<sequence::Nucleotide> sequence, std::size_t extension_length);
+    void make_active(std::vector<sequence::Nucleotide> sequence,
+                     std::optional<sequence::PrimerLocation> location = std::nullopt);
+    void show_homology(analysis::HomologyKind kind);
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
     void use_from_molecule();
@@ -117,6 +129,7 @@ private:
     AnalysisView analysis_;
     SitesView sites_;
     FindPairView pairs_;
+    HomologyView homology_;
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;

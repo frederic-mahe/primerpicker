@@ -1,5 +1,6 @@
 #include "gui/main_window.hpp"
 
+#include "core/analysis/legacy_homology.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
@@ -14,6 +15,7 @@
 #include "gui/colour_scheme.hpp"
 #include "gui/find_enzymes_dialog.hpp"
 #include "gui/find_pair_dialog.hpp"
+#include "gui/homology_view.hpp"
 #include "gui/sequence_dialog.hpp"
 
 #include <QAction>
@@ -112,6 +114,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&analysis_);
     pages_.addWidget(&sites_);
     pages_.addWidget(&pairs_);
+    pages_.addWidget(&homology_);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -122,6 +125,10 @@ MainWindow::MainWindow()
     QObject::connect(&find_enzymes_, &FindEnzymesDialog::enzyme_entered, this, &MainWindow::use_find_enzymes);
     QObject::connect(&find_pair_, &FindPairDialog::search_entered, this, &MainWindow::use_find_pair);
     QObject::connect(&analysis_, &AnalysisView::print_requested, this, &MainWindow::print_report);
+    QObject::connect(&analysis_, &AnalysisView::uniqueness_requested, this,
+                     [this] { show_homology(analysis::HomologyKind::uniqueness); });
+    QObject::connect(&analysis_, &AnalysisView::false_priming_requested, this,
+                     [this] { show_homology(analysis::HomologyKind::false_priming); });
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
 }
 
@@ -355,18 +362,43 @@ void MainWindow::use_from_molecule() {
         return;
     }
     from_molecule_.accept();
-    make_active(std::move(*primer), 0);
+    make_active(std::move(*primer), sequence::PrimerLocation{.position = *position,
+                                                             .length = defaults_.primer_length,
+                                                             .strand = from_molecule_.strand()});
 }
 
-// a new primer, with the System Defaults' criteria
-void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, std::size_t const extension_length) {
+// a new primer without extension, with the System Defaults' criteria
+void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence,
+                             std::optional<sequence::PrimerLocation> const location) {
     active_primer_ = ActivePrimer{
-        .sequence = std::move(sequence), .extension_length = extension_length, .criteria = defaults_.criteria};
+        .sequence = std::move(sequence), .extension_length = 0, .criteria = defaults_.criteria, .location = location};
     analyze_active_primer();
 }
 
+auto MainWindow::homology(analysis::HomologyKind const kind) -> std::optional<QString> {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value()) {
+        return u"Please create a primer from a molecule"_s;
+    }
+    auto const primer = std::span{active_primer_->sequence}.subspan(active_primer_->extension_length);
+    auto const settings = analysis::HomologySettings{
+        .tm_filter = defaults_.exclude_tm_at_most_zero ? analysis::HomologyTmFilter::exclude_at_most_zero
+                                                       : analysis::HomologyTmFilter::keep_all,
+        .order = defaults_.sort_homologies_by_tm ? analysis::HomologyOrder::by_tm : analysis::HomologyOrder::by_position};
+    auto const sites =
+        analysis::legacy_homology_sites(primer, molecule_->sequence, *active_primer_->location, kind, settings);
+    homology_.show_sites({.kind = kind, .primer = primer, .molecule_name = molecule_->name}, sites);
+    pages_.setCurrentWidget(&homology_);
+    return std::nullopt;
+}
+
+void MainWindow::show_homology(analysis::HomologyKind const kind) {
+    if (auto const error = homology(kind); error.has_value()) {
+        QMessageBox::information(this, u"Uniqueness and False Priming"_s, *error);
+    }
+}
+
 void MainWindow::use_direct_entry() {
-    make_active(direct_entry_.sequence(), 0);
+    make_active(direct_entry_.sequence());
 }
 
 void MainWindow::modify_extension() {
@@ -416,8 +448,11 @@ auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
     }
     auto sequence = *extension;
     sequence.insert(sequence.end(), primer->begin(), primer->end());
-    active_primer_ = ActivePrimer{
-        .sequence = std::move(sequence), .extension_length = extension->size(), .criteria = parsed.primer->criteria};
+    // the molecule of a .PD2 file may not be the loaded one: no location
+    active_primer_ = ActivePrimer{.sequence = std::move(sequence),
+                                  .extension_length = extension->size(),
+                                  .criteria = parsed.primer->criteria,
+                                  .location = std::nullopt};
     analyze_active_primer();
     return std::nullopt;
 }

@@ -26,6 +26,7 @@ add_executable(gui_tests
   test_hairpin_drawing.cpp
   test_find_enzymes.cpp
   test_find_pair.cpp
+  test_homology.cpp
   test_screenshots.cpp)
 target_link_libraries(gui_tests PRIVATE primerpicker_gui Qt6::Test Catch2::Catch2)
 target_compile_options(gui_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
