@@ -15,6 +15,7 @@
 #include "core/io/pd2_cfg.hpp"
 #include "core/report/legacy_report.hpp"
 #include "core/search/legacy_find_pair.hpp"
+#include "core/search/legacy_match.hpp"
 #include "core/sequence/iupac.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
@@ -66,7 +67,8 @@ constexpr auto usage = std::string_view{
     "                              MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker homology [--false-priming] [--report FILE] MOLECULE POSITION\n"
-    "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair|homology ...\n"
+    "       primerpicker match [--report FILE] MOLECULE POSITION TARGET\n"
+    "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair|homology|match ...\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
@@ -100,7 +102,11 @@ constexpr auto usage = std::string_view{
     "         molecule file: its regions of homology (7 bases or more) on both\n"
     "         strands; with --false-priming, the False Priming screen (3' end\n"
     "         homologies of 6 bases or more). --report also writes the report\n"
-    "         PRIMER.exe prints to disk\n"};
+    "         PRIMER.exe prints to disk\n"
+    "match    the Find Matching Primer list (Match Active Primer) of the primer\n"
+    "         at POSITION (top strand): primers B on the complement strand from\n"
+    "         TARGET - 50 to TARGET + 50 (the settings' search range) that match\n"
+    "         it; --report also writes the report PRIMER.exe prints to disk\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -969,6 +975,95 @@ auto homology_command(std::span<char const* const> arguments, LegacySystemDefaul
     return homology(parsed, defaults);
 }
 
+// match [--report FILE] MOLECULE POSITION TARGET
+struct MatchArguments {
+    std::optional<std::string_view> report;
+    std::string_view molecule;
+    std::string_view position;
+    std::string_view target;
+};
+
+constexpr auto no_match_message = std::string_view{"No matching primer found\n"};
+
+auto match_screen(primerpicker::report::MatchReport const& match) -> std::string {
+    auto const& settings = match.settings;
+    auto text = std::format("Primer A:  5'-{}-3', position {} (top strand)\n", letters(match.primer_a),
+                            match.primer_a_position);
+    text += std::format("Molecule:  {}, {} bases\n", match.molecule_name, match.molecule_size);
+    text += std::format("Search:    primers B on the complement strand, target {} - {} to {} + {}\n\n",
+                        settings.target, settings.start_offset, settings.target, settings.end_offset);
+    if (match.list.empty()) {
+        return text + std::string{no_match_message};
+    }
+    text += std::format("{:>8}{:>10}{:>6}{:>7}{:>9}{:>5}{:>9}{:>5}{:>6}{:>8}\n", "Position", "from tgt", "GC %",
+                        "Tm °C", "self 3'", "any", "inter 3'", "any", "runs", "3' G/C");
+    for (auto const& candidate : match.list) {
+        auto const& actual = candidate.actual;
+        text += std::format("{:>8}{:>10}{:>6}{:>7}{:>9}{:>5}{:>9}{:>5}{:>6}{:>8}\n", candidate.position,
+                            candidate.distance, actual.gc_percent, actual.tm_celsius, actual.dimer_3prime_matches,
+                            actual.dimer_adjacent_bases, candidate.inter_dimer_3prime_matches,
+                            candidate.inter_dimer_adjacent_bases, actual.longest_run, actual.gc_run_3prime);
+    }
+    return text;
+}
+
+auto match(MatchArguments const& arguments, LegacySystemDefaults const& defaults) -> int {
+    auto const position = parse_position(arguments.position, "position");
+    auto const target = parse_position(arguments.target, "target");
+    if (not position.has_value() or not target.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const molecule = read_molecule(std::filesystem::path{arguments.molecule});
+    if (not molecule.has_value()) {
+        return EXIT_FAILURE;
+    }
+    auto const length = defaults.primer_length;
+    if (length > molecule->sequence.size() or *position > molecule->sequence.size() - length + 1) {
+        return fail(std::format("position: a primer of {} bases at {} goes beyond the molecule ({} bases)", length,
+                                *position, molecule->sequence.size()));
+    }
+    auto const primer_a = std::span{molecule->sequence}.subspan(*position - 1, length);
+    auto const settings = primerpicker::search::MatchSettings{.target = *target,
+                                                              .start_offset = defaults.match_start_offset,
+                                                              .end_offset = defaults.match_end_offset,
+                                                              .length = length,
+                                                              .gc_tolerance_percent = defaults.gc_tolerance_percent,
+                                                              .tm_tolerance_celsius = defaults.tm_tolerance_celsius};
+    auto const list = primerpicker::search::legacy_match_active_primer(
+        {.molecule = molecule->sequence, .primer_a = primer_a}, settings, defaults.criteria);
+    auto const report = primerpicker::report::MatchReport{.molecule_name = molecule->name,
+                                                          .molecule_size = molecule->sequence.size(),
+                                                          .primer_a = primer_a,
+                                                          .primer_a_position = *position,
+                                                          .settings = settings,
+                                                          .list = list};
+    if (arguments.report.has_value() and
+        not write_report(std::filesystem::path{*arguments.report},
+                         primerpicker::report::legacy_match_report(report, today()))) {
+        return EXIT_FAILURE;
+    }
+    std::cout << match_screen(report);
+    return EXIT_SUCCESS;
+}
+
+// match [--report FILE] MOLECULE POSITION TARGET: the command's
+// arguments, after its name
+auto match_command(std::span<char const* const> const arguments, LegacySystemDefaults const& defaults) -> int {
+    constexpr auto report_option = std::string_view{"--report"};
+    constexpr auto positional_count = std::size_t{3};
+    constexpr auto report_size = std::size_t{2};  // the option and its file
+    if (arguments.size() == positional_count) {
+        return match({.report = std::nullopt, .molecule = arguments[0], .position = arguments[1], .target = arguments[2]},
+                     defaults);
+    }
+    if (arguments.size() == positional_count + report_size and arguments[0] == report_option) {
+        return match({.report = arguments[1], .molecule = arguments[2], .position = arguments[3], .target = arguments[4]},
+                     defaults);
+    }
+    std::cerr << usage;
+    return EXIT_FAILURE;
+}
+
 // A command and its arguments (after the command's name)
 auto run_command(std::string_view const command, std::span<char const* const> const arguments,
                  LegacySystemDefaults const& defaults) -> int {
@@ -999,6 +1094,9 @@ auto run_command(std::string_view const command, std::span<char const* const> co
     }
     if (command == "homology") {
         return homology_command(arguments, defaults);
+    }
+    if (command == "match") {
+        return match_command(arguments, defaults);
     }
     constexpr auto find_enzymes_count = std::size_t{2};
     constexpr auto find_almost_enzymes_count = std::size_t{3};

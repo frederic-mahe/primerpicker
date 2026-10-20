@@ -33,3 +33,6 @@ add_test(NAME cli_homology
 add_test(NAME cli_homology_copies
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_homology_copies.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_match
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_match.sh $<TARGET_FILE:primerpicker>
+          ${PROJECT_SOURCE_DIR}/tests/legacy)

@@ -67,7 +67,9 @@ fixed_seeds() {
             printf 'analyze\n--report\nr\nGTAAAACGACGGCCAGT' > "$corpus/analyze_report"
             printf 'pair\n--report\nr\nAAAAAAAAAAAA\nCCCCCCCCCCCC' > "$corpus/pair_report"
             printf 'multi\n--report\nr\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_report"
-            printf 'find-pair\n--report\nr\n/m\n150\n400' > "$corpus/find_pair_report" ;;
+            printf 'find-pair\n--report\nr\n/m\n150\n400' > "$corpus/find_pair_report"
+            printf 'match\n/m\n51\n400' > "$corpus/match"
+            printf 'match\n--report\nr\n/m\n51\n400' > "$corpus/match_report" ;;
         fuzz_multi_primer)
             # fields A to D (0x0F), each 20 bases: the 4-primer recording
             # of tests/legacy/multi/
