@@ -1,3 +1,4 @@
 # file	molecule	target_a	target_b	config	reason
-find_pair/TCIRC_15_560.PRN	circular/TCIRC.GB	15	560	-	3prime-run
-find_pair/TLIN_15_560.PRN	circular/TLIN.GB	15	560	-	3prime-run
+find_pair/TRUN_480_580.PRN	search/TRUN.GB	480	580	-	full-length-copy
+find_pair/TRUN_480_580_RUNS4.PRN	search/TRUN.GB	480	580	PD2_RUNS4.CFG	full-length-copy
+find_pair/TRUN_1280_1380_RUNS4.PRN	search/TRUN.GB	1280	1380	PD2_RUNS4.CFG	full-length-copy

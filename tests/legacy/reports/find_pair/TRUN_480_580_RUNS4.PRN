@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   480;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   580;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 4 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+     390       640      50 / 50    71 / 71       2    4        - / -
+     390       641      50 / 50    71 / 71       2    4        - / -
+     423       581      60 / 60    75 / 75       2    4        - / -
+     452       617      50 / 50    71 / 70       2    3        - / -
+     380       618      55 / 55    73 / 72       2    4        - / -
+     381       618      55 / 55    73 / 72       2    4        - / -
+     388       617      50 / 50    71 / 70       2    4        - / -
+     388       640      50 / 50    71 / 71       2    5        - / -
+     388       641      50 / 50    71 / 71       2    5        - / -
+     389       638      50 / 50    72 / 72       2    5        - / -
+     390       617      50 / 50    71 / 70       2    4        - / -
+     390       638      50 / 50    71 / 72       2    4        - / -
+     390       643      50 / 50    71 / 72       2    4        - / -
+     452       616      50 / 50    71 / 69       2    3        - / -
+     454       617      50 / 50    72 / 70       2    3        - / -
+     388       616      50 / 50    71 / 69       2    4        - / -
+     388       638      50 / 50    71 / 72       2    5        - / -
+     388       643      50 / 50    71 / 72       2    5        - / -
+     388       675      50 / 50    71 / 71       2    6        - / -
+     389       640      50 / 50    72 / 71       2    5        - / -

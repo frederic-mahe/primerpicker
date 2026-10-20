@@ -1139,14 +1139,49 @@ PRIMER.exe treats a circular molecule as linear:
 primerpicker v1 does the same.
 
 **Primers B ending with a run of three.** In these Find Pair searches,
-PRIMER.exe finds 9 possible primers B and 25 pairs, primerpicker 11 and
-33: the two primers B that PRIMER.exe leaves out, at 569
-(AGGCCAGCGATCACGTCAAA) and 598 (TCATTGAGCTCCTCGCGAAA), both end with
-AAA, and their pairs account for the 8 missing pairs; 599 (ending with
-AA) is kept. Yet the Primer Analysis screen does not count the run at
-the 3' end ("Primer criteria"). Not understood from this case: the two
-reports are listed in `reports/find_pair_reports_pending.tsv`, outside
-the sweep, until it is probed.
+PRIMER.exe found 9 possible primers B and 25 pairs, where a Find Pair
+that applies the Primer Analysis criteria finds 11 and 33: the two left
+out, at 569 (AGGCCAGCGATCACGTCAAA) and 598 (TCATTGAGCTCCTCGCGAAA), end
+with AAA. See "Find Pair and runs at the 3' end" below; both reports
+are reproduced.
+
+## Find Pair and runs at the 3' end (recorded 2026-10-20)
+
+`search/TRUN.GB` (`tools/plant_sites.py`, 2000 bases) holds, in five
+regions 400 bases apart, a primer A (top strand, at 400 i + 50) and a
+primer B (complement strand, ending at 400 i + 219) that meet every
+Primer Analysis criterion and end with AA (region 0), AAA, AAAA, TTT and
+TTTT (regions 1 to 4); in regions 1, 3 and 4 primers A and B have the
+same sequence. Find Pair with targets 400 i + 80 and 400 i + 180
+(offsets 100), with built-in settings and with `config/PD2_RUNS4.CFG`
+(runs criterion 4, otherwise built in; written with
+`tools/make_pd2_cfg.py --criteria`, an input); recorded with
+`tools/print_report.sh find_pair`. `search/find_pair_3prime_runs.tsv`:
+the final "Primer A/B: N possible primers" and "Pairs: N possible"
+counts of the 9 runs that reached them (the counts climb during the
+search: the last value is kept); `reports/find_pair/TRUN_*.PRN`: the 8
+reports.
+
+Rule (all 9 primer A counts, 7 primer B and pair counts, and
+`circular/TLIN.GB` and `TCIRC.GB`): Find Pair rejects a primer whose
+run at the 3' end reaches the runs criterion ("reject >= 3 base runs":
+AAA is rejected, AA is not; with 4: AAAA is rejected, AAA is not),
+although the Primer Analysis screen does not count that run ("Primer
+criteria"). A fixed limit of 3 contradicts the counts with criterion 4.
+Predicted before recording from the TLIN case, for both settings.
+`tests/unit/test_legacy_find_pair_3prime_runs.cpp` checks the counts;
+5 TRUN reports and both circular reports are reproduced byte for byte.
+
+**Primers with a copy elsewhere.** Where primers A and B have the same
+sequence (regions 1, 3 and 4), some primers have a second full-length
+(or 19-base) match in the molecule, at the other primer's site: there,
+PRIMER.exe's lists differ (two runs: the primer B count, the pair count;
+three reports: the order of the pairs). primerpicker's homology search
+leaves out every full-length match as the primer's own site, which
+these recordings suggest is not what PRIMER.exe does. Not probed
+further (`note` = `full-length-copy` in `find_pair_3prime_runs.tsv`;
+reports in `reports/find_pair_reports_pending.tsv`). Not probed either:
+whether Match Active Primer applies the same 3'-end rule.
 
 ## Restriction enzymes (recorded 2026-10-18)
 

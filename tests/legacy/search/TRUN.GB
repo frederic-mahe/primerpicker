@@ -1,0 +1,39 @@
+LOCUS       TRUN         2000 bp    DNA     linear
+DEFINITION  Random test molecule (seed 3301, GC 0.5,0.5,0.5,0.5), copies CTCAATGACGTGCGGTCGAA@50 TTCTCGATGAGCCTGACTGC@200 GCAGTCAGGCTCATCGCAAA@450 TTTGCGATGAGCCTGACTGC@600 CTCAATGACGTGCGGCAAAA@850 TTTTGGCTGAGCCTGACTGC@1000 CTCAATGACGTGCGGTCTTT@1250 AAAGACCGCACGTCATTGAG@1400 CTCAATGACGTGCGGCTTTT@1650 AAAAGCCGCACGTCATTGAG@1800.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 ggcgctgctc tggtattaaa aggattatac atggcctata tgagcaggac tcaatgacgt
+       61 gcggtcgaaa gcaatacctt tgcaaactgt cgatgatatc cgcgcccatc accccggcaa
+      121 ccgcttactg gatatggcgg gtaaagtggt gcctattctt cgcggccaag ccaagtgcgg
+      181 gacgtcacat tcggaaagat tctcgatgag cctgactgcc tcgtgtgggc ctctgtgtct
+      241 cagtcggtca tgcgcgcctt aactaaccct cgtagatagt gtcgttactc aatagggttc
+      301 agaacacagc agtcatatgt gttcccagca ccacttgctt caaccaagca aggaatgggt
+      361 gtcccgggga tatccgttcg acacgattag cgcccacttc aaatacctag gaaccgccga
+      421 cccgggaaga gaacgtcagg gaccagcccg cagtcaggct catcgcaaag agatctctct
+      481 agtgtggcct ccgccatagt gcacgctggg taggtattct acgatgacgt tcagtgacag
+      541 gtcattcccc aagaggtgcc gactcgctga acttggtcgg gggtcagact gaaaattagt
+      601 ttgcgatgag cctgactgcg aacacagcgc acaagattcc tcaatctata ctcataacgt
+      661 acggatattg cccagatcag ctttctccac ggactttgcg ccgactagga ttatgcgatg
+      721 caataaaacc tgcggtacct agtttgacaa tgactaaaac cactccctga aagacgtcga
+      781 ggcgaaatct gctcttaatc tcctggagag atgtgggacg ttactaggga cttgcgctgg
+      841 cgtagcaatc tcaatgacgt gcggcaaaag tgttttgata ccgcgaccaa gcttgttgag
+      901 cttatcaaat tagccccacc cggcgcgctt atcagagcat taaatctcgt catacgacgg
+      961 catgactagg cgttggcgat atcgacaggt agagtcatct tttggctgag cctgactgca
+     1021 cttccgaaca gagaccctgc agccactcgc acccattgga ggaccttagt acgcttttcg
+     1081 agacgtaacg agatcccctt tactcgcaca cccgcttgga ataccgtcca taagcactaa
+     1141 gttaactatt accactgacg ttagtaggcg cacaaagcaa caagtaggtg atgtcagcgc
+     1201 ggacgagaga tttacccgtg gtgggaccca cctacgcaga gaaggaaccc tcaatgacgt
+     1261 gcggtctttt agatcatgag tatatcgacc agtatagtgg cactaaacca ggtgctaaca
+     1321 accagccagc cattgggcag gccttgattc gtcgtaggca tgcgtgtatg agaaagggga
+     1381 tgagagtccc gtgacttaca aagaccgcac gtcattgagt aaccctctcc atttctctaa
+     1441 ccttgctctc cgatcgcata ccctcgtaat caacgtgttt gattggagga tacggggtta
+     1501 cgagtcctca gggatgaggc ccgatctgat gctgatgttg cggaaattgg tagggctaga
+     1561 ttcggcggag tgtgtatcct ctatcggaac cggttcaagc gaaagcggct aagggcacct
+     1621 tgaactaggc ctagacttga ctcgtagcac tcaatgacgt gcggctttta ctcacagcat
+     1681 atcacgaaag ttctgtgagg atcctctgat tacgggggat gtctggagga actctcttcg
+     1741 agttagtaaa tctgtgaatt cggggaccta ttcgagagca agcttgtagc agcctacgta
+     1801 aaagccgcac gtcattgagg gaaccaccct cactgacatg tttgctcaag caggcggtcc
+     1861 cacagatcaa cgattcatta agccgagcac tatgggttgc tgctgccagc ctaatatcct
+     1921 gaacaaaatc atacctttgc cgaccggtgt acctcgggca tcctagcacc caccctctta
+     1981 tggttgaggc taataatagt
+//

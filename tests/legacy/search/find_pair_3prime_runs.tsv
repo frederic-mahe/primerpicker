@@ -1,0 +1,10 @@
+# config	target_a	target_b	possible_a	possible_b	pairs	note
+-	1280	1380	2	9	5	-
+PD2_RUNS4.CFG	1280	1380	22	27	282	full-length-copy
+-	1680	1780	6	2	4	-
+PD2_RUNS4.CFG	1680	1780	13	24	117	full-length-copy
+-	480	580	6	15	44	-
+PD2_RUNS4.CFG	480	580	26	22	278	-
+-	80	180	4	19	28	-
+-	880	980	3	18	19	-
+PD2_RUNS4.CFG	880	980	19	34	223	-

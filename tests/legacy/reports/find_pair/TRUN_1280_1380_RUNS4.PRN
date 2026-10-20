@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:  1280;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:  1380;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 4 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+    1195      1468      55 / 55    74 / 74       2    6        - / -
+    1201      1456      55 / 55    70 / 70       2    6        - / -
+    1202      1456      55 / 55    70 / 70       2    6        - / -
+    1205      1456      55 / 55    70 / 70       2    6        - / -
+    1235      1457      55 / 55    73 / 73       2    6        - / -
+    1195      1457      55 / 55    74 / 73       2    6        - / -
+    1196      1457      55 / 55    72 / 73       2    6        - / -
+    1204      1456      55 / 55    71 / 70       2    6        - / -
+    1224      1464      60 / 60    73 / 74       2    6        - / -
+    1224      1465      60 / 60    73 / 72       2    6        - / -
+    1234      1457      55 / 55    72 / 73       2    6        - / -
+    1235      1468      55 / 55    73 / 74       2    6        - / -
+    1194      1468      55 / 55    76 / 74       2    6        - / -
+    1196      1456      55 / 55    72 / 70       2    6        - / -
+    1204      1457      55 / 55    71 / 73       2    6        - / -
+    1224      1467      60 / 60    73 / 75       2    6        - / -
+    1225      1465      60 / 60    70 / 72       2    6        - / -
+    1234      1456      55 / 55    72 / 70       2    6        - / -
+    1234      1468      55 / 55    72 / 74       2    6        - / -
+    1194      1457      55 / 55    76 / 73       2    6        - / -

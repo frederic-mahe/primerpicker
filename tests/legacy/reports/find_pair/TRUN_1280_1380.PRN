@@ -1,0 +1,30 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:  1280;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:  1380;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+    1184      1457      60 / 55    75 / 73       2    6       25 / -
+    1184      1456      60 / 55    75 / 70       2    6       25 / -
+    1249      1423      55 / 50    74 / 69       2    4       69 / 64
+    1249      1420      55 / 50    74 / 71       2    4       69 / 69
+    1249      1421      55 / 50    74 / 69       2    4       69 / 67

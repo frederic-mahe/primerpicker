@@ -1,0 +1,44 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   880;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   980;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+     837      1032      50 / 50    70 / 70       2    4        - / -
+     839      1034      50 / 50    68 / 68       2    4        1 / -
+     837       982      50 / 50    70 / 71       2    5        - / -
+     837      1034      50 / 50    70 / 68       2    4        - / -
+     837      1073      50 / 50    70 / 65       2    4        - / -
+     837      1031      50 / 55    70 / 69       2    4        - / -
+     837       983      50 / 55    70 / 70       2    6        - / -
+     837      1033      50 / 55    70 / 68       2    4        - / -
+     848      1034      50 / 50    75 / 68       2    4        - / -
+     848      1076      50 / 50    75 / 67       2    4        - / -
+     848      1073      50 / 50    75 / 65       2    4        - / -
+     837      1075      50 / 50    70 / 67       2    4        - /  8
+     848      1031      50 / 55    75 / 69       2    4        - / -
+     848      1075      50 / 50    75 / 67       1    4        - /  8
+     837      1074      50 / 50    70 / 67       2    4        - / 16
+     837      1030      50 / 55    70 / 72       2    4        - / 16
+     848      1030      50 / 55    75 / 72       2    4        - / 16
+     848      1074      50 / 50    75 / 67       2    4        - / 16
+     848      1028      50 / 55    75 / 73       2    4        - / 36

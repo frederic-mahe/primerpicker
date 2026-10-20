@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:    80;   Start: Target - 79 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   180;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+      50       219      55 / 55    75 / 71       1    4        - / -
+      50       220      55 / 60    75 / 74       2    4        - / -
+      50       253      55 / 55    75 / 70       2    5        - / -
+      50       255      55 / 60    75 / 75       2    5        - / -
+      50       250      55 / 55    75 / 66       2    5        - / -
+      50       261      55 / 60    75 / 79       2    6        - / -
+      50       218      55 / 50    75 / 68       2    4        - / -
+      50       217      55 / 50    75 / 67       2    4        - / -
+      50       249      55 / 60    75 / 67       2    5        - / -
+      50       251      55 / 50    75 / 65       2    5        - / -
+      42       219      55 / 55    69 / 71       2    4       38 / -
+      42       218      55 / 50    69 / 68       2    4       38 / -
+      42       217      55 / 50    69 / 67       2    4       38 / -
+      42       265      55 / 55    69 / 74       2    6       38 / -
+      42       220      55 / 60    69 / 74       2    4       38 / -
+      42       266      55 / 50    69 / 72       2    6       38 / -
+      42       255      55 / 60    69 / 75       2    4       38 / -
+      42       261      55 / 60    69 / 79       2    6       38 / -
+      42       262      55 / 60    69 / 79       2    6       38 / -
+      42       263      55 / 60    69 / 79       2    6       38 / -
