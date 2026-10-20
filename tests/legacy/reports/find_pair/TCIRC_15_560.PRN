@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TCIRC                               600 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:    15;   Start: Target - 14 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   560;   End:   Target + 40 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+      11       578      50 / 50    70 / 70       2    4        - / -
+      11       576      50 / 50    70 / 71       2    4        - / -
+      13       578      50 / 50    69 / 70       2    4        - / -
+      13       576      50 / 50    69 / 71       2    4        - / -
+       3       578      50 / 50    66 / 70       2    4        - / -
+       3       576      50 / 50    66 / 71       2    4        - / -
+       8       578      50 / 50    65 / 70       2    4        - / -
+       8       576      50 / 50    65 / 71       2    4        - / -
+       9       578      55 / 50    69 / 70       2    4        - / -
+       9       576      55 / 50    69 / 71       2    4        - / -
+       9       575      55 / 55    69 / 71       2    4        - /  7
+      11       571      50 / 55    70 / 75       2    4        - / -
+       9       574      55 / 60    69 / 75       2    4        - / -
+      12       571      50 / 55    69 / 75       2    4        - / -
+      13       571      50 / 55    69 / 75       2    4        - / -
+      11       570      50 / 55    70 / 77       2    4        - / -
+       3       571      50 / 55    66 / 75       1    4        - / -
+      11       575      50 / 55    70 / 71       2    4        - /  7
+      12       570      50 / 55    69 / 77       2    4        - / -
+      13       570      50 / 55    69 / 77       2    4        - / -

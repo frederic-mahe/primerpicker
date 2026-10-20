@@ -1,0 +1,15 @@
+LOCUS       TCIRC        600 bp    DNA     circular
+DEFINITION  Random test molecule (seed 6060, GC 0.5,0.5), copies CTCAATGACGTGCGGTTAGT@591 ACTTACGCCAGATGACTTCC@31.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 tgcggttagt agttcgcaag agtccacgtt acttacgcca gatgacttcc cccatttgtt
+       61 tggcaggcgt gcggctaacc ttgtcgggag cgccgccact gaataggaca accgtaagct
+      121 aagcgactat ggaaactccg caccgggtgt ccgagcaagg caacggggac tcggtcgcgc
+      181 ctcgatgcct ccatttccga ttacactttc agtagtagcg cgaaataggt cccagcgccg
+      241 aagggacgac attcttcagt attccctcct aacccgttca caatactcgt acaggggacc
+      301 cagttcgcca cgtatagatc cagcggactc tcgagagatt tatgaacccg cacgtggtta
+      361 ttccatgatt atgatgtttg cttcgcgggg gttatatggc ggtggaaaca atctactgtc
+      421 tacgcacccg ccgaacgcct tctgatatct tttccacggc ggaaaaatag gcgcccgcca
+      481 ggaccgtatc tgtgcttttg aactggtgat cgcctaataa agtcagctct tttccgccct
+      541 cagtcgtcgt ttgacgtgat cgctggcctt aggtaatgtt tcgcgaggag ctcaatgacg
+//

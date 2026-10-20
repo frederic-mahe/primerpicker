@@ -1,0 +1,15 @@
+LOCUS       TLIN2        600 bp    DNA     linear
+DEFINITION  Random test molecule (seed 6061, GC 0.5,0.5), copies CTCAAAGGCTCAGACATCAG@300 AAAGGCTCAGAC@595 AAAGGCTCAGAC@450.
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 tcagacccgg ccaggaaagt tacggtacaa tttgccgggc gcttcgctgg agggtattag
+       61 ggacgtacaa gtatctagaa ttcctaccgt cacatcctgg tcctatatca aatgtctcac
+      121 tactctagaa gtgataatga tcaaacacga cgggcccact gatctgtccc ctccaagggt
+      181 gcgtagtata atctacctcc tgcggcgacc acagccggga aaagcttgat gatagacgtc
+      241 gcttaacggt gagtcacatg tagtcaagga tattgccctg tcgactactt cttaactccc
+      301 tcaaaggctc agacatcagc cggctggatt ggctgtttcg catttatgcg accgacaacc
+      361 atcactatag gatacactgg gtaaagtccc taattcgacc tacggttgtt ccggagtgtc
+      421 gtcaaattat cacttgtgcg atctcgctga aaggctcaga caattgctct ttcatcaact
+      481 cccgattttg gcgatccctt tccacacttt acaaactagt agtattaagt aacgtcaata
+      541 acctccttgg tggctagtag agtcgagtgg accggattag gtggaactgc atctaaaggc
+//

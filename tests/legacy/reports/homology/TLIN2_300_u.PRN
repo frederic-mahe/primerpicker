@@ -1,0 +1,35 @@
+Uniqueness of Primer Report                           Report Date: 10/20/26
+
+
+---------------------------------------------------------------------------
+
+Primer Sequence:  5'-CTCAAAGGCTCAGACATCAG-3'
+                  Bp pos:   300
+
+Source molecule:  TLIN2                               600 bps
+
+
+---------------------------------------------------------------------------
+
+
+Search criteria defined:
+
+     Regions of homology (>= 7 bases) between primer and template
+     Sites with melting temperatures <= 0 C are not reported
+
+
+
+Molecule map with primer location (P) and homologous regions marked
+
+                                P>
+==================================================================
+                                                    >
+ 
+
+
+
+Regions of homology found:
+
+             Homologous bases                   Bp Pos          Tm C
+
+             5'......AAAGGCTCAGACA....3'          450            42   

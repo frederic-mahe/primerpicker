@@ -652,11 +652,18 @@ auto legacy_find_pair_report(FindPairReport const& find_pair, analysis::LegacyCr
     report += blank_lines(2);
     report += line("Search parameters:");
     report += legacy_line_end;
+    // the offsets as searched: cut at the molecule's ends (target - 1
+    // bases before target A, the rest of the molecule after target B)
+    auto const start_offset = std::min(settings.start_offset_a, settings.target_a > 0 ? settings.target_a - 1 : 0);
+    auto const end_offset = std::min(settings.end_offset_b,
+                                     find_pair.molecule_size > settings.target_b
+                                         ? find_pair.molecule_size - settings.target_b
+                                         : 0);
     report += line(std::format("   Primer A (normal strand): Target bp:{:6};   Start: Target - {} bases",
-                               settings.target_a, settings.start_offset_a));
+                               settings.target_a, start_offset));
     report += line(std::format("            Length:{:4}      5' Extension: - none -", settings.length));
     report += line(std::format("   Primer B (compl. strand): Target bp:{:6};   End:   Target + {} bases",
-                               settings.target_b, settings.end_offset_b));
+                               settings.target_b, end_offset));
     report += line(std::format("            Length:{:4}      5' Extension: - none -", settings.length));
     report += legacy_line_end;
     report += line(std::format("   Primer Balance:           GC Match: +/- {} GC %     TM Match: +/- {} C",

@@ -1111,6 +1111,43 @@ it; ':' under the pairs of the duplex):
   of column 0 are cut (`AGTTTCTTTTGAGGCT-5'` with one leading space,
   `ATCCGGCGAAGTTAGCT-5'` from column 0).
 
+## Circular molecules (recorded 2026-10-20)
+
+`circular/`: two pairs of molecules written with `tools/plant_sites.py`
+(copies that run past the last base continue at the first), each
+identical but for the LOCUS line: `TCIRC.GB` (circular) and `TLIN.GB`
+(linear), 600 bases, with a primer meeting the built-in criteria across
+the origin (CTCAATGACGTGCGGTTAGT, bases 591 to 600 and 1 to 10) and a
+complement-strand primer B ending at 50; `TCIRC2.GB` and `TLIN2.GB`,
+with the primer CTCAAAGGCTCAGACATCAG at 300 and copies of its bases 4
+to 15 at 450 and across the origin (595 to 600 and 1 to 6). Recorded
+with `tools/print_report.sh` (`find_pair`, `homology`).
+
+Apart from the restriction site search (see "True and almost sites"),
+PRIMER.exe treats a circular molecule as linear:
+- Find Pair, targets 15 and 560 (offsets 100): the same list on both
+  molecules; the search windows stop at the molecule's ends (primer A
+  from 1, primer B up to 600), so neither the primer across the origin
+  nor the primer B at 50 is found; the report prints the offsets cut
+  at the ends: "Start: Target - 14", "End: Target + 40"
+  (`reports/find_pair/TCIRC_15_560.PRN`, `TLIN_15_560.PRN`);
+- Uniqueness of the primer at 300: the copy across the origin is not
+  found on the circular molecule either, only the copy at 450
+  (`reports/homology/TCIRC2_300_u.PRN`, `TLIN2_300_u.PRN`, reproduced);
+- a primer made from the molecule at 591 (20 bases in 600) is refused
+  with "Invalid Position", on both molecules.
+primerpicker v1 does the same.
+
+**Primers B ending with a run of three.** In these Find Pair searches,
+PRIMER.exe finds 9 possible primers B and 25 pairs, primerpicker 11 and
+33: the two primers B that PRIMER.exe leaves out, at 569
+(AGGCCAGCGATCACGTCAAA) and 598 (TCATTGAGCTCCTCGCGAAA), both end with
+AAA, and their pairs account for the 8 missing pairs; 599 (ending with
+AA) is kept. Yet the Primer Analysis screen does not count the run at
+the 3' end ("Primer criteria"). Not understood from this case: the two
+reports are listed in `reports/find_pair_reports_pending.tsv`, outside
+the sweep, until it is probed.
+
 ## Restriction enzymes (recorded 2026-10-18)
 
 ### Built-in enzyme table

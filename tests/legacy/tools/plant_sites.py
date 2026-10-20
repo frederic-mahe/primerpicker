@@ -11,7 +11,8 @@ Usage: python3 -I plant_sites.py [--circular] NAME SEED GC_FRACTIONS SEGMENT_LEN
   COPY: FIRST:LENGTH:DESTINATION (1-based positions on the top strand)
   copies LENGTH bases from FIRST to DESTINATION; SEQUENCE@DESTINATION
   writes SEQUENCE (A, C, G, T) at DESTINATION; copies are made in the
-  order given
+  order given; a copy that goes beyond the last base continues at the
+  first (across the origin)
   for instance: plant_sites.py TFP 3236 0.55,0.55,0.55,0.55,0.55,0.55 150 88:11:620 GAATTC@300
 """
 import os
@@ -29,7 +30,10 @@ def plant(sequence, copies):
         else:
             first, length = source
             planted = bases[first - 1:first - 1 + length]
-        bases[destination - 1:destination - 1 + len(planted)] = planted
+        # a copy that goes beyond the last base continues at the first
+        # (across the origin of a circular molecule)
+        for offset, base in enumerate(planted):
+            bases[(destination - 1 + offset) % len(bases)] = base
     return ''.join(bases)
 
 
