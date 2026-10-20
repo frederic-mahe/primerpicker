@@ -16,7 +16,8 @@
 # Pair list first asks "N Pairs found.  Print best: [N]": enter; the
 # Uniqueness and False Priming screens have a menu bar: right, enter
 # opens Print), down down enter (Print Control -> Print to Disk), the
-# file name, enter. A molecule file must be listed after PRIMER.EXE. Prints the run directory and "ok" (REPORT
+# file name, enter. CFG: a settings file copied as PD2.CFG (default:
+# none, built-in settings). A molecule file must be listed after PRIMER.EXE. Prints the run directory and "ok" (REPORT
 # written) or "incomplete".
 set -eu
 
@@ -49,10 +50,14 @@ case "$kind" in
         exit 1 ;;
 esac
 
-run="$workdir/${kind}_$(printf '%s' "$*" | tr ' /' '__' | sed 's/.*tests_legacy_//')"
+cfg=${CFG:-}
+run="$workdir/${kind}_$(printf '%s' "$*" | tr ' /' '__' | sed 's/.*tests_legacy_//')${cfg:+_$(basename "$cfg" .CFG)}"
 rm -rf "$run"
 mkdir -p "$run/c"
 cp "$PRIMER_EXE" "$run/c/PRIMER.EXE"
+if [ -n "$cfg" ]; then
+    cp "$cfg" "$run/c/PD2.CFG"
+fi
 if [ -n "$molecule" ]; then
     cp "$molecule" "$run/c/"
 fi

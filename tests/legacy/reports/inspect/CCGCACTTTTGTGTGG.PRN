@@ -1,0 +1,55 @@
+Primer Design Report:  One Primer                     Report Date: 10/20/26
+
+
+
+
+
+-----  P R I M E R   I N F O  --------------------------------------------
+
+
+Sequence:     5'-CCGCACTTTTGTGTGG-3'
+
+              Length:  16;
+              5' Extension:   --none--
+              Composition:    A: 1  C: 4  G: 5  T: 6
+
+---------------------------------------------------------------------------
+
+
+
+PRIMER EVALUATION AND CRITERIA SETTINGS:
+
+
+Criteria         Criteria Setting                  Actual    Meets Criteria
+-------------    ----------------------------      ------    --------------
+
+% GC             Min   50,    Max   60                56           YES
+
+Tm C             Min   55,    Max   80                63           YES
+
+No Hairpins      Energy cutoff  0.0 kcal              --           NO
+
+No 3' Dimers     Reject >=  3 matches at 3' end        1           YES
+No Dimers        Reject >=  7 adj homol bases          3           YES
+
+No Runs          Reject >=  3 base runs                4           NO
+No 3'GC runs     Reject >=  3 G or C at 3' end         2           YES
+
+
+
+
+LARGEST DUPLEXES REPORTED IN PRIMER DIMERS (above)
+
+
+     Primer-dimers with 3'end involvement:
+
+          5'-CCGCACTTTTGTGTGG-3'
+                            :
+               3'-GGTGTGTTTTCACGCC-5'
+
+
+     Other Primer-Dimers:
+
+          5'-CCGCACTTTTGTGTGG-3'
+                :::
+          3'-GGTGTGTTTTCACGCC-5'
