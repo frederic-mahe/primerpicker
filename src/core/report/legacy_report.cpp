@@ -206,7 +206,7 @@ auto primer_summary(char const name, std::span<Nucleotide const> const primer, a
     text += line(std::format("Sequence:     5'-{}-3'", letters(primer)));
     text += legacy_line_end;
     text += line(std::format("              Length: {:3};", primer.size()));
-    text += line(std::format("              % GC: {:2};     Tm C: {:2};    Composition:  A:{}  C:{}  G:{}  T:{}",
+    text += line(std::format("              % GC:{:3};     Tm C:{:3};    Composition:  A:{}  C:{}  G:{}  T:{}",
                              actual.gc_percent, actual.tm_celsius, count(Nucleotide::adenine),
                              count(Nucleotide::cytosine), count(Nucleotide::guanine), count(Nucleotide::thymine)));
     text += legacy_line_end;

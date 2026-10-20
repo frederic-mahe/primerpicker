@@ -21,7 +21,8 @@
 # Uniqueness and False Priming screens have a menu bar: right, enter
 # opens Print), down down enter (Print Control -> Print to Disk), the
 # file name, enter. CFG: a settings file copied as PD2.CFG (default:
-# none, built-in settings). A molecule file must be listed after PRIMER.EXE. Prints the run directory and "ok" (REPORT
+# none, built-in settings; it is listed before the molecule file, which
+# takes one more down). A molecule file must be listed after PRIMER.EXE. Prints the run directory and "ok" (REPORT
 # written) or "incomplete".
 set -eu
 
@@ -48,7 +49,7 @@ case "$kind" in
         print_keys=", , , , p , , $to_disk" ;;
     find_pair)
         molecule=$1
-        path="space down down down enter enter down down enter enter $(keys "$2") enter enter enter enter $(keys "$3") enter enter enter enter enter enter , , , , space"
+        path="space down down down enter enter down down ${CFG:+down }enter enter $(keys "$2") enter enter enter enter $(keys "$3") enter enter enter enter enter enter , , , , space"
         print_keys=", , p , , enter , , $to_disk" ;;
     homology)
         molecule=$1

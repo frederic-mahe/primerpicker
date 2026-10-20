@@ -897,6 +897,37 @@ spaces: for the 3'-end duplex, a marks line of 51121 spaces then a line
 `3'-...-5'`. These reports (`duplexes` = `no-pairs`) are recorded, and
 not reproduced: what primerpicker prints there is not decided yet.
 
+### The Primer Pair report (recorded 2026-10-20)
+
+`reports/pair/*.PRN`: 39 more reports of the Primer Pair Analysis
+screen, for the pairs of `pairs/pair_screens.tsv` and
+`pairs/pair_screens_2.tsv` and a few others, written with
+`tools/print_report.sh pair` (Direct Entry) or `pair_files` (the
+primers loaded as `.PD2` files, for pairs too long to type in one
+autotype line); `reports/pair_reports.tsv` lists every Primer Pair
+report (PAIR.PRN included). Every report with pairs is reproduced byte
+for byte by `legacy_pair_report` (`tests/unit/test_legacy_pair_report.cpp`,
+`tests/cli/test_report.sh`):
+- two pages: page 1 ends with an empty line, then CR and a form feed
+  (bytes 0D 0C) start the title of page 2 ("-- Page 2");
+- each primer: "% GC:" and "Tm C:" values in 3 columns (`% GC:100;`),
+  the composition without padding, the criteria in short form, "Meets
+  criteria selected: YES/NO" (as the Primer Analysis screen);
+- Primer Balance: no '!' flag; the comment ("N base difference", "N %
+  difference", "N C difference") only when the difference is not zero,
+  6 spaces after the value of B;
+- Primer Cautions: values followed by their '!' flag or a space (hence
+  trailing spaces), as the screen; Hairpins shows OK or '!' with no
+  flag column, then "Hairpin(s) found" (5 spaces after B) when either
+  primer has one; no "Runs found" comment, unlike the screen;
+- Primer Dimers: A:A, B:B, A:B with flags, then "(see page 2" and "for
+  duplexes)";
+- page 2: the 3'-end duplexes, then the other duplexes, of A:A, B:B
+  and A:B (see "Duplexes of the reports"; for A:B, A is the first
+  primer).
+AAAAAAAAAAAA with CCCCCCCCCCCC (no pair at all) writes the long lines
+of spaces described above (`duplexes` = `no-pairs`; not reproduced).
+
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
 The One Primer report ends with "LARGEST DUPLEXES REPORTED IN PRIMER

@@ -1,0 +1,106 @@
+Primer Design Report:  Primer Pair                    Report Date: 10/20/26
+
+
+
+
+
+
+-----  P R I M E R   A  ---------------------------------------------------
+
+Sequence:     5'-AAAGTAACTTCTAACCTAGC-3'
+
+              Length:  20;
+              % GC: 35;     Tm C: 56;    Composition:  A:8  C:5  G:2  T:5
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+              Meets criteria selected:  NO
+
+-----------------------------------------------  P R I M E R   B  ---------
+
+Sequence:     5'-CAAACCACACCCATAACATT-3'
+
+              Length:  20;
+              % GC: 40;     Tm C: 66;    Composition:  A:9  C:8  G:0  T:3
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+              Meets criteria selected:  NO
+
+---------------------------------------------------------------------------
+
+Primer Balance:                      -A-      -B-      Comment
+
+              Length                  20       20
+              % GC                    35       40      5 % difference
+              Tm C                    56       66      10 C difference
+
+Primer Cautions:
+
+              Runs of G/C at 3' end    2        0 
+              Runs of bases (any)      3        3 
+              Hairpins                OK       OK
+
+Primer Dimers:
+                                      A:A      B:B      A:B
+              3'end matches            2        2        2    (see page 2
+              Any adj homol bases      4        2        2    for duplexes)
+
+Primer Design Report:  Primer Pair  -- Page 2         Report Date: 10/20/26
+
+
+Largest Duplexes reported in Primer Interactions
+
+---------------------------------------------------------------------------
+
+Primer-Dimers with 3'end involvement:
+
+
+
+A:A
+          5'-AAAGTAACTTCTAACCTAGC-3'
+                               ::
+                            3'-CGATCCAATCTTCAATGAAA-5'
+
+
+B:B
+          5'-CAAACCACACCCATAACATT-3'
+                               ::
+                        3'-TTACAATACCCACACCAAAC-5'
+
+
+A:B
+          5'-AAAGTAACTTCTAACCTAGC-3'
+                         ::
+                      3'-TTACAATACCCACACCAAAC-5'
+
+
+---------------------------------------------------------------------------
+
+Other Primer-Dimers:
+
+
+
+A:A
+          5'-AAAGTAACTTCTAACCTAGC-3'
+              ::::
+ 3'-CGATCCAATCTTCAATGAAA-5'
+
+
+B:B
+          5'-CAAACCACACCCATAACATT-3'
+              ::
+           3'-TTACAATACCCACACCAAAC-5'
+
+
+A:B
+          5'-AAAGTAACTTCTAACCTAGC-3'
+                ::
+ TTACAATACCCACACCAAAC-5'
+
+
+---------------------------------------------------------------------------
