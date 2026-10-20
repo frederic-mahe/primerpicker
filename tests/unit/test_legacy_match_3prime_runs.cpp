@@ -1,3 +1,4 @@
+#include "core/analysis/legacy_verdict.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/search/legacy_match.hpp"
 #include "core/sequence/nucleotide.hpp"
