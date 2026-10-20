@@ -23,6 +23,7 @@ using analysis::PrimerPair;
 using sequence::Nucleotide;
 
 constexpr auto title_width = std::size_t{54};  // "Report Date:" starts in this column
+constexpr auto lines_after_title = std::size_t{5};
 constexpr auto years_per_century = 100;
 constexpr auto criteria_name_width = std::size_t{17};
 constexpr auto criteria_actual_end = std::size_t{56};  // right edge of the "Actual" column
@@ -63,14 +64,21 @@ auto verdict_word(bool const meets) -> std::string_view {
     return meets ? "YES" : "NO";
 }
 
+// One row of the criteria table
+struct Criterion {
+    std::string_view name;
+    std::string setting;
+    std::string actual;
+    bool meets;
+};
+
 // The setting after the criterion's name, the actual value right-aligned
 // on criteria_actual_end, then the verdict
-auto criterion_line(std::string_view const name, std::string_view const setting, std::string_view const actual,
-                    bool const meets) -> std::string {
-    auto const left = std::format("{:<{}}{}", name, criteria_name_width, setting);
-    assert(left.size() + actual.size() <= criteria_actual_end);
-    return line(std::format("{}{:>{}}{}{}", left, actual, criteria_actual_end - left.size(), verdict_gap,
-                            verdict_word(meets)));
+auto criterion_line(Criterion const& criterion) -> std::string {
+    auto const left = std::format("{:<{}}{}", criterion.name, criteria_name_width, criterion.setting);
+    assert(left.size() + criterion.actual.size() <= criteria_actual_end);
+    return line(std::format("{}{:>{}}{}{}", left, criterion.actual, criteria_actual_end - left.size(), verdict_gap,
+                            verdict_word(criterion.meets)));
 }
 
 auto range_setting(int const minimum, int const maximum) -> std::string {
@@ -79,29 +87,41 @@ auto range_setting(int const minimum, int const maximum) -> std::string {
 
 auto criteria_rows(analysis::LegacyActualValues const& actual, analysis::LegacyCriteria const& criteria,
                    analysis::LegacyVerdict const& verdict) -> std::string {
-    auto rows = criterion_line("% GC", range_setting(criteria.gc_min_percent, criteria.gc_max_percent),
-                               std::to_string(actual.gc_percent), verdict.gc);
+    auto rows = criterion_line({.name = "% GC",
+                                .setting = range_setting(criteria.gc_min_percent, criteria.gc_max_percent),
+                                .actual = std::to_string(actual.gc_percent),
+                                .meets = verdict.gc});
     rows += legacy_line_end;
-    rows += criterion_line("Tm C", range_setting(criteria.tm_min_celsius, criteria.tm_max_celsius),
-                           std::to_string(actual.tm_celsius), verdict.tm);
+    rows += criterion_line({.name = "Tm C",
+                            .setting = range_setting(criteria.tm_min_celsius, criteria.tm_max_celsius),
+                            .actual = std::to_string(actual.tm_celsius),
+                            .meets = verdict.tm});
     rows += legacy_line_end;
     // as on the screen, the hairpin energy is not in the "Actual" column
-    rows += criterion_line("No Hairpins",
-                           std::format("Energy cutoff {:4.1f} kcal", criteria.hairpin_cutoff.kcal_per_mol), "--",
-                           verdict.no_hairpin);
+    rows += criterion_line({.name = "No Hairpins",
+                            .setting = std::format("Energy cutoff {:4.1f} kcal", criteria.hairpin_cutoff.kcal_per_mol),
+                            .actual = "--",
+                            .meets = verdict.no_hairpin});
     rows += legacy_line_end;
-    rows += criterion_line("No 3' Dimers",
-                           std::format("Reject >= {:2} matches at 3' end", criteria.reject_dimer_3prime_matches),
-                           std::to_string(actual.dimer_3prime_matches), verdict.no_3prime_dimer);
-    rows += criterion_line("No Dimers",
-                           std::format("Reject >= {:2} adj homol bases", criteria.reject_dimer_adjacent_bases),
-                           std::to_string(actual.dimer_adjacent_bases), verdict.no_dimer);
+    rows += criterion_line(
+        {.name = "No 3' Dimers",
+         .setting = std::format("Reject >= {:2} matches at 3' end", criteria.reject_dimer_3prime_matches),
+         .actual = std::to_string(actual.dimer_3prime_matches),
+         .meets = verdict.no_3prime_dimer});
+    rows += criterion_line(
+        {.name = "No Dimers",
+         .setting = std::format("Reject >= {:2} adj homol bases", criteria.reject_dimer_adjacent_bases),
+         .actual = std::to_string(actual.dimer_adjacent_bases),
+         .meets = verdict.no_dimer});
     rows += legacy_line_end;
-    rows += criterion_line("No Runs", std::format("Reject >= {:2} base runs", criteria.reject_run_length),
-                           std::to_string(actual.longest_run), verdict.no_runs);
-    rows += criterion_line("No 3'GC runs",
-                           std::format("Reject >= {:2} G or C at 3' end", criteria.reject_gc_run_3prime),
-                           std::to_string(actual.gc_run_3prime), verdict.no_3prime_gc_run);
+    rows += criterion_line({.name = "No Runs",
+                            .setting = std::format("Reject >= {:2} base runs", criteria.reject_run_length),
+                            .actual = std::to_string(actual.longest_run),
+                            .meets = verdict.no_runs});
+    rows += criterion_line({.name = "No 3'GC runs",
+                            .setting = std::format("Reject >= {:2} G or C at 3' end", criteria.reject_gc_run_3prime),
+                            .actual = std::to_string(actual.gc_run_3prime),
+                            .meets = verdict.no_3prime_gc_run});
     return rows;
 }
 
@@ -145,7 +165,7 @@ auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::Legac
     auto const count = [sequence](Nucleotide const nucleotide) { return std::ranges::count(sequence, nucleotide); };
 
     auto report = title_line("Primer Design Report:  One Primer", date);
-    report += blank_lines(5);
+    report += blank_lines(lines_after_title);
     report += line("-----  P R I M E R   I N F O  --------------------------------------------");
     report += blank_lines(2);
     report += line(std::format("Sequence:     5'-{}-3'", letters(sequence)));

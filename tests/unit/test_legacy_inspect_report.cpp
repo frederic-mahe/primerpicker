@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <filesystem>
 #include <fstream>
+#include <ios>
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
@@ -60,11 +61,12 @@ auto criteria_from(std::string_view const config) -> LegacyCriteria {
     return result.defaults->criteria;
 }
 
-auto number(std::string_view const text) -> int {
+auto number(std::string const& text) -> int {
     auto value = 0;
-    auto const [end, error] = std::from_chars(text.data(), std::next(text.data(), std::ssize(text)), value);
-    if (error != std::errc{} or end != std::next(text.data(), std::ssize(text))) {
-        throw std::runtime_error{"not a number: " + std::string{text}};
+    auto const* const last = std::next(text.data(), std::ssize(text));
+    auto const [end, error] = std::from_chars(text.data(), last, value);
+    if (error != std::errc{} or end != last) {
+        throw std::runtime_error{"not a number: " + text};
     }
     return value;
 }
@@ -78,7 +80,7 @@ auto report_date(std::string_view const report) -> std::chrono::year_month_day {
     if (start == std::string_view::npos) {
         throw std::runtime_error{"no report date"};
     }
-    auto const date = report.substr(start + label.size(), std::string_view{"MM/DD/YY"}.size());
+    auto const date = std::string{report.substr(start + label.size(), std::string_view{"MM/DD/YY"}.size())};
     return std::chrono::year_month_day{
         std::chrono::year{twenty_first_century + number(date.substr(2 * (field + 1), field))},
         std::chrono::month{static_cast<unsigned>(number(date.substr(0, field)))},

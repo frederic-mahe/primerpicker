@@ -205,7 +205,7 @@ struct AnalyzeArguments {
 
 // Today's date (UTC), for the reports
 auto today() -> std::chrono::year_month_day {
-    return std::chrono::year_month_day{std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now())};
+    return std::chrono::year_month_day{std::chrono::floor<std::chrono::sys_days::duration>(std::chrono::system_clock::now())};
 }
 
 // TEXT written to PATH as is (a report: CR LF line ends), or false
