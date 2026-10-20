@@ -22,16 +22,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Qt 6.8 or later (for the graphical front-end) is packaged
+        # from Ubuntu 26.04 on; on 24.04 (Qt 6.4) the GUI is not built
         include:
-          - { os: ubuntu-24.04, gcc: 13 }
-          - { os: ubuntu-24.04, gcc: 14 }
-          - { os: ubuntu-26.04, gcc: 15 }
+          - { os: ubuntu-24.04, gcc: 13, qt: '' }
+          - { os: ubuntu-24.04, gcc: 14, qt: '' }
+          - { os: ubuntu-26.04, gcc: 15, qt: qt6-base-dev }
     steps:
       - uses: actions/checkout@v5
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install --yes ninja-build g++-${{ matrix.gcc }}
+          sudo apt-get install --yes ninja-build g++-${{ matrix.gcc }} ${{ matrix.qt }}
       - name: Configure
         run: cmake --preset debug -DCMAKE_CXX_COMPILER=g++-${{ matrix.gcc }}
       - name: Build
@@ -95,8 +97,9 @@ jobs:
             mingw-w64-ucrt-x86_64-gcc
             mingw-w64-ucrt-x86_64-cmake
             mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-qt6-base
       - name: Configure
-        run: cmake --preset release
+        run: cmake --preset release -DPRIMERPICKER_GUI=ON
       - name: Build
         run: cmake --build --preset release -j
       - name: Test
@@ -112,7 +115,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install --yes ninja-build cppcheck clang-20 clang-tidy-20
+          sudo apt-get install --yes ninja-build cppcheck clang-20 clang-tidy-20 qt6-base-dev
       - name: Configure (clang-libstdcxx, the reference for clang-tidy)
         run: cmake --preset clang-libstdcxx
       - name: Build
@@ -121,9 +124,9 @@ jobs:
         run: ctest --preset clang-libstdcxx
       - name: clang-tidy
         run: |
-          find src tests/unit -name '*.cpp' -print0 | \
+          find src tests/unit tests/gui -name '*.cpp' -print0 | \
             xargs -0 -n1 clang-tidy-20 -p build/clang-libstdcxx --quiet --warnings-as-errors='*'
       - name: cppcheck
         run: |
           cppcheck --force --enable=warning,style --language=c++ --std=c++20 \
-            --error-exitcode=1 --quiet -Isrc src tests/unit
+            --error-exitcode=1 --quiet -Isrc src tests/unit tests/gui

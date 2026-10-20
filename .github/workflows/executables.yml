@@ -1,0 +1,335 @@
+name: Executables
+
+# Builds the executables attached to a release (proposal §3.8): the
+# command-line program for Linux (x86_64, aarch64), Windows (x86_64)
+# and macOS (universal), and the graphical program for Windows
+# (x86_64). Triggered by a published release, or by hand: with a tag,
+# the assets are attached to that tag's release; without one, they are
+# only built, checked and kept as workflow artifacts. Not run on
+# pushes: the CI workflow already tests every commit.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing release tag to attach the assets to (empty: build and check only)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: executables-${{ github.event.release.tag_name || inputs.tag || github.ref }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ github.event.release.tag_name || inputs.tag }}
+
+jobs:
+  version:
+    name: Version check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      cmake_version: ${{ steps.version.outputs.cmake_version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - id: version
+        name: Version of CMakeLists.txt, against the tag
+        run: |
+          version=$(sed -n 's/^  VERSION \([0-9][0-9.]*\)$/\1/p' CMakeLists.txt)
+          test -n "$version"
+          echo "cmake_version=$version" >> "$GITHUB_OUTPUT"
+          if [ -n "$TAG" ]; then
+            if [ "$TAG" != "v$version" ]; then
+              echo "::error::tag $TAG does not match the version $version of CMakeLists.txt"
+              exit 1
+            fi
+          else
+            version="$version-$(git rev-parse --short HEAD)"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+  linux:
+    # Built in ubuntu:24.04 (glibc 2.39, the oldest of the supported
+    # systems), entered with docker run, so that GitHub's JavaScript
+    # actions stay on the host; libstdc++ and libgcc are linked
+    # statically, glibc is the only runtime dependency
+    name: Linux ${{ matrix.arch }} (command line)
+    needs: version
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: x86_64, runner: ubuntu-24.04 }
+          - { arch: aarch64, runner: ubuntu-24.04-arm }
+    env:
+      ASSET: primerpicker-${{ needs.version.outputs.version }}-linux-${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - name: Build in ubuntu:24.04
+        run: |
+          docker run --rm -v "$PWD:/src" -w /src ubuntu:24.04 sh -c '
+            set -eu
+            apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -qq --yes cmake ninja-build g++-14 > /dev/null
+            cmake --preset release -B build/asset -DCMAKE_CXX_COMPILER=g++-14 \
+              -DBUILD_TESTING=OFF -DPRIMERPICKER_GUI=OFF \
+              -DCMAKE_EXE_LINKER_FLAGS="-static-libstdc++ -static-libgcc"
+            cmake --build build/asset -j
+            strip build/asset/src/cli/primerpicker'
+      - name: Check the asset (version, glibc floor, a smoke test)
+        run: |
+          binary=build/asset/src/cli/primerpicker
+          "$binary" --version | grep -Fx "primerpicker ${{ needs.version.outputs.cmake_version }}"
+          "$binary" analyze GTAAAACGACGGCCAGT | grep -F 'Meets criteria: NO'
+          newest=$(objdump -T "$binary" | sed -n 's/.*GLIBC_\([0-9.]*\).*/\1/p' | sort -V | tail -n 1)
+          echo "newest glibc symbol: $newest"
+          if [ "$(printf '%s\n2.39\n' "$newest" | sort -V | tail -n 1)" != "2.39" ]; then
+            echo "::error::needs glibc $newest, newer than 2.39 (Ubuntu 24.04)"
+            exit 1
+          fi
+          if objdump -p "$binary" | grep -E 'NEEDED.*(libstdc\+\+|libgcc_s)'; then
+            echo "::error::libstdc++ or libgcc is linked dynamically"
+            exit 1
+          fi
+      - name: Package
+        run: |
+          mkdir "$ASSET"
+          cp build/asset/src/cli/primerpicker LICENSE README.md CITATION.cff "$ASSET/"
+          tar -czf "$ASSET.tar.gz" "$ASSET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+          path: ${{ env.ASSET }}.tar.gz
+          if-no-files-found: error
+
+  windows-cli-build:
+    # Cross-compiled with MinGW-w64 (posix threads, linked statically),
+    # then run on Windows by the next job
+    name: Windows x86_64 (command line, build)
+    needs: version
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      ASSET: primerpicker-${{ needs.version.outputs.version }}-windows-x86_64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - name: Install MinGW-w64
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ninja-build g++-mingw-w64-x86-64-posix
+      - name: Build
+        run: |
+          cmake --preset mingw-release -B build/asset -DBUILD_TESTING=OFF
+          cmake --build build/asset -j
+          x86_64-w64-mingw32-strip build/asset/src/cli/primerpicker.exe
+      - name: Package
+        run: |
+          mkdir "$ASSET"
+          cp build/asset/src/cli/primerpicker.exe LICENSE README.md CITATION.cff "$ASSET/"
+          zip -r "$ASSET.zip" "$ASSET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+          path: ${{ env.ASSET }}.zip
+          if-no-files-found: error
+
+  windows-cli-check:
+    name: Windows x86_64 (command line, check)
+    needs: [version, windows-cli-build]
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      ASSET: primerpicker-${{ needs.version.outputs.version }}-windows-x86_64
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+      - name: Run the executable
+        shell: pwsh
+        run: |
+          Expand-Archive "$env:ASSET.zip" -DestinationPath .
+          $exe = Join-Path $env:ASSET 'primerpicker.exe'
+          $version = & $exe --version
+          $version
+          if ($version -ne 'primerpicker ${{ needs.version.outputs.cmake_version }}') { exit 1 }
+          $out = & $exe analyze GTAAAACGACGGCCAGT
+          $out
+          if (-not ($out -match 'Meets criteria: NO')) { exit 1 }
+
+  windows-gui:
+    # Built natively in MSYS2 (UCRT64), whose Qt 6 package has the
+    # Windows libraries; the folder gets every DLL it needs
+    # (packaging/windows/deploy-gui.sh) and is checked by the next job
+    # on a Windows without MSYS2
+    name: Windows x86_64 (graphical, build)
+    needs: version
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: msys2 {0}
+    env:
+      ASSET: primerpicker-gui-${{ needs.version.outputs.version }}-windows-x86_64
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            zip
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-cmake
+            mingw-w64-ucrt-x86_64-ninja
+            mingw-w64-ucrt-x86_64-qt6-base
+            mingw-w64-ucrt-x86_64-qt6-tools
+      - name: Build and test
+        run: |
+          cmake --preset release -B build/asset -DPRIMERPICKER_GUI=ON
+          cmake --build build/asset -j
+          ctest --test-dir build/asset --output-on-failure -R '^gui: '
+          strip build/asset/src/gui/primerpicker-gui.exe
+      - name: Gather the DLLs
+        run: sh packaging/windows/deploy-gui.sh build/asset/src/gui/primerpicker-gui.exe "$ASSET"
+      - name: Package
+        run: |
+          cp LICENSE README.md CITATION.cff "$ASSET/"
+          zip -r "$ASSET.zip" "$ASSET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+          path: ${{ env.ASSET }}.zip
+          if-no-files-found: error
+
+  windows-gui-check:
+    # A Windows without MSYS2 in PATH: the program must start with the
+    # DLLs of its folder only, and keep running (a missing DLL or
+    # plugin stops it at once)
+    name: Windows x86_64 (graphical, check)
+    needs: [version, windows-gui]
+    runs-on: windows-latest
+    timeout-minutes: 10
+    env:
+      ASSET: primerpicker-gui-${{ needs.version.outputs.version }}-windows-x86_64
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+      - name: Start the program
+        shell: pwsh
+        run: |
+          Expand-Archive "$env:ASSET.zip" -DestinationPath .
+          $exe = Join-Path $env:ASSET 'primerpicker-gui.exe'
+          $process = Start-Process -FilePath $exe -PassThru
+          Start-Sleep -Seconds 10
+          if ($process.HasExited) {
+            Write-Error "primerpicker-gui.exe stopped with exit code $($process.ExitCode)"
+            exit 1
+          }
+          Stop-Process -Id $process.Id
+          Get-ChildItem -Recurse $env:ASSET | Select-Object -ExpandProperty FullName
+
+  macos:
+    name: macOS ${{ matrix.arch }} (command line)
+    needs: version
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: arm64, runner: macos-latest }
+          - { arch: x86_64, runner: macos-15-intel }
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - name: Install tools
+        run: brew install ninja
+      - name: Build
+        run: |
+          cmake -B build/asset -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DPRIMERPICKER_GUI=OFF \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=13.3
+          cmake --build build/asset -j
+          strip build/asset/src/cli/primerpicker
+          build/asset/src/cli/primerpicker --version | grep -Fx "primerpicker ${{ needs.version.outputs.cmake_version }}"
+          build/asset/src/cli/primerpicker analyze GTAAAACGACGGCCAGT | grep -F 'Meets criteria: NO'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-${{ matrix.arch }}
+          path: build/asset/src/cli/primerpicker
+          if-no-files-found: error
+
+  macos-universal:
+    name: macOS universal (command line)
+    needs: [version, macos]
+    runs-on: macos-latest
+    timeout-minutes: 10
+    env:
+      ASSET: primerpicker-${{ needs.version.outputs.version }}-macos-universal
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG || github.ref }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: macos-*
+      - name: Join and package
+        run: |
+          mkdir "$ASSET"
+          lipo -create -output "$ASSET/primerpicker" macos-arm64/primerpicker macos-x86_64/primerpicker
+          chmod +x "$ASSET/primerpicker"
+          lipo -info "$ASSET/primerpicker" | grep -F x86_64 | grep -F arm64
+          "$ASSET/primerpicker" --version
+          cp LICENSE README.md CITATION.cff "$ASSET/"
+          COPYFILE_DISABLE=1 tar -czf "$ASSET.tar.gz" "$ASSET"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ASSET }}
+          path: ${{ env.ASSET }}.tar.gz
+          if-no-files-found: error
+
+  publish:
+    name: Attach to the release
+    if: ${{ (github.event.release.tag_name || inputs.tag) != '' }}
+    needs: [version, linux, windows-cli-check, windows-gui-check, macos-universal]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: primerpicker-*
+          merge-multiple: true
+          path: assets
+      - name: Checksums and upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd assets || exit 1
+          count=$(find . -maxdepth 1 -type f | wc -l)
+          if [ "$count" -ne 5 ]; then
+            echo "::error::expected 5 assets, found $count"
+            ls -l
+            exit 1
+          fi
+          sha256sum ./* > SHA256SUMS
+          cat SHA256SUMS
+          gh release upload "$TAG" ./* --clobber --repo "$GITHUB_REPOSITORY"
