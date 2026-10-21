@@ -169,6 +169,27 @@ constexpr auto pad_to(std::string& text, std::size_t const width) -> void {
     return {.location = location, .message = message};
 }
 
+// Modify -> Length: the primer with LENGTH bases, its 5' end (position)
+// and strand kept; refused, as + and - of the picking screen, with
+// "Primer must have length!" for 0 bases and "Primer Too Long - Extends
+// outside molecule" when it would not fit (tests/legacy/modify_length/).
+// Requires a primer that fits.
+[[nodiscard]] constexpr auto legacy_change_length(std::span<sequence::Nucleotide const> const molecule,
+                                                  sequence::PrimerLocation const& location,
+                                                  std::size_t const length) noexcept -> PickingMove {
+    auto const molecule_size = molecule.size();
+    assert(detail::fits(location, molecule_size));
+    if (length == 0) {
+        return {.location = location, .message = PickingMessage::primer_must_have_length};
+    }
+    auto changed = location;
+    changed.length = length;
+    if (not detail::fits(changed, molecule_size)) {
+        return {.location = location, .message = PickingMessage::primer_too_long};
+    }
+    return {.location = changed, .message = PickingMessage::none};
+}
+
 // Find next: Ctrl+Right searches toward higher positions, Ctrl+Left
 // toward lower ones, on the same strand
 enum struct SearchDirection : std::uint8_t { forward, backward };

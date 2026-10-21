@@ -187,6 +187,11 @@ public:
     // if there was none
     [[nodiscard]] auto modify_position() -> std::optional<QString>;
 
+    // Modify -> Length: the active primer's length (5' extension
+    // included), its 5' end kept; the Primer List entry it comes from
+    // changes too, as in PRIMER.exe; the error, if it was not changed
+    [[nodiscard]] auto change_length(std::size_t length) -> std::optional<QString>;
+
     // Modify -> Mutagenize: the Mutagenize Primer screen for the active
     // primer, made from the loaded molecule on its top strand, without
     // 5' extension; the error, if there was none
@@ -228,6 +233,8 @@ private:
     void make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
                      std::optional<sequence::PrimerLocation> location = std::nullopt);
     void save_to_list();
+    void show_primer_list();
+    void open_change_length();
     void show_listed_primer(int row);
     void open_primer_pair();
     void use_primer_pair();
@@ -267,6 +274,7 @@ private:
     };
     std::optional<ScreenReport> report_;
     std::vector<ActivePrimer> primer_list_;  // the Primer List, in saving order
+    std::optional<std::size_t> active_list_index_;  // the entry the active primer is, if any
     // members are destroyed in reverse order: the pages before the
     // stack that holds them
     QStackedWidget pages_;

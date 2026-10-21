@@ -7,6 +7,7 @@
 #include "core/io/molecule_file.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/search/legacy_match.hpp"
+#include "core/search/legacy_picking.hpp"
 #include "core/io/pd2.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/report/legacy_report.hpp"
@@ -280,7 +281,8 @@ void MainWindow::add_legacy_menus() {
     modify.addSection(u"Active Primer:"_s);
     auto const& position = add_item(modify, {.text = u"&Position", .name = u"modify_position"});
     QObject::connect(&position, &QAction::triggered, this, &MainWindow::open_modify_position);
-    add_disabled_items(modify, {u"&Length"_s});
+    auto const& length = add_item(modify, {.text = u"&Length", .name = u"modify_length"});
+    QObject::connect(&length, &QAction::triggered, this, &MainWindow::open_change_length);
     auto const& extension = add_item(modify, {.text = u"5'-&extension...", .name = u"modify_extension"});
     QObject::connect(&extension, &QAction::triggered, this, &MainWindow::modify_extension);
     auto const& criteria = add_item(modify, {.text = u"&Criteria...", .name = u"modify_criteria"});
@@ -836,6 +838,7 @@ void MainWindow::inspect_mutated_primer() {
         return;
     }
     active_primer_ = mutated_copy(*mutagenize_source_, mutagenize_.mutated());
+    active_list_index_.reset();
     analyze_active_primer();
 }
 
@@ -851,6 +854,7 @@ void MainWindow::use_picked_location() {
         return;
     }
     auto& primer = *active_primer_;
+    active_list_index_.reset();  // a moved primer is a new one (S saves it as a new entry)
     primer.sequence.resize(primer.extension_length);
     primer.sequence.insert(primer.sequence.end(), bases->begin(), bases->end());
     primer.location = location;
@@ -865,6 +869,7 @@ void MainWindow::use_picked_location() {
 // a new primer without extension, with the System Defaults' criteria
 void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
                              std::optional<sequence::PrimerLocation> const location) {
+    active_list_index_.reset();
     active_primer_ = ActivePrimer{.sequence = std::move(sequence),
                                   .extension_length = 0,
                                   .criteria = defaults_.criteria,
@@ -885,6 +890,14 @@ void MainWindow::save_to_list() {
         return;
     }
     primer_list_.push_back(*active_primer_);
+    active_list_index_ = primer_list_.size() - 1;  // the active primer is that entry
+    show_primer_list();
+    if (pages_.currentWidget() == &picking_) {
+        analyze_active_primer();  // as S on the picking screen
+    }
+}
+
+void MainWindow::show_primer_list() {
     auto rows = QList<QList<QString>>{};
     for (auto const& primer : primer_list_) {
         auto const sequence = std::span{primer.sequence};
@@ -894,8 +907,59 @@ void MainWindow::save_to_list() {
                      QString::number(primer.sequence.size()), primer.origin});
     }
     list_model_.set_rows(std::move(rows));
-    if (pages_.currentWidget() == &picking_) {
-        analyze_active_primer();  // as S on the picking screen
+}
+
+auto MainWindow::change_length(std::size_t const length) -> std::optional<QString> {
+    if (active_primer_.has_value() and not active_primer_->original.empty()) {
+        return u"Mutated primers cannot be moved"_s;  // not recorded for Length
+    }
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value() or
+        active_primer_->molecule_name != molecule_->name) {
+        return u"Please create a primer from a molecule"_s;
+    }
+    auto& primer = *active_primer_;
+    // the length includes the 5' extension, as the form says
+    auto const bases = length > primer.extension_length ? length - primer.extension_length : 0;
+    auto const [changed, message] = search::legacy_change_length(molecule_->sequence, *primer.location, bases);
+    if (message == search::PickingMessage::primer_must_have_length) {
+        return u"Primer must have length!"_s;  // PRIMER.exe's messages
+    }
+    if (message == search::PickingMessage::primer_too_long) {
+        return u"Primer Too Long - Extends outside molecule"_s;
+    }
+    auto const primer_bases = sequence::primer_at(molecule_->sequence, changed);
+    if (not primer_bases.has_value()) {
+        return u"Primer Too Long - Extends outside molecule"_s;  // unreachable: the length was checked
+    }
+    primer.sequence.resize(primer.extension_length);
+    primer.sequence.insert(primer.sequence.end(), primer_bases->begin(), primer_bases->end());
+    primer.location = changed;
+    // as PRIMER.exe, the Primer List entry of the active primer changes too
+    if (active_list_index_.has_value() and *active_list_index_ < primer_list_.size()) {
+        primer_list_.at(*active_list_index_) = primer;
+        show_primer_list();
+    }
+    analyze_active_primer();
+    return std::nullopt;
+}
+
+void MainWindow::open_change_length() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    auto accepted = false;
+    constexpr auto minimum = 0;  // PRIMER.exe refuses it with a message
+    constexpr auto maximum = 99;  // the form's two digits
+    constexpr auto step = 1;
+    auto const length = QInputDialog::getInt(this, u"Change Primer Length"_s, u"Primer length (incl 5' ext):"_s,
+                                             static_cast<int>(active_primer_->sequence.size()), minimum, maximum,
+                                             step, &accepted);
+    if (not accepted) {
+        return;
+    }
+    if (auto const error = change_length(static_cast<std::size_t>(length)); error.has_value()) {
+        QMessageBox::information(this, u"Change Primer Length"_s, *error);
     }
 }
 
@@ -904,6 +968,7 @@ void MainWindow::show_listed_primer(int const row) {
         return;
     }
     active_primer_ = primer_list_.at(static_cast<std::size_t>(row));
+    active_list_index_ = static_cast<std::size_t>(row);
     analyze_active_primer();
 }
 
@@ -1178,6 +1243,7 @@ auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
     auto sequence = *extension;
     sequence.insert(sequence.end(), primer->begin(), primer->end());
     // the molecule of a .PD2 file may not be the loaded one: no location
+    active_list_index_.reset();
     active_primer_ = ActivePrimer{.sequence = std::move(sequence),
                                   .extension_length = extension->size(),
                                   .criteria = parsed.primer->criteria,
