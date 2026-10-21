@@ -11,7 +11,10 @@
 #include <optional>
 #include <span>
 #include <string>
+#include <iterator>
+#include <string_view>
 #include <utility>
+#include <vector>
 
 namespace primerpicker::io {
 
@@ -109,6 +112,9 @@ constexpr auto number_group = 9U;
 
 enum struct TextField : std::uint8_t { extension = 0, typed_primer = 1, molecule_name = 2, molecule_path = 3, molecule_primer = 4 };
 enum struct NumberField : std::uint8_t {
+    total_length = 0,      // with the extension
+    primer_length = 1,     // without it
+    extension_length = 2,
     position = 3,
     complement = 4,
     gc_range = 0x10,
@@ -178,6 +184,9 @@ constexpr auto set_number(Pd2Primer& primer, NumberField const field, std::uint3
             criteria.reject_gc_run_3prime = static_cast<std::size_t>(low_half(value));
             criteria.reject_run_length = static_cast<std::size_t>(high_half(value));
             break;
+        case NumberField::total_length:
+        case NumberField::primer_length:
+        case NumberField::extension_length:
         default:
             break;  // lengths (fields 0 to 2) follow from the texts
     }
@@ -225,6 +234,109 @@ constexpr auto set_number(Pd2Primer& primer, NumberField const field, std::uint3
         return failure(Pd2Error::unknown_record);
     }
     return {.primer = std::move(primer), .error = Pd2Error::none};
+}
+
+namespace detail {
+
+// Little-endian writes, the layout of parse_pd2
+class ByteWriter {
+public:
+    constexpr void u16(std::uint32_t const value) {
+        bytes_.push_back(static_cast<std::byte>(value & low_byte_mask));
+        bytes_.push_back(static_cast<std::byte>((value >> bits_per_byte) & low_byte_mask));
+    }
+
+    constexpr void u32(std::uint32_t const value) {
+        u16(value & low_half_mask);
+        u16(value >> half_shift);
+    }
+
+    // a text record: its tag, its size (the text, a NUL, padded to an
+    // even size) and its bytes
+    constexpr void text(TextField const field, std::string_view const value) {
+        u16(tag(text_group, static_cast<std::uint32_t>(field)));
+        auto const size = (value.size() + 2) & ~std::size_t{1};  // with the NUL, rounded up to even
+        u32(static_cast<std::uint32_t>(size));
+        std::ranges::transform(value, std::back_inserter(bytes_),
+                               [](char const letter) { return static_cast<std::byte>(letter); });
+        bytes_.resize(bytes_.size() + size - value.size(), std::byte{0});
+    }
+
+    // a number record: its tag, a zero 32-bit word, its value
+    constexpr void number(NumberField const field, std::uint32_t const value) {
+        u16(tag(number_group, static_cast<std::uint32_t>(field)));
+        u32(0);
+        u32(value);
+    }
+
+    // two signed 16-bit values in one 32-bit word: LOW first
+    constexpr void pair(NumberField const field, int const low, int const high) {
+        number(field, half(low) | (half(high) << half_shift));
+    }
+
+    constexpr void raw(std::span<std::byte const> const bytes) { bytes_.insert(bytes_.end(), bytes.begin(), bytes.end()); }
+
+    [[nodiscard]] constexpr auto bytes() && -> std::vector<std::byte> { return std::move(bytes_); }
+
+private:
+    static constexpr auto tag(std::uint32_t const group, std::uint32_t const field) noexcept -> std::uint32_t {
+        return (group << bits_per_byte) | field;
+    }
+
+    static constexpr auto half(int const value) noexcept -> std::uint32_t {
+        return static_cast<std::uint32_t>(static_cast<std::uint16_t>(static_cast<std::int16_t>(value)));
+    }
+
+    std::vector<std::byte> bytes_;
+};
+
+// the 10 header bytes after the magic, as in every recorded file
+constexpr auto pd2_header_rest = std::array{std::byte{0x03}, std::byte{0x01}, std::byte{0}, std::byte{0},
+                                            std::byte{0x05}, std::byte{0},    std::byte{0}, std::byte{0},
+                                            std::byte{0},    std::byte{0}};
+
+}  // namespace detail
+
+// A .PD2 file as PRIMER.exe's Save Active Primer writes it (layout in
+// tests/legacy/README.md, "Primer files .PD2"): a primer without
+// molecule name is a Direct Entry primer. The run thresholds are written
+// in the order parse_pd2 reads them (inferred). Not noexcept: the vector
+// allocates.
+[[nodiscard]] constexpr auto write_pd2(Pd2Primer const& primer) -> std::vector<std::byte> {
+    using detail::NumberField;
+    using detail::TextField;
+    auto writer = detail::ByteWriter{};
+    writer.raw(detail::pd2_magic);
+    writer.raw(detail::pd2_header_rest);
+    if (not primer.extension.empty()) {
+        writer.text(TextField::extension, primer.extension);
+    }
+    if (primer.molecule_name.empty()) {
+        writer.text(TextField::typed_primer, primer.sequence);
+    } else {
+        writer.text(TextField::molecule_name, primer.molecule_name);
+        writer.text(TextField::molecule_path, primer.molecule_path);
+        writer.text(TextField::molecule_primer, primer.sequence);
+    }
+    auto const extension_length = static_cast<std::uint32_t>(primer.extension.size());
+    auto const primer_length = static_cast<std::uint32_t>(primer.sequence.size());
+    writer.number(NumberField::total_length, extension_length + primer_length);
+    writer.number(NumberField::primer_length, primer_length);
+    writer.number(NumberField::extension_length, extension_length);
+    writer.number(NumberField::position, static_cast<std::uint32_t>(primer.position));
+    writer.number(NumberField::complement, primer.complement ? 1U : 0U);
+    auto const& criteria = primer.criteria;
+    writer.pair(NumberField::gc_range, criteria.gc_max_percent, criteria.gc_min_percent);
+    writer.pair(NumberField::tm_range, criteria.tm_max_celsius, criteria.tm_min_celsius);
+    writer.number(NumberField::hairpin_cutoff,
+                  std::bit_cast<std::uint32_t>(static_cast<float>(criteria.hairpin_cutoff.kcal_per_mol)));
+    writer.pair(NumberField::dimer_thresholds, static_cast<int>(criteria.reject_dimer_adjacent_bases),
+                static_cast<int>(criteria.reject_dimer_3prime_matches));
+    writer.pair(NumberField::run_thresholds, static_cast<int>(criteria.reject_gc_run_3prime),
+                static_cast<int>(criteria.reject_run_length));
+    writer.u16(detail::pd2_end_tag);
+    writer.u32(0);
+    return std::move(writer).bytes();
 }
 
 }  // namespace primerpicker::io
