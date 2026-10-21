@@ -21,6 +21,7 @@
 #include "gui/match_dialog.hpp"
 #include "gui/multi_primer_dialog.hpp"
 #include "gui/pair_dialog.hpp"
+#include "gui/picking_view.hpp"
 #include "gui/sequence_dialog.hpp"
 
 #include <QAbstractItemView>
@@ -152,6 +153,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&pair_);
     pages_.addWidget(&multi_);
     pages_.addWidget(&match_);
+    pages_.addWidget(&picking_);
     list_view_.setObjectName(u"primer_list"_s);
     list_view_.setModel(&list_model_);
     list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -197,6 +199,10 @@ MainWindow::MainWindow()
     QObject::connect(&analysis_, &AnalysisView::false_priming_requested, this,
                      [this] { show_homology(analysis::HomologyKind::false_priming); });
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
+    QObject::connect(&picking_, &PickingView::location_changed, this, &MainWindow::use_picked_location);
+    // S, Enter or Esc: as PRIMER.exe, the primer joins the Primer List and
+    // the picking screen closes
+    QObject::connect(&picking_, &PickingView::save_requested, this, &MainWindow::save_to_list);
 }
 
 // a running search reads the molecule: it is stopped first
@@ -238,7 +244,9 @@ void MainWindow::add_legacy_menus() {
 
     auto& modify = *menu_bar.addMenu(u"&Modify"_s);
     modify.addSection(u"Active Primer:"_s);
-    add_disabled_items(modify, {u"&Position"_s, u"&Length"_s});
+    auto const& position = add_item(modify, {.text = u"&Position", .name = u"modify_position"});
+    QObject::connect(&position, &QAction::triggered, this, &MainWindow::open_modify_position);
+    add_disabled_items(modify, {u"&Length"_s});
     auto const& extension = add_item(modify, {.text = u"5'-&extension...", .name = u"modify_extension"});
     QObject::connect(&extension, &QAction::triggered, this, &MainWindow::modify_extension);
     auto const& criteria = add_item(modify, {.text = u"&Criteria...", .name = u"modify_criteria"});
@@ -642,7 +650,69 @@ void MainWindow::use_from_molecule() {
         active_primer_->position = static_cast<int>(*position);
         active_primer_->complement = complement;
     }
+    start_picking();
 }
+
+// PRIMER.exe's MODIFY PRIMER POSITION screen for the active primer; while
+// a second primer is picked, the one saved last to the Primer List is
+// the partner of the A:B dimers line
+void MainWindow::start_picking() {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value()) {
+        return;
+    }
+    auto partner = std::optional<PickingPartner>{};
+    if (not primer_list_.empty()) {
+        auto const& last = primer_list_.back();
+        auto const bases = std::span{last.sequence}.subspan(last.extension_length);
+        partner = PickingPartner{.primer = {bases.begin(), bases.end()},
+                                 .name = u"primer %1 (%2)"_s.arg(primer_list_.size()).arg(letters(bases))};
+    }
+    picking_.start({.molecule_name = molecule_->name,
+                    .molecule = molecule_->sequence,
+                    .location = *active_primer_->location,
+                    .criteria = active_primer_->criteria,
+                    .partner = std::move(partner)});
+    pages_.setCurrentWidget(&picking_);
+    picking_.setFocus();
+}
+
+auto MainWindow::modify_position() -> std::optional<QString> {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value() or
+        active_primer_->molecule_name != molecule_->name) {
+        return u"Please create a primer from a molecule"_s;
+    }
+    start_picking();
+    return std::nullopt;
+}
+
+void MainWindow::open_modify_position() {
+    if (auto const error = modify_position(); error.has_value()) {
+        QMessageBox::information(this, u"Modify Position"_s, *error);
+    }
+}
+
+// the active primer follows the picking view's window; its 5'
+// extension, if any, is kept
+void MainWindow::use_picked_location() {
+    if (not active_primer_.has_value() or not molecule_.has_value()) {
+        return;
+    }
+    auto const location = picking_.location();
+    auto const bases = sequence::primer_at(molecule_->sequence, location);
+    if (not bases.has_value()) {
+        return;
+    }
+    auto& primer = *active_primer_;
+    primer.sequence.resize(primer.extension_length);
+    primer.sequence.insert(primer.sequence.end(), bases->begin(), bases->end());
+    primer.location = location;
+    primer.position = static_cast<int>(location.position);
+    primer.complement = location.strand == sequence::Strand::complement;
+    primer.origin = u"%1 at %2%3"_s.arg(molecule_->name)
+                        .arg(location.position)
+                        .arg(primer.complement ? u" (complement)"_s : QString{});
+}
+
 
 // a new primer without extension, with the System Defaults' criteria
 void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
@@ -675,6 +745,9 @@ void MainWindow::save_to_list() {
                      QString::number(primer.sequence.size()), primer.origin});
     }
     list_model_.set_rows(std::move(rows));
+    if (pages_.currentWidget() == &picking_) {
+        analyze_active_primer();  // as S on the picking screen
+    }
 }
 
 void MainWindow::show_listed_primer(int const row) {

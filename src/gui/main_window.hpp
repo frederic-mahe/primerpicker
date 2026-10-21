@@ -23,6 +23,7 @@
 #include "gui/multi_primer_view.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/pair_view.hpp"
+#include "gui/picking_view.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
 #include "gui/system_defaults_dialog.hpp"
@@ -164,6 +165,11 @@ public:
     // no search
     [[nodiscard]] auto match_active_primer(MatchRequest const& request) -> std::optional<QString>;
 
+    // Modify -> Position: the picking view for the active primer, made
+    // from the loaded molecule (From Molecule opens it too); the error,
+    // if there was none
+    [[nodiscard]] auto modify_position() -> std::optional<QString>;
+
     // Help -> Glossary at the built-in definition NAME (a key or an
     // alias; the first entry if there is none); whether NAME was found
     auto show_glossary(QString const& name) -> bool;
@@ -207,6 +213,9 @@ private:
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
     void use_from_molecule();
+    void start_picking();
+    void open_modify_position();
+    void use_picked_location();
     void analyze_active_primer();
 
     std::optional<std::reference_wrapper<QSettings>> settings_;
@@ -233,6 +242,7 @@ private:
     PairView pair_;
     MultiPrimerView multi_;
     MatchView match_;
+    PickingView picking_;
     // the Primer List panel: the dock before the view it holds
     QDockWidget list_dock_;
     TextTableModel list_model_;

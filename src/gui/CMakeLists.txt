@@ -19,6 +19,7 @@ add_library(primerpicker_gui
   multi_primer_view.cpp
   pair_dialog.cpp
   pair_view.cpp
+  picking_view.cpp
   sequence_dialog.cpp
   sites_view.cpp
   system_defaults_dialog.cpp
