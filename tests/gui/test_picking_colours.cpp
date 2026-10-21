@@ -14,7 +14,6 @@ using primerpicker::colour::contrast_ratio;
 using primerpicker::colour::simulate;
 using primerpicker::gui::dark_picking_palette;
 using primerpicker::gui::light_picking_palette;
-using primerpicker::gui::PickingPalette;
 
 constexpr auto palettes = std::array{light_picking_palette, dark_picking_palette};
 

@@ -57,11 +57,14 @@ constexpr auto fits(sequence::PrimerLocation const& location, std::size_t const 
 
 constexpr auto append_number(std::string& text, std::size_t value) -> void {
     constexpr auto base = std::size_t{10};
+    if (value == 0) {
+        text += '0';
+        return;
+    }
     auto digits = std::string{};
-    do {
+    for (; value > 0; value /= base) {
         digits.insert(digits.begin(), static_cast<char>('0' + (value % base)));
-        value /= base;
-    } while (value > 0);
+    }
     text += digits;
 }
 
@@ -208,7 +211,7 @@ struct PickingState {
     std::string value_line;
     // "MEETS CRITERIA SELECTED: Yes"; the window is then green (light
     // grey otherwise)
-    bool meets_criteria;
+    bool meets_criteria = false;
 };
 
 

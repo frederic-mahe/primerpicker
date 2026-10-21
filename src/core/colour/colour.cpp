@@ -49,7 +49,7 @@ auto from_linear(double const component) noexcept -> double {
     return ((1.0 + offset) * std::pow(component, exponent)) - offset;
 }
 
-auto linear(SrgbComponents const colour) noexcept -> Vector {
+auto linear(SrgbComponents const& colour) noexcept -> Vector {
     return {.first = to_linear(colour.red), .second = to_linear(colour.green), .third = to_linear(colour.blue)};
 }
 
@@ -99,7 +99,8 @@ constexpr auto inverse(Matrix const& matrix) noexcept -> Matrix {
     auto result = Matrix{};
     for (auto row = std::size_t{0}; row < 3; ++row) {
         for (auto column = std::size_t{0}; column < 3; ++column) {
-            result.at(row).at(column) = cofactor(column, row) / determinant;  // the adjugate, transposed
+            // the adjugate: the transposed matrix of cofactors
+            result.at(column).at(row) = cofactor(row, column) / determinant;
         }
     }
     return result;
@@ -122,27 +123,28 @@ auto lab_function(double const ratio) noexcept -> double {
     if (ratio > delta * delta * delta) {
         return std::cbrt(ratio);
     }
+    constexpr auto slope = 3.0 * delta * delta;
     constexpr auto four_29ths = 4.0 / 29.0;
-    return (ratio / (3.0 * delta * delta)) + four_29ths;
+    return (ratio / slope) + four_29ths;
 }
 
-auto lab(SrgbComponents const colour) noexcept -> Lab {
+auto lab(SrgbComponents const& colour) noexcept -> Lab {
     auto const xyz = multiply(xyz_matrix, linear(colour));
-    auto const fx = lab_function(xyz.first / white_point.first);
-    auto const fy = lab_function(xyz.second / white_point.second);
-    auto const fz = lab_function(xyz.third / white_point.third);
+    auto const x_term = lab_function(xyz.first / white_point.first);
+    auto const y_term = lab_function(xyz.second / white_point.second);
+    auto const z_term = lab_function(xyz.third / white_point.third);
     constexpr auto lightness_scale = 116.0;
     constexpr auto lightness_offset = 16.0;
     constexpr auto a_scale = 500.0;
     constexpr auto b_scale = 200.0;
-    return {.lightness = (lightness_scale * fy) - lightness_offset,
-            .a_axis = a_scale * (fx - fy),
-            .b_axis = b_scale * (fy - fz)};
+    return {.lightness = (lightness_scale * y_term) - lightness_offset,
+            .a_axis = a_scale * (x_term - y_term),
+            .b_axis = b_scale * (y_term - z_term)};
 }
 
 }  // namespace
 
-auto relative_luminance(SrgbComponents const colour) noexcept -> double {
+auto relative_luminance(SrgbComponents const& colour) noexcept -> double {
     // WCAG 2.2 coefficients (those of ITU-R BT.709)
     constexpr auto red_weight = 0.2126;
     constexpr auto green_weight = 0.7152;
@@ -170,7 +172,7 @@ auto simulate(Srgb const colour, ColourVision const vision) noexcept -> SrgbComp
     return {.red = encoded(simulated.first), .green = encoded(simulated.second), .blue = encoded(simulated.third)};
 }
 
-auto colour_difference_cie76(SrgbComponents const first, SrgbComponents const second) noexcept -> double {
+auto colour_difference_cie76(SrgbComponents const& first, SrgbComponents const& second) noexcept -> double {
     auto const one = lab(first);
     auto const other = lab(second);
     return std::hypot(one.lightness - other.lightness, one.a_axis - other.a_axis, one.b_axis - other.b_axis);

@@ -25,6 +25,7 @@ using primerpicker::search::legacy_picking_move;
 using primerpicker::search::legacy_picking_state;
 using primerpicker::search::PickingKey;
 using primerpicker::search::PickingMessage;
+using primerpicker::search::PickingState;
 using primerpicker::search::SearchDirection;
 using primerpicker::sequence::Nucleotide;
 using primerpicker::sequence::PrimerLocation;
@@ -117,6 +118,29 @@ auto recorded_states() -> std::vector<RecordedState> {
     return states;
 }
 
+void check_recorded_state(RecordedState const& recorded) {
+    INFO(recorded.run << ": " << recorded.value_line);
+    auto const sequence = molecule(recorded.molecule_file);
+    auto const shown = legacy_picking_state(sequence, recorded.location, LegacyCriteria{});
+    REQUIRE(shown.has_value());
+    CHECK(shown.value_or(PickingState{}).value_line == recorded.value_line);
+    CHECK(shown.value_or(PickingState{}).meets_criteria == recorded.meets);
+    CHECK((recorded.window_colour == "green") == recorded.meets);
+}
+
+// The position found by Find next, 0 for "No Primers found"
+auto found_position(std::optional<PrimerLocation> const& found) -> std::size_t {
+    return found.has_value() ? found->position : std::size_t{0};
+}
+
+auto found_length(std::optional<PrimerLocation> const& found) -> std::size_t {
+    return found.has_value() ? found->length : std::size_t{0};
+}
+
+auto found_strand(std::optional<PrimerLocation> const& found) -> std::optional<Strand> {
+    return found.has_value() ? std::optional{found->strand} : std::nullopt;
+}
+
 }  // namespace
 
 // Reference: PRIMER.exe, From Molecule (built-in criteria), every
@@ -127,18 +151,8 @@ auto recorded_states() -> std::vector<RecordedState> {
 TEST_CASE("the picking screen's values, verdict and window colour, as recorded", "[search][picking][legacy]") {
     auto const states = recorded_states();
     REQUIRE(states.size() >= 40);
-    auto const criteria = LegacyCriteria{};
     for (auto const& recorded : states) {
-        INFO(recorded.run << ": " << recorded.value_line);
-        auto const sequence = molecule(recorded.molecule_file);
-        auto const shown = legacy_picking_state(sequence, recorded.location, criteria);
-        REQUIRE(shown.has_value());
-        if (not shown.has_value()) {
-            continue;
-        }
-        CHECK(shown->value_line == recorded.value_line);
-        CHECK(shown->meets_criteria == recorded.meets);
-        CHECK((recorded.window_colour == "green") == recorded.meets);
+        check_recorded_state(recorded);
     }
 }
 
@@ -206,21 +220,27 @@ TEST_CASE("Ctrl+arrows find the next primer that meets the criteria", "[search][
     auto const sequence = test600();
     auto const criteria = LegacyCriteria{};
     auto const next = [&](PrimerLocation const& from, SearchDirection const direction) {
-        return legacy_find_next(sequence, from, criteria, direction);
+        return found_position(legacy_find_next(sequence, from, criteria, direction));
     };
-    auto const position = [](std::optional<PrimerLocation> const& found) {
-        return found.has_value() ? found->position : std::size_t{0};
+    CHECK(next(top(51), SearchDirection::forward) == 71);
+    CHECK(next(top(71), SearchDirection::forward) == 72);
+    CHECK(next(top(72), SearchDirection::backward) == 71);
+    CHECK(next(top(71), SearchDirection::backward) == 36);
+    CHECK(next(top(36), SearchDirection::backward) == 35);
+}
+
+// Same references
+TEST_CASE("Ctrl+arrows: no primer found, and the length is kept", "[search][picking][legacy]") {
+    auto const sequence = test600();
+    auto const criteria = LegacyCriteria{};
+    auto const next = [&](PrimerLocation const& from, SearchDirection const direction) {
+        return found_position(legacy_find_next(sequence, from, criteria, direction));
     };
-    CHECK(position(next(top(51), SearchDirection::forward)) == 71);
-    CHECK(position(next(top(71), SearchDirection::forward)) == 72);
-    CHECK(position(next(top(72), SearchDirection::backward)) == 71);
-    CHECK(position(next(top(71), SearchDirection::backward)) == 36);
-    CHECK(position(next(top(36), SearchDirection::backward)) == 35);
-    CHECK(position(next(top(530), SearchDirection::forward)) == 559);
-    CHECK_FALSE(next(top(559), SearchDirection::forward).has_value());
-    CHECK(position(next(top(36, 22), SearchDirection::forward)) == 71);
-    CHECK(next(top(36, 22), SearchDirection::forward)->length == 22);
-    CHECK_FALSE(next(top(2), SearchDirection::backward).has_value());
+    CHECK(next(top(530), SearchDirection::forward) == 559);
+    CHECK(next(top(559), SearchDirection::forward) == 0);
+    CHECK(next(top(36, 22), SearchDirection::forward) == 71);
+    CHECK(found_length(legacy_find_next(sequence, top(36, 22), criteria, SearchDirection::forward)) == 22);
+    CHECK(next(top(2), SearchDirection::backward) == 0);
 }
 
 // Reference: PRIMER.exe, TEST600, complement strand (comp_400): from
@@ -230,10 +250,10 @@ TEST_CASE("Ctrl+arrows on the complement strand", "[search][picking][legacy]") {
     auto const criteria = LegacyCriteria{};
     auto const forward = legacy_find_next(sequence, complement(460), criteria, SearchDirection::forward);
     auto const backward = legacy_find_next(sequence, complement(516), criteria, SearchDirection::backward);
-    REQUIRE(forward.has_value());
-    REQUIRE(backward.has_value());
-    CHECK(same(*forward, complement(516)));
-    CHECK(same(*backward, complement(457)));
+    CHECK(found_position(forward) == 516);
+    CHECK(found_strand(forward) == Strand::complement);
+    CHECK(found_position(backward) == 457);
+    CHECK(found_strand(backward) == Strand::complement);
 }
 
 // Reference: PRIMER.exe, TEST600 and picking/TWIDTH.GB: - on a primer of
@@ -255,14 +275,9 @@ TEST_CASE("the - key stops at one base", "[search][picking][legacy]") {
 TEST_CASE("the run at the 3' end counts on the picking screen", "[search][picking][legacy]") {
     auto const sequence = molecule("search/TRUN.GB");
     auto const criteria = LegacyCriteria{};
-    auto const state = legacy_picking_state(sequence, top(450), criteria);
-    REQUIRE(state.has_value());
-    CHECK_FALSE(state->meets_criteria);
-    CHECK(state->value_line.ends_with("Runs: !"));
-    auto const found = legacy_find_next(sequence, top(449), criteria, SearchDirection::forward);
-    REQUIRE(found.has_value());
-    CHECK(found->position == 471);
-    auto const from_40 = legacy_find_next(sequence, top(40), criteria, SearchDirection::forward);
-    REQUIRE(from_40.has_value());
-    CHECK(from_40->position == 42);
+    auto const state = legacy_picking_state(sequence, top(450), criteria).value_or(PickingState{});
+    CHECK_FALSE(state.meets_criteria);
+    CHECK(state.value_line.ends_with("Runs: !"));
+    CHECK(found_position(legacy_find_next(sequence, top(449), criteria, SearchDirection::forward)) == 471);
+    CHECK(found_position(legacy_find_next(sequence, top(40), criteria, SearchDirection::forward)) == 42);
 }

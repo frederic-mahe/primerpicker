@@ -98,6 +98,26 @@ auto references() -> std::vector<Reference> {
 constexpr auto black = Srgb{.red = 0, .green = 0, .blue = 0};
 constexpr auto white = Srgb{.red = 255, .green = 255, .blue = 255};
 
+constexpr auto tolerance = 1e-5;  // the reference table has 6 decimals
+
+void check_components(SrgbComponents const& simulated, SrgbComponents const& expected) {
+    CHECK_THAT(simulated.red, WithinAbs(expected.red, tolerance));
+    CHECK_THAT(simulated.green, WithinAbs(expected.green, tolerance));
+    CHECK_THAT(simulated.blue, WithinAbs(expected.blue, tolerance));
+}
+
+void check_reference(Reference const& reference) {
+    INFO(static_cast<int>(reference.first.red) << ',' << static_cast<int>(reference.first.green) << ','
+                                               << static_cast<int>(reference.first.blue));
+    CHECK_THAT(relative_luminance(reference.first), WithinAbs(reference.luminance, tolerance));
+    CHECK_THAT(contrast_ratio(reference.first, reference.second), WithinAbs(reference.contrast, tolerance));
+    constexpr auto kinds = std::array{ColourVision::protanopia, ColourVision::deuteranopia, ColourVision::tritanopia};
+    for (auto index = std::size_t{0}; index < kinds.size(); ++index) {
+        check_components(simulate(reference.first, kinds.at(index)), reference.simulations.at(index));
+    }
+    CHECK_THAT(colour_difference_cie76(reference.first, reference.second), WithinAbs(reference.difference, tolerance));
+}
+
 }  // namespace
 
 // Reference: WCAG 2.2, definition of "contrast ratio" (ratios range
@@ -114,9 +134,9 @@ TEST_CASE("black on white has the largest contrast ratio, 21:1", "[colour]") {
 TEST_CASE("the lightest grey that passes WCAG AA on white", "[colour]") {
     constexpr auto passes = Srgb{.red = 0x76, .green = 0x76, .blue = 0x76};
     constexpr auto fails = Srgb{.red = 0x77, .green = 0x77, .blue = 0x77};
-    constexpr auto tolerance = 0.005;  // WebAIM prints two decimals
-    CHECK_THAT(contrast_ratio(passes, white), WithinAbs(4.54, tolerance));
-    CHECK_THAT(contrast_ratio(fails, white), WithinAbs(4.48, tolerance));
+    constexpr auto webaim_tolerance = 0.005;  // WebAIM prints two decimals
+    CHECK_THAT(contrast_ratio(passes, white), WithinAbs(4.54, webaim_tolerance));
+    CHECK_THAT(contrast_ratio(fails, white), WithinAbs(4.48, webaim_tolerance));
 }
 
 // Reference values: colorspacious 1.1.2 (Machado et al. 2009 matrices,
@@ -125,21 +145,7 @@ TEST_CASE("the lightest grey that passes WCAG AA on white", "[colour]") {
 TEST_CASE("luminance, contrast, colour-vision simulations and CIE76 differences", "[colour][colorspacious]") {
     auto const found = references();
     REQUIRE(found.size() == 11);
-    constexpr auto tolerance = 1e-5;  // the table has 6 decimals
-    constexpr auto kinds = std::array{ColourVision::protanopia, ColourVision::deuteranopia, ColourVision::tritanopia};
     for (auto const& reference : found) {
-        INFO(static_cast<int>(reference.first.red) << ',' << static_cast<int>(reference.first.green) << ','
-                                                   << static_cast<int>(reference.first.blue));
-        CHECK_THAT(relative_luminance(reference.first), WithinAbs(reference.luminance, tolerance));
-        CHECK_THAT(contrast_ratio(reference.first, reference.second), WithinAbs(reference.contrast, tolerance));
-        for (auto index = std::size_t{0}; index < kinds.size(); ++index) {
-            auto const simulated = simulate(reference.first, kinds.at(index));
-            auto const& expected = reference.simulations.at(index);
-            CHECK_THAT(simulated.red, WithinAbs(expected.red, tolerance));
-            CHECK_THAT(simulated.green, WithinAbs(expected.green, tolerance));
-            CHECK_THAT(simulated.blue, WithinAbs(expected.blue, tolerance));
-        }
-        CHECK_THAT(colour_difference_cie76(reference.first, reference.second),
-                   WithinAbs(reference.difference, tolerance));
+        check_reference(reference);
     }
 }

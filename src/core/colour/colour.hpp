@@ -25,7 +25,7 @@ struct SrgbComponents {
 
 // Relative luminance, from 0 (black) to 1 (white): WCAG 2.2, definition
 // of "relative luminance" (sRGB)
-[[nodiscard]] auto relative_luminance(SrgbComponents colour) noexcept -> double;
+[[nodiscard]] auto relative_luminance(SrgbComponents const& colour) noexcept -> double;
 [[nodiscard]] auto relative_luminance(Srgb colour) noexcept -> double;
 
 // Contrast ratio of two colours, from 1 to 21 (WCAG 2.2, definition of
@@ -44,7 +44,8 @@ enum struct ColourVision : std::uint8_t { protanopia, deuteranopia, tritanopia }
 // The CIE 1976 colour difference (Delta E*ab) of two colours, in
 // CIELAB with the D65 white point; about 2.3 is a just noticeable
 // difference
-[[nodiscard]] auto colour_difference_cie76(SrgbComponents first, SrgbComponents second) noexcept -> double;
+[[nodiscard]] auto colour_difference_cie76(SrgbComponents const& first, SrgbComponents const& second) noexcept
+    -> double;
 [[nodiscard]] auto colour_difference_cie76(Srgb first, Srgb second) noexcept -> double;
 
 }  // namespace primerpicker::colour
