@@ -273,6 +273,10 @@ Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
   kcal, so the core computes in integer hundredths);
 - stems do not extend through a tandem T.G/G.T step (no recorded
   stem contains one).
+  Updated 2026-10-21: PRIMER.exe does extend stems through such steps
+  (`find_pair_trun/`, `hairpin_tandem_gt/`, see "Find Pair: A:B
+  adjacent bases" below); the step values are being probed
+  (decided 2026-10-21: probe, then fix the model).
 
 `inspect/inspect_2.tsv` adds the primers of the first batch whose
 recording had failed, loop lengths 13 to 40 next to the same stem,
@@ -360,7 +364,7 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 
 | Offset | Value | Default |
 |---|---|---|
-| 0 | unknown (4 bytes, zero in both files; kept unchanged when the defaults are saved: `config_header/`, 2026-10-20) | 0 |
+| 0 | 4 bytes, read and written back unchanged; zero in every file PRIMER.exe wrote; non-zero values (float 1.0 and 50.0, FF, int 10) change none of the One Primer, Find Pair and Uniqueness reports nor the amplified product screen (`config_header/`, 2026-10-20; `config_bytes/`, 2026-10-21) | 0 |
 | 4 | primer length (incl. 5' extension) | 20 |
 | 6 | exclude Tm <= 0 °C (1 = Y) | 1 |
 | 8 | sort homologies by Tm (1 = Y) | 1 |
@@ -376,7 +380,7 @@ Layout (little-endian; int16 unless noted), confirmed by the two files:
 | 38 | reject runs if >= | 3 |
 | 40 | reject 3' G/C runs if >= | 3 |
 | 42-46 | five weights, one byte each: GC mismatch, Tm mismatch, false priming, 3' dimers, any dimers (recorded 2026-10-19, below) | 1 |
-| 47-54 | zero in both files (kept unchanged when the defaults are saved: `config_header/`, 2026-10-20) | 0 |
+| 47-54 | 8 bytes, the same (`config_header/`, 2026-10-20; `config_bytes/`, 2026-10-21) | 0 |
 
 Which of offsets 38 and 40 holds which run threshold was first
 inferred from the screen order (only offset 38 changed);
@@ -758,6 +762,9 @@ Version 1 (decided 2026-10-19): the same 100-primer limit; at 1000
 pairs, the search stops, keeps the first 1000 pairs in generation
 order, ranks them, and warns "More than 1000 possible pairs found!"
 instead of hanging.
+Updated 2026-10-21: PRIMER.exe keeps the best 1000 of the first 1001
+pairs (see "Reports of more than 20 pairs" below); version 1 will do
+the same (decided 2026-10-21).
 
 ### No Matching Primers Found (recorded 2026-10-19)
 
@@ -775,6 +782,24 @@ its count lines, which an existing test pins, and prints the message
 instead of the empty list.)
 Navigation: a target field takes at least 6 digits (it does not move
 on by itself after 4).
+
+### Targets near and beyond the molecule's end (recorded 2026-10-21)
+
+`find_pair_beyond_end/`: Find Pair on `pairs/TEST600.GB` (600 bases),
+mostly with `config/PD2_RELAXED.CFG` and offsets 40 and 40
+(`tools/probe_keys.sh`). The form checks the targets when it is
+completed: a target A of 0 or beyond the molecule gives a box "Must
+enter value for this field"; a target A with target + primer A's
+length > L (581 to 600 for 20 bases in 600; 576 with 25 bases) gives
+"Primer too long to fit within molecule." and puts the cursor on
+primer A's length; a target B beyond the molecule gives "Must enter
+value for this field", and a target B smaller than the primer length
+(10, 19 for 20 bases) "Primer too long to fit within molecule.". No
+search starts; the form stays open. A target B equal to L is searched
+with a window of one position ("End: Target + 0 bases"). The accepted
+cases (targets A 150, 579 and 580, targets B 590 and 600) are
+reproduced byte for byte by primerpicker. Version 1 refuses these
+targets as PRIMER.exe does (decided 2026-10-21).
 
 ### The false-priming term of the score (recorded 2026-10-18)
 
@@ -850,6 +875,17 @@ stop codons. It is the standard genetic code
 (`tests/unit/test_codon_table.cpp` expands every line).
 Not recorded yet: F1 (the enzyme list), S (save), I (inspect), a
 complement-strand primer, a primer with a 5' extension.
+
+**Mutated primers** (recorded 2026-10-21). `mutagenize_enter/`: S on
+the Mutagenize screen saves the primer (edited or not) as a new entry
+of the Primer List, marked with character 7F (⌂) after its number: a
+mutated primer. Mutagenize on it says "Primer is already Mutated",
+Modify -> Position "Mutated primers cannot be moved". I on the
+Mutagenize screen opens the Primer Analysis of the mutated primer, and
+its One Primer report adds "Mutated", the source molecule and
+position, and a "PRIMER MUTAGENESIS INFORMATION" section (bases
+changed, translations in three frames). Choosing an enzyme with Enter
+in the F1 list changes nothing that was observed.
 
 ## Reports (recorded 2026-10-19 and 2026-10-20)
 
@@ -1013,8 +1049,23 @@ for byte by `legacy_find_pair_report`
   F8); the rows are those of the screen, a false-priming Tm of B taking
   2 columns (`- /  6`), '-' when there is no site.
 Not recorded: reports of more than 20 pairs (whether PRIMER.exe breaks
-pages), a typed M. `config/PD2_LENGTH25.CFG`
+pages), a typed M. (Recorded 2026-10-21, see below.) `config/PD2_LENGTH25.CFG`
 lost keys twice.
+
+### Reports of more than 20 pairs (recorded 2026-10-21)
+
+`reports/find_pair_best/`: "N Pairs found.  Print best: [20  ]" takes
+1 to 4 digits (the first digit clears the field; 1 to 3 digits need
+Enter, a fourth completes the field by itself). The report holds the
+best min(M, N) pairs in the order of the list: 25, 30 and 100
+recorded; 50 and 9999 on 30 pairs print the 30; 1000 on 1000 pairs
+prints them all (70916 bytes). There is no page break, no form feed,
+and only one header. 0 closes the box and prints nothing. The 1000
+rows of `TEST600_150_400_CRITERIA_best1000.PRN` are the best 1000 of
+the first 1001 pairs generated (primer A, then primer B, by position),
+not of the first 1000: the 1001st pair (148/421) is listed, and the
+worst of the first 1000 (71/422) is not; a second case designed so
+that the two models disagree confirms it.
 
 ### The Uniqueness and False Priming reports (recorded 2026-10-20)
 
@@ -1110,7 +1161,22 @@ document a known deviation from PRIMER.exe.
 Not recorded: a complement-strand primer (the tool makes top-strand
 primers only); a primer within 20 bases of the molecule's end (two
 runs froze); "Primer is unique" (the uniqueness box, presumably
-without report either).
+without report either). (Complement-strand primers: recorded
+2026-10-21, below.)
+
+**A complement-strand primer** (recorded 2026-10-21).
+`homology_complement/`: Uniqueness and False Priming reports of
+complement-strand primers (made From Molecule with Complement strand =
+Y, then Analyze -> Active Primer, U or F, Print), on
+`homology/TREP2.GB` (400) and `homology_complement/TCOMP.GB` (700, 708;
+an input written with `tools/plant_sites.py`). The position line adds
+"Complementary strand" (8 spaces after the 6-column position); the map
+shows `<P`, with `P` in column P / s - 1 (P being the 5' end typed) and
+`<` before it (`<P` starting in column max(0, P / s - 2)); sites are
+found and printed as for a top-strand primer whose sequence is the
+primer as written ("(C)": that sequence occurs on the complement
+strand). On the screen (not in the report) the map uses another
+formula (`PROBES_20261021.md`, section 3).
 
 ### Duplexes of the reports (from the recordings of 2026-10-20)
 
@@ -1210,6 +1276,25 @@ the primers B at 1019 (AAAA), 1020 (AAA), 1819 (AAAA), 1820 and 1860
 (AAA), as predicted; `search/match_3prime_runs.tsv` lists the positions
 (`tests/unit/test_legacy_match_3prime_runs.cpp`). The format of the
 Match Active Primer report is recorded, not reproduced yet.
+
+## Find Pair: A:B adjacent bases (recorded 2026-10-21)
+
+`find_pair_trun/`. Find Pair, like Match Active Primer, keeps only
+pairs with fewer A:B adjacent homologous bases than the criterion: this
+explains the 282 pairs of region 3 of `search/TRUN.GB` (criterion 4;
+300 - 18 pairs with 7), and three searches with criteria 5, 6 and 8
+(`PD2_RUNS4_ADJ5.CFG`, `_ADJ6`, `_ADJ8`: inputs, `config/PD2_RUNS4.CFG`
+with another adjacent-bases criterion) give the predicted counts (160,
+173, 300; primerpicker without the rule: 194, 203, 300) and the ADJ5
+best 20. No other recorded Find Pair list has a pair that reaches its
+criterion. Version 1 applies the rule (decided 2026-10-21).
+Region 4: primer B 1867 (ATCTGTGGGACCGCCTGCTT) is not counted because
+PRIMER.exe finds a hairpin in it (-1.0 kcal; a 5-pair stem G:C, T.G,
+G.T, G:C, G:C with a loop of 4), whose tandem T.G/G.T step the hairpin
+model above excludes. PRIMER.exe allows such a step:
+`hairpin_tandem_gt/ACCTGGCAAAAGCTGGGTTA` (-6.1 kcal, 7 pairs with T.G
+then G.T) is another case. For 1867, the three steps around the
+tandem pair add up to 4.0 to 4.1 kcal.
 
 ## Copies of the primer elsewhere (recorded 2026-10-20)
 
