@@ -81,7 +81,9 @@ add_executable(unit_tests
   test_legacy_mutated_report.cpp
   test_legacy_mutagenize_lines.cpp
   test_legacy_find_pair_best.cpp
-  test_legacy_modify_length.cpp)
+  test_legacy_modify_length.cpp
+  test_legacy_molecule_view.cpp
+  test_legacy_find_sequence.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
