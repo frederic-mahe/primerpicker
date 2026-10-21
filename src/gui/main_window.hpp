@@ -9,6 +9,7 @@
 #include "core/sequence/topology.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
+#include "gui/criteria_dialog.hpp"
 #include "gui/find_enzymes_dialog.hpp"
 #include "gui/find_pair_dialog.hpp"
 #include "gui/find_pair_view.hpp"
@@ -23,6 +24,7 @@
 #include "gui/pair_view.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
+#include "gui/system_defaults_dialog.hpp"
 #include "gui/text_table_model.hpp"
 
 #include <QActionGroup>
@@ -95,6 +97,10 @@ public:
     // if it was not loaded (the settings are then kept)
     [[nodiscard]] auto load_settings(QString const& path) -> std::optional<QString>;
 
+    // Writes the System Defaults as a pd2.cfg file of Primer Designer;
+    // the error, if it was not written
+    [[nodiscard]] auto save_settings_to(QString const& path) const -> std::optional<QString>;
+
     // Retrieves a primer saved by Primer Designer (.PD2 file) as the
     // active primer, and shows its analysis; the error, if it was not
     // loaded (the active primer is then kept)
@@ -153,6 +159,12 @@ private:
     void use_extension();
     void retrieve_primer();
     void save_primer();
+    void modify_criteria();
+    void use_criteria();
+    void open_system_defaults();
+    void use_system_defaults();
+    void load_settings_file();
+    void save_settings_file();
     void open_find_enzymes();
     void use_find_enzymes();
     void open_find_pair();
@@ -177,6 +189,7 @@ private:
 
     std::optional<std::reference_wrapper<QSettings>> settings_;
     io::LegacySystemDefaults defaults_;
+    QString settings_name_;  // the settings file's name; empty: built-in
     std::optional<ActivePrimer> active_primer_;
     std::optional<LoadedMolecule> molecule_;
     // the report of the current screen: its usual file name, and its text
@@ -214,6 +227,8 @@ private:
     MultiPrimerDialog multi_dialog_;
     MatchDialog match_dialog_;
     GlossaryDialog glossary_;
+    CriteriaDialog criteria_dialog_;
+    SystemDefaultsDialog defaults_dialog_;
 };
 
 }  // namespace primerpicker::gui

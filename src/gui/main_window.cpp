@@ -129,7 +129,9 @@ MainWindow::MainWindow()
       pair_dialog_{*this},
       multi_dialog_{*this},
       match_dialog_{*this},
-      glossary_{*this} {
+      glossary_{*this},
+      criteria_dialog_{*this},
+      defaults_dialog_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     // the dock's title first: it names the dock's View menu item
     list_dock_.setWindowTitle(u"Primer List"_s);
@@ -160,6 +162,11 @@ MainWindow::MainWindow()
     QObject::connect(&pair_dialog_, &QDialog::accepted, this, &MainWindow::use_primer_pair);
     QObject::connect(&multi_dialog_, &QDialog::accepted, this, &MainWindow::use_multi_primer);
     QObject::connect(&match_dialog_, &MatchDialog::search_entered, this, &MainWindow::use_match);
+    QObject::connect(&criteria_dialog_, &CriteriaDialog::criteria_entered, this, &MainWindow::use_criteria);
+    QObject::connect(&defaults_dialog_, &SystemDefaultsDialog::defaults_entered, this,
+                     &MainWindow::use_system_defaults);
+    QObject::connect(&defaults_dialog_, &SystemDefaultsDialog::load_requested, this, &MainWindow::load_settings_file);
+    QObject::connect(&defaults_dialog_, &SystemDefaultsDialog::save_requested, this, &MainWindow::save_settings_file);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -213,9 +220,12 @@ void MainWindow::add_legacy_menus() {
     add_disabled_items(modify, {u"&Position"_s, u"&Length"_s});
     auto const& extension = add_item(modify, {.text = u"5'-&extension...", .name = u"modify_extension"});
     QObject::connect(&extension, &QAction::triggered, this, &MainWindow::modify_extension);
-    add_disabled_items(modify, {u"&Criteria"_s, u"M&utagenize"_s});
+    auto const& criteria = add_item(modify, {.text = u"&Criteria...", .name = u"modify_criteria"});
+    QObject::connect(&criteria, &QAction::triggered, this, &MainWindow::modify_criteria);
+    add_disabled_items(modify, {u"M&utagenize"_s});
     modify.addSeparator();
-    add_disabled_items(modify, {u"&System Defaults"_s});
+    auto const& system_defaults = add_item(modify, {.text = u"&System Defaults...", .name = u"system_defaults"});
+    QObject::connect(&system_defaults, &QAction::triggered, this, &MainWindow::open_system_defaults);
 
     auto& analyze = *menu_bar.addMenu(u"&Analyze"_s);
     auto const& active_primer = add_item(analyze, {.text = u"&Active Primer", .name = u"analyze_active_primer"});
@@ -299,8 +309,79 @@ auto MainWindow::load_settings(QString const& path) -> std::optional<QString> {
         return u"%1: not a Primer Designer 2.0 settings file (pd2.cfg)"_s.arg(path);
     }
     defaults_ = *parsed.defaults;
-    settings_label_.setText(u"Settings: %1"_s.arg(QFileInfo{path}.fileName()));
+    settings_name_ = QFileInfo{path}.fileName();
+    settings_label_.setText(u"Settings: %1"_s.arg(settings_name_));
     return std::nullopt;
+}
+
+auto MainWindow::save_settings_to(QString const& path) const -> std::optional<QString> {
+    auto contents = QByteArray{};
+    for (auto const byte : io::write_pd2_cfg(defaults_)) {
+        contents.append(std::bit_cast<char>(byte));
+    }
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or file.write(contents) != contents.size()) {
+        return u"cannot write the settings to %1"_s.arg(path);
+    }
+    return std::nullopt;
+}
+
+void MainWindow::modify_criteria() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    criteria_dialog_.start(active_primer_->criteria);
+}
+
+// the active primer's own criteria (a .PD2 file keeps them)
+void MainWindow::use_criteria() {
+    if (active_primer_.has_value()) {
+        active_primer_->criteria = criteria_dialog_.criteria();
+        analyze_active_primer();
+    }
+}
+
+void MainWindow::open_system_defaults() {
+    defaults_dialog_.start(defaults_);
+}
+
+// new primers and searches use them; the active primer keeps its
+// criteria (as a primer of PRIMER.exe)
+void MainWindow::use_system_defaults() {
+    defaults_ = defaults_dialog_.defaults();
+    auto const name = settings_name_.isEmpty() ? u"built-in"_s : settings_name_;
+    settings_label_.setText(u"Settings: %1 (changed)"_s.arg(name));
+}
+
+void MainWindow::load_settings_file() {
+    auto const path = QFileDialog::getOpenFileName(this, u"Load Settings File"_s, {},
+                                                   u"Settings files (*.cfg *.CFG);;All files (*)"_s);
+    if (path.isEmpty()) {
+        return;
+    }
+    if (auto const error = load_settings(path); error.has_value()) {
+        QMessageBox::warning(this, u"Load Settings File"_s, *error);
+        return;
+    }
+    defaults_dialog_.start(defaults_);
+}
+
+// the values of the dialog, as PRIMER.exe saves PD2.CFG
+void MainWindow::save_settings_file() {
+    auto const path = QFileDialog::getSaveFileName(this, u"Save Settings File"_s, u"PD2.CFG"_s,
+                                                   u"Settings files (*.cfg *.CFG);;All files (*)"_s);
+    if (path.isEmpty()) {
+        return;
+    }
+    auto contents = QByteArray{};
+    for (auto const byte : io::write_pd2_cfg(defaults_dialog_.defaults())) {
+        contents.append(std::bit_cast<char>(byte));
+    }
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or file.write(contents) != contents.size()) {
+        QMessageBox::warning(this, u"Save Settings File"_s, u"cannot write the settings to %1"_s.arg(path));
+    }
 }
 
 auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {

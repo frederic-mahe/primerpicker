@@ -4,6 +4,8 @@
 add_library(primerpicker_gui
   analysis_view.cpp
   colour_scheme.cpp
+  criteria_dialog.cpp
+  criteria_fields.cpp
   find_enzymes_dialog.cpp
   find_pair_dialog.cpp
   find_pair_view.cpp
@@ -19,6 +21,7 @@ add_library(primerpicker_gui
   pair_view.cpp
   sequence_dialog.cpp
   sites_view.cpp
+  system_defaults_dialog.cpp
   text_table_model.cpp)
 set_target_properties(primerpicker_gui PROPERTIES AUTOMOC ON)
 target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets)
