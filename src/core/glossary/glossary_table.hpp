@@ -195,12 +195,14 @@ hairpin is searched and its free energy estimated (kcal/mol, at
     energy = loop penalty − sum of stacking stabilities along the stem
 
 - stems are runs of contiguous pairs; G·T pairs are allowed inside a
-  stem, never at its ends; a stem is zipped inwards as long as the next
-  pair is a Watson-Crick pair and the loop keeps at least 3 bases;
+  stem, alone or two in a row, never at its ends; a stem is zipped
+  inwards through Watson-Crick and G·T pairs to the innermost
+  Watson-Crick pair that keeps a loop of at least 3 bases;
 - stacking stabilities: Freier et al. (1986), RNA nearest-neighbour
   values read for DNA (T for U), kcal/mol: AA 0.9, AT 0.9, TA 1.1,
   CT 1.7, CA 1.8, AC 2.1, GA 2.3, CG 2.0, GG 2.9, GC 3.4 (and their
-  complements); steps with a G·T pair have their own values;
+  complements); steps with a G·T pair have their own values, fitted on
+  recordings of Primer Designer (two G·T pairs in a row included);
 - loop penalty, Freier et al. (1986), by loop length: 3: 7.4,
   4: 5.9, 5: 4.4, 6: 4.3, 7: 4.1, 8: 4.1, 9: 4.2, 10: 4.3, 12: 4.9,
   14: 5.6, 16: 6.1, 18: 6.7, 20: 7.1, 30: 8.9; linear interpolation in

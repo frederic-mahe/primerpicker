@@ -41,7 +41,9 @@ auto recorded_drawings() -> std::vector<RecordedDrawing> {
     constexpr auto column_count = 10U;
     auto drawings = std::vector<RecordedDrawing>{};
     auto const directory = std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "inspect";
-    for (auto const* const name : {"inspect.tsv", "hairpin_design.tsv", "inspect_2.tsv"}) {
+    // and the tandem G.T stems of 2026-10-21 (approved the same day)
+    for (auto const* const name : {"inspect.tsv", "hairpin_design.tsv", "inspect_2.tsv",
+                                   "../hairpin_tandem_gt_2/hairpin_tandem_gt_2.tsv"}) {
         auto file = std::ifstream{directory / name};
         for (auto line = std::string{}; std::getline(file, line);) {
             if (line.starts_with('#')) {
@@ -135,11 +137,12 @@ auto hairpin_page_rows() -> std::vector<PageRow> {
 
 // Reference values: PRIMER.exe, the hairpin drawing of the Primer
 // Analysis (Inspect) screen (tests/legacy/inspect/*.tsv, recorded
-// 2026-10-17 and 2026-10-18)
+// 2026-10-17 and 2026-10-18; tests/legacy/hairpin_tandem_gt_2/, recorded
+// 2026-10-21)
 
 TEST_CASE("hairpin drawings match every recorded drawing", "[analysis][legacy]") {
     auto const drawings = recorded_drawings();
-    REQUIRE(drawings.size() == 168);
+    REQUIRE(drawings.size() == 285);
     for (auto const& recorded : drawings) {
         check_drawing(recorded.primer, recorded);
     }

@@ -109,3 +109,16 @@ TEST_CASE("Find Pair: the A:B adjacent-bases rule follows the criterion", "[sear
     CHECK(adjacent_5.possible_b == 29);
     CHECK(adjacent_5.pairs.size() == 160);
 }
+
+// Reference: PRIMER.exe, Find Pair on search/TRUN.GB, targets 1680 and
+// 1780, config/PD2_RUNS4.CFG: 13 and 24 possible primers, 117 pairs
+// (search/find_pair_3prime_runs.tsv, recorded 2026-10-20); primer B at
+// 1867 (ATCTGTGGGACCGCCTGCTT) is left out for its hairpin with a tandem
+// T.G/G.T step (tests/legacy/README.md, "Find Pair: A:B adjacent bases";
+// hairpin_tandem_gt_2/, recorded 2026-10-21)
+TEST_CASE("Find Pair: a primer B left out for a hairpin with a tandem G.T step", "[search][legacy]") {
+    auto const result = find_pair(legacy_dir / "config" / "PD2_RUNS4.CFG", {.target_a = 1680, .target_b = 1780});
+    CHECK(result.possible_a == 13);
+    CHECK(result.possible_b == 24);
+    CHECK(result.pairs.size() == 117);
+}

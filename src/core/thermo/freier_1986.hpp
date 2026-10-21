@@ -69,14 +69,18 @@ struct WobbleStack {
     int stability_centi_kcal_per_mol;
 };
 
-// The tandem step T.G over G.T is not in the table: stems do not
-// extend through it (no recorded stem does)
+// The tandem step T.G over G.T (5'-TG-3'/3'-GT-5') was first left out:
+// no stem recorded until 2026-10-20 went through it. PRIMER.exe extends
+// stems through it: its value was fitted on the recordings of
+// tests/legacy/hairpin_tandem_gt_2/ (2026-10-21; with the ten other
+// values unchanged, 60 hundredths fits every recording)
 constexpr auto freier_1986_wobble_table = std::array{
     WobbleStack{Step{'A', 'G', 'T', 'T'}, 50},  WobbleStack{Step{'A', 'T', 'T', 'G'}, 70},
     WobbleStack{Step{'C', 'G', 'G', 'T'}, 150}, WobbleStack{Step{'C', 'T', 'G', 'G'}, 150},
     WobbleStack{Step{'G', 'A', 'T', 'T'}, 50},  WobbleStack{Step{'G', 'C', 'T', 'G'}, 190},
     WobbleStack{Step{'G', 'G', 'C', 'T'}, 130}, WobbleStack{Step{'G', 'G', 'T', 'T'}, 50},
     WobbleStack{Step{'G', 'T', 'T', 'G'}, 50},  WobbleStack{Step{'T', 'A', 'G', 'T'}, 70},
+    WobbleStack{Step{'T', 'G', 'G', 'T'}, 60},
 };
 
 constexpr auto letter(sequence::Nucleotide const nucleotide) noexcept -> char {

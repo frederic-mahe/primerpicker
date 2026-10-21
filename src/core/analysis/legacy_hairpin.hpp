@@ -93,12 +93,35 @@ constexpr auto hairpin_at(std::span<sequence::Nucleotide const> const primer, st
                    .energy_centi_kcal_per_mol = *loop_penalty - stem_energy};
 }
 
+// Whether a Watson-Crick pair further in, reached through Watson-Crick
+// and G.T pairs, still closes a loop of at least three bases: the stem
+// closed by (inner_5prime, inner_3prime) is then scored there
+// (tests/legacy/hairpin_tandem_gt_2/, recorded 2026-10-21)
+constexpr auto zips_inward(std::span<sequence::Nucleotide const> const primer, std::size_t const inner_5prime,
+                           std::size_t const inner_3prime) noexcept -> bool {
+    for (auto depth = std::size_t{1}; inner_5prime + depth < inner_3prime - depth; ++depth) {
+        auto const top = primer[inner_5prime + depth];
+        auto const bottom = primer[inner_3prime - depth];
+        if (inner_3prime - depth - (inner_5prime + depth) - 1 < thermo::freier_1986_min_hairpin_loop) {
+            return false;
+        }
+        if (pairs(top, bottom)) {
+            return true;
+        }
+        if (not is_wobble(top, bottom)) {
+            return false;
+        }
+    }
+    return false;
+}
+
 }  // namespace detail
 
 // The most stable hairpin of Primer Designer 2.0, if its energy is
 // negative (tests/legacy/README.md, "Primer criteria"): stems of
 // contiguous pairs, zipped inwards as far as a loop of at
-// least three bases allows (over Watson-Crick pairs only), with G.T
+// least three bases allows (over Watson-Crick and G.T pairs, to a
+// Watson-Crick pair; recorded 2026-10-21), with G.T
 // pairs inside the stem, scored with Freier 1986 stacks minus the loop
 // penalty.
 [[nodiscard]] constexpr auto legacy_hairpin(std::span<sequence::Nucleotide const> const primer) noexcept
@@ -110,9 +133,8 @@ constexpr auto hairpin_at(std::span<sequence::Nucleotide const> const primer, st
             if (not detail::pairs(primer[inner_5prime], primer[inner_3prime])) {
                 continue;
             }
-            // a stem that could zip one more pair inwards is scored there
-            auto const loop_length = inner_3prime - inner_5prime - 1;
-            if (loop_length >= min_loop + 2 and detail::pairs(primer[inner_5prime + 1], primer[inner_3prime - 1])) {
+            // a stem that could zip further inwards is scored there
+            if (detail::zips_inward(primer, inner_5prime, inner_3prime)) {
                 continue;
             }
             auto const hairpin = detail::hairpin_at(primer, inner_5prime, inner_3prime);

@@ -161,7 +161,9 @@ auto same(std::optional<double> const lhs, std::optional<double> const rhs) -> b
 TEST_CASE("legacy hairpins match the recorded primers", "[analysis][legacy]") {
     auto const directory = std::filesystem::path{PRIMERPICKER_LEGACY_DIR} / "inspect";
     auto recordings = read_recordings(directory / "inspect.tsv");
-    for (auto const* const name : {"hairpin_design.tsv", "inspect_2.tsv"}) {
+    // and the tandem G.T stems of 2026-10-21 (approved the same day)
+    for (auto const* const name :
+         {"hairpin_design.tsv", "inspect_2.tsv", "../hairpin_tandem_gt_2/hairpin_tandem_gt_2.tsv"}) {
         auto const more = read_recordings(directory / name);
         recordings.insert(recordings.end(), more.begin(), more.end());
     }
