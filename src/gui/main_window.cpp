@@ -20,6 +20,7 @@
 #include "gui/find_pair_dialog.hpp"
 #include "gui/homology_view.hpp"
 #include "gui/match_dialog.hpp"
+#include "gui/molecule_view.hpp"
 #include "gui/multi_primer_dialog.hpp"
 #include "gui/mutagenize_view.hpp"
 #include "gui/pair_dialog.hpp"
@@ -60,7 +61,6 @@
 #include <bit>
 #include <chrono>
 #include <cstddef>
-#include <initializer_list>
 #include <iterator>
 #include <optional>
 #include <span>
@@ -94,14 +94,6 @@ auto add_item(QMenu& menu, MenuItem const item) -> QAction& {
     auto& action = *menu.addAction(item.text.toString());
     action.setObjectName(item.name);
     return action;
-}
-
-// Disabled items: features of Primer Designer not implemented in the
-// GUI yet
-void add_disabled_items(QMenu& menu, std::initializer_list<QString> const texts) {
-    for (auto const& text : texts) {
-        menu.addAction(text)->setEnabled(false);
-    }
 }
 
 constexpr auto colour_scheme_key = QAnyStringView{u"appearance/colour_scheme"};
@@ -186,6 +178,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&match_);
     pages_.addWidget(&picking_);
     pages_.addWidget(&mutagenize_);
+    pages_.addWidget(&molecule_view_);
     list_view_.setObjectName(u"primer_list"_s);
     list_view_.setModel(&list_model_);
     list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -309,7 +302,10 @@ void MainWindow::add_legacy_menus() {
     auto& molecule_ops = *menu_bar.addMenu(u"M&olecule-Ops"_s);
     auto const& find_enzymes = add_item(molecule_ops, {.text = u"Find &Enzymes...", .name = u"find_enzymes"});
     QObject::connect(&find_enzymes, &QAction::triggered, this, &MainWindow::open_find_enzymes);
-    add_disabled_items(molecule_ops, {u"&View/Edit"_s, u"&Save/Remove"_s});
+    auto const& view_edit = add_item(molecule_ops, {.text = u"&View/Edit", .name = u"view_molecule"});
+    QObject::connect(&view_edit, &QAction::triggered, this, &MainWindow::open_view_molecule);
+    auto const& save_remove = add_item(molecule_ops, {.text = u"&Save/Remove", .name = u"save_remove_molecule"});
+    QObject::connect(&save_remove, &QAction::triggered, this, &MainWindow::open_save_remove);
 
     // not in PRIMER.exe: the window's own settings, such as its colours
     // (proposal §3.2)
@@ -513,6 +509,7 @@ auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
     }
     molecule_ = LoadedMolecule{.name = QString::fromStdString(parsed.molecule->name),
                                .path = QFileInfo{path}.absoluteFilePath(),
+                               .text = bytes.toStdString(),
                                .sequence = std::move(*sequence),
                                .topology = parsed.molecule->topology};
     molecule_label_.setText(u"Molecule: %1, %2 bp, %3"_s.arg(molecule_->name)
@@ -807,6 +804,64 @@ auto MainWindow::mutagenize() -> std::optional<QString> {
     pages_.setCurrentWidget(&mutagenize_);
     mutagenize_.setFocus();
     return std::nullopt;
+}
+
+auto MainWindow::view_molecule() -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Please load a molecule"_s;
+    }
+    molecule_view_.show_molecule({.name = molecule_->name,
+                                  .sequence = molecule_->sequence,
+                                  .file_text = molecule_->text,
+                                  .topology = molecule_->topology});
+    report_.reset();  // nothing to print on this screen (Print is not recorded)
+    pages_.setCurrentWidget(&molecule_view_);
+    return std::nullopt;
+}
+
+// as Find Enzymes, a molecule is asked for when none is loaded
+void MainWindow::open_view_molecule() {
+    if (not molecule_.has_value() and not ask_for_molecule()) {
+        return;
+    }
+    static_cast<void>(view_molecule());  // a molecule is loaded: no error
+}
+
+auto MainWindow::remove_molecule() -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Molecule List is Empty"_s;  // PRIMER.exe's message
+    }
+    if (find_pair_running()) {
+        return u"A Find Pair search is running"_s;  // it reads the molecule
+    }
+    molecule_.reset();
+    molecule_label_.clear();
+    // the screens that show the molecule close
+    if (pages_.currentWidget() == &molecule_view_ or pages_.currentWidget() == &picking_ or
+        pages_.currentWidget() == &mutagenize_) {
+        analyze_active_primer();
+    }
+    return std::nullopt;
+}
+
+// PRIMER.exe's SAVE/REMOVE MOLECULE screen: Remove only (what Save
+// writes is not recorded)
+void MainWindow::open_save_remove() {
+    if (not molecule_.has_value()) {
+        QMessageBox::information(this, u"Save/Remove Molecule"_s, u"Molecule List is Empty"_s);
+        return;
+    }
+    auto const answer = QMessageBox::question(
+        this, u"Save/Remove Molecule"_s,
+        u"Remove %1?\n\nRemoving a molecule from the list unloads the molecule from program memory "
+        u"(it does not delete a disk file)."_s.arg(molecule_->name),
+        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    if (answer != QMessageBox::Yes) {
+        return;
+    }
+    if (auto const error = remove_molecule(); error.has_value()) {
+        QMessageBox::information(this, u"Save/Remove Molecule"_s, *error);
+    }
 }
 
 void MainWindow::open_mutagenize() {

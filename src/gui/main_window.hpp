@@ -20,6 +20,7 @@
 #include "gui/match_dialog.hpp"
 #include "gui/match_view.hpp"
 #include "gui/multi_primer_dialog.hpp"
+#include "gui/molecule_view.hpp"
 #include "gui/multi_primer_view.hpp"
 #include "gui/mutagenize_view.hpp"
 #include "gui/pair_dialog.hpp"
@@ -83,6 +84,7 @@ struct ActivePrimer {
 struct LoadedMolecule {
     QString name;
     QString path;  // its file
+    std::string text;  // the file's contents (View/Edit: features, annotations)
     std::vector<sequence::Nucleotide> sequence;
     sequence::Topology topology = sequence::Topology::linear;
 };
@@ -197,6 +199,15 @@ public:
     // 5' extension; the error, if there was none
     [[nodiscard]] auto mutagenize() -> std::optional<QString>;
 
+    // Molecule-Ops -> View/Edit: the loaded molecule's views (read only);
+    // the error, if there is no molecule
+    [[nodiscard]] auto view_molecule() -> std::optional<QString>;
+
+    // Molecule-Ops -> Save/Remove, R: unloads the loaded molecule (its
+    // file stays); the error, if none is loaded ("Molecule List is
+    // Empty", as PRIMER.exe)
+    [[nodiscard]] auto remove_molecule() -> std::optional<QString>;
+
     // Help -> Glossary at the built-in definition NAME (a key or an
     // alias; the first entry if there is none); whether NAME was found
     auto show_glossary(QString const& name) -> bool;
@@ -251,6 +262,8 @@ private:
     void open_modify_position();
     void use_picked_location();
     void open_mutagenize();
+    void open_view_molecule();
+    void open_save_remove();
     void save_mutated_primer();
     void inspect_mutated_primer();
     void analyze_active_primer();
@@ -288,6 +301,7 @@ private:
     MatchView match_;
     PickingView picking_;
     MutagenizeView mutagenize_;
+    MoleculeView molecule_view_;
     // the Primer List panel: the dock before the view it holds
     QDockWidget list_dock_;
     TextTableModel list_model_;

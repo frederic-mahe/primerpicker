@@ -13,6 +13,7 @@ add_library(primerpicker_gui
   glossary_dialog.cpp
   homology_view.cpp
   main_window.cpp
+  molecule_view.cpp
   match_dialog.cpp
   match_view.cpp
   multi_primer_dialog.cpp

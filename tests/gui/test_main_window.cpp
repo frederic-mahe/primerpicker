@@ -84,6 +84,7 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
                                     u"&System Defaults..."_s,
                                     u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s,
                                     u"Print to &Disk..."_s,
-                                    u"Find &Enzymes..."_s, u"Primer &List"_s, u"&Colour Scheme"_s,
+                                    u"Find &Enzymes..."_s, u"&View/Edit"_s, u"&Save/Remove"_s,
+                                    u"Primer &List"_s, u"&Colour Scheme"_s,
                                     u"&Glossary"_s});
 }
