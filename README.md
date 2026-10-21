@@ -49,11 +49,14 @@ Command-line interface (`primerpicker --help`):
 - **`--config`**: the criteria, tolerances, search windows and weights
   of a Primer Designer settings file (`pd2.cfg`).
 
-Graphical interface (`primerpicker-gui`, first steps): the menu bar of
-Primer Designer (items not available yet are greyed out), Direct Entry
-and From Molecule (GenBank, FASTA or plain-sequence files), the Primer
-Analysis of the active primer, `--config` for a `pd2.cfg` file, and a
-System / Light / Dark colour scheme.
+Graphical interface (`primerpicker-gui`, under development): the menu
+bar of Primer Designer (items not available yet are greyed out),
+Direct Entry, From Molecule (GenBank, FASTA or plain-sequence files),
+Retrieve from disk (`.PD2`), the 5' extension, a Primer List; the
+Primer Analysis of the active primer (with its hairpin, Uniqueness,
+False Priming and the One Primer report), Primer Pair, Multi Primer,
+Match Active Primer, Find Pair and Find Enzymes; `--config` for a
+`pd2.cfg` file, and a System / Light / Dark colour scheme.
 
 Also in the core library, for the graphical interface: Match Active
 Primer (a partner for a given primer), uniqueness and false priming
