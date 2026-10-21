@@ -17,6 +17,7 @@ add_library(primerpicker_gui
   match_view.cpp
   multi_primer_dialog.cpp
   multi_primer_view.cpp
+  mutagenize_view.cpp
   pair_dialog.cpp
   pair_view.cpp
   picking_view.cpp

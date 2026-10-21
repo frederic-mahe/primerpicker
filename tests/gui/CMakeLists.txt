@@ -37,7 +37,8 @@ add_executable(gui_tests
   test_settings_dialogs.cpp
   test_screenshots.cpp
   test_picking_colours.cpp
-  test_picking.cpp)
+  test_picking.cpp
+  test_mutagenize.cpp)
 target_link_libraries(gui_tests PRIVATE primerpicker_gui Qt6::Test Catch2::Catch2)
 target_compile_options(gui_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(gui_tests PRIVATE PRIMERPICKER_LEGACY_DIR="${PROJECT_SOURCE_DIR}/tests/legacy")

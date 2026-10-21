@@ -20,6 +20,7 @@
 #include "gui/homology_view.hpp"
 #include "gui/match_dialog.hpp"
 #include "gui/multi_primer_dialog.hpp"
+#include "gui/mutagenize_view.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/picking_view.hpp"
 #include "gui/sequence_dialog.hpp"
@@ -121,6 +122,15 @@ auto topology_name(sequence::Topology const topology) -> QString {
     }
 }
 
+// a mutated primer: PRIMER, edited on the Mutagenize screen
+auto mutated_copy(ActivePrimer const& primer, std::vector<sequence::Nucleotide> mutated) -> ActivePrimer {
+    auto copy = primer;
+    copy.original = primer.sequence;
+    copy.sequence = std::move(mutated);
+    copy.origin = primer.origin + u" (mutated)"_s;
+    return copy;
+}
+
 }  // namespace
 
 MainWindow::MainWindow()
@@ -154,6 +164,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&multi_);
     pages_.addWidget(&match_);
     pages_.addWidget(&picking_);
+    pages_.addWidget(&mutagenize_);
     list_view_.setObjectName(u"primer_list"_s);
     list_view_.setModel(&list_model_);
     list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -200,6 +211,9 @@ MainWindow::MainWindow()
                      [this] { show_homology(analysis::HomologyKind::false_priming); });
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
     QObject::connect(&picking_, &PickingView::location_changed, this, &MainWindow::use_picked_location);
+    QObject::connect(&mutagenize_, &MutagenizeView::save_requested, this, &MainWindow::save_mutated_primer);
+    QObject::connect(&mutagenize_, &MutagenizeView::inspect_requested, this, &MainWindow::inspect_mutated_primer);
+    QObject::connect(&mutagenize_, &MutagenizeView::exit_requested, this, &MainWindow::analyze_active_primer);
     // S, Enter or Esc: as PRIMER.exe, the primer joins the Primer List and
     // the picking screen closes
     QObject::connect(&picking_, &PickingView::save_requested, this, &MainWindow::save_to_list);
@@ -251,7 +265,8 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&extension, &QAction::triggered, this, &MainWindow::modify_extension);
     auto const& criteria = add_item(modify, {.text = u"&Criteria...", .name = u"modify_criteria"});
     QObject::connect(&criteria, &QAction::triggered, this, &MainWindow::modify_criteria);
-    add_disabled_items(modify, {u"M&utagenize"_s});
+    auto const& mutagenize_item = add_item(modify, {.text = u"M&utagenize", .name = u"modify_mutagenize"});
+    QObject::connect(&mutagenize_item, &QAction::triggered, this, &MainWindow::open_mutagenize);
     modify.addSeparator();
     auto const& system_defaults = add_item(modify, {.text = u"&System Defaults...", .name = u"system_defaults"});
     QObject::connect(&system_defaults, &QAction::triggered, this, &MainWindow::open_system_defaults);
@@ -677,6 +692,13 @@ void MainWindow::start_picking() {
 }
 
 auto MainWindow::modify_position() -> std::optional<QString> {
+    if (active_primer_.has_value() and not active_primer_->original.empty()) {
+        return u"Mutated primers cannot be moved"_s;  // PRIMER.exe's messages
+    }
+    if (active_primer_.has_value() and not active_primer_->location.has_value() and
+        active_primer_->origin == u"Direct Entry"_s) {
+        return u"Directly entered primers cannot be moved"_s;
+    }
     if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value() or
         active_primer_->molecule_name != molecule_->name) {
         return u"Please create a primer from a molecule"_s;
@@ -689,6 +711,62 @@ void MainWindow::open_modify_position() {
     if (auto const error = modify_position(); error.has_value()) {
         QMessageBox::information(this, u"Modify Position"_s, *error);
     }
+}
+
+auto MainWindow::mutagenize() -> std::optional<QString> {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value() or
+        active_primer_->molecule_name != molecule_->name) {
+        return u"Please create a primer from a molecule"_s;
+    }
+    auto const& primer = *active_primer_;
+    if (not primer.original.empty()) {
+        return u"Primer is already Mutated"_s;  // PRIMER.exe's message
+    }
+    // not recorded from PRIMER.exe yet (tests/legacy/README.md, "Mutagenize")
+    if (primer.location->strand != sequence::Strand::top or primer.extension_length != 0) {
+        return u"Mutagenize: primers on the top strand, without 5' extension, only"_s;
+    }
+    mutagenize_source_ = primer;
+    mutagenize_.start({.molecule_name = molecule_->name,
+                       .molecule = molecule_->sequence,
+                       .position = primer.location->position,
+                       .primer = primer.sequence,
+                       .criteria = primer.criteria});
+    pages_.setCurrentWidget(&mutagenize_);
+    mutagenize_.setFocus();
+    return std::nullopt;
+}
+
+void MainWindow::open_mutagenize() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    if (auto const error = mutagenize(); error.has_value()) {
+        QMessageBox::information(this, u"Mutagenize"_s, *error);
+    }
+}
+
+// S: as PRIMER.exe, the mutated primer is a new entry of the Primer
+// List, and the active primer; the Mutagenize screen stays
+void MainWindow::save_mutated_primer() {
+    if (not mutagenize_source_.has_value()) {
+        return;
+    }
+    active_primer_ = mutated_copy(*mutagenize_source_, mutagenize_.mutated());
+    save_to_list();
+    pages_.setCurrentWidget(&mutagenize_);
+    mutagenize_.show_saved();
+}
+
+// I: the Primer Analysis of the mutated primer, whose report (Print to
+// Disk) adds the mutagenesis information
+void MainWindow::inspect_mutated_primer() {
+    if (not mutagenize_source_.has_value()) {
+        return;
+    }
+    active_primer_ = mutated_copy(*mutagenize_source_, mutagenize_.mutated());
+    analyze_active_primer();
 }
 
 // the active primer follows the picking view's window; its 5'
@@ -725,7 +803,8 @@ void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, QString
                                   .molecule_name = {},
                                   .molecule_path = {},
                                   .position = 1,
-                                  .complement = false};
+                                  .complement = false,
+                                  .original = {}};
     analyze_active_primer();
 }
 
@@ -1037,7 +1116,8 @@ auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
                                   .molecule_name = QString::fromStdString(parsed.primer->molecule_name),
                                   .molecule_path = QString::fromStdString(parsed.primer->molecule_path),
                                   .position = parsed.primer->position,
-                                  .complement = parsed.primer->complement};
+                                  .complement = parsed.primer->complement,
+                                  .original = {}};
     analyze_active_primer();
     return std::nullopt;
 }
@@ -1139,6 +1219,21 @@ void MainWindow::analyze_active_primer() {
     }
     analysis_.show_primer({.sequence = active_primer_->sequence, .extension_length = active_primer_->extension_length},
                           active_primer_->criteria);
+    if (not active_primer_->original.empty() and molecule_.has_value() and active_primer_->location.has_value()) {
+        report_ = ScreenReport{
+            .file_name = u"INSPECT.PRN"_s,
+            .text = [primer = *active_primer_, name = molecule_->name.toStdString(),
+                     size = molecule_->sequence.size()](std::chrono::year_month_day const& date) {
+                return report::legacy_mutated_inspect_report({.original = primer.original,
+                                                              .mutated = primer.sequence,
+                                                              .molecule_name = name,
+                                                              .molecule_size = size,
+                                                              .position = primer.location->position},
+                                                             primer.criteria, date);
+            }};
+        pages_.setCurrentWidget(&analysis_);
+        return;
+    }
     report_ = ScreenReport{.file_name = u"INSPECT.PRN"_s,
                            .text = [primer = *active_primer_](std::chrono::year_month_day const& date) {
                                return report::legacy_inspect_report(

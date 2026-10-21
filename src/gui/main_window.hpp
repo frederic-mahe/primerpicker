@@ -21,6 +21,7 @@
 #include "gui/match_view.hpp"
 #include "gui/multi_primer_dialog.hpp"
 #include "gui/multi_primer_view.hpp"
+#include "gui/mutagenize_view.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/pair_view.hpp"
 #include "gui/picking_view.hpp"
@@ -72,6 +73,9 @@ struct ActivePrimer {
     QString molecule_path;
     int position = 1;
     bool complement = false;
+    // a mutated primer (saved on the Mutagenize screen): the primer it
+    // was made from; empty for other primers
+    std::vector<sequence::Nucleotide> original;
 };
 
 // A molecule (template) loaded from a file
@@ -170,6 +174,11 @@ public:
     // if there was none
     [[nodiscard]] auto modify_position() -> std::optional<QString>;
 
+    // Modify -> Mutagenize: the Mutagenize Primer screen for the active
+    // primer, made from the loaded molecule on its top strand, without
+    // 5' extension; the error, if there was none
+    [[nodiscard]] auto mutagenize() -> std::optional<QString>;
+
     // Help -> Glossary at the built-in definition NAME (a key or an
     // alias; the first entry if there is none); whether NAME was found
     auto show_glossary(QString const& name) -> bool;
@@ -216,12 +225,16 @@ private:
     void start_picking();
     void open_modify_position();
     void use_picked_location();
+    void open_mutagenize();
+    void save_mutated_primer();
+    void inspect_mutated_primer();
     void analyze_active_primer();
 
     std::optional<std::reference_wrapper<QSettings>> settings_;
     io::LegacySystemDefaults defaults_;
     QString settings_name_;  // the settings file's name; empty: built-in
     std::optional<ActivePrimer> active_primer_;
+    std::optional<ActivePrimer> mutagenize_source_;  // the primer the Mutagenize screen was opened on
     std::optional<LoadedMolecule> molecule_;
     // the report of the current screen: its usual file name, and its text
     // for a date
@@ -243,6 +256,7 @@ private:
     MultiPrimerView multi_;
     MatchView match_;
     PickingView picking_;
+    MutagenizeView mutagenize_;
     // the Primer List panel: the dock before the view it holds
     QDockWidget list_dock_;
     TextTableModel list_model_;

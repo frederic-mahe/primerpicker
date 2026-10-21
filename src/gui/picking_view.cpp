@@ -119,7 +119,8 @@ void PickingSequence::show_window(sequence::PrimerLocation const& location, bool
 auto PickingSequence::sizeHint() const -> QSize {
     auto const metrics = QFontMetrics{font()};
     auto const lines = static_cast<int>((letters_.size() + bases_per_line - 1) / bases_per_line);
-    constexpr auto columns = number_columns + gap_columns + static_cast<int>(bases_per_line + (bases_per_line / bases_per_block));
+    constexpr auto columns =
+        number_columns + gap_columns + static_cast<int>(bases_per_line + (bases_per_line / bases_per_block));
     return {(2 * margin) + (columns * metrics.horizontalAdvance(u'M')), (2 * margin) + (lines * 2 * metrics.height())};
 }
 
