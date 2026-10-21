@@ -1,4 +1,6 @@
-// libFuzzer harness: legacy settings files (pd2.cfg; core/io/pd2_cfg.hpp)
+// libFuzzer harness: legacy settings files (pd2.cfg; core/io/pd2_cfg.hpp).
+// A file that parses is written back (write_pd2_cfg): that file has the
+// same size and parses, and writing it again gives the same bytes.
 
 #include "core/io/pd2_cfg.hpp"
 #include "fuzz_input.hpp"
@@ -29,5 +31,12 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
     auto const& weights = result.defaults->weights;
     check(is_weight(weights.gc_mismatch) and is_weight(weights.tm_mismatch) and is_weight(weights.dimer_3prime) and
           is_weight(weights.dimer_any) and is_weight(weights.false_priming));
+    auto const written = primerpicker::io::write_pd2_cfg(*result.defaults);
+    check(written.size() == input.size());
+    auto const reread = primerpicker::io::parse_pd2_cfg(written);
+    check(reread.defaults.has_value());
+    if (reread.defaults.has_value()) {
+        check(primerpicker::io::write_pd2_cfg(*reread.defaults) == written);
+    }
     return 0;
 }
