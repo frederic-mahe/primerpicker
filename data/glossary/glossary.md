@@ -3,7 +3,9 @@ Built-in definitions of primerpicker (`primerpicker explain`, the
 graphical interface's Help -> Glossary and tooltips). Drafted on
 2026-10-20 from the code, tests/legacy/README.md and the cited
 literature; reviewed by the lab and accepted as is on 2026-10-21 (some
-points to be improved later). English only.
+points to be improved later); brought in line with the behaviour of
+2026-10-21 the same day (Tm constant, Find Pair and Match Active Primer
+rules, criteria settings). English only.
 
 After editing, regenerate the C++ table:
   python3 -I data/glossary/make_glossary_table.py data/glossary/glossary.md > src/core/glossary/glossary_table.hpp
@@ -93,13 +95,14 @@ enthalpy ΔH (kcal/mol) and entropy ΔS (cal/K/mol) are sums over the
 primer's consecutive base pairs (dinucleotide steps), with the
 parameters of Breslauer et al. (1986), then
 
-    Tm (°C) = floor( 1000 × ΔH / (ΔS + 60.699) − 273 )
+    Tm (°C) = floor( 1000 × ΔH / (ΔS + 60.69987) − 273 )
 
 - no initiation, terminal or symmetry term; no salt or concentration
-  term: 60.699 cal/K/mol is a constant fitted on 186 primers recorded
-  from Primer Designer (any value from 60.6983 to 60.7000 fits). Its
-  origin is not known; it equals Primer3's formula with a primer
-  concentration of about 50 pM;
+  term: 60.69987 cal/K/mol is a constant fitted on 200 primers recorded
+  from Primer Designer (any value above 60.699732 and up to 60.7 fits;
+  60.7 is probably the original value, the middle of the interval
+  avoids rounding ties). Its origin is not known; it equals Primer3's
+  formula with a primer concentration of about 50 pM;
 - the offset is 273, not 273.15, and the result is truncated (floor);
 - a Tm at or below 0 °C is shown as "?" (0 on the analysis screen);
 - the 5' extension is not included.
@@ -124,7 +127,8 @@ Owczarzy et al. 2004) and Mg²⁺ and dNTP corrections (Owczarzy et al.
 
 *References:* Breslauer KJ, Frank R, Blöcker H, Marky LA (1986)
 Predicting DNA duplex stability from the base sequence. PNAS 83:
-3746-3750. *Source:* README "Primer Tm", "Primer3 equivalent".
+3746-3750. *Source:* README "Primer Tm", "Primer Tm: the constant b",
+"Primer3 equivalent".
 
 ## Product Tm
 
@@ -280,9 +284,11 @@ Tm, hairpins, 3' dimers, dimers, runs, 3' G/C runs.
 **Method.** %GC and Tm pass inside their ranges, limits included; the
 four counts fail when they reach their "reject if ≥" value; the
 hairpin check fails when a hairpin is below the energy cutoff.
-"Meets criteria" is YES when all seven pass. Values are set in
-Modify → Criteria, or read from a settings file (`pd2.cfg`, CLI
-`--config`).
+"Meets criteria" is YES when all seven pass. Values are the built-in
+defaults, or those of a settings file (`pd2.cfg`, option `--config` of
+the command line and of the graphical interface); a primer retrieved
+from a `.PD2` file keeps its own. (Modify → Criteria is not available
+yet.)
 
 *Source:* README "Primer criteria", "Built-in defaults".
 
@@ -337,10 +343,11 @@ primer (primer A) around a target position on the other strand.
 **Method.** Primers B of the given length in the window target − start
 to target + end that meet every criterion (with Find Pair's 3'-end run
 rule), whose %GC and Tm are within
-the tolerances of primer A's, and that have fewer A:B 3' dimers than
-the criterion. Listed by position, with their distance to the target.
+the tolerances of primer A's, and that have fewer A:B 3' dimers and
+fewer A:B adjacent homologous bases than the criteria. Listed by
+position, with their distance to the target.
 
-*Source:* README "Match Active Primer".
+*Source:* README "Match Active Primer", "The Match Active Primer report".
 
 ## Find Pair and its score
 
@@ -351,8 +358,9 @@ complement strand after target B.
 **Method.** Possible primers: those of each window that meet every
 criterion and whose run at the 3' end is shorter than the runs
 criterion (unlike the Primer Analysis, which does not count that run).
-Possible pairs: %GC and Tm within the tolerances, and fewer
-A:B 3' dimers than the criterion. Pairs are ranked by increasing
+Possible pairs: %GC and Tm within the tolerances, fewer A:B 3' dimers
+and fewer A:B adjacent homologous bases than the criteria. Pairs are
+ranked by increasing
 **classic score (v1 default)** (equal scores keep the order in which
 pairs were generated):
 
@@ -362,15 +370,20 @@ pairs were generated):
 
 with weights from 0 (ignore) to 5 (default 1 each); "max" is the
 largest of A:A, B:B and A:B; a primer without false-priming site
-counts 0. Limits: a window with 100 possible primers or more stops the
-search; at most 1000 pairs are kept (primerpicker then warns, where
-Primer Designer may hang).
+counts 0. Targets are checked first: target A from 1 to the molecule's
+length, with target A + primer length within the molecule, and target
+B from the primer length to the molecule's length ("Must enter value
+for this field", "Primer too long to fit within molecule."). Limits: a
+window with 100 possible primers or more stops the search; at 1000
+pairs, the best 1000 of the first 1001 pairs are kept (primerpicker
+then warns, where Primer Designer may hang).
 
 *Alternatives (planned for v2):* Primer3-compatible automatic pair
 picking.
 
 *Source:* README "Find Pair", "The false-priming term of the score",
-"Limits on primers and pairs".
+"Limits on primers and pairs", "Targets near and beyond the molecule's
+end", "Reports of more than 20 pairs", "Find Pair: A:B adjacent bases".
 
 ## Restriction sites (true and almost sites)
 
