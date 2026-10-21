@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   880;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   980;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 5 adj homol bases
+              Reject >= 4 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+     825      1063      60 / 60    77 / 77       2    4        - / -
+     837      1032      50 / 50    70 / 70       2    4        - / -
+     803      1031      55 / 55    70 / 69       2    4        - / -
+     804      1032      50 / 50    69 / 70       2    4        - / -
+     806      1073      50 / 50    64 / 65       2    4        - / -
+     815      1038      55 / 55    67 / 69       1    4        - / -
+     819      1031      55 / 55    70 / 69       2    4        - / -
+     819      1038      55 / 55    70 / 69       2    4        - / -
+     821      1038      55 / 55    71 / 69       1    4        - / -
+     825      1066      60 / 60    77 / 78       2    4        - / -
+     837      1070      50 / 50    70 / 68       2    3        - / -
+     839      1034      50 / 50    68 / 68       2    4        1 / -
+     804       982      50 / 50    69 / 71       2    4        - / -
+     805      1031      55 / 55    67 / 69       2    4        - / -
+     815      1031      55 / 55    67 / 69       2    4        - / -
+     816      1038      55 / 55    67 / 69       2    4        - / -
+     837      1034      50 / 50    70 / 68       2    4        - / -
+     811      1032      50 / 50    67 / 70       2    4        - / -
+     806      1070      50 / 50    64 / 68       2    4        - / -
+     837      1077      50 / 50    70 / 66       2    4        - / -

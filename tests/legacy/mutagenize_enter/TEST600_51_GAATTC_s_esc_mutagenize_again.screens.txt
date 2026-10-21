@@ -1,0 +1,858 @@
+==== f00495.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+????????????????????????
+│         ????????????????????????????????????????????????????????????         │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f00496.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f00503.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f00709.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f00711.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f01341.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f01343.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02393.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    ?                        ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02607.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    5                        ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02820.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03034.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    ?                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03255.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    51                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): ?0                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03675.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+?????????????????????????????????????????????????????????????????????          │
+│                                                                  --?         │
+│      1   GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   │
+│                                                                              │
+│     61   CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   │
+│                                          ?                                   │
+│    121   GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   │
+│                                                                              │
+│    181   GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   │
+│                                                                              │
+│    241   AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                                                  │
+│                                                                              │
+│ Pos: 51     %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !          │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+ Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f03676.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600                                        │
+│                                                                              │
+│                                                                  --         │
+│      1   GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   │
+│                                                                              │
+│     61   CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   │
+│                                                                              │
+│    121   GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   │
+│                                                                              │
+│    181   GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   │
+│                                                                              │
+│    241   AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                                                  │
+│                                                                              │
+│ Pos: 51     %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !          │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+?Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f03888.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600                                        │
+│                                                                              │
+│                                                                  --         │
+│      1   GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   │
+│                                                                              │
+│     61   CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   │
+│                                                                              │
+│    121   GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   │
+│                                                                              │
+│    181   GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   │
+│                                                                              │
+│    241   AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                                                  │
+│                                                                              │
+│ Pos: 51     %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !          │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└────────────?─?─?─?─?─?───?─?─?─?─?─?─?─?───────???????─???───────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f03889.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+║ Save Active Primer  ║
+║ Retrieve from disk  ║
+║                     ║
+╚═════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04523.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+?????????????????????????????????????
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04524.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05805.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?                                                                      ? Y  Tyr?
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f05806.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           CTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           L  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f06860.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           CTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           L  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f06861.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           V  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07074.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCA?ACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GTCAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            S  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           V  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: !   Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07288.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GACAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            T  K  A  Q  T  S                        │ P  Pro
+│ U                             Q  R  L  R  H  Q                       │ Q  Gln
+│ T                           D  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 65    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f07716.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAAAAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            K  K  A  Q  T  S                        │ P  Pro
+│ U                             K  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  K  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 65    Hairpin: OK  Dimers: OK  Runs: !  │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08143.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATAAGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  K  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  -  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08571.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATTAGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  -  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  L  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 45!   Tm°C: 62    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08998.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCA?ACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATTCGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  S  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  F  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 68    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f08999.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAACCTGGCTCAAAGGCTCAGACATCAGGGCTCAATGACGTGCGGTTA   │ L  Leu
+│ 5'->3'                          --                                  │ M  Met
+│                           GAATTCGGCTCAGACATCAG                       │ N  Asn
+│ M                            N  S  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  F  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 68    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+? Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f09633.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                │ G  Gly
+│ O         I  L  M  S ▒                              ▒  -  R  A  V    │ H  His
+│ R        N  T  H  V  ▒         Primer Saved         ▒ M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q▒                              ▒N  D  V  R  L   │ K  Lys
+│       GAATACTCATGTCAA▒ Press any key to continue... ▒TGACGTGCGGTTA   │ L  Leu
+│ 5'->3'               ▒                              ▒                │ M  Met
+│                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                │ N  Asn
+│ M                            N  S  A  Q  T  S                        │ P  Pro
+│ U                             I  R  L  R  H  Q                       │ Q  Gln
+│ T                           E  F  G  S  D  I                         │ R  Arg
+│                                                                      │ S  Ser
+│                                                                      │ T  Thr
+│ MUTATED:    %GC: 50    Tm°C: 68    Hairpin: OK  Dimers: OK  Runs: OK │ V  Val
+│                                                                      │ W  Trp
+│     I=Inspect      F1=REnz      F2=Codons      S=Save      ESC=Exit  │ Y  Tyr
+└──────────────────────────────────────────────────────────────────────┘
+  Move edit highlight;  Type over to Edit (Overwrite mode).
+==== f10901.png
+                       * * *   MUTAGENIZE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────┐
+│                                                                      │
+│ Source Molecule:   TEST600            Pos:    51                     │ A  Ala
+│ Length: 20         5'extension: -- none --                           │ C  Cys
+│                                                                      │ D  Asp
+│ ORIGINAL:   %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !  │ E  Glu
+│                                                                      │ F  Phe
+│                                                                      │ G  Gly
+│ O         I  L  M  S  T  W  L  K  G  S  D  I  R  A  Q  -  R  A  V    │ H  His
+│ R        N  T  H  V  N  L  A  Q  R  L  R  H  Q  G  S  M  T  C  G     │ I  Ile
+│ I       E  Y  S  C  Q  P  G  S  K  A  Q  T  S  G  L  N  D  V  R  L   │ K  Lys
+?                ???????????????????????????????                       ?
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│  2  TEST600       OK    51     20   GAATTCGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f10902.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│  2  TEST600       OK    51     20   GAATTCGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f11536.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+
+
+
+
+
+
+                       ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+                       ▒                              ▒
+                       ▒  Primer is already Mutated   ▒
+                       ▒                              ▒
+                       ▒ Press any key to continue... ▒
+                       ▒                              ▒
+┌──────────────────────▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !     51     20   CTCAAAGGCTCAGACATCAG                    │
+│  2  TEST600       OK    51     20   GAATTCGGCTCAGACATCAG                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer

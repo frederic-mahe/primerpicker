@@ -1,0 +1,806 @@
+==== f01417.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f01423.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01701.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PD2.CFG      ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ PRIMER.EXE   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │ TRUN.GB      ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01703.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PD2.CFG      ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ PRIMER.EXE   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │ TRUN.GB      ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f02836.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PD2.CFG      ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ PRIMER.EXE   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │ TRUN.GB      ░  │        ▒▒▒▒▒▒▒▒▒▒▒▒▒▒                          │  ║   │
+│  ??????????????????????????????????????????????????????????????????????????  │
+?                                                                              ?
+└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────TRUN─────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ═════════════════╤════════════════╤════════════════╤════════════════╤        │
+│                  500              1000             1500             2000     │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02837.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────TRUN─────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ═════════════════╤════════════════╤════════════════╤════════════════╤        │
+│                  500              1000             1500             2000     │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02839.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────TRUN─────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ═════════════════╤════════════════╤════════════════╤════════════════╤        │
+│                  500              1000             1500             2000     │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f03120.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│       ?????? ?     ???         ???????????????????????????????????????       │
+│       ║ Primer A  Target bp position:                                ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03121.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:                                ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03404.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1?                       ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03688.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       16?                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03972.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       168                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04256.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04540.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - ?00                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04824.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 1?                       ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05107.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 10                       ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05675.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      ?0                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f06243.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1                        ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f06527.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       18                       ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f06811.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       186?                     ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07094.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07383.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + ?00                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07662.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + ?                        ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07663.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + 0                        ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08231.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + 0                        ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      ?0                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08519.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + 0                        ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      ?  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f08798.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       1867                     ║       │
+└───────║ (compl)   Extend search to Target + 0                        ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      ?0 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f09081.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║          ???????????????????????????100????????????          ║       │
+│       ║          ║    * * * SEARCH MATCHING PAIRS * * *   ║          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║      Primer A:    possible primers     ║          ║       │
+│       ║ Primer B ║      Primer B:    possible primers     ║          ║       │
+└───────║ (compl)  ║                                        ║          ║───────┘
+┌───────║          ║      Pairs:       possible             ║          ║───────┐
+│       ║          ║                                        ║          ║       │
+│       ║          ║    <Press key to interrupt search>     ║          ║       │
+│       ║ Matching ║                                        ║          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      ?0 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f09082.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║           Len▒                              ▒                ║       │
+│       ║              ▒  No Matching Primers Found   ▒                ║       │
+│       ║ Primer B  Tar▒                              ▒                ║       │
+└───────║ (compl)   Ext▒ Press any key to continue... ▒                ║───────┘
+┌───────║           5' ▒                              ▒                ║───────┐
+│       ║           Len▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f09083.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       ?680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║           Len▒                              ▒                ║       │
+│       ║              ▒  No Matching Primers Found   ▒                ║       │
+│       ║ Primer B  Tar▒                              ▒                ║       │
+└───────║ (compl)   Ext▒ Press any key to continue... ▒                ║───────┘
+┌───────║           5' ▒                              ▒                ║───────┐
+│       ║           Len▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f09087.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TRUN                                                  │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1680                     ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║           Len▒                              ▒                ║       │
+│       ║              ▒  No Matching Primers Found   ▒                ║       │
+│       ║ Primer B  Tar▒                              ▒                ║       │
+└───────║ (compl)   Ext▒ Press any key to continue... ▒                ║───────┘
+┌───────║           5' ▒                              ▒                ║───────┐
+│       ║           Len▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║00     │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘

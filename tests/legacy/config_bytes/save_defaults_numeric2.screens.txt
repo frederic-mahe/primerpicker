@@ -1,0 +1,130 @@
+==== f10462.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+
+
+
+               ╔═══════════════════════════════════════════════╗
+               ║                                               ║
+               ║    * * *  E X I T   P R O G R A M   * * *     ║
+               ║                                               ║
+               ║                                               ║
+               ║     System Defaults Changed But Not Saved!    ║
+               ║                                               ║
+               ║                                               ║
+               ║         SAVE CURRENT DEFAULTS (Y/N) ?         ║
+               ║                                               ║
+               ║                                               ║
+               ╚═══════════════════════════════════════════════╝
+
+
+
+
+
+
+
+
+?
+==== f10463.png
+
+
+
+
+               ╔═══════════════════════════════════════════════╗
+               ║                                               ║
+               ║    * * *  E X I T   P R O G R A M   * * *     ║
+               ║                                               ║
+               ║                                               ║
+               ║     System Defaults Changed But Not Saved!    ║
+               ║                                               ║
+               ║                                               ║
+               ║         SAVE CURRENT DEFAULTS (Y/N) ?         ║
+               ║                                               ║
+               ║                                               ║
+               ╚═══════════════════════════════════════════════╝
+
+
+
+
+
+
+
+
+
+==== f10471.png
+
+
+
+
+               ╔═══════════════════════════════════════════════╗
+               ║                                               ║
+               ║    * * *  E X I T   P R O G R A M   * * *     ║
+               ║                                               ║
+               ║                                               ║
+               ║     System Defaults Changed But Not Saved!    ║
+               ║                                               ║
+               ║                                               ║
+               ║         SAVE CURRENT DEFAULTS (Y/N) ?         ║
+               ║                                               ║
+               ║                                               ║
+               ╚═══════════════════════════════════════════════╝
+
+
+
+
+
+
+
+
+?
+==== f11692.png
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+?
+==== f11695.png
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

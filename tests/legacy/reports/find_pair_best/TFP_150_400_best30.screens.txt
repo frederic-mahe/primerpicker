@@ -1,0 +1,1066 @@
+==== f01132.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f01135.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01345.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+   ???????? ??????????????????     ─┘ Select                       ?????????
+   ║ ????????????????                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01346.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TFP.GB       ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01351.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TFP.GB       ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f01987.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TFP.GB       ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────? ?oa??ng... ??─────────────────────────┘  ║   │
+└──║ │              ░           ▒            ▒                             ║───┘
+   ║ │              ░           ▒▒▒▒▒▒▒▒▒▒▒▒▒▒e                            ║
+   ??????????????????????????????????????????????????????????????????????????
+          ????????????????????????????????????????????????????????????
+?                                                                              ?
+│                                                                              │
+│                                                                              │
+│ ═══════════════╤══════════════╤═══════════════╤══════════════╤═══════        │
+│                200            400             600            800             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f01988.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────TFP──────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ═══════════════╤══════════════╤═══════════════╤══════════════╤═══════        │
+│                200            400             600            800             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f01991.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────TFP──────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ═══════════════╤══════════════╤═══════════════╤══════════════╤═══════        │
+│                200            400             600            800             │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f02199.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       ?                        ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02414.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       1?                       ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02625.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       15                       ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f02835.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03049.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - ?00                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03479.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      ?0                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:                                ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03885.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       4?                       ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04099.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       40                       ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04312.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400?                     ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04522.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400                      ║       │
+└───────║ (compl)   Extend search to Target + ?00                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04951.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400                      ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      ?0                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05159.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400                      ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      ?  GC %                  ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05370.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400                      ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching Criteria:                                           ║       │
+│       ║           Match GC's to within      5  GC %                  ║       │
+│       ║           Match Tm's to within      ?0 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05581.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A  Target bp position:       150                      ║       │
+│       ║           Start search at: Target - 100                      ║       │
+│       ║           5' extension:                                      ║       │
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Primer B  Target bp position:       400                      ║       │
+└───────║ (compl)   Extend search to Target + 100                      ║───────┘
+┌───────║           5' extension:                                      ║───────┐
+│       ║           Length (incl 5'ext):      20                       ║       │
+│       ║                                                              ║       │
+│       ║ Matching ??????????????????????????????????????????          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      ?0 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05582.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A ╔════════════════════════════════════════╗          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║    * * * SEARCH MATCHING PAIRS * * *   ║          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║      Primer A:  9 possible primers     ║          ║       │
+│       ║ Primer B ║      Primer B:    possible primers     ║          ║       │
+└───────║ (compl)  ║                                        ║          ║───────┘
+┌───────║          ║      Pairs:       possible             ║          ║───────┐
+│       ║          ║                                        ║          ║       │
+│       ║          ║    <Press key to interrupt search>     ║          ║       │
+│       ║ Matching ║                                        ║          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f05583.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A ╔════════════════════════════════════════╗          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║    * * * SEARCH MATCHING PAIRS * * *   ║          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║      Primer A: 20 possible primers     ║          ║       │
+│       ║ Primer B ║      Primer B:  4 possible primers     ║          ║       │
+└───────║ (compl)  ║                                        ║          ║───────┘
+┌───────║          ║      Pairs:       possible             ║          ║───────┐
+│       ║          ║                                        ║          ║       │
+│       ║          ║    <Press key to interrupt search>     ║          ║       │
+│       ║ Matching ║                                        ║          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05584.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A ╔════════════════════════════════════════╗          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║    * * * SEARCH MATCHING PAIRS * * *   ║          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║      Primer A: 20 possible primers     ║          ║       │
+│       ║ Primer B ║      Primer B:  5 possible primers     ║          ║       │
+└───────║ (compl)  ║                                        ║          ║───────┘
+┌───────║          ║      Pairs:    30 possible             ║          ║───────┐
+│       ║          ║                                        ║          ║       │
+│       ║          ║ <Press key to display possible pairs>  ║          ║       │
+│       ║ Matching ║                                        ║          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f05591.png
+                       * * *   CREATE PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TFP                                                   │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║            * * DEFINE PRIMER PAIR CONSTRAINTS * *            ║       │
+│       ║                                                              ║       │
+│       ║ Primer A ╔════════════════════════════════════════╗          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║    * * * SEARCH MATCHING PAIRS * * *   ║          ║       │
+│       ║          ║                                        ║          ║       │
+│       ║          ║      Primer A: 20 possible primers     ║          ║       │
+│       ║ Primer B ║      Primer B:  5 possible primers     ║          ║       │
+└───────║ (compl)  ║                                        ║          ║───────┘
+┌───────║          ║      Pairs:    30 possible             ║          ║───────┐
+│       ║          ║                                        ║          ║       │
+│       ║          ║ <Press key to display possible pairs>  ║          ║       │
+│       ║ Matching ║                                        ║          ║       │
+│       ║          ╚════════════════════════════════════════╝          ║       │
+│       ║           Match Tm's to within      10 C°                    ║       │
+│ ══════║                                                              ║       │
+│       ║   [ F1 = REnz ]     [ F3 = Criteria ]     [ F4 = Weights ]   ║       │
+│       ║                                                              ║       │
+│       ║   [ ─┘ ] To Complete;           To Cancel Press:  [ ESC ]   ║       │
+│       ╚══════════════════════════════════════════════════════════════╝       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f07466.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       461      50 / 50    66 / 68       2    6        - / -         ▓
+│       80       460      50 / 50    63 / 66       2    6        - / -         ░
+│      135       460      50 / 50    71 / 66       2    4        - / -         ░
+│      135       458      50 / 50    71 / 65       2    4        - / -         ░
+│       80       461      50 / 50    63 / 68       2    6        - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+?       Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f08513.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       461      50 / 50    66 / 68       2    6        - / -         ▓
+│       80       460      50 / 50    63 / 66       2    6        - / -         ░
+│      135       460      50 / 50    71 / 66       2    4        - / -         ░
+│      135       458      50 / 50    71 / 65       2    4        - / -         ░
+│       80       4????????????????????????????????????????????   - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f08514.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       4╔═════════════════════════════════════════╗    - / -         ▓
+│       80       4║                                         ║    - / -         ░
+│      135       4║   30 Pairs found.  Print best: [20  ]   ║    - / -         ░
+│      135       4║                                         ║    - / -         ░
+│       80       4╚═════════════════════════════════════════╝    - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f08519.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       4╔═════════════════════════════════════════╗    - / -         ▓
+│       80       4║                                         ║    - / -         ░
+│      135       4║   30 Pairs found.  Print best: [?0  ]   ║    - / -         ░
+│      135       4║                                         ║    - / -         ░
+│       80       4╚═════════════════════════════════════════╝    - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f09562.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       4╔═════════════════════════════════════════╗    - / -         ▓
+│       80       4║                                         ║    - / -         ░
+│      135       4║   30 Pairs found.  Print best: [3?  ]   ║    - / -         ░
+│      135       4║                                         ║    - / -         ░
+│       80       4╚═════════════════════════════════════════╝    - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f09775.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       460      50 / 50    67 / 66       2    6        - / -         ░
+│      135       461      50 / 50    71 / 68       2    4        - / -         ░
+│      138       458      50 / 50    68 / 65       2    4        - / -         ░
+│       81       4╔═════════════════════════════════════════╗    - / -         ▓
+│       80       4║                                         ║    - / -         ░
+│      135       4║   30 Pairs found.  Print best: [30  ]   ║    - / -         ░
+│      135       4║                                         ║    - / -         ░
+│       80       4╚═════════════════════════════════════════╝    - / -         ░
+│       81       404      50 / 50    66 / 61       2    6        - / -         ░
+│       83       404      50 / 50    68 / 61       2    4        - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f09987.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       461      50 / 50    68 / 68       2    4        - / -         
+│       81       460      50 / 50    66 / 66       2    6        - / -         ░
+│      138       460      50 / 50    68 / 66       2    4        - / -         ░
+│       82       46??????????????????????????????????????????    - / -         ░
+│      135       46║  ?????????????????????                 ║    - / -         ░
+│      138       45║  │                   │                 ║    - / -         ░
+│       81       46║  │ Abandon Printing  │    Change     ║    - / -         ▓
+│       80       46║  │ Start Printing    │                 ║    - / -         ░
+│      135       46║  │ Print to Disk     │  ─┘ Select     ║    - / -         ░
+│      135       45║  │                   │                 ║    - / -         ░
+│       80       46║  └───────────────────┘                 ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f09988.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║  ┌───────────────────┐                 ║    - / -         ░
+│      138       45║  │                   │                 ║    - / -         ░
+│       81       46║  │ Abandon Printing  │    Change     ║    - / -         ▓
+│       80       46║  │ Start Printing    │                 ║    - / -         ░
+│      135       46║  │ Print to Disk     │  ─┘ Select     ║    - / -         ░
+│      135       45║  │                   │                 ║    - / -         ░
+│       80       46║  └───────────────────┘                 ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f11449.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: ?                         ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f12497.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: r                         ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f12705.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: re                        ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f12919.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: rep?                      ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f13133.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: repo?                     ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f13345.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: repor                     ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit
+==== f13560.png
+                         * * *  FIND PRIMER PAIR  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│        Position          GC(%)      Tm(°C)     Max Dimers   FalsePriming     │
+│      -A-       -B-       A / B      A / B        3'  Any      TmA/TmB        │
+│                                                                              │
+│       83       46╔════════════════════════════════════════╗    - / -         
+│       81       46║                                        ║    - / -         ░
+│      138       46║       P R I N T   C O N T R O L        ║    - / -         ░
+│       82       46║                                        ║    - / -         ░
+│      135       46║╔═════════════════════════════════════╗ ║    - / -         ░
+│      138       45║║                                     ║ ║    - / -         ░
+│       81       46║║ Filename: report?                   ║ ║    - / -         ▓
+│       80       46║║                                     ║ ║    - / -         ░
+│      135       46║╚═════════════════════════════════════╝ ║    - / -         ░
+│      135       45║                                        ║    - / -         ░
+│       80       46║                                        ║    - / -         ░
+│       81       40║                                        ║    - / -         ░
+│       83       40╚════════════════════════════════════════╝    - / -         ░
+│      138       404      50 / 50    68 / 61       2    4        - / -         
+│                                                                              │
+│                                                                              │
+│  F=FalsePri    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;     Analyze or save highlighted primer pair;       ESC = Exit

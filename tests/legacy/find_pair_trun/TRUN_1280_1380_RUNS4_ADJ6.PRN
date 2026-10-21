@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TRUN                               2000 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:  1280;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:  1380;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 6 adj homol bases
+              Reject >= 4 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+    1196      1417      55 / 50    72 / 72       2    4        - / -
+    1201      1411      55 / 50    70 / 70       2    4        - / -
+    1202      1411      55 / 50    70 / 70       2    4        - / -
+    1205      1411      55 / 50    70 / 70       2    4        - / -
+    1201      1452      55 / 50    70 / 68       2    3        - / -
+    1201      1453      55 / 50    70 / 68       2    3        - / -
+    1202      1452      55 / 50    70 / 68       2    3        - / -
+    1202      1453      55 / 50    70 / 68       2    3        - / -
+    1204      1411      55 / 50    71 / 70       2    4        - / -
+    1204      1417      55 / 50    71 / 72       2    4        - / -
+    1205      1452      55 / 50    70 / 68       2    3        - / -
+    1205      1453      55 / 50    70 / 68       2    3        - / -
+    1195      1417      55 / 50    74 / 72       2    4        - / -
+    1201      1413      55 / 50    70 / 68       2    4        - / -
+    1201      1417      55 / 50    70 / 72       2    4        - / -
+    1201      1454      55 / 50    70 / 67       2    3        - / -
+    1201      1475      55 / 50    70 / 69       2    5        - / -
+    1202      1412      55 / 50    70 / 68       2    4        - / -
+    1202      1413      55 / 50    70 / 68       2    4        - / -
+    1202      1417      55 / 50    70 / 72       2    4        - / -

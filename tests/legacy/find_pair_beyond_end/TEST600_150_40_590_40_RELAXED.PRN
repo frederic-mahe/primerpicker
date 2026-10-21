@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/20/26
+
+
+Source molecule:  TEST600                             600 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   150;   Start: Target - 40 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   590;   End:   Target + 10 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min   0, Max 100;    Tm C:  Min   0, Max  99
+              Hairpin cutoff:-99.0 kcal;
+              Reject >= 99 matches at 3' end;  >= 99 adj homol bases
+              Reject >= 99 base runs;  >= 99 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+     123       590      45 / 45    70 / 68       2    4        - / -
+     124       590      45 / 45    69 / 68       3    4        - / -
+     122       590      45 / 45    71 / 68       4    4        - / -
+     112       590      45 / 45    74 / 68       3    4        - / -
+     113       590      45 / 45    74 / 68       3    4        - / -
+     115       590      45 / 45    75 / 68       2    4        - / -
+     129       590      45 / 45    74 / 68       3    4        - / -
+     110       590      45 / 45    75 / 68       3    4        - / -
+     111       590      45 / 45    75 / 68       3    4        - / -
+     123       592      45 / 40    70 / 67       2    4        - / -
+     124       592      45 / 40    69 / 67       3    4        - / -
+     114       590      45 / 45    75 / 68       4    4        - / -
+     123       591      45 / 40    70 / 66       2    4        - / -
+     124       591      45 / 40    69 / 66       3    4        - / -
+     116       590      50 / 45    74 / 68       2    3        - / -
+     120       590      50 / 45    74 / 68       2    3        - / -
+     121       590      50 / 45    74 / 68       2    3        - / -
+     123       600      45 / 40    70 / 67       2    6        - / -
+     124       600      45 / 40    69 / 67       3    6        - / -
+     122       592      45 / 40    71 / 67       4    4        - / -

@@ -1,0 +1,45 @@
+Primer Design Report:  Find Pair                      Report Date: 10/21/26
+
+
+Source molecule:  TEST600                             600 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   580;   Start: Target - 40 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   600;   End:   Target + 0 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min   0, Max 100;    Tm C:  Min   0, Max  99
+              Hairpin cutoff:-99.0 kcal;
+              Reject >= 99 matches at 3' end;  >= 99 adj homol bases
+              Reject >= 99 base runs;  >= 99 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+     547       600      40 / 40    65 / 67       3    6        - / -
+     553       600      40 / 40    63 / 67       2    6        - / -
+     556       600      40 / 40    63 / 67       2    6        - / -
+     552       600      40 / 40    62 / 67       2    6        - / -
+     555       600      40 / 40    61 / 67       2    6        - / -
+     546       600      45 / 40    68 / 67       3    6        - / -
+     554       600      40 / 40    60 / 67       2    6        - / -
+     561       600      40 / 40    60 / 67       2    6        - / -
+     545       600      45 / 40    69 / 67       3    6        - / -
+     564       600      40 / 40    60 / 67       3    6        - / -
+     551       600      35 / 40    62 / 67       2    6        - / -
+     558       600      45 / 40    62 / 67       2    6        - / -
+     565       600      40 / 40    59 / 67       4    6        - / -
+     567       600      40 / 40    61 / 67       6    6        - / -
+     548       600      35 / 40    61 / 67       2    6        - / -
+     557       600      45 / 40    62 / 67       3    6        - / -
+     560       600      45 / 40    61 / 67       2    6        - / -
+     550       600      35 / 40    61 / 67       3    6        - / -
+     563       600      45 / 40    60 / 67       2    6        - / -
+     562       600      45 / 40    60 / 67       3    6        - / -

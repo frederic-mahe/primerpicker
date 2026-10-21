@@ -1,0 +1,55 @@
+Primer Design Report:  Find Pair                      Report Date: 10/21/26
+
+
+Source molecule:  TFP                                 900 bps
+
+
+Search parameters:
+
+   Primer A (normal strand): Target bp:   150;   Start: Target - 100 bases
+            Length:  20      5' Extension: - none -
+   Primer B (compl. strand): Target bp:   400;   End:   Target + 100 bases
+            Length:  20      5' Extension: - none -
+
+   Primer Balance:           GC Match: +/- 5 GC %     TM Match: +/- 10 C
+
+Criteria:     % GC:  Min  50, Max  60;    Tm C:  Min  55, Max  80
+              Hairpin cutoff: 0.0 kcal;
+              Reject >= 3 matches at 3' end;  >= 7 adj homol bases
+              Reject >= 3 base runs;  >= 3 G/C at 3' end
+
+Primer pairs requested:
+
+       Position          GC(%)      Tm(øC)     Max Dimers   FalsePriming
+     -A-       -B-       A / B      A / B        3'  Any      TmA/TmB
+
+      83       461      50 / 50    68 / 68       2    4        - / -
+      81       460      50 / 50    66 / 66       2    6        - / -
+     138       460      50 / 50    68 / 66       2    4        - / -
+      82       460      50 / 50    67 / 66       2    6        - / -
+     135       461      50 / 50    71 / 68       2    4        - / -
+     138       458      50 / 50    68 / 65       2    4        - / -
+      81       461      50 / 50    66 / 68       2    6        - / -
+      80       460      50 / 50    63 / 66       2    6        - / -
+     135       460      50 / 50    71 / 66       2    4        - / -
+     135       458      50 / 50    71 / 65       2    4        - / -
+      80       461      50 / 50    63 / 68       2    6        - / -
+      81       404      50 / 50    66 / 61       2    6        - / -
+      83       404      50 / 50    68 / 61       2    4        - / -
+     138       404      50 / 50    68 / 61       2    4        - / -
+      82       404      50 / 50    67 / 61       2    6        - / -
+     126       471      60 / 60    73 / 70       2    4        - /  6
+     136       404      50 / 50    70 / 61       2    4        - / -
+     135       404      50 / 50    71 / 61       2    4        - / -
+     124       471      60 / 60    75 / 70       2    4        - /  6
+     132       471      60 / 60    75 / 70       2    4        - /  6
+     119       471      60 / 60    77 / 70       2    5        - /  6
+     129       471      60 / 60    75 / 70       2    4       17 /  6
+     115       471      60 / 60    78 / 70       2    5       15 /  6
+     130       471      60 / 60    74 / 70       2    4       24 /  6
+     131       471      60 / 60    71 / 70       2    4       30 /  6
+     116       471      60 / 60    79 / 70       2    5       23 /  6
+      79       460      50 / 50    66 / 66       2    6       39 / -
+     117       471      60 / 60    76 / 70       2    5       29 /  6
+      79       461      50 / 50    66 / 68       2    6       39 / -
+      78       471      55 / 60    68 / 70       2    6       32 /  6
