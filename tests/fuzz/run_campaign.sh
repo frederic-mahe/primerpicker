@@ -70,6 +70,8 @@ fixed_seeds() {
             printf 'find-pair\n--report\nr\n/m\n150\n400' > "$corpus/find_pair_report"
             printf 'match\n/m\n51\n400' > "$corpus/match"
             printf 'match\n--report\nr\n/m\n51\n400' > "$corpus/match_report"
+            printf 'match\n--top-strand\n/m\n50\n600' > "$corpus/match_top_strand"
+            printf 'explain\nTa' > "$corpus/explain"
             # an argument cut by a NUL byte (fuzz_cli.cpp, found 2026-10-20)
             printf 'analyze\n--report\000x\n/\nGGGTCGGG' > "$corpus/nul_report" ;;
         fuzz_multi_primer)

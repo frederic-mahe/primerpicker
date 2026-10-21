@@ -32,6 +32,7 @@
 "Eco47-3"
 "homology"
 "--false-priming"
+"--top-strand"
 "--report"
 "//molecule"
 "///molecule"
