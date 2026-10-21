@@ -215,6 +215,41 @@ struct PickingState {
 };
 
 
+namespace detail {
+
+// the value line after its position: "%GC: ..." to "Runs: ..."
+constexpr auto append_values(std::string& line, analysis::LegacyActualValues const& actual,
+                             analysis::LegacyVerdict const& verdict) -> void {
+    using namespace std::string_view_literals;
+    constexpr auto spaces = "   "sv;
+    constexpr auto word_width = std::size_t{4};
+    auto const flag = [](bool const meets) { return meets ? ' ' : '!'; };
+    auto const word = [](std::string_view const label, bool const meets) {
+        auto field = std::string{label};
+        field += meets ? "OK"sv : "!"sv;
+        pad_to(field, label.size() + word_width);
+        return field;
+    };
+    line += "%GC:";
+    append_value(line, static_cast<std::size_t>(actual.gc_percent));
+    line += flag(verdict.gc);
+    line += spaces;
+    line += "Tm°C:";
+    if (actual.tm_celsius > 0) {
+        append_value(line, static_cast<std::size_t>(actual.tm_celsius));
+    } else {
+        line += " ? ";
+    }
+    line += flag(verdict.tm);
+    line += spaces;
+    line += word("Hairpin: ", verdict.no_hairpin);
+    line += word("Dimers: ", verdict.no_3prime_dimer and verdict.no_dimer);
+    line += "Runs: ";
+    line += verdict.no_runs and verdict.no_3prime_gc_run ? "OK"sv : "!"sv;
+}
+
+}  // namespace detail
+
 // The value line (tests/legacy/README.md, "The picking screen"): "Pos: "
 // and the position in 7 columns; "%GC:" and "Tm°C:" with the value
 // right-aligned in 3 columns ("?" in the middle one when the Tm is not
@@ -225,36 +260,11 @@ struct PickingState {
 [[nodiscard]] constexpr auto legacy_value_line(std::size_t const position,
                                                analysis::LegacyActualValues const& actual,
                                                analysis::LegacyVerdict const& verdict) -> std::string {
-    using namespace std::string_view_literals;
     constexpr auto position_end = std::size_t{12};  // "Pos: " and 7 columns
-    constexpr auto spaces = "   "sv;
-    constexpr auto word_width = std::size_t{4};
-    auto const flag = [](bool const meets) { return meets ? ' ' : '!'; };
-    auto const word = [](std::string_view const label, bool const meets) {
-        auto field = std::string{label};
-        field += meets ? "OK"sv : "!"sv;
-        detail::pad_to(field, label.size() + word_width);
-        return field;
-    };
     auto line = std::string{"Pos: "};
     detail::append_number(line, position);
     detail::pad_to(line, position_end);
-    line += "%GC:";
-    detail::append_value(line, static_cast<std::size_t>(actual.gc_percent));
-    line += flag(verdict.gc);
-    line += spaces;
-    line += "Tm°C:";
-    if (actual.tm_celsius > 0) {
-        detail::append_value(line, static_cast<std::size_t>(actual.tm_celsius));
-    } else {
-        line += " ? ";
-    }
-    line += flag(verdict.tm);
-    line += spaces;
-    line += word("Hairpin: ", verdict.no_hairpin);
-    line += word("Dimers: ", verdict.no_3prime_dimer and verdict.no_dimer);
-    line += "Runs: ";
-    line += verdict.no_runs and verdict.no_3prime_gc_run ? "OK"sv : "!"sv;
+    detail::append_values(line, actual, verdict);
     return line;
 }
 
@@ -273,6 +283,24 @@ struct PickingState {
     auto const verdict = analysis::evaluate(actual, criteria);
     return PickingState{.value_line = legacy_value_line(location.position, actual, verdict),
                         .meets_criteria = verdict.all()};
+}
+
+}  // namespace primerpicker::search
+
+namespace primerpicker::search {
+
+// The ORIGINAL and MUTATED lines of the Mutagenize Primer screen
+// (tests/legacy/README.md, "Mutagenize"): the value line of the picking
+// screen without its position ("%GC: 50    Tm°C: 66    Hairpin: OK
+// Dimers: OK  Runs: !"), the run at the 3' end counting too. Requires a
+// primer of one base or more. Not noexcept: builds a string.
+[[nodiscard]] constexpr auto legacy_mutagenize_line(std::span<sequence::Nucleotide const> const primer,
+                                                    analysis::LegacyCriteria const& criteria) -> std::string {
+    assert(not primer.empty());
+    auto const actual = detail::picking_values(primer);
+    auto line = std::string{};
+    detail::append_values(line, actual, analysis::evaluate(actual, criteria));
+    return line;
 }
 
 }  // namespace primerpicker::search
