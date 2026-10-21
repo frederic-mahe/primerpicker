@@ -709,7 +709,8 @@ auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& d
                                                                                                             : "target B"};
         return fail(std::format("{}: {}", target, primerpicker::search::legacy_message(refused)));
     }
-    auto const result = primerpicker::search::legacy_find_pair(molecule->sequence, settings, defaults.criteria);
+    auto const result =
+        primerpicker::search::legacy_find_pair(molecule->sequence, settings, defaults.criteria, *weights);
     if (arguments.report.has_value() and
         not write_find_pair_report(*arguments.report,
                                    {.molecule_name = molecule->name,

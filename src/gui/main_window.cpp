@@ -307,7 +307,7 @@ auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QStr
         auto const message = search::legacy_message(refused);
         return QString::fromLatin1(message.data(), static_cast<qsizetype>(message.size()));
     }
-    auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria);
+    auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria, defaults_.weights);
     pairs_.show_pairs(result, defaults_.weights);
     pages_.setCurrentWidget(&pairs_);
     return std::nullopt;

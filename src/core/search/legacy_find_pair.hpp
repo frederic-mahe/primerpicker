@@ -50,7 +50,8 @@ struct PairCandidate {
 // The limits of Find Pair in Primer Designer 2.0 (tests/legacy/README.md,
 // "Limits on primers and pairs (recorded 2026-10-19)"): a window with
 // this many possible primers stops the search, and the pair count stops
-// at this many pairs
+// at this many pairs (the best of one more, "Reports of more than 20
+// pairs", recorded 2026-10-21)
 constexpr auto legacy_max_possible_primers = std::size_t{100};
 constexpr auto legacy_max_pairs = std::size_t{1000};
 
@@ -60,8 +61,10 @@ enum struct FindPairLimit : std::uint8_t {
     // pair is searched ("More than 100 sites found.  Suggest you
     // redefine matching limits.")
     too_many_primers,
-    // more pairs match than legacy_max_pairs: the first ones are kept
-    // ("More than 1000 possible pairs found!"; PRIMER.exe hangs instead)
+    // more pairs match than legacy_max_pairs: the best legacy_max_pairs
+    // of the first legacy_max_pairs + 1 are kept, as PRIMER.exe keeps them
+    // (decided 2026-10-21; "More than 1000 possible pairs found!";
+    // PRIMER.exe hangs instead)
     pairs_capped,
 };
 
@@ -161,69 +164,6 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
 
 }  // namespace detail
 
-// Find Pair of Primer Designer 2.0 (tests/legacy/README.md, "Find
-// Pair"): the possible primers A and B (every criterion met), and the
-// pairs whose GC % and Tm match within the tolerances and that have
-// fewer A:B 3' end matches and fewer A:B adjacent homologous bases than
-// the criteria ("Find Pair: A:B adjacent bases"), in generation order;
-// legacy_rank_pairs sorts them as the Find Pair list. The search stops
-// at the limits of FindPairLimit. Not
-// constexpr: the false-priming search uses std::ranges::stable_sort;
-// not noexcept: vectors allocate.
-[[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
-                                           FindPairSettings const& settings, analysis::LegacyCriteria const& criteria)
-    -> FindPairResult {
-    auto const first_a = settings.target_a > settings.start_offset_a ? settings.target_a - settings.start_offset_a : 1;
-    auto const last_a = sequence::window_end(settings.target_a, 0, molecule.size());
-    auto const primers_a =
-        detail::possible_primers(molecule, first_a, last_a, sequence::Strand::top, settings.length, criteria);
-    if (primers_a.size() == legacy_max_possible_primers) {
-        return {.possible_a = primers_a.size(), .possible_b = 0, .pairs = {}, .limit = FindPairLimit::too_many_primers};
-    }
-    auto const last_b = sequence::window_end(settings.target_b, settings.end_offset_b, molecule.size());
-    auto const primers_b = detail::possible_primers(molecule, settings.target_b, last_b,
-                                                    sequence::Strand::complement, settings.length, criteria);
-    if (primers_b.size() == legacy_max_possible_primers) {
-        return {.possible_a = primers_a.size(),
-                .possible_b = primers_b.size(),
-                .pairs = {},
-                .limit = FindPairLimit::too_many_primers};
-    }
-    auto result = FindPairResult{.possible_a = primers_a.size(), .possible_b = primers_b.size(), .pairs = {}};
-    for (auto const& primer_a : primers_a) {
-        for (auto const& primer_b : primers_b) {
-            auto const pair = analysis::PrimerPair{.first = primer_a.sequence, .second = primer_b.sequence};
-            auto const inter_3prime = analysis::dimer_at_3prime_end(pair);
-            auto const inter_adjacent = analysis::longest_complementary_run(pair);
-            auto const matches =
-                detail::difference(primer_a.actual.gc_percent, primer_b.actual.gc_percent) <= settings.gc_tolerance_percent and
-                detail::difference(primer_a.actual.tm_celsius, primer_b.actual.tm_celsius) <= settings.tm_tolerance_celsius and
-                inter_3prime < criteria.reject_dimer_3prime_matches and
-                inter_adjacent < criteria.reject_dimer_adjacent_bases;
-            if (not matches) {
-                continue;
-            }
-            if (result.pairs.size() == legacy_max_pairs) {
-                result.limit = FindPairLimit::pairs_capped;
-                return result;
-            }
-            auto const& actual_a = primer_a.actual;
-            auto const& actual_b = primer_b.actual;
-            result.pairs.push_back(PairCandidate{
-                .position_a = primer_a.position,
-                .position_b = primer_b.position,
-                .primer_a = actual_a,
-                .primer_b = actual_b,
-                .max_dimer_3prime_matches = std::max({actual_a.dimer_3prime_matches, actual_b.dimer_3prime_matches, inter_3prime}),
-                .max_dimer_adjacent_bases =
-                    std::max({actual_a.dimer_adjacent_bases, actual_b.dimer_adjacent_bases, inter_adjacent}),
-                .false_priming_tm_a = primer_a.false_priming_tm,
-                .false_priming_tm_b = primer_b.false_priming_tm});
-        }
-    }
-    return result;
-}
-
 // The "Find-Pair Weighting Factors" (F4 in the pair constraints form):
 // 0 ignores a term, 1 to 5 weigh it. Defaults: the built-in system
 // defaults (tests/legacy/README.md, "Built-in defaults").
@@ -274,6 +214,88 @@ constexpr auto is_weight(int const weight) noexcept -> bool {
     auto const score = [&weights](PairCandidate const& pair) { return legacy_pair_score(pair, weights); };
     std::ranges::stable_sort(pairs, std::less{}, score);
     return pairs;
+}
+
+namespace detail {
+
+// Removes the last pair of the ranked list from PAIRS (in generation
+// order), keeping the others in their order
+inline void remove_worst_pair(std::vector<PairCandidate>& pairs, FindPairWeights const& weights) {
+    assert(not pairs.empty());
+    auto const ranked = legacy_rank_pairs(pairs, weights);
+    auto const& worst = ranked.back();
+    auto const found = std::ranges::find_if(pairs, [&worst](PairCandidate const& pair) {
+        return pair.position_a == worst.position_a and pair.position_b == worst.position_b;
+    });
+    assert(found != pairs.end());
+    pairs.erase(found);
+}
+
+}  // namespace detail
+
+// Find Pair of Primer Designer 2.0 (tests/legacy/README.md, "Find
+// Pair"): the possible primers A and B (every criterion met), and the
+// pairs whose GC % and Tm match within the tolerances and that have
+// fewer A:B 3' end matches and fewer A:B adjacent homologous bases than
+// the criteria ("Find Pair: A:B adjacent bases"), in generation order;
+// legacy_rank_pairs sorts them as the Find Pair list. The search stops
+// at the limits of FindPairLimit; at the pair limit, the weights choose
+// the pair left out (the worst of legacy_max_pairs + 1). Not
+// constexpr: the false-priming search uses std::ranges::stable_sort;
+// not noexcept: vectors allocate.
+[[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
+                                           FindPairSettings const& settings, analysis::LegacyCriteria const& criteria,
+                                           FindPairWeights const& weights = {}) -> FindPairResult {
+    auto const first_a = settings.target_a > settings.start_offset_a ? settings.target_a - settings.start_offset_a : 1;
+    auto const last_a = sequence::window_end(settings.target_a, 0, molecule.size());
+    auto const primers_a =
+        detail::possible_primers(molecule, first_a, last_a, sequence::Strand::top, settings.length, criteria);
+    if (primers_a.size() == legacy_max_possible_primers) {
+        return {.possible_a = primers_a.size(), .possible_b = 0, .pairs = {}, .limit = FindPairLimit::too_many_primers};
+    }
+    auto const last_b = sequence::window_end(settings.target_b, settings.end_offset_b, molecule.size());
+    auto const primers_b = detail::possible_primers(molecule, settings.target_b, last_b,
+                                                    sequence::Strand::complement, settings.length, criteria);
+    if (primers_b.size() == legacy_max_possible_primers) {
+        return {.possible_a = primers_a.size(),
+                .possible_b = primers_b.size(),
+                .pairs = {},
+                .limit = FindPairLimit::too_many_primers};
+    }
+    auto result = FindPairResult{.possible_a = primers_a.size(), .possible_b = primers_b.size(), .pairs = {}};
+    for (auto const& primer_a : primers_a) {
+        for (auto const& primer_b : primers_b) {
+            auto const pair = analysis::PrimerPair{.first = primer_a.sequence, .second = primer_b.sequence};
+            auto const inter_3prime = analysis::dimer_at_3prime_end(pair);
+            auto const inter_adjacent = analysis::longest_complementary_run(pair);
+            auto const matches =
+                detail::difference(primer_a.actual.gc_percent, primer_b.actual.gc_percent) <= settings.gc_tolerance_percent and
+                detail::difference(primer_a.actual.tm_celsius, primer_b.actual.tm_celsius) <= settings.tm_tolerance_celsius and
+                inter_3prime < criteria.reject_dimer_3prime_matches and
+                inter_adjacent < criteria.reject_dimer_adjacent_bases;
+            if (not matches) {
+                continue;
+            }
+            auto const& actual_a = primer_a.actual;
+            auto const& actual_b = primer_b.actual;
+            result.pairs.push_back(PairCandidate{
+                .position_a = primer_a.position,
+                .position_b = primer_b.position,
+                .primer_a = actual_a,
+                .primer_b = actual_b,
+                .max_dimer_3prime_matches = std::max({actual_a.dimer_3prime_matches, actual_b.dimer_3prime_matches, inter_3prime}),
+                .max_dimer_adjacent_bases =
+                    std::max({actual_a.dimer_adjacent_bases, actual_b.dimer_adjacent_bases, inter_adjacent}),
+                .false_priming_tm_a = primer_a.false_priming_tm,
+                .false_priming_tm_b = primer_b.false_priming_tm});
+            if (result.pairs.size() > legacy_max_pairs) {
+                detail::remove_worst_pair(result.pairs, weights);
+                result.limit = FindPairLimit::pairs_capped;
+                return result;
+            }
+        }
+    }
+    return result;
 }
 
 }  // namespace primerpicker::search
