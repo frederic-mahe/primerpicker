@@ -116,7 +116,8 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
 // Find Pair of Primer Designer 2.0 (tests/legacy/README.md, "Find
 // Pair"): the possible primers A and B (every criterion met), and the
 // pairs whose GC % and Tm match within the tolerances and that have
-// fewer A:B 3' end matches than the criterion, in generation order;
+// fewer A:B 3' end matches and fewer A:B adjacent homologous bases than
+// the criteria ("Find Pair: A:B adjacent bases"), in generation order;
 // legacy_rank_pairs sorts them as the Find Pair list. The search stops
 // at the limits of FindPairLimit. Not
 // constexpr: the false-priming search uses std::ranges::stable_sort;
@@ -145,10 +146,12 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
         for (auto const& primer_b : primers_b) {
             auto const pair = analysis::PrimerPair{.first = primer_a.sequence, .second = primer_b.sequence};
             auto const inter_3prime = analysis::dimer_at_3prime_end(pair);
+            auto const inter_adjacent = analysis::longest_complementary_run(pair);
             auto const matches =
                 detail::difference(primer_a.actual.gc_percent, primer_b.actual.gc_percent) <= settings.gc_tolerance_percent and
                 detail::difference(primer_a.actual.tm_celsius, primer_b.actual.tm_celsius) <= settings.tm_tolerance_celsius and
-                inter_3prime < criteria.reject_dimer_3prime_matches;
+                inter_3prime < criteria.reject_dimer_3prime_matches and
+                inter_adjacent < criteria.reject_dimer_adjacent_bases;
             if (not matches) {
                 continue;
             }
@@ -164,8 +167,8 @@ inline auto possible_primers(std::span<sequence::Nucleotide const> const molecul
                 .primer_a = actual_a,
                 .primer_b = actual_b,
                 .max_dimer_3prime_matches = std::max({actual_a.dimer_3prime_matches, actual_b.dimer_3prime_matches, inter_3prime}),
-                .max_dimer_adjacent_bases = std::max({actual_a.dimer_adjacent_bases, actual_b.dimer_adjacent_bases,
-                                                      analysis::longest_complementary_run(pair)}),
+                .max_dimer_adjacent_bases =
+                    std::max({actual_a.dimer_adjacent_bases, actual_b.dimer_adjacent_bases, inter_adjacent}),
                 .false_priming_tm_a = primer_a.false_priming_tm,
                 .false_priming_tm_b = primer_b.false_priming_tm});
         }
