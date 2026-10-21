@@ -45,3 +45,6 @@ add_test(NAME cli_homology_copies
 add_test(NAME cli_match
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_match.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_find_pair_best
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_find_pair_best.sh $<TARGET_FILE:primerpicker>
+          ${PROJECT_SOURCE_DIR}/tests/legacy)

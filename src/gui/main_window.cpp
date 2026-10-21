@@ -37,6 +37,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QFileInfo>
 #include <QHeaderView>
 #include <QIODevice>
@@ -62,6 +63,7 @@
 #include <iterator>
 #include <optional>
 #include <span>
+#include <string>
 #include <string_view>
 #include <utility>
 #include <variant>
@@ -120,6 +122,24 @@ auto topology_name(sequence::Topology const topology) -> QString {
         default:
             return {};  // unreachable: all enumerators are handled
     }
+}
+
+// the date of the reports
+auto today() -> std::chrono::year_month_day {
+    auto const date = QDate::currentDate();
+    return std::chrono::year_month_day{std::chrono::year{date.year()},
+                                       std::chrono::month{static_cast<unsigned>(date.month())},
+                                       std::chrono::day{static_cast<unsigned>(date.day())}};
+}
+
+// the error, if REPORT could not be written to PATH
+auto write_report(QString const& path, std::string const& report) -> std::optional<QString> {
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or
+        file.write(report.data(), static_cast<qint64>(report.size())) != static_cast<qint64>(report.size())) {
+        return u"cannot write the report to %1"_s.arg(path);
+    }
+    return std::nullopt;
 }
 
 // a mutated primer: PRIMER, edited on the Mutagenize screen
@@ -625,21 +645,24 @@ void MainWindow::show_find_pair(search::FindPairSettings const& settings, search
     pairs_.show_pairs(result, defaults_.weights);
     report_.reset();  // PRIMER.exe prints nothing without a pair
     if (not result.pairs.empty() and molecule_.has_value()) {
-        // PRIMER.exe's "Print best: [N]": the best 20 at most
         auto ranked = search::legacy_rank_pairs(result.pairs, defaults_.weights);
-        if (ranked.size() > report::legacy_report_best_pairs) {
-            constexpr auto best = static_cast<std::ptrdiff_t>(report::legacy_report_best_pairs);
-            ranked.erase(std::next(ranked.begin(), best), ranked.end());
-        }
-        report_ = ScreenReport{
-            .file_name = u"FINDPAIR.PRN"_s,
-            .text = [name = molecule_->name.toStdString(), size = molecule_->sequence.size(), settings,
-                     ranked = std::move(ranked),
-                     criteria = defaults_.criteria](std::chrono::year_month_day const& date) {
-                return report::legacy_find_pair_report(
-                    {.molecule_name = name, .molecule_size = size, .settings = settings, .best_pairs = ranked},
-                    criteria, date);
-            }};
+        auto const pair_count = ranked.size();
+        auto best_pairs_text = [name = molecule_->name.toStdString(), size = molecule_->sequence.size(), settings,
+                                ranked = std::move(ranked), criteria = defaults_.criteria](
+                                   std::chrono::year_month_day const& date, std::size_t const best) {
+            return report::legacy_find_pair_report({.molecule_name = name,
+                                                    .molecule_size = size,
+                                                    .settings = settings,
+                                                    .best_pairs = report::legacy_printed_pairs(ranked, best)},
+                                                   criteria, date);
+        };
+        // PRIMER.exe's "Print best: [N]": the best 20 at most
+        report_ = ScreenReport{.file_name = u"FINDPAIR.PRN"_s,
+                               .text = [best_pairs_text, pair_count](std::chrono::year_month_day const& date) {
+                                   return best_pairs_text(date, report::legacy_print_best_default(pair_count));
+                               },
+                               .pair_count = pair_count,
+                               .best_pairs_text = best_pairs_text};
     }
     pages_.setCurrentWidget(&pairs_);
 }
@@ -1184,17 +1207,17 @@ auto MainWindow::print_report_to(QString const& path) -> std::optional<QString> 
     if (not report_.has_value()) {
         return u"Nothing to print on this screen"_s;
     }
-    auto const today = QDate::currentDate();
-    auto const date = std::chrono::year_month_day{std::chrono::year{today.year()},
-                                                  std::chrono::month{static_cast<unsigned>(today.month())},
-                                                  std::chrono::day{static_cast<unsigned>(today.day())}};
-    auto const report = report_->text(date);
-    auto file = QFile{path};
-    if (not file.open(QIODevice::WriteOnly) or
-        file.write(report.data(), static_cast<qint64>(report.size())) != static_cast<qint64>(report.size())) {
-        return u"cannot write the report to %1"_s.arg(path);
+    return write_report(path, report_->text(today()));
+}
+
+auto MainWindow::print_report_to(QString const& path, std::size_t const best_pairs) -> std::optional<QString> {
+    if (not report_.has_value()) {
+        return u"Nothing to print on this screen"_s;
     }
-    return std::nullopt;
+    if (not report_->best_pairs_text or best_pairs == 0 or best_pairs > report::legacy_report_max_best_pairs) {
+        return print_report_to(path);
+    }
+    return write_report(path, report_->best_pairs_text(today(), best_pairs));
 }
 
 auto MainWindow::save_primer_to(QString const& path) -> std::optional<QString> {
@@ -1248,12 +1271,27 @@ void MainWindow::print_report() {
         QMessageBox::information(this, u"Print to Disk"_s, u"Nothing to print on this screen"_s);
         return;
     }
+    // the Find Pair list: PRIMER.exe's "N Pairs found.  Print best: [M]"
+    auto best_pairs = std::size_t{0};
+    if (report_->best_pairs_text) {
+        auto accepted = false;
+        constexpr auto minimum = 1;
+        constexpr auto step = 1;
+        auto const answer = QInputDialog::getInt(
+            this, u"Print to Disk"_s, u"%1 Pairs found.  Print best:"_s.arg(report_->pair_count),
+            static_cast<int>(report::legacy_print_best_default(report_->pair_count)), minimum,
+            static_cast<int>(report::legacy_report_max_best_pairs), step, &accepted);
+        if (not accepted) {
+            return;
+        }
+        best_pairs = static_cast<std::size_t>(answer);
+    }
     auto const path = QFileDialog::getSaveFileName(this, u"Print to Disk"_s, report_->file_name,
                                                    u"Reports (*.prn *.PRN *.txt);;All files (*)"_s);
     if (path.isEmpty()) {
         return;
     }
-    if (auto const error = print_report_to(path); error.has_value()) {
+    if (auto const error = print_report_to(path, best_pairs); error.has_value()) {
         QMessageBox::warning(this, u"Print to Disk"_s, *error);
     }
 }

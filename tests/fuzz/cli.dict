@@ -34,6 +34,7 @@
 "--false-priming"
 "--top-strand"
 "--report"
+"--best"
 "//molecule"
 "///molecule"
 "51"

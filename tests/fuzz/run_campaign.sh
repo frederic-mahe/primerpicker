@@ -68,6 +68,7 @@ fixed_seeds() {
             printf 'pair\n--report\nr\nAAAAAAAAAAAA\nCCCCCCCCCCCC' > "$corpus/pair_report"
             printf 'multi\n--report\nr\nCTCGATCCGTTCCTAAT\n-\nCGGGGCTCATTGCACTC' > "$corpus/multi_report"
             printf 'find-pair\n--report\nr\n/m\n150\n400' > "$corpus/find_pair_report"
+            printf 'find-pair\n--report\nr\n--best\n25\n/m\n150\n400' > "$corpus/find_pair_report_best"
             printf 'match\n/m\n51\n400' > "$corpus/match"
             printf 'match\n--report\nr\n/m\n51\n400' > "$corpus/match_report"
             printf 'match\n--top-strand\n/m\n50\n600' > "$corpus/match_top_strand"

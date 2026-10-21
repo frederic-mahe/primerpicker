@@ -138,6 +138,9 @@ public:
     // was not written (a screen without report, or nothing to print, as
     // PRIMER.exe for an empty list)
     [[nodiscard]] auto print_report_to(QString const& path) -> std::optional<QString>;
+    // The same; on the Find Pair list, with the answer to PRIMER.exe's
+    // "N Pairs found.  Print best: [M]" (1 to 9999) instead of M
+    [[nodiscard]] auto print_report_to(QString const& path, std::size_t best_pairs) -> std::optional<QString>;
 
     // Primer/Create -> Save Active Primer: writes the active primer as a
     // .PD2 file of Primer Designer; the error, if it was not written
@@ -258,6 +261,9 @@ private:
     struct ScreenReport {
         QString file_name;
         std::function<std::string(std::chrono::year_month_day const&)> text;
+        // the Find Pair list: the pairs found, and the report of the best N
+        std::size_t pair_count = 0;
+        std::function<std::string(std::chrono::year_month_day const&, std::size_t)> best_pairs_text = {};
     };
     std::optional<ScreenReport> report_;
     std::vector<ActivePrimer> primer_list_;  // the Primer List, in saving order

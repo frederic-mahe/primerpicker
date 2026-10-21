@@ -8,6 +8,8 @@
 #include "core/search/legacy_match.hpp"
 #include "core/sequence/nucleotide.hpp"
 
+#include <algorithm>
+#include <cassert>
 #include <chrono>
 #include <cstddef>
 #include <span>
@@ -70,6 +72,24 @@ struct MutatedPrimerReport {
 // pairs printed, best first. PRIMER.exe asks "N Pairs found.  Print
 // best: [M]", M being N up to legacy_report_best_pairs.
 constexpr auto legacy_report_best_pairs = std::size_t{20};
+// The field takes 4 digits (tests/legacy/README.md, "Reports of more
+// than 20 pairs")
+constexpr auto legacy_report_max_best_pairs = std::size_t{9999};
+
+// The answer PRIMER.exe proposes for PAIR_COUNT pairs found
+[[nodiscard]] constexpr auto legacy_print_best_default(std::size_t const pair_count) noexcept -> std::size_t {
+    return std::min(pair_count, legacy_report_best_pairs);
+}
+
+// The pairs printed for the answer BEST (0 to 9999): the best BEST of the
+// RANKED pairs, all of them when there are fewer; none for 0 (PRIMER.exe
+// then prints nothing)
+[[nodiscard]] constexpr auto legacy_printed_pairs(std::span<search::PairCandidate const> const ranked,
+                                                  std::size_t const best) noexcept
+    -> std::span<search::PairCandidate const> {
+    assert(best <= legacy_report_max_best_pairs);
+    return ranked.first(std::min(ranked.size(), best));
+}
 
 struct FindPairReport {
     std::string_view molecule_name;
