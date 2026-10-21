@@ -103,18 +103,28 @@ jobs:
       - name: Configure
         run: cmake --preset release -DPRIMERPICKER_GUI=ON
       - name: Build
+        id: build
         run: cmake --build --preset release -j
       - name: Test
         run: ctest --preset release
+      - name: Keep the test log
+        if: ${{ failure() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-ctest-log
+          path: build/release/Testing/Temporary/LastTest.log
+          retention-days: 14
       # the graphical program with its DLLs, to try out (releases come
-      # from executables.yml)
+      # from executables.yml), also when a test fails
       - name: Gather the graphical program and its DLLs
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           folder=primerpicker-gui-${GITHUB_SHA:0:7}-windows-x86_64
           sh packaging/windows/deploy-gui.sh build/release/src/gui/primerpicker-gui.exe "$folder"
           cp LICENSE README.md "$folder/"
           echo "GUI_FOLDER=$folder" >> "$GITHUB_ENV"
       - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         with:
           name: ${{ env.GUI_FOLDER }}
           path: ${{ env.GUI_FOLDER }}
