@@ -71,7 +71,8 @@ add_executable(unit_tests
   test_legacy_find_pair_adjacent.cpp
   test_legacy_find_pair_targets.cpp
   test_legacy_find_pair_cap.cpp
-  test_glossary.cpp)
+  test_glossary.cpp
+  test_legacy_match_top_strand.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE

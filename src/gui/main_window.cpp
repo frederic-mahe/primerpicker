@@ -599,18 +599,20 @@ auto MainWindow::match_active_primer(MatchRequest const& request) -> std::option
     auto const settings = search::MatchSettings{.target = request.target,
                                                 .start_offset = request.start_offset,
                                                 .end_offset = request.end_offset,
+                                                .strand = request.strand,
                                                 .length = defaults_.primer_length,
                                                 .gc_tolerance_percent = defaults_.gc_tolerance_percent,
                                                 .tm_tolerance_celsius = defaults_.tm_tolerance_celsius};
     auto const list = search::legacy_match_active_primer({.molecule = molecule_->sequence, .primer_a = primer_a},
                                                          settings, active_primer_->criteria);
-    match_.show_list(u"Primer A: 5'-%1-3', position %2 of %3; primers B (complement strand) from %4 - %5 to %4 + %6"_s
+    match_.show_list(u"Primer A: 5'-%1-3', position %2 of %3; primers B (%7 strand) from %4 - %5 to %4 + %6"_s
                          .arg(letters(primer_a))
                          .arg(location.position)
                          .arg(molecule_->name)
                          .arg(request.target)
                          .arg(request.start_offset)
-                         .arg(request.end_offset),
+                         .arg(request.end_offset)
+                         .arg(request.strand == sequence::Strand::top ? u"top"_s : u"complement"_s),
                      list);
     report_.reset();  // PRIMER.exe prints nothing without a primer B
     if (not list.empty()) {

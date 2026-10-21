@@ -1,5 +1,8 @@
 #pragma once
 
+#include "core/sequence/strand.hpp"
+
+#include <QCheckBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFormLayout>
@@ -17,11 +20,13 @@
 namespace primerpicker::gui {
 
 // The search of Primer/Create -> Match Active Primer: primers B from
-// target - start_offset to target + end_offset
+// target - start_offset to target + end_offset, on the complement strand
+// (the form's default) or on the top strand
 struct MatchRequest {
     std::size_t target = 0;
     std::size_t start_offset = 0;
     std::size_t end_offset = 0;
+    sequence::Strand strand = sequence::Strand::complement;  // of primers B
 };
 
 // Primer/Create -> Match Active Primer: the "Define Matching Primer"
@@ -57,6 +62,7 @@ private:
     QLineEdit target_;
     QLineEdit start_offset_;
     QLineEdit end_offset_;
+    QCheckBox complement_;
     QLabel message_;
     QDialogButtonBox buttons_;
 };

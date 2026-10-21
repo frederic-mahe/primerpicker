@@ -804,7 +804,11 @@ auto legacy_match_report(MatchReport const& match, std::chrono::year_month_day c
                                match.molecule_size, molecule_size_width));
     report += blank_lines(2);
     report += line("Search parameters:");
-    report += line(std::format("   Target bp pos:{:6} (Complementary strand)", settings.target));
+    // primers B on the top strand: no strand named (recorded 2026-10-20,
+    // match_variations/TRUN_50_600_top_strand.PRN)
+    auto const strand = settings.strand == sequence::Strand::complement ? std::string_view{" (Complementary strand)"}
+                                                                         : std::string_view{};
+    report += line(std::format("   Target bp pos:{:6}{}", settings.target, strand));
     auto const [start_offset, end_offset] = match_offsets(match);
     report += line(std::format("   Start: Target - {} bases;   End: Target + {} bases", start_offset, end_offset));
     report += line(std::format("   Length:{:4}                 5' Extension: - none -", settings.length));

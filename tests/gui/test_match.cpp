@@ -106,3 +106,25 @@ TEST_CASE("Match Active Primer without a match shows PRIMER.exe's message", "[gu
     REQUIRE_FALSE(window.match_active_primer({.target = 400, .start_offset = 0, .end_offset = 0}).has_value());
     CHECK(child<QLabel>(window, u"match_message").text() == u"No Matching Primers Found"_s);
 }
+
+// Reference: PRIMER.exe, Match Active Primer for the primer at 50 of
+// search/TRUN.GB, target 600, "Complement strand (Y/N)" answered N:
+// rows 552 to 609, and the report printed to disk
+// (tests/legacy/match_variations/TRUN_50_600_top_strand.PRN, recorded
+// 2026-10-20)
+TEST_CASE("Match Active Primer with primers B on the top strand", "[gui][match][legacy]") {
+    auto window = MainWindow{};
+    REQUIRE_FALSE(window.load_molecule(legacy_file(u"search/TRUN.GB")).has_value());
+    from_molecule(window, u"50"_s, false);
+    child<QAction>(window, u"match_active_primer").trigger();
+    auto& complement = child<QCheckBox>(window, u"match_complement_box");
+    CHECK(complement.isChecked());  // the form's default
+    complement.setChecked(false);
+    auto& target = child<QLineEdit>(window, u"match_target_field");
+    QTest::keyClicks(&target, u"600"_s);
+    QTest::keyClick(&target, Qt::Key_Return);
+    auto const rows = table_rows(window, u"match_table");
+    REQUIRE_FALSE(rows.isEmpty());
+    CHECK(rows.front().front() == u"552"_s);
+    CHECK(rows.back().front() == u"609"_s);
+}

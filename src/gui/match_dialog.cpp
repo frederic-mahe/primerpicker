@@ -1,5 +1,7 @@
 #include "gui/match_dialog.hpp"
 
+#include "core/sequence/strand.hpp"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>
@@ -31,6 +33,7 @@ auto number(QLineEdit const& field) -> std::optional<std::size_t> {
 MatchDialog::MatchDialog(QWidget& parent)
     : QDialog{&parent},
       digits_{QRegularExpression{u"[0-9]{1,18}"_s}},
+      complement_{u"Primer B on the &complement strand"_s},
       buttons_{QDialogButtonBox::Ok | QDialogButtonBox::Cancel} {
     setObjectName(u"match_dialog"_s);
     setWindowTitle(u"Match Active Primer"_s);
@@ -38,13 +41,16 @@ MatchDialog::MatchDialog(QWidget& parent)
     start_offset_.setObjectName(u"match_start_field"_s);
     end_offset_.setObjectName(u"match_end_field"_s);
     message_.setObjectName(u"match_message_label"_s);
+    complement_.setObjectName(u"match_complement_box"_s);
+    complement_.setChecked(true);
     for (auto* const field : std::array{&target_, &start_offset_, &end_offset_}) {
         field->setValidator(&digits_);
         QObject::connect(field, &QLineEdit::textChanged, &message_, &QLabel::clear);
     }
-    form_.addRow(u"Primer B (complement strand), &target bp position:"_s, &target_);
+    form_.addRow(u"Primer B, &target bp position:"_s, &target_);
     form_.addRow(u"    &Start: Target -"_s, &start_offset_);
     form_.addRow(u"    &End: Target +"_s, &end_offset_);
+    form_.addRow(&complement_);
     layout_.addLayout(&form_);
     layout_.addWidget(&message_);
     layout_.addWidget(&buttons_);
@@ -69,7 +75,10 @@ auto MatchDialog::request() const -> std::optional<MatchRequest> {
     if (not target or not start_offset or not end_offset or *target == 0) {
         return std::nullopt;
     }
-    return MatchRequest{.target = *target, .start_offset = *start_offset, .end_offset = *end_offset};
+    return MatchRequest{.target = *target,
+                        .start_offset = *start_offset,
+                        .end_offset = *end_offset,
+                        .strand = complement_.isChecked() ? sequence::Strand::complement : sequence::Strand::top};
 }
 
 void MatchDialog::refuse(QString const& message) {

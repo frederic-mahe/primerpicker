@@ -21,6 +21,9 @@ add_test(NAME cli_multi
 add_test(NAME cli_options
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_options.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/tests/legacy)
+add_test(NAME cli_match_top_strand
+  COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_match_top_strand.sh $<TARGET_FILE:primerpicker>
+          ${PROJECT_SOURCE_DIR}/tests/legacy)
 add_test(NAME cli_explain
   COMMAND ${BASH_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test_explain.sh $<TARGET_FILE:primerpicker>
           ${PROJECT_SOURCE_DIR}/data/glossary/glossary.md)
