@@ -165,9 +165,6 @@ void MainWindow::add_legacy_menus() {
     add_disabled_items(modify, {u"&Criteria"_s, u"M&utagenize"_s});
     modify.addSeparator();
     add_disabled_items(modify, {u"&System Defaults"_s});
-    // not in PRIMER.exe: the window's colours (proposal §3.2)
-    modify.addSeparator();
-    add_colour_scheme_menu(modify);
 
     auto& analyze = *menu_bar.addMenu(u"&Analyze"_s);
     auto const& active_primer = add_item(analyze, {.text = u"&Active Primer", .name = u"analyze_active_primer"});
@@ -179,12 +176,17 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&find_enzymes, &QAction::triggered, this, &MainWindow::open_find_enzymes);
     add_disabled_items(molecule_ops, {u"&View/Edit"_s, u"&Save/Remove"_s});
 
+    // not in PRIMER.exe: the window's own settings, such as its colours
+    // (proposal §3.2)
+    auto& view = *menu_bar.addMenu(u"&View"_s);
+    add_colour_scheme_menu(view);
+
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
 }
 
 void MainWindow::add_colour_scheme_menu(QMenu& parent) {
-    auto& menu = *parent.addMenu(u"Colour Sc&heme"_s);
+    auto& menu = *parent.addMenu(u"&Colour Scheme"_s);
     struct SchemeItem {
         QStringView text;
         ColourScheme scheme = ColourScheme::system;
