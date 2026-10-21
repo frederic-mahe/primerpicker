@@ -354,6 +354,8 @@ auto MainWindow::load_settings(QString const& path) -> std::optional<QString> {
     }
     defaults_ = *parsed.defaults;
     settings_name_ = QFileInfo{path}.fileName();
+    settings_path_ = path;
+    saved_defaults_ = defaults_;
     settings_label_.setText(u"Settings: %1"_s.arg(settings_name_));
     return std::nullopt;
 }
@@ -425,7 +427,50 @@ void MainWindow::save_settings_file() {
     auto file = QFile{path};
     if (not file.open(QIODevice::WriteOnly) or file.write(contents) != contents.size()) {
         QMessageBox::warning(this, u"Save Settings File"_s, u"cannot write the settings to %1"_s.arg(path));
+        return;
     }
+    saved_defaults_ = defaults_dialog_.defaults();
+}
+
+auto MainWindow::settings_changed() const -> bool {
+    // the two settings as their files: what quitting would save
+    return io::write_pd2_cfg(defaults_) != io::write_pd2_cfg(saved_defaults_);
+}
+
+auto MainWindow::settings_save_path() const -> QString {
+    auto const file_name = u"PD2.CFG"_s;  // the only name PRIMER.exe loads
+    if (settings_path_.isEmpty()) {
+        return QDir::current().filePath(file_name);
+    }
+    return QFileInfo{settings_path_}.absoluteDir().filePath(file_name);
+}
+
+void MainWindow::closeEvent(QCloseEvent* const event) {
+    if (not settings_changed()) {
+        QMainWindow::closeEvent(event);
+        return;
+    }
+    auto const answer = QMessageBox::question(
+        this, u"Quit"_s, u"System Defaults Changed But Not Saved!\nSave current defaults?"_s,
+        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
+    if (answer == QMessageBox::No) {
+        QMainWindow::closeEvent(event);
+        return;
+    }
+    if (answer == QMessageBox::Yes) {
+        auto const path = QFileDialog::getSaveFileName(this, u"Save Settings File"_s, settings_save_path(),
+                                                       u"Settings files (*.cfg *.CFG);;All files (*)"_s);
+        if (not path.isEmpty()) {
+            if (auto const error = save_settings_to(path); error.has_value()) {
+                QMessageBox::warning(this, u"Save Settings File"_s, *error);
+            } else {
+                saved_defaults_ = defaults_;
+                QMainWindow::closeEvent(event);
+                return;
+            }
+        }
+    }
+    event->ignore();  // Cancel, or no file saved: the window stays
 }
 
 auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {

@@ -31,6 +31,7 @@
 #include "gui/text_table_model.hpp"
 
 #include <QActionGroup>
+#include <QCloseEvent>
 #include <QDockWidget>
 #include <QFutureWatcher>
 #include <QLabel>
@@ -117,6 +118,15 @@ public:
     // the error, if it was not written
     [[nodiscard]] auto save_settings_to(QString const& path) const -> std::optional<QString>;
 
+    // Whether the System Defaults differ from those loaded or saved last
+    // (the built-in ones at first): quitting then asks whether to save
+    // them, as PRIMER.exe
+    [[nodiscard]] auto settings_changed() const -> bool;
+
+    // Where quitting offers to save changed System Defaults: PD2.CFG, in
+    // the folder of the settings file loaded last, if any
+    [[nodiscard]] auto settings_save_path() const -> QString;
+
     // Retrieves a primer saved by Primer Designer (.PD2 file) as the
     // active primer, and shows its analysis; the error, if it was not
     // loaded (the active primer is then kept)
@@ -183,6 +193,11 @@ public:
     // alias; the first entry if there is none); whether NAME was found
     auto show_glossary(QString const& name) -> bool;
 
+protected:
+    // PRIMER.exe's "System Defaults Changed But Not Saved! SAVE CURRENT
+    // DEFAULTS (Y/N) ?": Yes opens a save dialog, No quits, Cancel stays
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -233,6 +248,8 @@ private:
     std::optional<std::reference_wrapper<QSettings>> settings_;
     io::LegacySystemDefaults defaults_;
     QString settings_name_;  // the settings file's name; empty: built-in
+    QString settings_path_;  // the settings file loaded last; empty: none
+    io::LegacySystemDefaults saved_defaults_;  // the System Defaults loaded or saved last
     std::optional<ActivePrimer> active_primer_;
     std::optional<ActivePrimer> mutagenize_source_;  // the primer the Mutagenize screen was opened on
     std::optional<LoadedMolecule> molecule_;
