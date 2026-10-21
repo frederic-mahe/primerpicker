@@ -46,7 +46,7 @@ TEST_CASE("the menu bar mirrors Primer Designer's main menu, with a View menu", 
 TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
     auto const window = MainWindow{};
     CHECK(texts(menu_titled(window, u"&Primer/Create"_s).actions()) ==
-          QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Match &Active Primer"_s, u"Find &Pair..."_s,
+          QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Match &Active Primer..."_s, u"Find &Pair..."_s,
                       u"&Save Active Primer"_s, u"Save to &List"_s, u"&Retrieve from disk..."_s});
     // the section title "Active Primer:" is a separator with a text
     CHECK(texts(menu_titled(window, u"&Modify"_s).actions()) ==
@@ -75,7 +75,8 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
             }
         }
     }
-    CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Find &Pair..."_s,
+    CHECK(enabled == QList<QString>{u"From &Molecule..."_s, u"&Direct Entry..."_s, u"Match &Active Primer..."_s,
+                                    u"Find &Pair..."_s,
                                     u"Save to &List"_s, u"&Retrieve from disk..."_s,
                                     u"5'-&extension..."_s, u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s,
                                     u"Find &Enzymes..."_s, u"Primer &List"_s, u"&Colour Scheme"_s});

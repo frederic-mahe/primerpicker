@@ -14,6 +14,8 @@
 #include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/match_dialog.hpp"
+#include "gui/match_view.hpp"
 #include "gui/multi_primer_dialog.hpp"
 #include "gui/multi_primer_view.hpp"
 #include "gui/pair_dialog.hpp"
@@ -114,6 +116,13 @@ public:
     // (their 5' extensions aside); the error, if there was no analysis
     [[nodiscard]] auto analyze_multi(MultiSelection const& selection) -> std::optional<QString>;
 
+    // Primer/Create -> Match Active Primer: the primers B (complement
+    // strand) that match the active primer, made from the loaded
+    // molecule on its top strand (5' extension aside), with the
+    // settings' criteria, length and tolerances; the error, if there was
+    // no search
+    [[nodiscard]] auto match_active_primer(MatchRequest const& request) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -135,6 +144,8 @@ private:
     void use_primer_pair();
     void open_multi_primer();
     void use_multi_primer();
+    void open_match();
+    void use_match();
     [[nodiscard]] auto list_texts() const -> QList<QString>;
     void show_homology(analysis::HomologyKind kind);
     auto ask_for_molecule() -> bool;
@@ -157,6 +168,7 @@ private:
     HomologyView homology_;
     PairView pair_;
     MultiPrimerView multi_;
+    MatchView match_;
     // the Primer List panel: the dock before the view it holds
     QDockWidget list_dock_;
     TextTableModel list_model_;
@@ -171,6 +183,7 @@ private:
     FindPairDialog find_pair_;
     PairDialog pair_dialog_;
     MultiPrimerDialog multi_dialog_;
+    MatchDialog match_dialog_;
 };
 
 }  // namespace primerpicker::gui

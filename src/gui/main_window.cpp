@@ -6,6 +6,7 @@
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/search/legacy_find_pair.hpp"
+#include "core/search/legacy_match.hpp"
 #include "core/io/pd2.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/report/legacy_report.hpp"
@@ -17,6 +18,7 @@
 #include "gui/find_enzymes_dialog.hpp"
 #include "gui/find_pair_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/match_dialog.hpp"
 #include "gui/multi_primer_dialog.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
@@ -123,7 +125,8 @@ MainWindow::MainWindow()
       find_enzymes_{*this},
       find_pair_{*this},
       pair_dialog_{*this},
-      multi_dialog_{*this} {
+      multi_dialog_{*this},
+      match_dialog_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     // the dock's title first: it names the dock's View menu item
     list_dock_.setWindowTitle(u"Primer List"_s);
@@ -138,6 +141,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&homology_);
     pages_.addWidget(&pair_);
     pages_.addWidget(&multi_);
+    pages_.addWidget(&match_);
     list_view_.setObjectName(u"primer_list"_s);
     list_view_.setModel(&list_model_);
     list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -152,6 +156,7 @@ MainWindow::MainWindow()
                      [this](QModelIndex const& index) { show_listed_primer(index.row()); });
     QObject::connect(&pair_dialog_, &QDialog::accepted, this, &MainWindow::use_primer_pair);
     QObject::connect(&multi_dialog_, &QDialog::accepted, this, &MainWindow::use_multi_primer);
+    QObject::connect(&match_dialog_, &MatchDialog::search_entered, this, &MainWindow::use_match);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -187,7 +192,8 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&from_molecule, &QAction::triggered, this, &MainWindow::create_from_molecule);
     auto const& direct_entry = add_item(primer_create, {.text = u"&Direct Entry...", .name = u"direct_entry"});
     QObject::connect(&direct_entry, &QAction::triggered, &direct_entry_, [this] { direct_entry_.start(); });
-    add_disabled_items(primer_create, {u"Match &Active Primer"_s});
+    auto const& match = add_item(primer_create, {.text = u"Match &Active Primer...", .name = u"match_active_primer"});
+    QObject::connect(&match, &QAction::triggered, this, &MainWindow::open_match);
     auto const& find_pair_item = add_item(primer_create, {.text = u"Find &Pair...", .name = u"find_pair"});
     QObject::connect(&find_pair_item, &QAction::triggered, this, &MainWindow::open_find_pair);
     add_disabled_items(primer_create, {u"&Save Active Primer"_s});
@@ -520,6 +526,58 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
     multi_.show_primers(fields, criteria);
     pages_.setCurrentWidget(&multi_);
     return std::nullopt;
+}
+
+auto MainWindow::match_active_primer(MatchRequest const& request) -> std::optional<QString> {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value() or not molecule_.has_value()) {
+        return u"Please create a primer from a molecule"_s;
+    }
+    auto const& location = *active_primer_->location;
+    if (location.strand != sequence::Strand::top) {
+        // primers B on the top strand: recorded (match_variations/), not
+        // reproduced yet
+        return u"Match Active Primer needs a primer A on the top strand"_s;
+    }
+    auto const primer_a = std::span{active_primer_->sequence}.subspan(active_primer_->extension_length);
+    auto const settings = search::MatchSettings{.target = request.target,
+                                                .start_offset = request.start_offset,
+                                                .end_offset = request.end_offset,
+                                                .length = defaults_.primer_length,
+                                                .gc_tolerance_percent = defaults_.gc_tolerance_percent,
+                                                .tm_tolerance_celsius = defaults_.tm_tolerance_celsius};
+    auto const list = search::legacy_match_active_primer({.molecule = molecule_->sequence, .primer_a = primer_a},
+                                                         settings, active_primer_->criteria);
+    match_.show_list(u"Primer A: 5'-%1-3', position %2 of %3; primers B (complement strand) from %4 - %5 to %4 + %6"_s
+                         .arg(letters(primer_a))
+                         .arg(location.position)
+                         .arg(molecule_->name)
+                         .arg(request.target)
+                         .arg(request.start_offset)
+                         .arg(request.end_offset),
+                     list);
+    pages_.setCurrentWidget(&match_);
+    return std::nullopt;
+}
+
+void MainWindow::open_match() {
+    if (not active_primer_.has_value() or not active_primer_->location.has_value()) {
+        QMessageBox::information(this, u"Match Active Primer"_s, u"Please create a primer from a molecule"_s);
+        return;
+    }
+    match_dialog_.start(defaults_.match_start_offset, defaults_.match_end_offset);
+}
+
+void MainWindow::use_match() {
+    auto const request = match_dialog_.request();
+    if (not request.has_value()) {
+        match_dialog_.refuse(u"Invalid Position"_s);
+        return;
+    }
+    if (auto const error = match_active_primer(*request); error.has_value()) {
+        match_dialog_.refuse(*error);
+        return;
+    }
+    match_dialog_.accept();
 }
 
 void MainWindow::open_multi_primer() {
