@@ -555,8 +555,10 @@ auto MainWindow::start_find_pair(FindPairRequest const& request) -> std::optiona
     return std::nullopt;
 }
 
+// until its result is shown: the thread may end before the window's
+// event loop delivers the watcher's finished()
 auto MainWindow::find_pair_running() const -> bool {
-    return find_pair_watcher_.isRunning();
+    return find_pair_watcher_.isRunning() or pending_find_pair_.has_value();
 }
 
 // PRIMER.exe's "Press key to interrupt search"
