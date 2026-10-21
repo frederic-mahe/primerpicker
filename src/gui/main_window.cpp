@@ -221,6 +221,11 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&primer_pair, &QAction::triggered, this, &MainWindow::open_primer_pair);
     auto const& multi_primer = add_item(analyze, {.text = u"&Multi Primer...", .name = u"analyze_multi_primer"});
     QObject::connect(&multi_primer, &QAction::triggered, this, &MainWindow::open_multi_primer);
+    // PRIMER.exe's P on each screen
+    analyze.addSeparator();
+    auto& print = add_item(analyze, {.text = u"Print to &Disk...", .name = u"print_report"});
+    print.setShortcut(QKeySequence{Qt::CTRL | Qt::Key_P});
+    QObject::connect(&print, &QAction::triggered, this, &MainWindow::print_report);
 
     auto& molecule_ops = *menu_bar.addMenu(u"M&olecule-Ops"_s);
     auto const& find_enzymes = add_item(molecule_ops, {.text = u"Find &Enzymes...", .name = u"find_enzymes"});
@@ -347,6 +352,7 @@ auto MainWindow::find_enzyme(QString const& name, enzymes::Mismatches const mism
     }
     auto const sites = enzymes::find_sites(molecule_->sequence, *pattern, mismatches, molecule_->topology);
     sites_.show_sites({.enzyme = resolved->enzyme, .mismatches = mismatches, .molecule = molecule_->sequence}, sites);
+    report_.reset();  // not recorded
     pages_.setCurrentWidget(&sites_);
     return std::nullopt;
 }
@@ -370,6 +376,24 @@ auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QStr
     }
     auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria, defaults_.weights);
     pairs_.show_pairs(result, defaults_.weights);
+    report_.reset();  // PRIMER.exe prints nothing without a pair
+    if (not result.pairs.empty()) {
+        // PRIMER.exe's "Print best: [N]": the best 20 at most
+        auto ranked = search::legacy_rank_pairs(result.pairs, defaults_.weights);
+        if (ranked.size() > report::legacy_report_best_pairs) {
+            constexpr auto best = static_cast<std::ptrdiff_t>(report::legacy_report_best_pairs);
+            ranked.erase(std::next(ranked.begin(), best), ranked.end());
+        }
+        report_ = ScreenReport{
+            .file_name = u"FINDPAIR.PRN"_s,
+            .text = [name = molecule_->name.toStdString(), size = molecule_->sequence.size(), settings,
+                     ranked = std::move(ranked),
+                     criteria = defaults_.criteria](std::chrono::year_month_day const& date) {
+                return report::legacy_find_pair_report(
+                    {.molecule_name = name, .molecule_size = size, .settings = settings, .best_pairs = ranked},
+                    criteria, date);
+            }};
+    }
     pages_.setCurrentWidget(&pairs_);
     return std::nullopt;
 }
@@ -483,9 +507,16 @@ auto MainWindow::analyze_pair(PairSelection const& selection) -> std::optional<Q
     auto const& second = primer_list_.at(selection.second);
     // the active primer's criteria, as the analysis screens
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
-    pair_.show_pair({.first = std::span{first.sequence}.subspan(first.extension_length),
-                     .second = std::span{second.sequence}.subspan(second.extension_length)},
-                    criteria);
+    auto const primer_a = std::span{first.sequence}.subspan(first.extension_length);
+    auto const primer_b = std::span{second.sequence}.subspan(second.extension_length);
+    pair_.show_pair({.first = primer_a, .second = primer_b}, criteria);
+    report_ = ScreenReport{.file_name = u"PAIR.PRN"_s,
+                           .text = [primer_a = std::vector(primer_a.begin(), primer_a.end()),
+                                    primer_b = std::vector(primer_b.begin(), primer_b.end()),
+                                    criteria](std::chrono::year_month_day const& date) {
+                               return report::legacy_pair_report({.first = primer_a, .second = primer_b}, criteria,
+                                                                 date);
+                           }};
     pages_.setCurrentWidget(&pair_);
     return std::nullopt;
 }
@@ -531,6 +562,21 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
     }
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
     multi_.show_primers(fields, criteria);
+    // copies of the primers: the list may change before printing
+    auto copies = std::array<std::optional<std::vector<sequence::Nucleotide>>, analysis::legacy_multi_primer_fields>{};
+    std::ranges::transform(fields, copies.begin(), [](auto const& field) {
+        return field.has_value() ? std::optional{std::vector(field->begin(), field->end())} : std::nullopt;
+    });
+    report_ = ScreenReport{.file_name = u"MULTI.PRN"_s,
+                           .text = [copies = std::move(copies), criteria](std::chrono::year_month_day const& date) {
+                               auto views = analysis::MultiPrimerFields{};
+                               std::ranges::transform(copies, views.begin(), [](auto const& copy) {
+                                   return copy.has_value()
+                                              ? std::optional{std::span<sequence::Nucleotide const>{*copy}}
+                                              : std::nullopt;
+                               });
+                               return report::legacy_multi_primer_report(views, criteria, date);
+                           }};
     pages_.setCurrentWidget(&multi_);
     return std::nullopt;
 }
@@ -566,6 +612,23 @@ auto MainWindow::match_active_primer(MatchRequest const& request) -> std::option
                          .arg(request.start_offset)
                          .arg(request.end_offset),
                      list);
+    report_.reset();  // PRIMER.exe prints nothing without a primer B
+    if (not list.empty()) {
+        report_ = ScreenReport{
+            .file_name = u"MATCH.PRN"_s,
+            .text = [name = molecule_->name.toStdString(), size = molecule_->sequence.size(),
+                     primer = std::vector(primer_a.begin(), primer_a.end()), position = location.position, settings,
+                     criteria = active_primer_->criteria, list](std::chrono::year_month_day const& date) {
+                return report::legacy_match_report({.molecule_name = name,
+                                                    .molecule_size = size,
+                                                    .primer_a = primer,
+                                                    .primer_a_position = position,
+                                                    .settings = settings,
+                                                    .criteria = criteria,
+                                                    .list = list},
+                                                   date);
+            }};
+    }
     pages_.setCurrentWidget(&match_);
     return std::nullopt;
 }
@@ -624,6 +687,25 @@ auto MainWindow::homology(analysis::HomologyKind const kind) -> std::optional<QS
     auto const sites =
         analysis::legacy_homology_sites(primer, molecule_->sequence, *active_primer_->location, kind, settings);
     homology_.show_sites({.kind = kind, .primer = primer, .molecule_name = molecule_->name}, sites);
+    // PRIMER.exe prints nothing without a site; the report of a
+    // complement-strand primer is recorded, not reproduced yet
+    report_.reset();
+    if (not sites.empty() and active_primer_->location->strand == sequence::Strand::top) {
+        report_ = ScreenReport{
+            .file_name = kind == analysis::HomologyKind::uniqueness ? u"UNIQUE.PRN"_s : u"FALSEPRI.PRN"_s,
+            .text = [name = molecule_->name.toStdString(), molecule = molecule_->sequence,
+                     primer = std::vector(primer.begin(), primer.end()), position = active_primer_->location->position,
+                     kind, tm_filter = settings.tm_filter, sites](std::chrono::year_month_day const& date) {
+                return report::legacy_homology_report({.molecule_name = name,
+                                                       .molecule_size = molecule.size(),
+                                                       .primer = primer,
+                                                       .position = position,
+                                                       .kind = kind,
+                                                       .tm_filter = tm_filter,
+                                                       .sites = sites},
+                                                      date);
+            }};
+    }
     pages_.setCurrentWidget(&homology_);
     return std::nullopt;
 }
@@ -707,16 +789,14 @@ void MainWindow::retrieve_primer() {
 }
 
 auto MainWindow::print_report_to(QString const& path) -> std::optional<QString> {
-    if (not active_primer_.has_value()) {
-        return u"Please create or retrieve a primer"_s;
+    if (not report_.has_value()) {
+        return u"Nothing to print on this screen"_s;
     }
     auto const today = QDate::currentDate();
     auto const date = std::chrono::year_month_day{std::chrono::year{today.year()},
                                                   std::chrono::month{static_cast<unsigned>(today.month())},
                                                   std::chrono::day{static_cast<unsigned>(today.day())}};
-    auto const report = report::legacy_inspect_report(
-        {.sequence = active_primer_->sequence, .extension_length = active_primer_->extension_length},
-        active_primer_->criteria, date);
+    auto const report = report_->text(date);
     auto file = QFile{path};
     if (not file.open(QIODevice::WriteOnly) or
         file.write(report.data(), static_cast<qint64>(report.size())) != static_cast<qint64>(report.size())) {
@@ -728,7 +808,11 @@ auto MainWindow::print_report_to(QString const& path) -> std::optional<QString> 
 // Print Control -> Print to Disk: PRIMER.exe writes its report to a
 // text file
 void MainWindow::print_report() {
-    auto const path = QFileDialog::getSaveFileName(this, u"Print to Disk"_s, u"INSPECT.PRN"_s,
+    if (not report_.has_value()) {
+        QMessageBox::information(this, u"Print to Disk"_s, u"Nothing to print on this screen"_s);
+        return;
+    }
+    auto const path = QFileDialog::getSaveFileName(this, u"Print to Disk"_s, report_->file_name,
                                                    u"Reports (*.prn *.PRN *.txt);;All files (*)"_s);
     if (path.isEmpty()) {
         return;
@@ -740,11 +824,18 @@ void MainWindow::print_report() {
 
 void MainWindow::analyze_active_primer() {
     if (not active_primer_.has_value()) {
+        report_.reset();
         pages_.setCurrentWidget(&no_primer_);
         return;
     }
     analysis_.show_primer({.sequence = active_primer_->sequence, .extension_length = active_primer_->extension_length},
                           active_primer_->criteria);
+    report_ = ScreenReport{.file_name = u"INSPECT.PRN"_s,
+                           .text = [primer = *active_primer_](std::chrono::year_month_day const& date) {
+                               return report::legacy_inspect_report(
+                                   {.sequence = primer.sequence, .extension_length = primer.extension_length},
+                                   primer.criteria, date);
+                           }};
     pages_.setCurrentWidget(&analysis_);
 }
 

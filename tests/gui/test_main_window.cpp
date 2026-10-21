@@ -54,7 +54,8 @@ TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
           QList<QString>{u"---"_s, u"&Position"_s, u"&Length"_s, u"5'-&extension..."_s, u"&Criteria"_s,
                       u"M&utagenize"_s, u"---"_s, u"&System Defaults"_s});
     CHECK(texts(menu_titled(window, u"&Analyze"_s).actions()) ==
-          QList<QString>{u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s});
+          QList<QString>{u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s, u"---"_s,
+                         u"Print to &Disk..."_s});
     CHECK(texts(menu_titled(window, u"M&olecule-Ops"_s).actions()) ==
           QList<QString>{u"Find &Enzymes..."_s, u"&View/Edit"_s, u"&Save/Remove"_s});
     // not in PRIMER.exe: the window's own settings
@@ -80,6 +81,7 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
                                     u"Find &Pair..."_s,
                                     u"Save to &List"_s, u"&Retrieve from disk..."_s,
                                     u"5'-&extension..."_s, u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s,
+                                    u"Print to &Disk..."_s,
                                     u"Find &Enzymes..."_s, u"Primer &List"_s, u"&Colour Scheme"_s,
                                     u"&Glossary"_s});
 }

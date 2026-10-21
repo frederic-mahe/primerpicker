@@ -38,7 +38,9 @@
 #include <QString>
 
 #include <cstddef>
+#include <chrono>
 #include <functional>
+#include <string>
 #include <optional>
 #include <vector>
 
@@ -91,8 +93,11 @@ public:
     // loaded (the active primer is then kept)
     [[nodiscard]] auto load_primer(QString const& path) -> std::optional<QString>;
 
-    // Writes PRIMER.exe's One Primer report of the active primer (Print
-    // to Disk), dated today; the error, if it was not written
+    // Print to Disk: writes PRIMER.exe's report of the current screen
+    // (One Primer, Primer Pair, Multiple Primers, Find Pair, Uniqueness,
+    // False Priming, Match Active Primer), dated today; the error, if it
+    // was not written (a screen without report, or nothing to print, as
+    // PRIMER.exe for an empty list)
     [[nodiscard]] auto print_report_to(QString const& path) -> std::optional<QString>;
 
     // Molecule-Ops -> Find Enzymes on the loaded molecule: shows the true
@@ -162,6 +167,13 @@ private:
     io::LegacySystemDefaults defaults_;
     std::optional<ActivePrimer> active_primer_;
     std::optional<LoadedMolecule> molecule_;
+    // the report of the current screen: its usual file name, and its text
+    // for a date
+    struct ScreenReport {
+        QString file_name;
+        std::function<std::string(std::chrono::year_month_day const&)> text;
+    };
+    std::optional<ScreenReport> report_;
     std::vector<ActivePrimer> primer_list_;  // the Primer List, in saving order
     // members are destroyed in reverse order: the pages before the
     // stack that holds them
