@@ -1,5 +1,6 @@
 # libFuzzer dictionary for the command line (fuzz_cli)
 "analyze"
+"explain"
 "pair"
 "multi"
 "-"

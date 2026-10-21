@@ -11,6 +11,8 @@
 #include "core/enzymes/enzyme.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
+#include "core/glossary/glossary.hpp"
+#include "core/glossary/glossary_table.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/io/pd2_cfg.hpp"
 #include "core/report/legacy_report.hpp"
@@ -69,6 +71,7 @@ constexpr auto usage = std::string_view{
     "       primerpicker homology [--false-priming] [--report FILE] MOLECULE POSITION\n"
     "       primerpicker match [--report FILE] MOLECULE POSITION TARGET\n"
     "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair|homology|match ...\n"
+    "       primerpicker explain [TERM]\n"
     "       primerpicker --help | --version\n"
     "\n"
     "Primers are written 5' to 3' with A, C, G and T, and analysed with the\n"
@@ -106,7 +109,10 @@ constexpr auto usage = std::string_view{
     "match    the Find Matching Primer list (Match Active Primer) of the primer\n"
     "         at POSITION (top strand): primers B on the complement strand from\n"
     "         TARGET - 50 to TARGET + 50 (the settings' search range) that match\n"
-    "         it; --report also writes the report PRIMER.exe prints to disk\n"};
+    "         it; --report also writes the report PRIMER.exe prints to disk\n"
+    "explain  the built-in definitions: without TERM, the list of terms; with\n"
+    "         TERM (a name of the list, or another accepted name such as Ta),\n"
+    "         its definition, method and references\n"};
 
 // Primer Designer's Direct Entry field holds 50 bases
 constexpr auto max_primer_length = std::size_t{50};
@@ -1125,6 +1131,27 @@ auto run_command(std::string_view const command, std::span<char const* const> co
     return EXIT_FAILURE;
 }
 
+// explain [TERM]: the list of the built-in definitions, or one of them
+auto explain(std::span<char const* const> const arguments) -> int {
+    if (arguments.empty()) {
+        for (auto const& entry : primerpicker::glossary::glossary_table) {
+            std::cout << std::format("{:<24}{}\n", entry.key, entry.title);
+        }
+        return EXIT_SUCCESS;
+    }
+    if (arguments.size() != 1) {
+        std::cerr << usage;
+        return EXIT_FAILURE;
+    }
+    auto const term = std::string_view{arguments[0]};
+    auto const entry = primerpicker::glossary::find_entry(term);
+    if (not entry.has_value()) {
+        return fail(std::format("explain: no definition of '{}' (primerpicker explain lists the terms)", term));
+    }
+    std::cout << entry->title << "\n\n" << entry->text;
+    return EXIT_SUCCESS;
+}
+
 auto dispatch(std::span<char const* const> const arguments) -> int {
     if (arguments.size() < 2) {
         std::cerr << usage;
@@ -1138,6 +1165,9 @@ auto dispatch(std::span<char const* const> const arguments) -> int {
     if (first == "--version") {
         std::cout << program_name << ' ' << PRIMERPICKER_VERSION << '\n';
         return EXIT_SUCCESS;
+    }
+    if (first == "explain") {
+        return explain(arguments.subspan(2));
     }
     // program name, [--config FILE,] command, then the command's arguments
     constexpr auto config_option = std::string_view{"--config"};
