@@ -4,13 +4,13 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <charconv>
-#include <cstddef>
 #include <filesystem>
 #include <fstream>
 #include <iterator>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <system_error>
 #include <vector>
 
 namespace {
@@ -64,9 +64,10 @@ TEST_CASE("Legacy primer Tm: the primers that pin the constant b", "[thermo][leg
     REQUIRE(recorded.size() >= 14);
     for (auto const& [primer, tm_celsius] : recorded) {
         INFO(primer);
-        auto const sequence = primerpicker::sequence::to_nucleotides(primer);
-        REQUIRE(sequence.has_value());
-        auto const shown = primerpicker::thermo::legacy_displayed_tm(primerpicker::thermo::legacy_primer_tm(*sequence));
+        auto const converted = primerpicker::sequence::to_nucleotides(primer);
+        REQUIRE(converted.has_value());
+        auto const sequence = converted.value_or(std::vector<primerpicker::sequence::Nucleotide>{});
+        auto const shown = primerpicker::thermo::legacy_displayed_tm(primerpicker::thermo::legacy_primer_tm(sequence));
         CHECK(shown == tm_celsius);
     }
 }
