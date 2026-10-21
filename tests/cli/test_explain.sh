@@ -51,7 +51,8 @@ DESCRIPTION="explain accepts aliases, in any case"
 
 DESCRIPTION="explain TERM prints the text of glossary.md as is"
 EXPECTED=$(awk '/^## Hairpin$/ {found = 1; next} /^## / {found = 0} found' "${GLOSSARY}" | sed -e '/./,$!d')
-ACTUAL=$("${PRIMERPICKER}" explain hairpin | tail -n +3)
+## (Windows: the program writes CR LF line ends to the console)
+ACTUAL=$("${PRIMERPICKER}" explain hairpin | tail -n +3 | tr -d '\r')
 [[ "${ACTUAL}" == "$(printf '%s' "${EXPECTED}")" ]] && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
