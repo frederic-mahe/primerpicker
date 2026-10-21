@@ -28,7 +28,7 @@ workers=${3:-$(($(nproc) - 1))}
 check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
 
 # harness:weight (share of the workers)
-harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1 fuzz_homology_report:2"
+harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1 fuzz_homology_report:2 fuzz_picking:2"
 total_weight=0
 for entry in $harnesses; do
     total_weight=$((total_weight + ${entry#*:}))
@@ -113,6 +113,19 @@ settings = bytes([150, 0, 100, 144, 1, 100, 12, 5, 10, 1, 1, 1, 1, 1])
 open(sys.argv[2], 'wb').write(settings + bytes('ACGT'.index(base) for base in sequence))
 EOP
             ;;
+        fuzz_picking)
+            # top strand, 20 bases at 51, the keys right, Find next
+            # forward and backward, +, -, then TEST600.GB, one byte per
+            # base
+            python3 -I - "$root/tests/legacy/pairs/TEST600.GB" "$corpus/test600" <<'EOP'
+import re, sys
+text = open(sys.argv[1]).read()
+sequence = ''.join(re.findall('[acgt]+', text.split('ORIGIN')[1])).upper()
+keys = bytes([0, 6, 7, 4, 5])
+header = bytes([0, 19, 50, 0, len(keys)])
+open(sys.argv[2], 'wb').write(header + keys + bytes('ACGT'.index(base) for base in sequence))
+EOP
+            ;;
         *) find "$root/tests/legacy" \( -iname '*.gb' -o -iname '*.fa' -o -iname '*.seq' -o -iname '*.emb' \) \
                -exec cp {} "$corpus/" \; ;;
     esac
@@ -124,6 +137,7 @@ options() {
         fuzz_genbank | fuzz_fasta | fuzz_molecule_file) printf '%s' "-dict=$root/tests/fuzz/genbank.dict" ;;
         fuzz_cli) printf '%s' "-dict=$root/tests/fuzz/cli.dict" ;;
         fuzz_find_pair) printf '%s' "-max_len=1214" ;;  # 14 bytes of settings, 1200 bases
+        fuzz_picking) printf '%s' "-max_len=2045" ;;  # 5 header bytes, 40 keys, 2000 bases
         fuzz_multi_primer) printf '%s' "-max_len=249" ;;  # 1 + 4 x (1 + 60)
         fuzz_pd2_cfg) printf '%s' "-max_len=128" ;;  # the files have 55 bytes
         *) printf '%s' "-max_len=65536" ;;
