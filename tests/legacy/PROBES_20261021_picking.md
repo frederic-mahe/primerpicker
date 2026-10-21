@@ -138,3 +138,29 @@ Not recorded: a Direct Entry run lost keys ("Not a valid base"). The
 executable holds "Directly entered primers cannot be moved" next to
 "Mutated primers cannot be moved" (recorded, "Mutated primers"); the GUI
 uses these two messages.
+
+
+## Modify -> Length
+
+Recordings: `modify_length/` (`README.txt`). Modify -> Length opens the
+CHANGE PRIMER LENGTH form ("Primer length (incl 5' ext): 20", "Type
+over number; Enter To Complete", Esc cancels). With the primer at 51
+of TEST600 saved as entry 1 of the Primer List (active):
+- 25, Enter: entry 1 becomes `51  25  CTCAAAGGCTCAGACATCAGGGCTC`, in
+  place (no new entry); the 5' end stays, the 3' end moves;
+- 1: entry 1 becomes `51  1  C`;
+- 0: a box "Primer must have length!" (as - on the picking screen);
+- 575, 30 bases: a box "Primer Too Long - Extends outside molecule";
+  the entry keeps 20 bases;
+- 400(C), 25: `400(C)  25  TGTATCCAGGTAATGCAAGGATACC`: on the
+  complement strand too, the 5' end (400) stays.
+The field takes 2 digits (99 at most; see `picking/len_99`). Not
+probed: a primer with a 5' extension (the label says the length
+includes it), a Direct Entry or mutated primer.
+
+**Draft for tests/legacy/README.md:** Modify -> Length sets the active
+primer's length (1 to 99 bases, the 5' end kept, on both strands), as +
+and - of the picking screen do one base at a time, with the same
+messages ("Primer must have length!", "Primer Too Long - Extends outside
+molecule"); the Primer List entry of the active primer is changed in
+place (`modify_length/`).
