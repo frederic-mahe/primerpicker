@@ -10,6 +10,8 @@ add_library(primerpicker_gui
   from_molecule_dialog.cpp
   homology_view.cpp
   main_window.cpp
+  multi_primer_dialog.cpp
+  multi_primer_view.cpp
   pair_dialog.cpp
   pair_view.cpp
   sequence_dialog.cpp

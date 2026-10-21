@@ -14,6 +14,8 @@
 #include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/multi_primer_dialog.hpp"
+#include "gui/multi_primer_view.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/pair_view.hpp"
 #include "gui/sequence_dialog.hpp"
@@ -23,6 +25,7 @@
 #include <QActionGroup>
 #include <QDockWidget>
 #include <QLabel>
+#include <QList>
 #include <QMainWindow>
 #include <QMenu>
 #include <QObject>
@@ -107,6 +110,10 @@ public:
     // extensions aside); the error, if there was no analysis
     [[nodiscard]] auto analyze_pair(PairSelection const& selection) -> std::optional<QString>;
 
+    // Analyze -> Multi Primer of two to four primers of the Primer List
+    // (their 5' extensions aside); the error, if there was no analysis
+    [[nodiscard]] auto analyze_multi(MultiSelection const& selection) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -126,6 +133,9 @@ private:
     void show_listed_primer(int row);
     void open_primer_pair();
     void use_primer_pair();
+    void open_multi_primer();
+    void use_multi_primer();
+    [[nodiscard]] auto list_texts() const -> QList<QString>;
     void show_homology(analysis::HomologyKind kind);
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
@@ -146,6 +156,7 @@ private:
     FindPairView pairs_;
     HomologyView homology_;
     PairView pair_;
+    MultiPrimerView multi_;
     // the Primer List panel: the dock before the view it holds
     QDockWidget list_dock_;
     TextTableModel list_model_;
@@ -159,6 +170,7 @@ private:
     FindEnzymesDialog find_enzymes_;
     FindPairDialog find_pair_;
     PairDialog pair_dialog_;
+    MultiPrimerDialog multi_dialog_;
 };
 
 }  // namespace primerpicker::gui

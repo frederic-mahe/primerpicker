@@ -1,6 +1,7 @@
 #include "gui/main_window.hpp"
 
 #include "core/analysis/legacy_homology.hpp"
+#include "core/analysis/legacy_multi_primer.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/molecule_file.hpp"
@@ -16,6 +17,7 @@
 #include "gui/find_enzymes_dialog.hpp"
 #include "gui/find_pair_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/multi_primer_dialog.hpp"
 #include "gui/pair_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
 
@@ -120,7 +122,8 @@ MainWindow::MainWindow()
       from_molecule_{*this},
       find_enzymes_{*this},
       find_pair_{*this},
-      pair_dialog_{*this} {
+      pair_dialog_{*this},
+      multi_dialog_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     // the dock's title first: it names the dock's View menu item
     list_dock_.setWindowTitle(u"Primer List"_s);
@@ -134,6 +137,7 @@ MainWindow::MainWindow()
     pages_.addWidget(&pairs_);
     pages_.addWidget(&homology_);
     pages_.addWidget(&pair_);
+    pages_.addWidget(&multi_);
     list_view_.setObjectName(u"primer_list"_s);
     list_view_.setModel(&list_model_);
     list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -147,6 +151,7 @@ MainWindow::MainWindow()
     QObject::connect(&list_view_, &QAbstractItemView::activated, this,
                      [this](QModelIndex const& index) { show_listed_primer(index.row()); });
     QObject::connect(&pair_dialog_, &QDialog::accepted, this, &MainWindow::use_primer_pair);
+    QObject::connect(&multi_dialog_, &QDialog::accepted, this, &MainWindow::use_multi_primer);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -207,7 +212,8 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&active_primer, &QAction::triggered, this, &MainWindow::analyze_active_primer);
     auto const& primer_pair = add_item(analyze, {.text = u"Primer &Pair...", .name = u"analyze_primer_pair"});
     QObject::connect(&primer_pair, &QAction::triggered, this, &MainWindow::open_primer_pair);
-    add_disabled_items(analyze, {u"&Multi Primer"_s});
+    auto const& multi_primer = add_item(analyze, {.text = u"&Multi Primer...", .name = u"analyze_multi_primer"});
+    QObject::connect(&multi_primer, &QAction::triggered, this, &MainWindow::open_multi_primer);
 
     auto& molecule_ops = *menu_bar.addMenu(u"M&olecule-Ops"_s);
     auto const& find_enzymes = add_item(molecule_ops, {.text = u"Find &Enzymes...", .name = u"find_enzymes"});
@@ -477,13 +483,58 @@ void MainWindow::open_primer_pair() {
         QMessageBox::information(this, u"Primer Pair"_s, u"Please save two primers to the Primer List"_s);
         return;
     }
+    pair_dialog_.start(list_texts());
+}
+
+// "N: SEQUENCE", a text per primer of the list
+auto MainWindow::list_texts() const -> QList<QString> {
     auto texts = QList<QString>{};
-    for (auto index = std::size_t{0}; index < primer_list_.size(); ++index) {
-        texts.append(u"%1: %2"_s.arg(index + 1).arg(list_model_.data(list_model_.index(static_cast<int>(index), 1),
-                                                                     Qt::DisplayRole)
-                                                        .toString()));
+    for (auto index = 0; index < list_model_.rowCount({}); ++index) {
+        constexpr auto sequence_column = 1;
+        texts.append(u"%1: %2"_s.arg(index + 1).arg(
+            list_model_.data(list_model_.index(index, sequence_column), Qt::DisplayRole).toString()));
     }
-    pair_dialog_.start(texts);
+    return texts;
+}
+
+auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional<QString> {
+    auto fields = analysis::MultiPrimerFields{};
+    auto filled = std::size_t{0};
+    for (auto index = std::size_t{0}; index < selection.size(); ++index) {
+        auto const& choice = selection.at(index);
+        if (not choice.has_value()) {
+            continue;
+        }
+        if (*choice >= primer_list_.size()) {
+            return u"Please save the primers to the Primer List"_s;
+        }
+        auto const& primer = primer_list_.at(*choice);
+        fields.at(index) = std::span{primer.sequence}.subspan(primer.extension_length);
+        ++filled;
+    }
+    constexpr auto min_filled = std::size_t{2};
+    if (filled < min_filled) {
+        return u"Please choose at least two primers"_s;
+    }
+    auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
+    multi_.show_primers(fields, criteria);
+    pages_.setCurrentWidget(&multi_);
+    return std::nullopt;
+}
+
+void MainWindow::open_multi_primer() {
+    constexpr auto min_primers = std::size_t{1};  // one primer may fill two fields
+    if (primer_list_.size() < min_primers) {
+        QMessageBox::information(this, u"Multi Primer"_s, u"Please save primers to the Primer List"_s);
+        return;
+    }
+    multi_dialog_.start(list_texts());
+}
+
+void MainWindow::use_multi_primer() {
+    if (auto const error = analyze_multi(multi_dialog_.selection()); error.has_value()) {
+        QMessageBox::warning(this, u"Multi Primer"_s, *error);
+    }
 }
 
 void MainWindow::use_primer_pair() {
