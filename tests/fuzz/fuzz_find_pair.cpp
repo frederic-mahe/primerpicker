@@ -2,7 +2,9 @@
 // (core/search/legacy_find_pair.hpp, and through it the criteria,
 // dimer, hairpin and false-priming code). The first bytes give the
 // settings and weights, each further byte a base (byte % 4), up to
-// max_molecule_length bases.
+// max_molecule_length bases. Also: the form's checks of the targets,
+// the weights at the 1000-pair limit, and an interrupted search
+// (updated 2026-10-21).
 
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/report/legacy_report.hpp"
@@ -12,6 +14,7 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
@@ -77,9 +80,23 @@ extern "C" auto LLVMFuzzerTestOneInput(std::uint8_t const* const data, std::size
                                          .dimer_any = settings_input[12] % weight_range,
                                          .false_priming = settings_input[13] % weight_range};
 
-    auto const result = primerpicker::search::legacy_find_pair(molecule, settings, primerpicker::analysis::LegacyCriteria{});
     using primerpicker::fuzz::check;
+    // the form's checks: a refused target has PRIMER.exe's message
+    auto const refused = primerpicker::search::legacy_check_targets(settings, molecule.size());
+    check((refused == primerpicker::search::FindPairTargetError::none) ==
+          primerpicker::search::legacy_message(refused).empty());
+
+    // an interrupted search returns no pair
+    auto const interrupt = std::atomic<bool>{true};
+    auto const interrupted =
+        primerpicker::search::legacy_find_pair(molecule, settings, primerpicker::analysis::LegacyCriteria{}, weights, interrupt);
+    check(interrupted.limit == primerpicker::search::FindPairLimit::interrupted and interrupted.pairs.empty());
+
+    auto const result =
+        primerpicker::search::legacy_find_pair(molecule, settings, primerpicker::analysis::LegacyCriteria{}, weights);
+    check(result.limit != primerpicker::search::FindPairLimit::interrupted);
     check(result.pairs.size() <= result.possible_a * result.possible_b);
+    check(result.pairs.size() <= primerpicker::search::legacy_max_pairs);
     auto const first_a = settings.target_a > settings.start_offset_a ? settings.target_a - settings.start_offset_a : 1;
     for (auto const& pair : result.pairs) {
         check(pair.position_a >= first_a and pair.position_a <= settings.target_a);
