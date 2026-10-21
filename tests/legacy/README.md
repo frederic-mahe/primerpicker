@@ -262,10 +262,15 @@ Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
   G.T pair have their own values; the recordings determine only the
   sum of the two steps around each G.T pair, so the ten step values
   in `core/thermo/freier_1986.hpp` are one solution of that system;
-- stems are zipped inwards as long as the next inner pair is a
-  Watson-Crick pair and the loop keeps at least 3 bases; only these
-  maximal stems are scored (`ATAT...` repeats get a loop of 4, not
-  6);
+- stems are zipped inwards through Watson-Crick and G.T pairs, to the
+  innermost Watson-Crick pair that keeps a loop of at least 3 bases
+  (zipping stops at a mismatch); only these maximal stems are scored
+  (`ATAT...` repeats get a loop of 4, not 6; `hairpin_tandem_gt_2/`,
+  designs S5 and Z-a: a stem closed outside a G.T pair with a larger
+  loop is not scored when a Watson-Crick pair further in closes a loop
+  of 3; recorded 2026-10-21, `PROBES_20261021_hairpin.md`; the first
+  rule, zipping over Watson-Crick pairs only, fitted the earlier
+  recordings as well);
 - the most stable hairpin is shown; "No Hairpins Found" when none has
   a negative energy;
 - the energy is shown truncated toward zero to tenths: a loop of 23
@@ -277,6 +282,16 @@ Found", is reproduced by `tests/unit/test_legacy_hairpin.cpp`):
   (`find_pair_trun/`, `hairpin_tandem_gt/`, see "Find Pair: A:B
   adjacent bases" below); the step values are being probed
   (decided 2026-10-21: probe, then fix the model).
+  Updated again 2026-10-21 (`hairpin_tandem_gt_2/`, 117 recordings,
+  `PROBES_20261021_hairpin.md`; implemented): stems extend through
+  tandem G.T steps; 5'-TG-3'/3'-GT-5' has its own value (0.60 kcal with
+  the other G.T values of `freier_1986.hpp`), and 5'-GT-3'/3'-TG-5'
+  (0.50) and GG/TT (0.50) are confirmed; each tandem step was recorded
+  in the 16 Watson-Crick contexts, all consistent with
+  nearest-neighbour additivity; as for single G.T pairs, tandem G.T
+  pairs at the outer end of a stem or next to the loop are not part of
+  the stem. Every recorded hairpin (the 117 new ones, the 262 of
+  `inspect/` and the first evidence) is reproduced.
 
 `inspect/inspect_2.tsv` adds the primers of the first batch whose
 recording had failed, loop lengths 13 to 40 next to the same stem,
