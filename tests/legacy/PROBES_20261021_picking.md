@@ -103,9 +103,38 @@ uses them elsewhere); the "--" mark's glyphs (two cells decoded as
 
 ## Find Pair's "Press key to interrupt search"
 
-TEST600 with targets 300 and 310 and offsets 290 (built-in settings):
-the search ended (332 pairs, as primerpicker) before the key typed 12 s
-after the start, so this run says nothing about an interrupt; after the
-search the box reads "<Press key to display possible pairs>". A run on
-a 30,000-base molecule (to make the search slower) lost its keys while
-the molecule map was drawn; see the end of this file for the rerun.
+Recordings: `find_pair_interrupt/` (`README.txt`). Three runs typed a
+space a few seconds after the last Enter of the form
+(`tools/find_pair_limits.sh` with `EXTRA`):
+- TEST600, targets 300 and 310, offsets 290, built-in settings: the
+  search ended (21 and 34 possible primers, 332 pairs, as primerpicker)
+  within a few video frames, before the key; the box then reads
+  "<Press key to display possible pairs>", and the space showed the
+  list.
+- TEST600, targets 150 and 400, offsets 100, `config/PD2_CRITERIA.CFG`
+  (the search that reached "Pairs: 1000 possible" and still showed its
+  list, "Limits on primers and pairs"): the same, in about 12 frames.
+- A random 30,000-base molecule (to slow the search down): keys were
+  lost while its map was drawn, twice (not kept).
+With the "pairs capped" runs of 2026-10-19 (the program hangs at 1000
+pairs and ignores keys), no recorded search could be interrupted:
+PRIMER.exe's searches end at once or never. What it shows after an
+interrupt is still unknown, and the GUI keeps the behaviour decided on
+2026-10-21 ("Search interrupted", no list).
+
+
+## Mutagenize and the run at the 3' end
+
+`mutagenize_3prime_run/`: Mutagenize on TRUN.GB at 450 (ends with AAA,
+meets every Primer Analysis criterion): the ORIGINAL and MUTATED lines
+read `Runs: !`, as the picking screen. The six screens of
+`mutagenize/mutagenize.tsv` do not tell the two rules apart (no primer
+there ends with a run of 3). Predicted from the picking screen.
+
+
+## Modify -> Position on other primers
+
+Not recorded: a Direct Entry run lost keys ("Not a valid base"). The
+executable holds "Directly entered primers cannot be moved" next to
+"Mutated primers cannot be moved" (recorded, "Mutated primers"); the GUI
+uses these two messages.
