@@ -1,0 +1,78 @@
+==== f05219.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════╔══════════════╗════════════════════════
+                                        ║              ║
+                                        ║ Find Enzymes ║
+                                        ║ View/Edit    ║
+                                        ║ Save/Remove  ║
+?         ????????????????????????????????????????????????????????????         ?
+│         ║ │ TEST600        ░    and/or remove molecules from      ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ░    program list.                     ║          │
+│         ║ │                ▓                                      ║          │
+│         ║ │                ░             Move                   ║          │
+└─────────║ │                ░                                      ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░    [ S = Save ]    [ R = Remove ]    ║
+          ║ │                                                      ║
+          ║ │                │                                      ║
+          ║ └────────────────┘            To Cancel Press: [ ESC ]  ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+       Removing a molecule from the list unloads the molecule from program
+       memory (it does not delete a disk file).  If the molecule has just
+       been created, save to disk before removing the file.
+
+==== f05220.png
+                       * * *   SAVE/REMOVE MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │                                      ║          │
+│         ║ │ ───Loaded───       Save molecules to disk files      ║          │
+│         ║ │ TEST600        ░    and/or remove molecules from      ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ░    program list.                     ║          │
+│         ║ │                ▓                                      ║          │
+│         ║ │                ░             Move                   ║          │
+└─────────║ │                ░                                      ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░    [ S = Save ]    [ R = Remove ]    ║
+          ║ │                                                      ║
+          ║ │                │                                      ║
+          ║ └────────────────┘            To Cancel Press: [ ESC ]  ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+       Removing a molecule from the list unloads the molecule from program
+       memory (it does not delete a disk file).  If the molecule has just
+       been created, save to disk before removing the file.
+
+==== f05223.png
+                       * * *   SAVE/REMOVE MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │                                      ║          │
+│         ║ │ ───Loaded───       Save molecules to disk files      ║          │
+│         ║ │ TEST600        ░    and/or remove molecules from      ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ░    program list.                     ║          │
+│         ║ │                ▓                                      ║          │
+│         ║ │                ░             Move                   ║          │
+└─────────║ │                ░                                      ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░    [ S = Save ]    [ R = Remove ]    ║
+          ║ │                                                      ║
+          ║ │                │                                      ║
+          ║ └────────────────┘            To Cancel Press: [ ESC ]  ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+       Removing a molecule from the list unloads the molecule from program
+       memory (it does not delete a disk file).  If the molecule has just
+       been created, save to disk before removing the file.
+?

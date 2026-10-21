@@ -1,0 +1,630 @@
+==== f01525.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════╔══════════════╗════════════════════════
+                                        ║              ║
+                                        ║ Find Enzymes ║
+                                        ║ View/Edit    ║
+                                        ║ Save/Remove  ║
+                                        ║              ║
+                                        ╚══════════════╝
+
+
+
+
+
+
+
+        Please create or retrieve a primer:
+        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ??????????????????????????????????????????????????????????????
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01526.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01527.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f02265.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f02271.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f03253.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ ???????????? ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f03502.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         ????????? ???????                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f03503.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03511.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f05471.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+??????????????? ?orma?         ?earc?         ?r?n?          ?a?n ?enu         ?
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f05472.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f05479.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f07192.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────╔═══════════════════╗───────────────────────────────────────────┐
+│              ║                   ║                                           │
+│       1  GGTC║ Single Strand     ║CTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGA║ Double Strand     ║GCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCG║ Translate         ║GCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGT║ Block Size Toggle ║TTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTA║ AA code toggle    ║ACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATC║                   ║CTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTA╚═══════════════════╝TGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f07199.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────╔═══════════════════╗───────────────────────────────────────────┐
+│              ║                   ║                                           │
+│       1  GGTC║ Single Strand     ║CTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGA║ Double Strand     ║GCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCG║ Translate         ║GCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGT║ Block Size Toggle ║TTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTA║ AA code toggle    ║ACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATC║                   ║CTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTA╚═══════════════════╝TGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f08671.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for:                               :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f09901.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: T?                            :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f10150.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TT                            :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f10398.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TTA?                          :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f10648.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TTAA?                         :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f10896.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TTAAA                         :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f11145.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TTAAAT?                       :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f11393.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for: TTAAAT                        :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│ ─────────────??????????????????????????????????????????????????───┬          ?
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│ 
+                                                                
+           │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f11394.png
+ View               Print              Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                        * * *   FIND SEQUENCE   * * *                         │
+│ Search for: TTAAAT                                 Number of Sites =  2      │
+│ ──────────────────────────────────────────────────────────────────────────── │
+│         8 ,       589C                                                       
+│                                                                              ░
+│                                                                              ▓
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│ 
+                                                                
+           │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f11399.png
+ View               Print              Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│                        * * *   FIND SEQUENCE   * * *                         │
+│ Search for: TTAAAT                                 Number of Sites =  2      │
+│ ──────────────────────────────────────────────────────────────────────────── │
+│         8 ,       589C                                                       
+│                                                                              ░
+│                                                                              ▓
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│ 
+                                                                
+           │
+?──────────────────────────────────────────────────────────────────────────────┘

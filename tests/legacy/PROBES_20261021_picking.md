@@ -164,3 +164,45 @@ and - of the picking screen do one base at a time, with the same
 messages ("Primer must have length!", "Primer Too Long - Extends outside
 molecule"); the Primer List entry of the active primer is changed in
 place (`modify_length/`).
+
+
+## Molecule-Ops -> View/Edit
+
+Recordings: `view_edit/` (`README.txt`), on TEST600.GB.
+- View/Edit asks for a molecule (Load File), then a menu: Features,
+  Sequence, Annotations, Header, Change molecule, ESCape/abandon.
+- Every view has a header: `NAME:        TEST600               600
+  BPS DNA             UPDATED  10/21/<6`, then `DESCRIPTION:` (empty).
+  The year 2026 is written `<6`: the program prints the year minus 1900
+  as two digits, the first one past '9' ('0' + 12).
+- Sequence: menu bar Edit, Format, Search, Print, Main Menu; lines of 60
+  bases in blocks of 10 after the line's first position (right-aligned
+  in 8 columns from column 1, then two spaces); Edit opens EDIT SEQUENCE
+  (OVERWRITE; INS toggles insert/overwrite; Esc exits/saves). Format
+  lists Single Strand, Double Strand, Translate, Block Size Toggle, AA
+  code toggle; no choice could be made in the recordings (arrows and
+  initial letters were ignored).
+- Search -> FIND SEQUENCE: "Search for:" and the IUPAC codes (N any; M
+  A/C, R A/G, W A/T, S C/G, Y C/T, K G/T; B not A, D not C, H not G, V
+  not T); the result: `Number of Sites =  N` and the sites on **both
+  strands**, by position (the leftmost base, `C` after a complement
+  site: TTAAAT gives `8` and `589C`, its reverse complement ATTTAA being
+  at 589), each in a field of 10 columns, six a line, comma-separated
+  (AAAT: 10 sites on two lines); IUPAC letters match (CATNTA: 5 sites).
+  These are the sites of the restriction-site search (true sites),
+  without mismatches. Predicted for TTAAAT and CATNTA from that search.
+- Features: `-- no features --` (TEST600 has none); keys: Change, INS =
+  add feature, DEL = remove.
+- Annotations: the lines of the file before the sequence, ORIGIN
+  included (LOCUS, DEFINITION, FEATURES, ORIGIN).
+- Header: EDIT MOLECULE HEADER: `Name: TEST600`, `Size: 600     sequence
+  present`, `Description:` (empty: the DEFINITION line is not used).
+- Save/Remove with no molecule loaded: "Molecule List is Empty"; with
+  TEST600 loaded: SAVE/REMOVE MOLECULE, the list of loaded molecules,
+  "[ S = Save ]    [ R = Remove ]", and "Removing a molecule from the
+  list unloads the molecule from program memory (it does not delete a
+  disk file).  If the molecule has just been created, save to disk
+  before removing the file." What S writes was not recorded.
+
+**Draft for tests/legacy/README.md:** the paragraph above, as a section
+"Molecule-Ops -> View/Edit (recorded 2026-10-21)".

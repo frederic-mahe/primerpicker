@@ -1,0 +1,416 @@
+==== f01350.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════╔══════════════╗════════════════════════
+                                        ║              ║
+                                        ║ Find Enzymes ║
+                                        ║ View/Edit    ║
+                                        ║ Save/Remove  ║
+                                        ║              ║
+?         ????????????????????????????????????????????????????????????         ?
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01351.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f01359.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f01984.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+   ║ ????????????????      ? ?=?r?ve ?    ? ?=???espec ?    ? ??? ?        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01985.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01991.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f03046.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule:                                                            │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░           ???????????????                            ║
+   ║ │              ░            ??????????????                            ║
+?  ??????????????????????????????????????????????????????????????????????????  ?
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03047.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f03055.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04735.png
+                        * * *   VIEW/EDIT MOLECULE   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         Molecule: TEST600                                                    │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Features          │     View/Edit features table                │
+│            │ Sequence          │     View/Edit sequence                      │
+│            │ Annotations       │     View annotations (if any)               │
+│            │ Header            │     View/Edit header information            │
+│            │ Change molecule   │     Select another molecule                 │
+│            │ ESCape/abandon    │     Cancel view/edit operation              │
+│            └───────────────────┘                                             │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+?                                                                              ?
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f04736.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f04743.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f05791.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────╔═══════════════════╗───────────────────────────────────────────┐
+│              ║                   ║                                           │
+│       1  GGTC║ Single Strand     ║CTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGA║ Double Strand     ║GCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCG║ Translate         ║GCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGT║ Block Size Toggle ║TTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTA║ AA code toggle    ║ACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATC║                   ║CTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTA╚═══════════════════╝TGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f05799.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────╔═══════════════════╗───────────────────────────────────────────┐
+│              ║                   ║                                           │
+│       1  GGTC║ Single Strand     ║CTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGA║ Double Strand     ║GCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCG║ Translate         ║GCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGT║ Block Size Toggle ║TTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTA║ AA code toggle    ║ACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATC║                   ║CTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTA╚═══════════════════╝TGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f06004.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────╔═══════════════════╗───────────────────────────────────────────┐
+│              ??????????????????????                                          │
+│       1  GGTCATTTTA AATGGACAAC CATCTATTGA GAATACTCAT GTCAACCTGG CTCAAAGGCT   
+│      61  CAGACATCAG GGCTCAATGA CGTGCGGTTA GTTATCAACC TACATGGACT TTATTTATGC   ░
+│     121  GGCGAGGCAA TAAACAAACG TGCGCCCAGG TGTTGGGCCT GTCTGTAGGC CCAACAGACT   ░
+│     181  GCGTGCGTCA AATGCCTCCC GTTTTCATTT AGAGCGAACC GGTCCTTACA TTTATTTCCA   ░
+│     241  AGTAACGACC GTAACGATGA GCAACACTCG TCCTATACTA GACGATGGGA CGCCATCAGT   ░
+│     301  TATCGATATG AATAAAGTTT CAGCTCTACA AACTCTAATG CGTTTACCAC AGGACATGAT   ░
+│     361  GTTAGCGTGC GACCTGGTAT CCTTGCATTA CCTGGATACA CTGACACTTA CGCCAGATGA   ░
+│     421  CTTCCCGTAT GGAAACGCGA TGAGTAGTAA CCGCACTCCA AAGTGCATAC CGGACTGAAA   ▓
+│     481  AGTACCCATT ATGATTCTAT GTTCGTCGAC TCTCAGGTAT CGAAAACGTC TACTCCTGTC   ░
+│     541  CAGGGGGGAT AAGCAAATCC ATCTGTAAGT CACCAGTCAA GATTTCCGAT TTAAAGCGAC   ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
+==== f07059.png
+NAME:        TEST600               600 BPS DNA             UPDATED  10/21/<6
+DESCRIPTION:
+────────────────────────────────────────────────────────────────────────────────
+ Edit           Format         Search         Print          Main Menu
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│       1  GGTC╔═══════════════════════════════════════════════╗G CTCAAAGGCT   
+│      61  CAGA║                                               ║T TTATTTATGC   ░
+│     121  GGCG║         * * *   FIND SEQUENCE   * * *         ║C CCAACAGACT   ░
+│     181  GCGT║                                               ║A TTTATTTCCA   ░
+│     241  AGTA║ Search for:                               :   ║A CGCCATCAGT   ░
+│     301  TATC║                                               ║C AGGACATGAT   ░
+│     361  GTTA║                                               ║A CGCCAGATGA   ░
+│     421  CTTC║ IUPAC ambiguous codes:                        ║C CGGACTGAAA   ▓
+│     481  AGTA║                                               ║C TACTCCTGTC   ░
+│     541  CAGG║   N = any base                   B = not A    ║T TTAAAGCGAC   ░
+│              ║   M = A or C;     S = C or G;    D = not C    ║               ░
+│              ║   R = A or G;     Y = C or T;    H = not G    ║               ░
+│              ║   W = A or T;     K = G or T;    V = not T    ║               ░
+│              ║                                               ║               ░
+│              ╚═══════════════════════════════════════════════╝               ░
+│                                                                              
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+─┘ Select;  ,PGUP,PGDN = Scroll;  HOME = start; END = bottom;  ESC = Exit
