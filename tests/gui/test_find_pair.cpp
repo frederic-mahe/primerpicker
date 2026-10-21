@@ -1,3 +1,4 @@
+#include "gui/find_pair_dialog.hpp"
 #include "gui/main_window.hpp"
 #include "gui_test_helpers.hpp"
 
@@ -12,9 +13,12 @@
 #include <QString>
 #include <QStringView>
 #include <QTableView>
+#include <QProgressDialog>
 #include <QTest>
 
 #include <catch2/catch_test_macros.hpp>
+
+#include <memory>
 
 using namespace Qt::StringLiterals;
 
@@ -58,9 +62,20 @@ auto recorded_list() -> QList<QList<QString>> {
     return rows;
 }
 
+// the longest wait for a search of the tests
+constexpr auto search_timeout_ms = 60'000;
+
 auto label_text(MainWindow const& window, QStringView const name) -> QString {
     return child<QLabel>(window, name).text();
 }
+
+// waits for the search started by start_find_pair
+void wait_for_search(MainWindow const& window) {
+    REQUIRE(QTest::qWaitFor([&window] { return not window.find_pair_running(); }, search_timeout_ms));
+}
+
+constexpr auto test600_request = primerpicker::gui::FindPairRequest{
+    .target_a = 150, .start_offset_a = 100, .target_b = 400, .end_offset_b = 100};
 
 }  // namespace
 
@@ -118,6 +133,8 @@ TEST_CASE("Primer/Create -> Find Pair asks for the targets, with the settings' o
     QTest::keyClicks(&target_b, u"400"_s);
     QTest::keyClick(&target_b, Qt::Key_Return);
     CHECK_FALSE(child<QDialog>(window, u"find_pair_dialog").isVisible());
+    // the search runs in another thread (updated 2026-10-21)
+    wait_for_search(window);
     CHECK(table_rows(window).size() == 10);
 }
 
@@ -139,4 +156,47 @@ TEST_CASE("Find Pair refuses targets whose primers do not fit", "[gui][find pair
     QTest::keyClick(&target_b, Qt::Key_Return);
     CHECK(child<QDialog>(window, u"find_pair_dialog").isVisible());
     CHECK(child<QLabel>(window, u"find_pair_message_label").text() == u"Primer too long to fit within molecule."_s);
+}
+
+// Reference: as "Find Pair ranks the pairs as PRIMER.exe" (search/
+// find_pair.tsv), the search running in another thread
+TEST_CASE("Find Pair runs in another thread behind a progress dialog", "[gui][find pair][legacy]") {
+    auto window = MainWindow{};
+    REQUIRE_FALSE(window.load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
+    REQUIRE_FALSE(window.start_find_pair(test600_request).has_value());
+    CHECK(child<QProgressDialog>(window, u"find_pair_progress").isVisible());
+    wait_for_search(window);
+    CHECK_FALSE(child<QProgressDialog>(window, u"find_pair_progress").isVisible());
+    CHECK(table_rows(window) == recorded_list());
+}
+
+TEST_CASE("Find Pair: no molecule change and no second search during a search", "[gui][find pair]") {
+    auto window = MainWindow{};
+    REQUIRE_FALSE(window.load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
+    REQUIRE_FALSE(window.start_find_pair(test600_request).has_value());
+    // the molecule cannot change while the search reads it
+    CHECK(window.load_molecule(legacy_file(u"pairs/TGRAD.GB")).has_value());
+    CHECK(window.start_find_pair(test600_request).has_value());
+    wait_for_search(window);
+}
+
+// PRIMER.exe's "Press key to interrupt search" (from the strings of
+// examples/PRIMER.exe): the progress dialog's Cancel interrupts the search
+TEST_CASE("Find Pair: the Cancel button interrupts the search", "[gui][find pair]") {
+    auto window = MainWindow{};
+    REQUIRE_FALSE(window.load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
+    REQUIRE_FALSE(window.start_find_pair(test600_request).has_value());
+    child<QProgressDialog>(window, u"find_pair_progress").cancel();
+    wait_for_search(window);
+    // the search may have ended before Cancel: then the list is shown
+    auto const message = label_text(window, u"find_pair_message");
+    CHECK((message == u"Search interrupted"_s or table_rows(window) == recorded_list()));
+}
+
+TEST_CASE("Find Pair: a window closed during a search waits for it", "[gui][find pair]") {
+    auto window = std::make_unique<MainWindow>();
+    REQUIRE_FALSE(window->load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
+    REQUIRE_FALSE(window->start_find_pair(test600_request).has_value());
+    window.reset();  // no crash (ASan): the search is interrupted and awaited
+    SUCCEED();
 }

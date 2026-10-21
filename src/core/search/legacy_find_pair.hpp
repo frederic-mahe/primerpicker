@@ -8,6 +8,7 @@
 #include "core/sequence/strand.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
@@ -66,6 +67,9 @@ enum struct FindPairLimit : std::uint8_t {
     // (decided 2026-10-21; "More than 1000 possible pairs found!";
     // PRIMER.exe hangs instead)
     pairs_capped,
+    // the search was interrupted (PRIMER.exe: "Press key to interrupt
+    // search"): no pair is returned
+    interrupted,
 };
 
 struct FindPairResult {
@@ -135,13 +139,23 @@ constexpr auto difference(int const lhs, int const rhs) noexcept -> int {
     return lhs > rhs ? lhs - rhs : rhs - lhs;
 }
 
+// A search window: its first and last positions, and its strand
+struct Window {
+    std::size_t first;
+    std::size_t last;
+    sequence::Strand strand;
+};
+
 // The primers of a window that meet every criterion; the count stops at
-// legacy_max_possible_primers
-inline auto possible_primers(std::span<sequence::Nucleotide const> const molecule, std::size_t const first,
-                             std::size_t const last, sequence::Strand const strand, std::size_t const length,
-                             analysis::LegacyCriteria const& criteria) -> std::vector<Possible> {
+// legacy_max_possible_primers, and the search when INTERRUPT is true
+inline auto possible_primers(std::span<sequence::Nucleotide const> const molecule, Window const& window,
+                             std::size_t const length, analysis::LegacyCriteria const& criteria,
+                             std::atomic<bool> const& interrupt) -> std::vector<Possible> {
+    auto const& [first, last, strand] = window;
     auto possible = std::vector<Possible>{};
-    for (auto position = first; position <= last and possible.size() < legacy_max_possible_primers; ++position) {
+    for (auto position = first; position <= last and possible.size() < legacy_max_possible_primers and
+                                not interrupt.load(std::memory_order_relaxed);
+         ++position) {
         auto primer = sequence::primer_at(molecule, {.position = position, .length = length, .strand = strand});
         if (not primer.has_value()) {
             continue;
@@ -243,19 +257,34 @@ inline void remove_worst_pair(std::vector<PairCandidate>& pairs, FindPairWeights
 // the pair left out (the worst of legacy_max_pairs + 1). Not
 // constexpr: the false-priming search uses std::ranges::stable_sort;
 // not noexcept: vectors allocate.
+// INTERRUPT stops the search as soon as it is true (it is read between
+// primers; from another thread, for instance).
 [[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
                                            FindPairSettings const& settings, analysis::LegacyCriteria const& criteria,
-                                           FindPairWeights const& weights = {}) -> FindPairResult {
+                                           FindPairWeights const& weights, std::atomic<bool> const& interrupt)
+    -> FindPairResult {
+    auto const interrupted = [&interrupt] { return interrupt.load(std::memory_order_relaxed); };
+    auto const stopped = [] {
+        return FindPairResult{.possible_a = 0, .possible_b = 0, .pairs = {}, .limit = FindPairLimit::interrupted};
+    };
     auto const first_a = settings.target_a > settings.start_offset_a ? settings.target_a - settings.start_offset_a : 1;
     auto const last_a = sequence::window_end(settings.target_a, 0, molecule.size());
-    auto const primers_a =
-        detail::possible_primers(molecule, first_a, last_a, sequence::Strand::top, settings.length, criteria);
+    auto const primers_a = detail::possible_primers(
+        molecule, {.first = first_a, .last = last_a, .strand = sequence::Strand::top}, settings.length, criteria,
+        interrupt);
+    if (interrupted()) {
+        return stopped();
+    }
     if (primers_a.size() == legacy_max_possible_primers) {
         return {.possible_a = primers_a.size(), .possible_b = 0, .pairs = {}, .limit = FindPairLimit::too_many_primers};
     }
     auto const last_b = sequence::window_end(settings.target_b, settings.end_offset_b, molecule.size());
-    auto const primers_b = detail::possible_primers(molecule, settings.target_b, last_b,
-                                                    sequence::Strand::complement, settings.length, criteria);
+    auto const primers_b = detail::possible_primers(
+        molecule, {.first = settings.target_b, .last = last_b, .strand = sequence::Strand::complement},
+        settings.length, criteria, interrupt);
+    if (interrupted()) {
+        return stopped();
+    }
     if (primers_b.size() == legacy_max_possible_primers) {
         return {.possible_a = primers_a.size(),
                 .possible_b = primers_b.size(),
@@ -264,6 +293,9 @@ inline void remove_worst_pair(std::vector<PairCandidate>& pairs, FindPairWeights
     }
     auto result = FindPairResult{.possible_a = primers_a.size(), .possible_b = primers_b.size(), .pairs = {}};
     for (auto const& primer_a : primers_a) {
+        if (interrupted()) {
+            return stopped();
+        }
         for (auto const& primer_b : primers_b) {
             auto const pair = analysis::PrimerPair{.first = primer_a.sequence, .second = primer_b.sequence};
             auto const inter_3prime = analysis::dimer_at_3prime_end(pair);
@@ -296,6 +328,20 @@ inline void remove_worst_pair(std::vector<PairCandidate>& pairs, FindPairWeights
         }
     }
     return result;
+}
+
+namespace detail {
+
+// for searches that cannot be interrupted
+inline std::atomic<bool> const never_interrupted{false};
+
+}  // namespace detail
+
+// The same search, not interrupted
+[[nodiscard]] inline auto legacy_find_pair(std::span<sequence::Nucleotide const> const molecule,
+                                           FindPairSettings const& settings, analysis::LegacyCriteria const& criteria,
+                                           FindPairWeights const& weights = {}) -> FindPairResult {
+    return legacy_find_pair(molecule, settings, criteria, weights, detail::never_interrupted);
 }
 
 }  // namespace primerpicker::search

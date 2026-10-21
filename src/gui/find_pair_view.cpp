@@ -48,6 +48,12 @@ FindPairView::FindPairView()
 
 void FindPairView::show_pairs(search::FindPairResult const& result, search::FindPairWeights const& weights) {
     auto rows = QList<QList<QString>>{};
+    if (result.limit == search::FindPairLimit::interrupted) {
+        counts_.clear();
+        message_.setText(u"Search interrupted"_s);
+        model_.set_rows(std::move(rows));
+        return;
+    }
     if (result.limit == search::FindPairLimit::too_many_primers) {
         counts_.clear();
         message_.setText(QString::fromUtf16(too_many_primers_message));

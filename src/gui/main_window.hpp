@@ -4,6 +4,7 @@
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/pd2_cfg.hpp"
+#include "core/search/legacy_find_pair.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 #include "core/sequence/topology.hpp"
@@ -29,21 +30,25 @@
 
 #include <QActionGroup>
 #include <QDockWidget>
+#include <QFutureWatcher>
 #include <QLabel>
 #include <QList>
 #include <QMainWindow>
 #include <QMenu>
+#include <QProgressDialog>
 #include <QObject>
 #include <QSettings>
 #include <QStackedWidget>
 #include <QTableView>
 #include <QString>
 
+#include <atomic>
 #include <cstddef>
 #include <chrono>
 #include <functional>
 #include <string>
 #include <optional>
+#include <variant>
 #include <vector>
 
 namespace primerpicker::gui {
@@ -87,6 +92,12 @@ public:
     // without settings: preferences are not kept
     MainWindow();
     explicit MainWindow(QSettings& settings);
+    ~MainWindow() override;
+
+    MainWindow(MainWindow const&) = delete;
+    MainWindow(MainWindow&&) = delete;
+    auto operator=(MainWindow const&) -> MainWindow& = delete;
+    auto operator=(MainWindow&&) -> MainWindow& = delete;
 
     // Loads a molecule file (GenBank, FASTA or plain sequence) as the
     // molecule primers are made from; the error, if it was not loaded
@@ -125,6 +136,13 @@ public:
     // settings' criteria, primer length, tolerances and weights: shows
     // the ranked pairs; the error, if there was no search
     [[nodiscard]] auto find_pair(FindPairRequest const& request) -> std::optional<QString>;
+
+    // The same search in another thread, behind a progress dialog whose
+    // Cancel interrupts it (the form's OK does this); the error, if it
+    // did not start. The result is shown when the search ends.
+    [[nodiscard]] auto start_find_pair(FindPairRequest const& request) -> std::optional<QString>;
+    [[nodiscard]] auto find_pair_running() const -> bool;
+    void cancel_find_pair();
 
     // The Uniqueness or False Priming screen of the active primer, made
     // from the loaded molecule (its 5' extension aside), with the
@@ -169,6 +187,10 @@ private:
     void use_find_enzymes();
     void open_find_pair();
     void use_find_pair();
+    void find_pair_finished();
+    void show_find_pair(search::FindPairSettings const& settings, search::FindPairResult const& result);
+    [[nodiscard]] auto find_pair_settings(FindPairRequest const& request) const
+        -> std::variant<search::FindPairSettings, QString>;
     void print_report();
     void make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
                      std::optional<sequence::PrimerLocation> location = std::nullopt);
@@ -226,6 +248,11 @@ private:
     PairDialog pair_dialog_;
     MultiPrimerDialog multi_dialog_;
     MatchDialog match_dialog_;
+    // the Find Pair search in another thread
+    std::atomic<bool> find_pair_interrupt_{false};
+    std::optional<search::FindPairSettings> pending_find_pair_;
+    QFutureWatcher<search::FindPairResult> find_pair_watcher_;
+    QProgressDialog find_pair_progress_;
     GlossaryDialog glossary_;
     CriteriaDialog criteria_dialog_;
     SystemDefaultsDialog defaults_dialog_;

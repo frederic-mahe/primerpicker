@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QByteArray>
 #include <QDialog>
+#include <QFutureWatcherBase>
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
@@ -41,12 +42,14 @@
 #include <QList>
 #include <QMessageBox>
 #include <QModelIndex>
+#include <QProgressDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QObject>
 #include <QString>
 #include <QStatusBar>
 #include <QStringView>
+#include <QtConcurrentRun>
 
 #include <algorithm>
 #include <array>
@@ -59,6 +62,7 @@
 #include <span>
 #include <string_view>
 #include <utility>
+#include <variant>
 #include <vector>
 
 using namespace Qt::StringLiterals;
@@ -129,6 +133,7 @@ MainWindow::MainWindow()
       pair_dialog_{*this},
       multi_dialog_{*this},
       match_dialog_{*this},
+      find_pair_progress_{this},
       glossary_{*this},
       criteria_dialog_{*this},
       defaults_dialog_{*this} {
@@ -176,12 +181,28 @@ MainWindow::MainWindow()
     QObject::connect(&extension_, &QDialog::accepted, this, &MainWindow::use_extension);
     QObject::connect(&find_enzymes_, &FindEnzymesDialog::enzyme_entered, this, &MainWindow::use_find_enzymes);
     QObject::connect(&find_pair_, &FindPairDialog::search_entered, this, &MainWindow::use_find_pair);
+    find_pair_progress_.setObjectName(u"find_pair_progress"_s);
+    find_pair_progress_.setWindowTitle(u"Find Pair"_s);
+    find_pair_progress_.setLabelText(u"Searching for primer pairs..."_s);
+    find_pair_progress_.setRange(0, 0);  // busy: the search gives no progress
+    find_pair_progress_.setWindowModality(Qt::WindowModal);
+    find_pair_progress_.setAutoClose(false);
+    find_pair_progress_.setAutoReset(false);
+    find_pair_progress_.hide();
+    QObject::connect(&find_pair_progress_, &QProgressDialog::canceled, this, &MainWindow::cancel_find_pair);
+    QObject::connect(&find_pair_watcher_, &QFutureWatcherBase::finished, this, &MainWindow::find_pair_finished);
     QObject::connect(&analysis_, &AnalysisView::print_requested, this, &MainWindow::print_report);
     QObject::connect(&analysis_, &AnalysisView::uniqueness_requested, this,
                      [this] { show_homology(analysis::HomologyKind::uniqueness); });
     QObject::connect(&analysis_, &AnalysisView::false_priming_requested, this,
                      [this] { show_homology(analysis::HomologyKind::false_priming); });
     QObject::connect(&from_molecule_, &FromMoleculeDialog::position_entered, this, &MainWindow::use_from_molecule);
+}
+
+// a running search reads the molecule: it is stopped first
+MainWindow::~MainWindow() {
+    cancel_find_pair();
+    find_pair_watcher_.waitForFinished();
 }
 
 MainWindow::MainWindow(QSettings& settings) : MainWindow() {
@@ -385,6 +406,9 @@ void MainWindow::save_settings_file() {
 }
 
 auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
+    if (find_pair_running()) {
+        return u"A Find Pair search is running"_s;  // it reads the molecule
+    }
     auto file = QFile{path};
     if (not file.open(QIODevice::ReadOnly)) {
         return u"cannot read %1"_s.arg(path);
@@ -442,7 +466,10 @@ auto MainWindow::find_enzyme(QString const& name, enzymes::Mismatches const mism
     return std::nullopt;
 }
 
-auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QString> {
+// The settings of a Find Pair search on the loaded molecule, or the
+// message of PRIMER.exe's form for targets that do not fit
+auto MainWindow::find_pair_settings(FindPairRequest const& request) const
+    -> std::variant<search::FindPairSettings, QString> {
     if (not molecule_.has_value()) {
         return u"Please load a molecule"_s;
     }
@@ -459,10 +486,75 @@ auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QStr
         auto const message = search::legacy_message(refused);
         return QString::fromLatin1(message.data(), static_cast<qsizetype>(message.size()));
     }
-    auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria, defaults_.weights);
+    return settings;
+}
+
+auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Please load a molecule"_s;
+    }
+    if (find_pair_running()) {
+        return u"A Find Pair search is running"_s;
+    }
+    auto const settings = find_pair_settings(request);
+    if (auto const* const error = std::get_if<QString>(&settings)) {
+        return *error;
+    }
+    auto const& search_settings = std::get<search::FindPairSettings>(settings);
+    show_find_pair(search_settings, search::legacy_find_pair(molecule_->sequence, search_settings,
+                                                             defaults_.criteria, defaults_.weights));
+    return std::nullopt;
+}
+
+// The search runs in another thread; the molecule cannot change meanwhile
+// (load_molecule refuses), and the window waits for it when it closes
+auto MainWindow::start_find_pair(FindPairRequest const& request) -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Please load a molecule"_s;
+    }
+    if (find_pair_running()) {
+        return u"A Find Pair search is running"_s;
+    }
+    auto const settings = find_pair_settings(request);
+    if (auto const* const error = std::get_if<QString>(&settings)) {
+        return *error;
+    }
+    auto const& search_settings = std::get<search::FindPairSettings>(settings);
+    pending_find_pair_ = search_settings;
+    find_pair_interrupt_.store(false);
+    find_pair_progress_.reset();
+    find_pair_progress_.show();
+    find_pair_watcher_.setFuture(QtConcurrent::run(
+        [molecule = std::span<sequence::Nucleotide const>{molecule_->sequence}, search_settings,
+         criteria = defaults_.criteria, weights = defaults_.weights, &interrupt = find_pair_interrupt_] {
+            return search::legacy_find_pair(molecule, search_settings, criteria, weights, interrupt);
+        }));
+    return std::nullopt;
+}
+
+auto MainWindow::find_pair_running() const -> bool {
+    return find_pair_watcher_.isRunning();
+}
+
+// PRIMER.exe's "Press key to interrupt search"
+void MainWindow::cancel_find_pair() {
+    find_pair_interrupt_.store(true);
+}
+
+void MainWindow::find_pair_finished() {
+    find_pair_progress_.hide();
+    if (not pending_find_pair_.has_value()) {
+        return;
+    }
+    auto const settings = *pending_find_pair_;
+    pending_find_pair_.reset();
+    show_find_pair(settings, find_pair_watcher_.result());
+}
+
+void MainWindow::show_find_pair(search::FindPairSettings const& settings, search::FindPairResult const& result) {
     pairs_.show_pairs(result, defaults_.weights);
     report_.reset();  // PRIMER.exe prints nothing without a pair
-    if (not result.pairs.empty()) {
+    if (not result.pairs.empty() and molecule_.has_value()) {
         // PRIMER.exe's "Print best: [N]": the best 20 at most
         auto ranked = search::legacy_rank_pairs(result.pairs, defaults_.weights);
         if (ranked.size() > report::legacy_report_best_pairs) {
@@ -480,7 +572,6 @@ auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QStr
             }};
     }
     pages_.setCurrentWidget(&pairs_);
-    return std::nullopt;
 }
 
 void MainWindow::open_find_pair() {
@@ -496,7 +587,7 @@ void MainWindow::use_find_pair() {
         find_pair_.refuse(u"Invalid Position"_s);
         return;
     }
-    if (auto const error = find_pair(*request); error.has_value()) {
+    if (auto const error = start_find_pair(*request); error.has_value()) {
         find_pair_.refuse(*error);
         return;
     }

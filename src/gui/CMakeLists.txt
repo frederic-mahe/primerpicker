@@ -24,7 +24,7 @@ add_library(primerpicker_gui
   system_defaults_dialog.cpp
   text_table_model.cpp)
 set_target_properties(primerpicker_gui PROPERTIES AUTOMOC ON)
-target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets)
+target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets Qt6::Concurrent)
 target_compile_options(primerpicker_gui PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 # QString conversions and Qt's keyword macros are explicit; no API
 # deprecated in the minimum Qt version
