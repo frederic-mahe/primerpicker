@@ -34,12 +34,14 @@ WORKDIR=$(mktemp -d)
 trap 'rm -rf "${WORKDIR}"' EXIT
 REPORT="${WORKDIR}/REPORT"
 
-## the report without its first line (the date)
+## the report without its dates: every page header has one ("Report
+## Date: MM/DD/YY", on the first line and on the Primer Pair report's
+## page 2)
 body () {
-    tail -n +2 "${1}"
+    sed 's|Report Date: [0-9/]*|Report Date: DATE|' "${1}"
 }
 
-## whether two reports are the same but for their first line; bash
+## whether two reports are the same but for their dates; bash
 ## only (no cmp: MSYS2 does not install diffutils by default). The
 ## final x keeps trailing line ends in the comparison
 same_body () {
