@@ -5,6 +5,15 @@
 #include <QStringView>
 
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_tostring.hpp>
+
+#include <string>
+
+// QString in Catch2's messages
+template <>
+struct Catch::StringMaker<QString> {
+    static auto convert(QString const& text) -> std::string { return '"' + text.toStdString() + '"'; }
+};
 
 namespace primerpicker::gui::test {
 

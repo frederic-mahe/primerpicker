@@ -16,8 +16,10 @@
 #include "gui/find_enzymes_dialog.hpp"
 #include "gui/find_pair_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/pair_dialog.hpp"
 #include "gui/sequence_dialog.hpp"
 
+#include <QAbstractItemView>
 #include <QAction>
 #include <QAnyStringView>
 #include <QChar>
@@ -27,8 +29,12 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QHeaderView>
 #include <QIODevice>
+#include <QKeySequence>
+#include <QList>
 #include <QMessageBox>
+#include <QModelIndex>
 #include <QMenu>
 #include <QMenuBar>
 #include <QObject>
@@ -85,6 +91,14 @@ void add_disabled_items(QMenu& menu, std::initializer_list<QString> const texts)
 
 constexpr auto colour_scheme_key = QAnyStringView{u"appearance/colour_scheme"};
 
+auto letters(std::span<sequence::Nucleotide const> const nucleotides) -> QString {
+    auto text = QString{};
+    for (auto const nucleotide : nucleotides) {
+        text.append(QChar::fromLatin1(sequence::to_letter(nucleotide)));
+    }
+    return text;
+}
+
 auto topology_name(sequence::Topology const topology) -> QString {
     switch (topology) {
         case sequence::Topology::linear:
@@ -99,13 +113,17 @@ auto topology_name(sequence::Topology const topology) -> QString {
 }  // namespace
 
 MainWindow::MainWindow()
-    : colour_schemes_{this},
+    : list_model_{{u"#"_s, u"Sequence"_s, u"Length"_s, u"Origin"_s}},
+      colour_schemes_{this},
       direct_entry_{*this, direct_entry_kind},
       extension_{*this, extension_kind},
       from_molecule_{*this},
       find_enzymes_{*this},
-      find_pair_{*this} {
+      find_pair_{*this},
+      pair_dialog_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
+    // the dock's title first: it names the dock's View menu item
+    list_dock_.setWindowTitle(u"Primer List"_s);
     add_legacy_menus();
     no_primer_.setObjectName(u"no_primer_label"_s);
     no_primer_.setText(QString::fromUtf16(no_primer_message));
@@ -115,6 +133,20 @@ MainWindow::MainWindow()
     pages_.addWidget(&sites_);
     pages_.addWidget(&pairs_);
     pages_.addWidget(&homology_);
+    pages_.addWidget(&pair_);
+    list_view_.setObjectName(u"primer_list"_s);
+    list_view_.setModel(&list_model_);
+    list_view_.setEditTriggers(QAbstractItemView::NoEditTriggers);
+    list_view_.setSelectionBehavior(QAbstractItemView::SelectRows);
+    list_view_.setSelectionMode(QAbstractItemView::SingleSelection);
+    list_view_.verticalHeader()->hide();
+    list_view_.horizontalHeader()->setStretchLastSection(true);
+    list_dock_.setObjectName(u"primer_list_dock"_s);
+    list_dock_.setWidget(&list_view_);
+    addDockWidget(Qt::LeftDockWidgetArea, &list_dock_);
+    QObject::connect(&list_view_, &QAbstractItemView::activated, this,
+                     [this](QModelIndex const& index) { show_listed_primer(index.row()); });
+    QObject::connect(&pair_dialog_, &QDialog::accepted, this, &MainWindow::use_primer_pair);
     setCentralWidget(&pages_);
     molecule_label_.setObjectName(u"molecule_label"_s);
     statusBar()->addWidget(&molecule_label_);
@@ -154,6 +186,10 @@ void MainWindow::add_legacy_menus() {
     auto const& find_pair_item = add_item(primer_create, {.text = u"Find &Pair...", .name = u"find_pair"});
     QObject::connect(&find_pair_item, &QAction::triggered, this, &MainWindow::open_find_pair);
     add_disabled_items(primer_create, {u"&Save Active Primer"_s});
+    // not in PRIMER.exe as a menu item: its S (Save+Exit) key
+    auto& save_to_list_item = add_item(primer_create, {.text = u"Save to &List", .name = u"save_to_list"});
+    save_to_list_item.setShortcut(QKeySequence{Qt::CTRL | Qt::Key_L});
+    QObject::connect(&save_to_list_item, &QAction::triggered, this, &MainWindow::save_to_list);
     auto const& retrieve = add_item(primer_create, {.text = u"&Retrieve from disk...", .name = u"retrieve_primer"});
     QObject::connect(&retrieve, &QAction::triggered, this, &MainWindow::retrieve_primer);
 
@@ -169,7 +205,9 @@ void MainWindow::add_legacy_menus() {
     auto& analyze = *menu_bar.addMenu(u"&Analyze"_s);
     auto const& active_primer = add_item(analyze, {.text = u"&Active Primer", .name = u"analyze_active_primer"});
     QObject::connect(&active_primer, &QAction::triggered, this, &MainWindow::analyze_active_primer);
-    add_disabled_items(analyze, {u"Primer &Pair"_s, u"&Multi Primer"_s});
+    auto const& primer_pair = add_item(analyze, {.text = u"Primer &Pair...", .name = u"analyze_primer_pair"});
+    QObject::connect(&primer_pair, &QAction::triggered, this, &MainWindow::open_primer_pair);
+    add_disabled_items(analyze, {u"&Multi Primer"_s});
 
     auto& molecule_ops = *menu_bar.addMenu(u"M&olecule-Ops"_s);
     auto const& find_enzymes = add_item(molecule_ops, {.text = u"Find &Enzymes...", .name = u"find_enzymes"});
@@ -179,6 +217,10 @@ void MainWindow::add_legacy_menus() {
     // not in PRIMER.exe: the window's own settings, such as its colours
     // (proposal §3.2)
     auto& view = *menu_bar.addMenu(u"&View"_s);
+    auto& list_toggle = *list_dock_.toggleViewAction();
+    list_toggle.setText(u"Primer &List"_s);
+    list_toggle.setObjectName(u"view_primer_list"_s);
+    view.addAction(&list_toggle);
     add_colour_scheme_menu(view);
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
@@ -370,17 +412,84 @@ void MainWindow::use_from_molecule() {
         return;
     }
     from_molecule_.accept();
-    make_active(std::move(*primer), sequence::PrimerLocation{.position = *position,
+    auto const complement = from_molecule_.strand() == sequence::Strand::complement;
+    auto origin = u"%1 at %2%3"_s.arg(molecule_->name).arg(*position).arg(complement ? u" (complement)"_s : QString{});
+    make_active(std::move(*primer), std::move(origin), sequence::PrimerLocation{.position = *position,
                                                              .length = defaults_.primer_length,
                                                              .strand = from_molecule_.strand()});
 }
 
 // a new primer without extension, with the System Defaults' criteria
-void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence,
+void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
                              std::optional<sequence::PrimerLocation> const location) {
-    active_primer_ = ActivePrimer{
-        .sequence = std::move(sequence), .extension_length = 0, .criteria = defaults_.criteria, .location = location};
+    active_primer_ = ActivePrimer{.sequence = std::move(sequence),
+                                  .extension_length = 0,
+                                  .criteria = defaults_.criteria,
+                                  .location = location,
+                                  .origin = std::move(origin)};
     analyze_active_primer();
+}
+
+// PRIMER.exe's S (Save+Exit): the active primer joins the Primer List
+void MainWindow::save_to_list() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    primer_list_.push_back(*active_primer_);
+    auto rows = QList<QList<QString>>{};
+    for (auto const& primer : primer_list_) {
+        auto const sequence = std::span{primer.sequence};
+        auto const extension = letters(sequence.first(primer.extension_length));
+        auto const bases = letters(sequence.subspan(primer.extension_length));
+        rows.append({QString::number(rows.size() + 1), extension.isEmpty() ? bases : extension + u'-' + bases,
+                     QString::number(primer.sequence.size()), primer.origin});
+    }
+    list_model_.set_rows(std::move(rows));
+}
+
+void MainWindow::show_listed_primer(int const row) {
+    if (row < 0 or std::cmp_greater_equal(row, primer_list_.size())) {
+        return;
+    }
+    active_primer_ = primer_list_.at(static_cast<std::size_t>(row));
+    analyze_active_primer();
+}
+
+auto MainWindow::analyze_pair(PairSelection const& selection) -> std::optional<QString> {
+    if (selection.first >= primer_list_.size() or selection.second >= primer_list_.size()) {
+        return u"Please save two primers to the Primer List"_s;
+    }
+    auto const& first = primer_list_.at(selection.first);
+    auto const& second = primer_list_.at(selection.second);
+    // the active primer's criteria, as the analysis screens
+    auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
+    pair_.show_pair({.first = std::span{first.sequence}.subspan(first.extension_length),
+                     .second = std::span{second.sequence}.subspan(second.extension_length)},
+                    criteria);
+    pages_.setCurrentWidget(&pair_);
+    return std::nullopt;
+}
+
+void MainWindow::open_primer_pair() {
+    constexpr auto pair_size = std::size_t{2};
+    if (primer_list_.size() < pair_size) {
+        QMessageBox::information(this, u"Primer Pair"_s, u"Please save two primers to the Primer List"_s);
+        return;
+    }
+    auto texts = QList<QString>{};
+    for (auto index = std::size_t{0}; index < primer_list_.size(); ++index) {
+        texts.append(u"%1: %2"_s.arg(index + 1).arg(list_model_.data(list_model_.index(static_cast<int>(index), 1),
+                                                                     Qt::DisplayRole)
+                                                        .toString()));
+    }
+    pair_dialog_.start(texts);
+}
+
+void MainWindow::use_primer_pair() {
+    if (auto const error = analyze_pair(pair_dialog_.selection()); error.has_value()) {
+        QMessageBox::warning(this, u"Primer Pair"_s, *error);
+    }
 }
 
 auto MainWindow::homology(analysis::HomologyKind const kind) -> std::optional<QString> {
@@ -406,7 +515,7 @@ void MainWindow::show_homology(analysis::HomologyKind const kind) {
 }
 
 void MainWindow::use_direct_entry() {
-    make_active(direct_entry_.sequence());
+    make_active(direct_entry_.sequence(), u"Direct Entry"_s);
 }
 
 void MainWindow::modify_extension() {
@@ -460,7 +569,8 @@ auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
     active_primer_ = ActivePrimer{.sequence = std::move(sequence),
                                   .extension_length = extension->size(),
                                   .criteria = parsed.primer->criteria,
-                                  .location = std::nullopt};
+                                  .location = std::nullopt,
+                                  .origin = QFileInfo{path}.fileName()};
     analyze_active_primer();
     return std::nullopt;
 }

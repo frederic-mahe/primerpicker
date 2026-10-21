@@ -14,16 +14,21 @@
 #include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
 #include "gui/homology_view.hpp"
+#include "gui/pair_dialog.hpp"
+#include "gui/pair_view.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
+#include "gui/text_table_model.hpp"
 
 #include <QActionGroup>
+#include <QDockWidget>
 #include <QLabel>
 #include <QMainWindow>
 #include <QMenu>
 #include <QObject>
 #include <QSettings>
 #include <QStackedWidget>
+#include <QTableView>
 #include <QString>
 
 #include <cstddef>
@@ -44,6 +49,7 @@ struct ActivePrimer {
     std::size_t extension_length = 0;
     analysis::LegacyCriteria criteria;
     std::optional<sequence::PrimerLocation> location;
+    QString origin;  // shown in the Primer List: Direct Entry, a molecule and position, a file
 };
 
 // A molecule (template) loaded from a file
@@ -97,6 +103,10 @@ public:
     // settings' homology options; the error, if there was no search
     [[nodiscard]] auto homology(analysis::HomologyKind kind) -> std::optional<QString>;
 
+    // Analyze -> Primer Pair of two primers of the Primer List (their 5'
+    // extensions aside); the error, if there was no analysis
+    [[nodiscard]] auto analyze_pair(PairSelection const& selection) -> std::optional<QString>;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -110,8 +120,12 @@ private:
     void open_find_pair();
     void use_find_pair();
     void print_report();
-    void make_active(std::vector<sequence::Nucleotide> sequence,
+    void make_active(std::vector<sequence::Nucleotide> sequence, QString origin,
                      std::optional<sequence::PrimerLocation> location = std::nullopt);
+    void save_to_list();
+    void show_listed_primer(int row);
+    void open_primer_pair();
+    void use_primer_pair();
     void show_homology(analysis::HomologyKind kind);
     auto ask_for_molecule() -> bool;
     void create_from_molecule();
@@ -122,6 +136,7 @@ private:
     io::LegacySystemDefaults defaults_;
     std::optional<ActivePrimer> active_primer_;
     std::optional<LoadedMolecule> molecule_;
+    std::vector<ActivePrimer> primer_list_;  // the Primer List, in saving order
     // members are destroyed in reverse order: the pages before the
     // stack that holds them
     QStackedWidget pages_;
@@ -130,6 +145,11 @@ private:
     SitesView sites_;
     FindPairView pairs_;
     HomologyView homology_;
+    PairView pair_;
+    // the Primer List panel: the dock before the view it holds
+    QDockWidget list_dock_;
+    TextTableModel list_model_;
+    QTableView list_view_;
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;
@@ -138,6 +158,7 @@ private:
     FromMoleculeDialog from_molecule_;
     FindEnzymesDialog find_enzymes_;
     FindPairDialog find_pair_;
+    PairDialog pair_dialog_;
 };
 
 }  // namespace primerpicker::gui
