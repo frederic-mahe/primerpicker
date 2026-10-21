@@ -70,7 +70,8 @@ add_executable(unit_tests
   test_site_match.cpp
   test_legacy_find_pair_adjacent.cpp
   test_legacy_find_pair_targets.cpp
-  test_legacy_find_pair_cap.cpp)
+  test_legacy_find_pair_cap.cpp
+  test_glossary.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
@@ -81,3 +82,13 @@ target_compile_definitions(unit_tests PRIVATE
 # a cross-compiled build succeeds even where the emulator (Wine)
 # cannot run
 catch_discover_tests(unit_tests DISCOVERY_MODE PRE_TEST)
+
+# The glossary table is the one data/glossary/glossary.md gives (where
+# Python is installed)
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_FOUND AND NOT CMAKE_CROSSCOMPILING)
+  add_test(NAME glossary_table_up_to_date
+    COMMAND ${Python3_EXECUTABLE} -I ${PROJECT_SOURCE_DIR}/data/glossary/make_glossary_table.py --check
+            ${PROJECT_SOURCE_DIR}/data/glossary/glossary.md
+            ${PROJECT_SOURCE_DIR}/src/core/glossary/glossary_table.hpp)
+endif()
