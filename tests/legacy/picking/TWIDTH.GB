@@ -1,0 +1,10 @@
+LOCUS       TWIDTH       300 bp    DNA     linear
+DEFINITION  value line widths: AT-rich (one G at 50), GC-rich, mixed
+FEATURES             Location/Qualifiers
+ORIGIN
+        1 aattataaat taatatttaa attatatttt atttaattat aaattaaaag ataatttaat
+       61 tataaaataa tattttttta ttttaaataa tttaaaatat gcccccgcgc ggggcccggc
+      121 ccgcggggcc ggcccgcgcc ccccccgggg gccgcgggcc ggccggcgcc cccccccggg
+      181 cccgcggcgg ccgcgcccgg cccgccagtt gggcactatc ccgccgatat attccgcatc
+      241 caaacagcca agcttacatt tgctttagcc cttagtgaaa caattgagaa catctgaggg
+//

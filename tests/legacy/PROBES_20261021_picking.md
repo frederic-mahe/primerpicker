@@ -1,0 +1,111 @@
+# Probes of PRIMER.exe, evening of 2026-10-21: the picking screen
+
+Primer/Create -> From Molecule, after its form, opens MODIFY PRIMER
+POSITION (so does Modify -> Position): the molecule, five lines of 60
+bases, with the primer drawn as a coloured window, its values on one
+line, and keys to move it. Recorded with DOSBox-X, headless, `PAUSE` 3,
+at most 4 emulators (no fuzzing campaign was running). Recordings and
+the exact keys: `picking/` (`README.txt`). Nothing in the README, the
+tools or the earlier recordings was changed; new tools:
+`tools/ctrlkeys.S` (a DOS TSR: DOSBox-X's `autotype` cannot hold Ctrl,
+so F5 to F10 become Ctrl+Home, Ctrl+End, Ctrl+PgUp, Ctrl+PgDn,
+Ctrl+Left, Ctrl+Right), `tools/probe_picking.sh` (`probe_keys.sh` with
+that TSR, on a drive D: of its own, and the screens' colours),
+`tools/screen_colours.py` (each cell's foreground and background, VGA
+colour names), `tools/parse_picking.py`, `tools/picking_table.py`
+(settled states: `picking/picking.tsv`), `tools/make_width_molecule.py`
+(`picking/TWIDTH.GB`).
+
+Predictions: the Find-next positions and verdicts were compared with
+primerpicker's Primer Analysis verdict on every position before the
+runs (`find_51`, `find_end`, `len_plus`, `comp_400`); the 3'-end run
+rule was predicted from Find Pair's ("Find Pair and runs at the 3'
+end") and both models were written down before `trun_*` ran.
+
+
+## Draft for tests/legacy/README.md
+
+## The picking screen (recorded 2026-10-21)
+
+`picking/`: 21 runs of Primer/Create -> From Molecule on
+`pairs/TEST600.GB`, `search/TRUN.GB` and `picking/TWIDTH.GB` (written for
+these probes, an input), built-in settings; `picking/picking.tsv`: the
+71 settled states of the screen (`tools/picking_table.py`); `README.txt`
+lists the keys.
+
+**Screen.** "MODIFY PRIMER POSITION", "Primer length: N   Molecule:
+NAME", five lines of the molecule (60 bases in blocks of 10, after the
+line's first position), "MEETS CRITERIA SELECTED: Yes|No" (with
+"*** Complementary Strand ***" on that line for the complement strand,
+whose bases are shown complemented), the value line, the keys
+"C=Criteria E=Extn(5') I=Inspect M=Mutagenz S=Save+Exit", "Move: (the
+arrows) Find next: Ctrl (left), Ctrl (right) Length: + -". Two cells
+("--") above the line mark the window's left end. Lines scroll so that
+the window stays in view (near the end of TEST600: lines 421 to 541).
+
+**Value line**, for example
+`Pos: 51     %GC: 50    Tm°C: 66    Hairpin: OK  Dimers: OK  Runs: !`:
+"Pos: " and the position in 7 columns; "%GC:" and "Tm°C:" with the value
+right-aligned in 3 columns (`%GC:  5!`, `%GC:100!`, `Tm°C:121!`; a Tm
+that is not positive is `Tm°C: ? !`), then `!` when the value is outside
+the criteria range or a space, then 3 spaces; "Hairpin: ", "Dimers: "
+(3' dimers or adjacent bases) and "Runs: " (runs of any base, or G/C at
+the 3' end) followed by `OK` or `!`, padded to 4 columns. **Unlike the
+Primer Analysis screen, the run at the 3' end counts** (as in Find Pair,
+"Find Pair and runs at the 3' end"): the primer at 450 of TRUN.GB
+(GCAGTCAGGCTCATCGCAAA), which meets every Primer Analysis criterion,
+shows `Runs: !` and "MEETS CRITERIA SELECTED: No", and Find next skips
+it; so do TEST600 at 36 with 21 bases (...CAAA) and AAA (TWIDTH at 41,
+3 bases). Predicted before `trun_*` ran (both models written down).
+
+**Colour.** The window's background is green (VGA colour 2) when MEETS
+CRITERIA SELECTED is Yes, light grey (7) otherwise, black text in both
+(all 71 states); the screen is white on blue; the fields of the value
+line keep their colours (black on cyan, the last on light grey)
+whatever the verdict. One screen cell (row 12, column 40) keeps a colour
+of its own (brown on blue, magenta on green, black on light grey) in
+every run; it is not part of the window. With 99 or 100 bases the
+window is drawn on 71 bases only (`len_99`).
+
+**Keys** (both strands; the position is the primer's 5' end, as
+elsewhere, and grows to the right on both strands):
+- Right, Left: position + 1, - 1; Down, Up: + 60, - 60 (one line). A
+  move that would take the primer off the molecule is ignored, without
+  message (Left at 1, Right at 581 with 20 bases in 600, Up at 51, Down
+  at 577; on the complement strand the primer must keep `length` bases
+  up to its position).
+- +, -: length + 1, - 1 (length 1 is allowed: GC 0, Tm `?`). + that would
+  extend past the molecule's end shows "Primer Too Long - Extends
+  outside molecule"; - at 1 base shows "Primer must have length!"
+  (boxes, "Press any key to continue..."); the primer is kept. The form
+  takes 2 digits for the length (99); + then gives 100.
+- Ctrl+Right, Ctrl+Left: the nearest position beyond the current one, in
+  that direction, where a primer of the same length and strand meets
+  every criterion (with the 3'-end run rule above): TEST600 from 51: 71,
+  72; back from 72: 71, 36, 35; from 530: 559, then "No Primers found"
+  (a box; the primer stays); from 2 backwards: "No Primers found"; with
+  22 bases from 36: 71; complement strand from 460(C): 516(C), back from
+  516(C): 457(C); TRUN.GB from 440: 449, 471 (450 and 451 end with AAA),
+  back: 449; from 40: 42, 46.
+- PgUp, PgDn, Home, End, Ctrl+Home, Ctrl+End, Ctrl+PgUp, Ctrl+PgDn: no
+  effect.
+- S (Save+Exit) **and Esc**: the primer as moved joins the Primer List
+  (TEST600 52, `!`; 457(C), `OK`), and the main menu returns.
+- Modify -> Position opens the same screen on the active primer
+  (`modify_position`: made at 51, saved, moved to 52 and found 71, saved
+  again: the list then holds 51 and 71).
+
+Not probed: C, E, I and M on this screen; a primer with a 5' extension;
+non-default criteria (the colour follows MEETS CRITERIA SELECTED, which
+uses them elsewhere); the "--" mark's glyphs (two cells decoded as
+`-`); circular molecules.
+
+
+## Find Pair's "Press key to interrupt search"
+
+TEST600 with targets 300 and 310 and offsets 290 (built-in settings):
+the search ended (332 pairs, as primerpicker) before the key typed 12 s
+after the start, so this run says nothing about an interrupt; after the
+search the box reads "<Press key to display possible pairs>". A run on
+a 30,000-base molecule (to make the search slower) lost its keys while
+the molecule map was drawn; see the end of this file for the rerun.
