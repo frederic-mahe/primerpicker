@@ -30,6 +30,27 @@ constexpr auto legacy_line_end = std::string_view{"\r\n"};
                                          analysis::LegacyCriteria const& criteria,
                                          std::chrono::year_month_day const& date) -> std::string;
 
+// A primer edited on the Mutagenize Primer screen: the primer made from
+// the molecule (5' to 3', top strand) and the mutated primer, as long
+struct MutatedPrimerReport {
+    std::span<sequence::Nucleotide const> original;
+    std::span<sequence::Nucleotide const> mutated;
+    std::string_view molecule_name;
+    std::size_t molecule_size;
+    std::size_t position;  // the primer's 5' end on the molecule
+};
+
+// The One Primer report of a mutated primer (I on the Mutagenize Primer
+// screen, then Print to Disk): the source molecule, "Mutated", the
+// position, then, on a second page, "PRIMER MUTAGENESIS INFORMATION":
+// the bases changed and the translations of both primers in three
+// frames (tests/legacy/README.md, "Mutated primers"). Both primers need
+// at least two nucleotides. Not noexcept: as above.
+// C++26 refactoring: make constexpr (std::format)
+[[nodiscard]] auto legacy_mutated_inspect_report(MutatedPrimerReport const& mutated,
+                                                 analysis::LegacyCriteria const& criteria,
+                                                 std::chrono::year_month_day const& date) -> std::string;
+
 // "Primer Design Report:  Primer Pair", the report of the Primer Pair
 // Analysis screen (two pages, a form feed between them). Both primers
 // need at least two nucleotides. Not noexcept: as above.

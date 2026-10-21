@@ -8,6 +8,7 @@
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/search/legacy_match.hpp"
+#include "core/sequence/genetic_code.hpp"
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 
@@ -543,8 +544,19 @@ auto match_row(search::MatchCandidate const& candidate) -> std::string {
 
 }  // namespace
 
-auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria,
-                           std::chrono::year_month_day const& date) -> std::string {
+namespace {
+
+// What the One Primer report of a mutated primer adds before the
+// criteria: the source molecule, "Mutated", the position
+struct MutatedHeader {
+    std::string_view molecule_name;
+    std::size_t molecule_size;
+    std::size_t position;
+};
+
+auto inspect_report(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria,
+                    std::chrono::year_month_day const& date, std::optional<MutatedHeader> const& mutated)
+    -> std::string {
     auto const actual = analysis::legacy_actual_values(primer);
     auto const verdict = analysis::evaluate(actual, criteria);
     auto const& sequence = primer.sequence;
@@ -553,15 +565,33 @@ auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::Legac
     auto const count = [sequence](Nucleotide const nucleotide) { return std::ranges::count(sequence, nucleotide); };
 
     auto report = title_line("Primer Design Report:  One Primer", date);
-    report += blank_lines(lines_after_title);
+    if (mutated.has_value()) {
+        report += blank_lines(2);
+        report += line(std::format("Source molecule:  {:<{}}{:>{}} bps", mutated->molecule_name, molecule_name_width,
+                                   mutated->molecule_size, molecule_size_width));
+        report += blank_lines(3);
+    } else {
+        report += blank_lines(lines_after_title);
+    }
     report += line("-----  P R I M E R   I N F O  --------------------------------------------");
-    report += blank_lines(2);
+    if (mutated.has_value()) {
+        report += legacy_line_end;
+        report += line("Mutated");
+    } else {
+        report += blank_lines(2);
+    }
     // the extension, then a dash, then the primer
     auto const shown = extension.empty() ? letters(sequence)
                                          : letters(extension) + "-" + letters(sequence.subspan(extension.size()));
     report += line(std::format("Sequence:     5'-{}-3'", shown));
     report += legacy_line_end;
-    report += line(std::format("              Length: {:3};", sequence.size()));
+    if (mutated.has_value()) {
+        constexpr auto position_width = std::size_t{5};
+        report += line(std::format("              Length: {:3};    Bp pos: {:{}}", sequence.size(), mutated->position,
+                                   position_width));
+    } else {
+        report += line(std::format("              Length: {:3};", sequence.size()));
+    }
     report += line(std::format("              5' Extension:   {}",
                                extension.empty() ? std::string{"--none--"} : letters(extension)));
     report += line(std::format("              Composition:    A:{:2}  C:{:2}  G:{:2}  T:{:2}",
@@ -586,6 +616,74 @@ auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::Legac
     report += line("     Other Primer-Dimers:");
     report += legacy_line_end;
     report += duplex_lines(self, analysis::legacy_longest_duplex(self));
+    return report;
+}
+
+constexpr auto mutation_column = std::string_view{"                                   "};  // the sequences' column
+
+// a translation row: each amino acid under the third base of its codon,
+// for the codons that start at base FIRST (0-based) and every third
+// base after it, inside the primer; as long as the primer, or ending
+// with the last amino acid
+auto translation_row(std::span<Nucleotide const> const primer, std::size_t const first) -> std::string {
+    constexpr auto codon = std::size_t{3};
+    auto row = std::string(primer.size(), ' ');
+    auto last = std::size_t{0};
+    for (auto start = first; start + codon <= primer.size(); start += codon) {
+        row.at(start + 2) = sequence::translate(primer[start], primer[start + 1], primer[start + 2]);
+        last = start + 2;
+    }
+    // the last frame's row stops at its last amino acid
+    if (first == 2) {
+        row.resize(last + 1);
+    }
+    return row;
+}
+
+auto translations(std::string_view const label, std::span<Nucleotide const> const primer) -> std::string {
+    auto text = line(std::format("          {} sequence:       {}", label, letters(primer)));
+    for (auto const first : {std::size_t{0}, std::size_t{1}, std::size_t{2}}) {
+        text += line(std::string{mutation_column} + translation_row(primer, first));
+    }
+    return text;
+}
+
+}  // namespace
+
+auto legacy_inspect_report(analysis::LegacyPrimer const& primer, analysis::LegacyCriteria const& criteria,
+                           std::chrono::year_month_day const& date) -> std::string {
+    return inspect_report(primer, criteria, date, std::nullopt);
+}
+
+auto legacy_mutated_inspect_report(MutatedPrimerReport const& mutated, analysis::LegacyCriteria const& criteria,
+                                   std::chrono::year_month_day const& date) -> std::string {
+    assert(mutated.original.size() == mutated.mutated.size());
+    auto report = inspect_report({.sequence = mutated.mutated, .extension_length = 0}, criteria, date,
+                                 MutatedHeader{.molecule_name = mutated.molecule_name,
+                                               .molecule_size = mutated.molecule_size,
+                                               .position = mutated.position});
+    report += page_break;
+    report += line("PRIMER MUTAGENESIS INFORMATION");
+    report += blank_lines(2);
+    report += line("     Modifications made:");
+    report += blank_lines(2);
+    report += line(std::format("          Original sequence:       {}", letters(mutated.original)));
+    auto marks = std::string(mutated.original.size(), ' ');
+    auto changed = std::string(mutated.original.size(), ' ');
+    for (auto index = std::size_t{0}; index < mutated.original.size(); ++index) {
+        if (mutated.original[index] != mutated.mutated[index]) {
+            marks.at(index) = '|';
+            changed.at(index) = sequence::to_letter(mutated.mutated[index]);
+        }
+    }
+    report += line(std::string{mutation_column} + marks);
+    report += line("            Base(s) changed:       " + changed);
+    report += blank_lines(3);
+    report += line("     Translation:");
+    report += blank_lines(2);
+    report += translations("Original", mutated.original);
+    report += blank_lines(3);
+    report += translations("Modified", mutated.mutated);
     return report;
 }
 

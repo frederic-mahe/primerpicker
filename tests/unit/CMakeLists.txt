@@ -77,7 +77,8 @@ add_executable(unit_tests
   test_pd2_cfg_write.cpp
   test_legacy_find_pair_interrupt.cpp
   test_colour.cpp
-  test_legacy_picking.cpp)
+  test_legacy_picking.cpp
+  test_legacy_mutated_report.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE
