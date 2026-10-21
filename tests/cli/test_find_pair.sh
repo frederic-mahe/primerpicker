@@ -57,15 +57,37 @@ DESCRIPTION="find-pair rejects fewer than five weights"
 
 ## targets far beyond the molecule (fuzz_cli findings, 2026-10-19: a
 ## crash, and an endless search window): no primer, and no hang
-DESCRIPTION="find-pair: a target A beyond the molecule finds no primer"
-timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 18446744073709551615 400 | \
-    grep -qxE "Primer A: +0 possible primers" && \
+## (updated 2026-10-21, approved: such targets are now refused, as
+## PRIMER.exe's form refuses them, tests/legacy/find_pair_beyond_end/)
+DESCRIPTION="find-pair: a target A beyond the molecule is refused"
+timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 18446744073709551615 400 2>&1 > /dev/null | \
+    grep -qx "primerpicker: target A: Must enter value for this field" && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
-DESCRIPTION="find-pair: a target B at the end of the size range does not hang"
-timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 16 18446744073709551515 | \
-    grep -qxE "Primer B: +0 possible primers" && \
+DESCRIPTION="find-pair: a target B at the end of the size range is refused, without hanging"
+timeout 20 "${PRIMERPICKER}" find-pair "${TEST600}" 16 18446744073709551515 > /dev/null 2>&1
+[[ $? -eq 1 ]] && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+## the checks of PRIMER.exe's form (tests/legacy/find_pair_beyond_end/,
+## recorded 2026-10-21): target A + length within the molecule, target
+## B from the length on
+DESCRIPTION="find-pair: a primer A that does not fit is refused (581 in 600)"
+"${PRIMERPICKER}" find-pair "${TEST600}" 581 600 2>&1 > /dev/null | \
+    grep -qx "primerpicker: target A: Primer too long to fit within molecule." && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-pair: a primer B that does not fit is refused (19 for 20 bases)"
+"${PRIMERPICKER}" find-pair "${TEST600}" 5 19 2>&1 > /dev/null | \
+    grep -qx "primerpicker: target B: Primer too long to fit within molecule." && \
+    success "${DESCRIPTION}" || \
+        failure "${DESCRIPTION}"
+
+DESCRIPTION="find-pair: targets 580 and 600 are searched"
+"${PRIMERPICKER}" find-pair "${TEST600}" 580 600 > /dev/null 2>&1 && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 

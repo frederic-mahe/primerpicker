@@ -120,3 +120,23 @@ TEST_CASE("Primer/Create -> Find Pair asks for the targets, with the settings' o
     CHECK_FALSE(child<QDialog>(window, u"find_pair_dialog").isVisible());
     CHECK(table_rows(window).size() == 10);
 }
+
+// Reference: PRIMER.exe's Find Pair form on TEST600.GB (600 bases):
+// target A 581 gives "Primer too long to fit within molecule.", target
+// B 601 "Must enter value for this field"; the form stays open
+// (tests/legacy/find_pair_beyond_end/README.txt, recorded 2026-10-21)
+TEST_CASE("Find Pair refuses targets whose primers do not fit", "[gui][find pair][legacy]") {
+    auto window = MainWindow{};
+    REQUIRE_FALSE(window.load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
+    CHECK(window.find_pair({.target_a = 581, .start_offset_a = 40, .target_b = 600, .end_offset_b = 40}) ==
+          u"Primer too long to fit within molecule."_s);
+    CHECK(window.find_pair({.target_a = 150, .start_offset_a = 40, .target_b = 601, .end_offset_b = 40}) ==
+          u"Must enter value for this field"_s);
+    child<QAction>(window, u"find_pair").trigger();
+    QTest::keyClicks(&child<QLineEdit>(window, u"target_a_field"), u"581"_s);
+    auto& target_b = child<QLineEdit>(window, u"target_b_field");
+    QTest::keyClicks(&target_b, u"600"_s);
+    QTest::keyClick(&target_b, Qt::Key_Return);
+    CHECK(child<QDialog>(window, u"find_pair_dialog").isVisible());
+    CHECK(child<QLabel>(window, u"find_pair_message_label").text() == u"Primer too long to fit within molecule."_s);
+}

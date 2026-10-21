@@ -14,6 +14,7 @@
 #include <functional>
 #include <optional>
 #include <span>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -70,6 +71,53 @@ struct FindPairResult {
     std::vector<PairCandidate> pairs;  // by position of A, then of B
     FindPairLimit limit = FindPairLimit::none;
 };
+
+// The checks of the "Define Primer Pair Constraints" form, made before
+// any search (tests/legacy/README.md, "Targets near and beyond the
+// molecule's end", recorded 2026-10-21): target A from 1 to the
+// molecule's length, and target A + length within it; target B from 1
+// to the molecule's length, and at least the length. Primer A first.
+enum struct FindPairTargetError : std::uint8_t {
+    none,
+    target_a_out_of_range,
+    primer_a_too_long,
+    target_b_out_of_range,
+    primer_b_too_long,
+};
+
+[[nodiscard]] constexpr auto legacy_check_targets(FindPairSettings const& settings,
+                                                  std::size_t const molecule_size) noexcept -> FindPairTargetError {
+    using enum FindPairTargetError;
+    if (settings.target_a == 0 or settings.target_a > molecule_size) {
+        return target_a_out_of_range;
+    }
+    // target_a + length > molecule_size, without overflow
+    if (settings.length > molecule_size - settings.target_a) {
+        return primer_a_too_long;
+    }
+    if (settings.target_b == 0 or settings.target_b > molecule_size) {
+        return target_b_out_of_range;
+    }
+    if (settings.target_b < settings.length) {
+        return primer_b_too_long;
+    }
+    return none;
+}
+
+// The message of PRIMER.exe's box for a refused target (empty: none)
+[[nodiscard]] constexpr auto legacy_message(FindPairTargetError const error) noexcept -> std::string_view {
+    switch (error) {
+        case FindPairTargetError::target_a_out_of_range:
+        case FindPairTargetError::target_b_out_of_range:
+            return "Must enter value for this field";
+        case FindPairTargetError::primer_a_too_long:
+        case FindPairTargetError::primer_b_too_long:
+            return "Primer too long to fit within molecule.";
+        case FindPairTargetError::none:
+        default:
+            return {};
+    }
+}
 
 namespace detail {
 

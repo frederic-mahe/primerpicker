@@ -701,6 +701,14 @@ auto find_pair(FindPairArguments const& arguments, LegacySystemDefaults const& d
                                                                  .length = defaults.primer_length,
                                                                  .gc_tolerance_percent = defaults.gc_tolerance_percent,
                                                                  .tm_tolerance_celsius = defaults.tm_tolerance_celsius};
+    // as PRIMER.exe's form, targets whose primers do not fit are refused
+    if (auto const refused = primerpicker::search::legacy_check_targets(settings, molecule->sequence.size());
+        refused != primerpicker::search::FindPairTargetError::none) {
+        using enum primerpicker::search::FindPairTargetError;
+        auto const target = std::string_view{refused == target_a_out_of_range or refused == primer_a_too_long ? "target A"
+                                                                                                            : "target B"};
+        return fail(std::format("{}: {}", target, primerpicker::search::legacy_message(refused)));
+    }
     auto const result = primerpicker::search::legacy_find_pair(molecule->sequence, settings, defaults.criteria);
     if (arguments.report.has_value() and
         not write_find_pair_report(*arguments.report,

@@ -301,6 +301,12 @@ auto MainWindow::find_pair(FindPairRequest const& request) -> std::optional<QStr
                                                    .length = defaults_.primer_length,
                                                    .gc_tolerance_percent = defaults_.gc_tolerance_percent,
                                                    .tm_tolerance_celsius = defaults_.tm_tolerance_celsius};
+    // as PRIMER.exe's form, targets whose primers do not fit are refused
+    if (auto const refused = search::legacy_check_targets(settings, molecule_->sequence.size());
+        refused != search::FindPairTargetError::none) {
+        auto const message = search::legacy_message(refused);
+        return QString::fromLatin1(message.data(), static_cast<qsizetype>(message.size()));
+    }
     auto const result = search::legacy_find_pair(molecule_->sequence, settings, defaults_.criteria);
     pairs_.show_pairs(result, defaults_.weights);
     pages_.setCurrentWidget(&pairs_);
