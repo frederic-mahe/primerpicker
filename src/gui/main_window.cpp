@@ -126,7 +126,8 @@ MainWindow::MainWindow()
       find_pair_{*this},
       pair_dialog_{*this},
       multi_dialog_{*this},
-      match_dialog_{*this} {
+      match_dialog_{*this},
+      glossary_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     // the dock's title first: it names the dock's View menu item
     list_dock_.setWindowTitle(u"Primer List"_s);
@@ -234,6 +235,12 @@ void MainWindow::add_legacy_menus() {
     list_toggle.setObjectName(u"view_primer_list"_s);
     view.addAction(&list_toggle);
     add_colour_scheme_menu(view);
+
+    // not in PRIMER.exe: the built-in definitions
+    auto& help = *menu_bar.addMenu(u"&Help"_s);
+    auto& glossary = add_item(help, {.text = u"&Glossary", .name = u"glossary"});
+    glossary.setShortcut(QKeySequence{Qt::Key_F1});
+    QObject::connect(&glossary, &QAction::triggered, this, [this] { show_glossary({}); });
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
@@ -526,6 +533,10 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
     multi_.show_primers(fields, criteria);
     pages_.setCurrentWidget(&multi_);
     return std::nullopt;
+}
+
+auto MainWindow::show_glossary(QString const& name) -> bool {
+    return glossary_.show_entry(name);
 }
 
 auto MainWindow::match_active_primer(MatchRequest const& request) -> std::optional<QString> {

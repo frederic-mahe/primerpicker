@@ -4,6 +4,7 @@
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/composition.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "gui/glossary_dialog.hpp"
 
 #include <QAbstractItemView>
 #include <QAbstractScrollArea>
@@ -136,6 +137,10 @@ AnalysisView::AnalysisView()
     criteria_table_.setObjectName(u"criteria_table"_s);
     sequence_.setTextInteractionFlags(Qt::TextSelectableByMouse);
     criteria_table_.setModel(&criteria_model_);
+    // the built-in definitions of the criteria, in the table's order
+    criteria_model_.set_tooltips({definition_text("gc"), definition_text("tm"), definition_text("hairpin"),
+                                  definition_text("dimer"), definition_text("dimer"), definition_text("runs"),
+                                  definition_text("gc-clamp")});
     criteria_table_.setEditTriggers(QAbstractItemView::NoEditTriggers);
     criteria_table_.setSelectionMode(QAbstractItemView::NoSelection);
     criteria_table_.verticalHeader()->hide();

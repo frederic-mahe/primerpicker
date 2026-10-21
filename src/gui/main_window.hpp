@@ -13,6 +13,7 @@
 #include "gui/find_pair_dialog.hpp"
 #include "gui/find_pair_view.hpp"
 #include "gui/from_molecule_dialog.hpp"
+#include "gui/glossary_dialog.hpp"
 #include "gui/homology_view.hpp"
 #include "gui/match_dialog.hpp"
 #include "gui/match_view.hpp"
@@ -123,6 +124,10 @@ public:
     // no search
     [[nodiscard]] auto match_active_primer(MatchRequest const& request) -> std::optional<QString>;
 
+    // Help -> Glossary at the built-in definition NAME (a key or an
+    // alias; the first entry if there is none); whether NAME was found
+    auto show_glossary(QString const& name) -> bool;
+
 private:
     void add_legacy_menus();
     void add_colour_scheme_menu(QMenu& parent);
@@ -184,6 +189,7 @@ private:
     PairDialog pair_dialog_;
     MultiPrimerDialog multi_dialog_;
     MatchDialog match_dialog_;
+    GlossaryDialog glossary_;
 };
 
 }  // namespace primerpicker::gui

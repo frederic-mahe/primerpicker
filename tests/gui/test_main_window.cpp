@@ -40,7 +40,8 @@ auto menu_titled(MainWindow const& window, QString const& title) -> QMenu const&
 TEST_CASE("the menu bar mirrors Primer Designer's main menu, with a View menu", "[gui][menu]") {
     auto const window = MainWindow{};
     CHECK(texts(window.menuBar()->actions()) ==
-          QList<QString>{u"&Primer/Create"_s, u"&Modify"_s, u"&Analyze"_s, u"M&olecule-Ops"_s, u"&View"_s, u"&Quit"_s});
+          QList<QString>{u"&Primer/Create"_s, u"&Modify"_s, u"&Analyze"_s, u"M&olecule-Ops"_s, u"&View"_s, u"&Help"_s,
+                         u"&Quit"_s});
 }
 
 TEST_CASE("each menu lists Primer Designer's items in order", "[gui][menu]") {
@@ -79,5 +80,6 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
                                     u"Find &Pair..."_s,
                                     u"Save to &List"_s, u"&Retrieve from disk..."_s,
                                     u"5'-&extension..."_s, u"&Active Primer"_s, u"Primer &Pair..."_s, u"&Multi Primer..."_s,
-                                    u"Find &Enzymes..."_s, u"Primer &List"_s, u"&Colour Scheme"_s});
+                                    u"Find &Enzymes..."_s, u"Primer &List"_s, u"&Colour Scheme"_s,
+                                    u"&Glossary"_s});
 }

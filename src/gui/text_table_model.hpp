@@ -19,6 +19,9 @@ public:
 
     void set_rows(QList<QList<QString>> rows);
 
+    // a tooltip per row (the same for every cell of the row)
+    void set_tooltips(QList<QString> tooltips);
+
     [[nodiscard]] auto rowCount(QModelIndex const& parent) const -> int override;
     [[nodiscard]] auto columnCount(QModelIndex const& parent) const -> int override;
     [[nodiscard]] auto data(QModelIndex const& index, int role) const -> QVariant override;
@@ -27,6 +30,7 @@ public:
 private:
     QList<QString> headers_;
     QList<QList<QString>> rows_;
+    QList<QString> tooltips_;
 };
 
 }  // namespace primerpicker::gui
