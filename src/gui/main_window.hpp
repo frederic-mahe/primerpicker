@@ -58,11 +58,18 @@ struct ActivePrimer {
     analysis::LegacyCriteria criteria;
     std::optional<sequence::PrimerLocation> location;
     QString origin;  // shown in the Primer List: Direct Entry, a molecule and position, a file
+    // what a .PD2 file keeps: the source molecule (none for Direct
+    // Entry), and the primer's position (1 for Direct Entry) and strand
+    QString molecule_name;
+    QString molecule_path;
+    int position = 1;
+    bool complement = false;
 };
 
 // A molecule (template) loaded from a file
 struct LoadedMolecule {
     QString name;
+    QString path;  // its file
     std::vector<sequence::Nucleotide> sequence;
     sequence::Topology topology = sequence::Topology::linear;
 };
@@ -99,6 +106,10 @@ public:
     // was not written (a screen without report, or nothing to print, as
     // PRIMER.exe for an empty list)
     [[nodiscard]] auto print_report_to(QString const& path) -> std::optional<QString>;
+
+    // Primer/Create -> Save Active Primer: writes the active primer as a
+    // .PD2 file of Primer Designer; the error, if it was not written
+    [[nodiscard]] auto save_primer_to(QString const& path) -> std::optional<QString>;
 
     // Molecule-Ops -> Find Enzymes on the loaded molecule: shows the true
     // or almost sites of an enzyme; the error, if there was no search
@@ -141,6 +152,7 @@ private:
     void modify_extension();
     void use_extension();
     void retrieve_primer();
+    void save_primer();
     void open_find_enzymes();
     void use_find_enzymes();
     void open_find_pair();

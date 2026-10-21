@@ -29,7 +29,9 @@
 #include <QChar>
 #include <QDate>
 #include <QApplication>
+#include <QByteArray>
 #include <QDialog>
+#include <QDir>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -197,7 +199,8 @@ void MainWindow::add_legacy_menus() {
     QObject::connect(&match, &QAction::triggered, this, &MainWindow::open_match);
     auto const& find_pair_item = add_item(primer_create, {.text = u"Find &Pair...", .name = u"find_pair"});
     QObject::connect(&find_pair_item, &QAction::triggered, this, &MainWindow::open_find_pair);
-    add_disabled_items(primer_create, {u"&Save Active Primer"_s});
+    auto const& save_item = add_item(primer_create, {.text = u"&Save Active Primer...", .name = u"save_active_primer"});
+    QObject::connect(&save_item, &QAction::triggered, this, &MainWindow::save_primer);
     // not in PRIMER.exe as a menu item: its S (Save+Exit) key
     auto& save_to_list_item = add_item(primer_create, {.text = u"Save to &List", .name = u"save_to_list"});
     save_to_list_item.setShortcut(QKeySequence{Qt::CTRL | Qt::Key_L});
@@ -314,6 +317,7 @@ auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
         return u"%1: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)"_s.arg(path);
     }
     molecule_ = LoadedMolecule{.name = QString::fromStdString(parsed.molecule->name),
+                               .path = QFileInfo{path}.absoluteFilePath(),
                                .sequence = std::move(*sequence),
                                .topology = parsed.molecule->topology};
     molecule_label_.setText(u"Molecule: %1, %2 bp, %3"_s.arg(molecule_->name)
@@ -460,6 +464,12 @@ void MainWindow::use_from_molecule() {
     make_active(std::move(*primer), std::move(origin), sequence::PrimerLocation{.position = *position,
                                                              .length = defaults_.primer_length,
                                                              .strand = from_molecule_.strand()});
+    if (active_primer_.has_value() and molecule_.has_value()) {  // always, here
+        active_primer_->molecule_name = molecule_->name;
+        active_primer_->molecule_path = QDir::toNativeSeparators(molecule_->path);
+        active_primer_->position = static_cast<int>(*position);
+        active_primer_->complement = complement;
+    }
 }
 
 // a new primer without extension, with the System Defaults' criteria
@@ -469,7 +479,11 @@ void MainWindow::make_active(std::vector<sequence::Nucleotide> sequence, QString
                                   .extension_length = 0,
                                   .criteria = defaults_.criteria,
                                   .location = location,
-                                  .origin = std::move(origin)};
+                                  .origin = std::move(origin),
+                                  .molecule_name = {},
+                                  .molecule_path = {},
+                                  .position = 1,
+                                  .complement = false};
     analyze_active_primer();
 }
 
@@ -774,7 +788,11 @@ auto MainWindow::load_primer(QString const& path) -> std::optional<QString> {
                                   .extension_length = extension->size(),
                                   .criteria = parsed.primer->criteria,
                                   .location = std::nullopt,
-                                  .origin = QFileInfo{path}.fileName()};
+                                  .origin = QFileInfo{path}.fileName(),
+                                  .molecule_name = QString::fromStdString(parsed.primer->molecule_name),
+                                  .molecule_path = QString::fromStdString(parsed.primer->molecule_path),
+                                  .position = parsed.primer->position,
+                                  .complement = parsed.primer->complement};
     analyze_active_primer();
     return std::nullopt;
 }
@@ -805,6 +823,50 @@ auto MainWindow::print_report_to(QString const& path) -> std::optional<QString> 
         return u"cannot write the report to %1"_s.arg(path);
     }
     return std::nullopt;
+}
+
+auto MainWindow::save_primer_to(QString const& path) -> std::optional<QString> {
+    if (not active_primer_.has_value()) {
+        return u"Please create or retrieve a primer"_s;
+    }
+    auto const& active = *active_primer_;
+    auto const sequence = std::span{active.sequence};
+    auto const primer = io::Pd2Primer{.extension = letters(sequence.first(active.extension_length)).toStdString(),
+                                .sequence = letters(sequence.subspan(active.extension_length)).toStdString(),
+                                .molecule_name = active.molecule_name.toStdString(),
+                                .molecule_path = active.molecule_path.toStdString(),
+                                .position = active.position,
+                                .complement = active.complement,
+                                .criteria = active.criteria};
+    auto const bytes = io::write_pd2(primer);
+    auto contents = QByteArray{};
+    contents.reserve(static_cast<qsizetype>(bytes.size()));
+    for (auto const byte : bytes) {
+        contents.append(std::bit_cast<char>(byte));
+    }
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or file.write(contents) != contents.size()) {
+        return u"cannot write the primer to %1"_s.arg(path);
+    }
+    return std::nullopt;
+}
+
+// PRIMER.exe asks for a file name and adds .PD2
+void MainWindow::save_primer() {
+    if (not active_primer_.has_value()) {
+        analyze_active_primer();  // asks for a primer
+        return;
+    }
+    auto path = QFileDialog::getSaveFileName(this, u"Save Active Primer"_s, {}, u"Primer files (*.PD2)"_s);
+    if (path.isEmpty()) {
+        return;
+    }
+    if (QFileInfo{path}.suffix().isEmpty()) {
+        path += u".PD2"_s;
+    }
+    if (auto const error = save_primer_to(path); error.has_value()) {
+        QMessageBox::warning(this, u"Save Active Primer"_s, *error);
+    }
 }
 
 // Print Control -> Print to Disk: PRIMER.exe writes its report to a
