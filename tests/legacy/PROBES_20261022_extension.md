@@ -64,3 +64,11 @@ and composition are those of the whole primer (`Length:  23;`,
 `A:8  C:5  G:6  T:4`), the Tm is without the extension (64), and the
 duplexes of page 2 are drawn on the whole primers, without dash. No
 other line mentions the extension.
+
+**Modify -> 5'-extension: a deliberate difference** (decided by the
+developer on 2026-10-22). PRIMER.exe keeps the primer's total length
+(the primer loses bases at its 3' end; `extension_paste/`) and refuses
+Direct Entry primers ("Cannot Modify Directly Entered Primers").
+primerpicker's GUI adds the extension in front of the whole primer and
+accepts Direct Entry primers; the values of a given primer are the same
+in both programs.
