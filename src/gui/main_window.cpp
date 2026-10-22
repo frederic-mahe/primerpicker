@@ -723,7 +723,7 @@ void MainWindow::create_from_molecule() {
 // ("Primer length (incl 5' ext)"; tests/legacy/extension/)
 void MainWindow::use_from_molecule() {
     auto const length = from_molecule_.length();
-    auto extension = from_molecule_.extension();
+    auto const extension = from_molecule_.extension();
     // two bases of the molecule at least, as the analysis needs (what
     // PRIMER.exe does with fewer is not recorded)
     constexpr auto min_bases = std::size_t{2};
@@ -746,9 +746,12 @@ void MainWindow::use_from_molecule() {
     auto origin = u"%1 at %2%3"_s.arg(molecule_->name).arg(*position).arg(complement ? u" (complement)"_s : QString{});
     make_active(std::move(*primer), std::move(origin), location);
     if (active_primer_.has_value() and not extension.empty()) {  // always active, here
+        auto whole = std::vector<sequence::Nucleotide>{};
+        whole.reserve(extension.size() + active_primer_->sequence.size());
+        std::ranges::copy(extension, std::back_inserter(whole));
+        std::ranges::copy(active_primer_->sequence, std::back_inserter(whole));
         active_primer_->extension_length = extension.size();
-        extension.insert(extension.end(), active_primer_->sequence.begin(), active_primer_->sequence.end());
-        active_primer_->sequence = std::move(extension);
+        active_primer_->sequence = std::move(whole);
     }
     if (active_primer_.has_value() and molecule_.has_value()) {  // always, here
         active_primer_->molecule_name = molecule_->name;
