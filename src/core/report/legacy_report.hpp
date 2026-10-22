@@ -3,6 +3,7 @@
 #include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
+#include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/search/legacy_match.hpp"
@@ -60,12 +61,25 @@ struct MutatedPrimerReport {
 // C++26 refactoring: make constexpr (std::format)
 [[nodiscard]] auto legacy_pair_report(analysis::PrimerPair const& primers, analysis::LegacyCriteria const& criteria,
                                       std::chrono::year_month_day const& date) -> std::string;
+// The same for primers with a 5' extension: the sequence written with a
+// dash after the extension, the values of the whole primer (the Tm
+// without the extension), the duplexes of the whole primers
+// (tests/legacy/extension/pair_ext_report.PRN). Both primers need at
+// least two nucleotides after their extension.
+[[nodiscard]] auto legacy_pair_report(analysis::LegacyPrimerPair const& extended,
+                                      analysis::LegacyCriteria const& criteria,
+                                      std::chrono::year_month_day const& date) -> std::string;
 
 // "Primer Design Report:  Multiple Primers", the report of the Multi
 // Primer Analysis screen. Each primer needs at least two nucleotides.
 // Not noexcept: as above.
 // C++26 refactoring: make constexpr (std::format)
 [[nodiscard]] auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields,
+                                              analysis::LegacyCriteria const& criteria,
+                                              std::chrono::year_month_day const& date) -> std::string;
+// The same for primers with a 5' extension, as the Primer Pair report
+// (tests/legacy/extension/multi_ext_report.PRN)
+[[nodiscard]] auto legacy_multi_primer_report(analysis::LegacyMultiPrimerFields const& fields,
                                               analysis::LegacyCriteria const& criteria,
                                               std::chrono::year_month_day const& date) -> std::string;
 

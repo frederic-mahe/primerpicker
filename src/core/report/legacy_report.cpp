@@ -77,6 +77,16 @@ auto letters(std::span<Nucleotide const> const primer) -> std::string {
     return text;
 }
 
+// "EXTENSION-PRIMER" when there is a 5' extension, as PRIMER.exe's
+// reports write it
+auto letters(analysis::LegacyPrimer const& primer) -> std::string {
+    auto const sequence = primer.sequence;
+    if (primer.extension_length == 0) {
+        return letters(sequence);
+    }
+    return letters(sequence.first(primer.extension_length)) + "-" + letters(sequence.subspan(primer.extension_length));
+}
+
 auto title_line(std::string_view const title, std::chrono::year_month_day const& date) -> std::string {
     return line(std::format("{:<{}}Report Date: {:02}/{:02}/{:02}", title, title_width,
                             static_cast<unsigned>(date.month()), static_cast<unsigned>(date.day()),
@@ -253,14 +263,15 @@ auto primer_header(char const name) -> std::string {
     return "-----------------------------------------------  P R I M E R   B  ---------";
 }
 
-auto primer_summary(char const name, std::span<Nucleotide const> const primer, analysis::LegacyCriteria const& criteria)
+auto primer_summary(char const name, analysis::LegacyPrimer const& extended, analysis::LegacyCriteria const& criteria)
     -> std::string {
-    auto const actual = analysis::legacy_actual_values(primer);
+    auto const primer = extended.sequence;
+    auto const actual = analysis::legacy_actual_values(extended);
     auto const verdict = analysis::evaluate(actual, criteria);
     auto const count = [primer](Nucleotide const nucleotide) { return std::ranges::count(primer, nucleotide); };
     auto text = line(primer_header(name));
     text += legacy_line_end;
-    text += line(std::format("Sequence:     5'-{}-3'", letters(primer)));
+    text += line(std::format("Sequence:     5'-{}-3'", letters(extended)));
     text += legacy_line_end;
     text += line(std::format("              Length: {:3};", primer.size()));
     text += line(std::format("              % GC:{:3};     Tm C:{:3};    Composition:  A:{}  C:{}  G:{}  T:{}",
@@ -350,7 +361,7 @@ constexpr auto matrix_dots_shorter = std::size_t{2};       // than the cells the
 constexpr auto matrix_offset = std::size_t{37};            // from the "3' end" matrix to the "Any" one
 
 // A field's section: its primer, or "none" for an empty field
-auto multi_primer_section(std::size_t const index, analysis::MultiPrimerFields const& fields) -> std::string {
+auto multi_primer_section(std::size_t const index, analysis::LegacyMultiPrimerFields const& fields) -> std::string {
     auto text = line(std::format("-----  P R I M E R   {}  ---------------------------------------------------",
                                  multi_names.at(index)));
     text += legacy_line_end;
@@ -358,11 +369,11 @@ auto multi_primer_section(std::size_t const index, analysis::MultiPrimerFields c
     if (not field.has_value()) {
         return text + line("     none") + std::string{legacy_line_end};
     }
-    auto const primer = *field;
+    auto const& primer = *field;
     text += line(std::format("Sequence:     5'-{}-3'", letters(primer)));
     text += legacy_line_end;
     text += line("              Source molecule:  none");
-    text += line(std::format("              Length: {:3};", primer.size()));
+    text += line(std::format("              Length: {:3};", primer.sequence.size()));
     text += legacy_line_end;
     return text;
 }
@@ -694,12 +705,20 @@ auto legacy_mutated_inspect_report(MutatedPrimerReport const& mutated, analysis:
 
 auto legacy_pair_report(PrimerPair const& primers, analysis::LegacyCriteria const& criteria,
                         std::chrono::year_month_day const& date) -> std::string {
+    return legacy_pair_report(analysis::LegacyPrimerPair{.first = {.sequence = primers.first, .extension_length = 0},
+                                                         .second = {.sequence = primers.second, .extension_length = 0}},
+                              criteria, date);
+}
+
+auto legacy_pair_report(analysis::LegacyPrimerPair const& extended, analysis::LegacyCriteria const& criteria,
+                        std::chrono::year_month_day const& date) -> std::string {
+    auto const primers = PrimerPair{.first = extended.first.sequence, .second = extended.second.sequence};
     auto const& [primer_a, primer_b] = primers;
-    auto const actual_a = analysis::legacy_actual_values(primer_a);
-    auto const actual_b = analysis::legacy_actual_values(primer_b);
+    auto const actual_a = analysis::legacy_actual_values(extended.first);
+    auto const actual_b = analysis::legacy_actual_values(extended.second);
     auto const cautions_a = analysis::legacy_pair_cautions(actual_a, criteria);
     auto const cautions_b = analysis::legacy_pair_cautions(actual_b, criteria);
-    auto const values_ab = analysis::legacy_pair_values(primers);
+    auto const values_ab = analysis::legacy_pair_values(extended);
     auto const flags = [&criteria](std::size_t const three_prime, std::size_t const adjacent) {
         return analysis::legacy_dimer_flags(three_prime, adjacent, criteria);
     };
@@ -714,8 +733,8 @@ auto legacy_pair_report(PrimerPair const& primers, analysis::LegacyCriteria cons
 
     auto report = title_line("Primer Design Report:  Primer Pair", date);
     report += blank_lines(lines_after_title + 1);
-    report += primer_summary('A', primer_a, criteria);
-    report += primer_summary('B', primer_b, criteria);
+    report += primer_summary('A', extended.first, criteria);
+    report += primer_summary('B', extended.second, criteria);
     report += line(rule);
     report += legacy_line_end;
     report += line("Primer Balance:                      -A-      -B-      Comment");
@@ -782,6 +801,12 @@ auto legacy_pair_report(PrimerPair const& primers, analysis::LegacyCriteria cons
 
 auto legacy_multi_primer_report(analysis::MultiPrimerFields const& fields, analysis::LegacyCriteria const& criteria,
                                 std::chrono::year_month_day const& date) -> std::string {
+    return legacy_multi_primer_report(analysis::with_extensions(fields), criteria, date);
+}
+
+auto legacy_multi_primer_report(analysis::LegacyMultiPrimerFields const& fields,
+                                analysis::LegacyCriteria const& criteria, std::chrono::year_month_day const& date)
+    -> std::string {
     auto const analysis = analysis::legacy_multi_primer(fields, criteria);
     auto report = title_line("Primer Design Report:  Multiple Primers", date);
     report += blank_lines(2);

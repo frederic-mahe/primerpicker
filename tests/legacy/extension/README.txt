@@ -37,3 +37,12 @@ X as above:
 P1.PD2: tools/make_pd2.py GTAAAACGACGGCCAGT GAATTC (= ../primers/M13EXT.PD2);
 P2.PD2: tools/make_pd2.py AACAGCTATGACCATG (inputs).
 Not kept: ext_false (False Priming; froze before the picking screen).
+
+Reports (Print to Disk), recorded later on 2026-10-22 with
+tools/probe_keys.sh, PAUSE=3, SECONDS_MAX=600, R = "space down down down
+down down down enter down enter , enter down down enter ," (Retrieve from
+disk P1.PD2 and P2.PD2) and PRINT = ", , p , down down enter , r e p o r t
+enter , , ,":
+  pair_ext_report   R "right right down enter 1 enter 2 enter" PRINT    P1.PD2 P2.PD2
+  multi_ext_report  R "right right down down enter 1 2 enter enter" PRINT P1.PD2 P2.PD2
+NAME.PRN: the REPORT file as written (DOS line ends, code page 437).

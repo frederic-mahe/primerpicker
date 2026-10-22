@@ -2,6 +2,7 @@
 
 #include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
+#include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
@@ -1095,18 +1096,19 @@ auto MainWindow::analyze_pair(PairSelection const& selection) -> std::optional<Q
     auto const& second = primer_list_.at(selection.second);
     // the active primer's criteria, as the analysis screens
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
-    auto const primer_a = std::span{first.sequence}.subspan(first.extension_length);
-    auto const primer_b = std::span{second.sequence}.subspan(second.extension_length);
     pair_.show_pair({.first = {.sequence = first.sequence, .extension_length = first.extension_length},
                      .second = {.sequence = second.sequence, .extension_length = second.extension_length}},
                     criteria);
-    report_ = ScreenReport{.file_name = u"PAIR.PRN"_s,
-                           .text = [primer_a = std::vector(primer_a.begin(), primer_a.end()),
-                                    primer_b = std::vector(primer_b.begin(), primer_b.end()),
-                                    criteria](std::chrono::year_month_day const& date) {
-                               return report::legacy_pair_report({.first = primer_a, .second = primer_b}, criteria,
-                                                                 date);
-                           }};
+    // copies of the primers: the list may change before printing
+    report_ = ScreenReport{
+        .file_name = u"PAIR.PRN"_s,
+        .text = [primer_a = first.sequence, extension_a = first.extension_length, primer_b = second.sequence,
+                 extension_b = second.extension_length, criteria](std::chrono::year_month_day const& date) {
+            return report::legacy_pair_report(
+                analysis::LegacyPrimerPair{.first = {.sequence = primer_a, .extension_length = extension_a},
+                                           .second = {.sequence = primer_b, .extension_length = extension_b}},
+                criteria, date);
+        }};
     pages_.setCurrentWidget(&pair_);
     return std::nullopt;
 }
@@ -1132,7 +1134,6 @@ auto MainWindow::list_texts() const -> QList<QString> {
 }
 
 auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional<QString> {
-    auto fields = analysis::MultiPrimerFields{};
     auto extended = analysis::LegacyMultiPrimerFields{};
     auto filled = std::size_t{0};
     for (auto index = std::size_t{0}; index < selection.size(); ++index) {
@@ -1144,7 +1145,6 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
             return u"Please save the primers to the Primer List"_s;
         }
         auto const& primer = primer_list_.at(*choice);
-        fields.at(index) = std::span{primer.sequence}.subspan(primer.extension_length);
         extended.at(index) = analysis::LegacyPrimer{.sequence = primer.sequence, .extension_length = primer.extension_length};
         ++filled;
     }
@@ -1155,17 +1155,21 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
     multi_.show_primers(extended, criteria);
     // copies of the primers: the list may change before printing
-    auto copies = std::array<std::optional<std::vector<sequence::Nucleotide>>, analysis::legacy_multi_primer_fields>{};
-    std::ranges::transform(fields, copies.begin(), [](auto const& field) {
-        return field.has_value() ? std::optional{std::vector(field->begin(), field->end())} : std::nullopt;
+    auto copies = std::array<std::optional<std::pair<std::vector<sequence::Nucleotide>, std::size_t>>,
+                             analysis::legacy_multi_primer_fields>{};
+    std::ranges::transform(extended, copies.begin(), [](auto const& field) {
+        return field.has_value()
+                   ? std::optional{std::pair{std::vector(field->sequence.begin(), field->sequence.end()),
+                                             field->extension_length}}
+                   : std::nullopt;
     });
     report_ = ScreenReport{.file_name = u"MULTI.PRN"_s,
                            .text = [copies = std::move(copies), criteria](std::chrono::year_month_day const& date) {
-                               auto views = analysis::MultiPrimerFields{};
+                               auto views = analysis::LegacyMultiPrimerFields{};
                                std::ranges::transform(copies, views.begin(), [](auto const& copy) {
-                                   return copy.has_value()
-                                              ? std::optional{std::span<sequence::Nucleotide const>{*copy}}
-                                              : std::nullopt;
+                                   return copy.has_value() ? std::optional{analysis::LegacyPrimer{
+                                                                 .sequence = copy->first, .extension_length = copy->second}}
+                                                           : std::nullopt;
                                });
                                return report::legacy_multi_primer_report(views, criteria, date);
                            }};

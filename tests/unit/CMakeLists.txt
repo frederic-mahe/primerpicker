@@ -88,7 +88,8 @@ add_executable(unit_tests
   test_legacy_native_molecule.cpp
   test_legacy_picking_extension.cpp
   test_legacy_match_complement.cpp
-  test_legacy_extension_pair.cpp)
+  test_legacy_extension_pair.cpp
+  test_legacy_extension_reports.cpp)
 target_link_libraries(unit_tests PRIVATE primerpicker_core Catch2::Catch2WithMain)
 target_compile_options(unit_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 target_compile_definitions(unit_tests PRIVATE

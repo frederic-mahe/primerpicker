@@ -4,10 +4,15 @@
 #include "gui_test_helpers.hpp"
 
 #include <QAction>
+#include <QByteArray>
+#include <QFile>
+#include <QIODevice>
 #include <QLineEdit>
 #include <QList>
 #include <QString>
+#include <QRegularExpression>
 #include <QStringView>
+#include <QTemporaryDir>
 #include <QTest>
 
 #include <catch2/catch_test_macros.hpp>
@@ -43,6 +48,33 @@ void save_with_extension(MainWindow& window, ExtendedPrimer const& typed) {
     child<QAction>(window, u"save_to_list").trigger();
 }
 
+// M13EXT.PD2 and AACAGCTATGACCATG (extension/P1.PD2, P2.PD2) in the
+// Primer List
+void list_of_two(MainWindow& window) {
+    REQUIRE_FALSE(window.load_primer(legacy_file(u"extension/P1.PD2")).has_value());
+    child<QAction>(window, u"save_to_list").trigger();
+    REQUIRE_FALSE(window.load_primer(legacy_file(u"extension/P2.PD2")).has_value());
+    child<QAction>(window, u"save_to_list").trigger();
+}
+
+// a report without its dates (one per page header)
+auto body(QString const& path) -> QByteArray {
+    auto file = QFile{path};
+    REQUIRE(file.open(QIODevice::ReadOnly));
+    auto text = file.readAll();
+    static auto const date = QRegularExpression{u"Report Date: [0-9/]+"_s};
+    return QString::fromLatin1(text).replace(date, u"Report Date: DATE"_s).toLatin1();
+}
+
+// Print to Disk of the current screen, without its dates
+auto printed(MainWindow& window) -> QByteArray {
+    auto const directory = QTemporaryDir{};
+    REQUIRE(directory.isValid());
+    auto const path = directory.filePath(u"REPORT"_s);
+    REQUIRE_FALSE(window.print_report_to(path).has_value());
+    return body(path);
+}
+
 }  // namespace
 
 // Reference: PRIMER.exe, Analyze -> Primer Pair for GAATTC +
@@ -71,10 +103,7 @@ TEST_CASE("Primer Pair with a 5' extension", "[gui][pair][legacy]") {
 // (tests/legacy/extension/ext_multi.screens.txt, recorded 2026-10-22)
 TEST_CASE("Multi Primer with a 5' extension", "[gui][multi][legacy]") {
     auto window = MainWindow{};
-    REQUIRE_FALSE(window.load_primer(legacy_file(u"extension/P1.PD2")).has_value());
-    child<QAction>(window, u"save_to_list").trigger();
-    REQUIRE_FALSE(window.load_primer(legacy_file(u"extension/P2.PD2")).has_value());
-    child<QAction>(window, u"save_to_list").trigger();
+    list_of_two(window);
     REQUIRE_FALSE(window.analyze_multi({std::size_t{0}, std::size_t{1}, std::nullopt, std::nullopt}).has_value());
     auto const balance = table_rows(window, u"multi_balance_table");
     REQUIRE(balance.size() >= 2);
@@ -88,4 +117,16 @@ TEST_CASE("Multi Primer with a 5' extension", "[gui][multi][legacy]") {
     CHECK(any.at(0).at(1) == u"6"_s);
     CHECK(three_prime.at(0).at(2) == u"2"_s);  // A:B
     CHECK(any.at(0).at(2) == u"2"_s);
+}
+
+// Reference: PRIMER.exe, Print to Disk of the Primer Pair and Multi
+// Primer screens of the same primers (tests/legacy/extension/
+// pair_ext_report.PRN, multi_ext_report.PRN, recorded 2026-10-22)
+TEST_CASE("Print to Disk: Primer Pair and Multi Primer reports with a 5' extension", "[gui][report][legacy]") {
+    auto window = MainWindow{};
+    list_of_two(window);
+    REQUIRE_FALSE(window.analyze_pair({.first = 0, .second = 1}).has_value());
+    CHECK(printed(window) == body(legacy_file(u"extension/pair_ext_report.PRN")));
+    REQUIRE_FALSE(window.analyze_multi({std::size_t{0}, std::size_t{1}, std::nullopt, std::nullopt}).has_value());
+    CHECK(printed(window) == body(legacy_file(u"extension/multi_ext_report.PRN")));
 }
