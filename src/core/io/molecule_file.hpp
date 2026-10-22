@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/io/genbank.hpp"
+#include "core/io/legacy_native_molecule.hpp"
 #include "core/sequence/topology.hpp"
 
 #include <cstdint>
@@ -14,8 +15,16 @@ namespace primerpicker::io {
 // Molecule files that Primer Designer 2.0 loads (tests/legacy/README.md,
 // "Molecule file formats"): GenBank, FASTA (name: the first word of the
 // header) and plain sequence (name: the file name). It rejects EMBL.
+// It also loads the files it writes (legacy_native_molecule.hpp).
 
-enum struct MoleculeError : std::uint8_t { none, missing_header, missing_origin, empty_sequence };
+enum struct MoleculeError : std::uint8_t {
+    none,
+    missing_header,
+    missing_origin,
+    empty_sequence,
+    illegal_format,  // a malformed file of Primer Designer's own format
+    protein          // a protein molecule of that format
+};
 
 // C++23 refactoring: replace with std::expected<Molecule, MoleculeError>
 struct MoleculeResult {
@@ -91,10 +100,46 @@ constexpr auto first_content_line(std::string_view const text) noexcept -> std::
     return detail::success(std::string{file.name}, std::move(sequence), sequence::Topology::linear);
 }
 
-// Any of the three formats, recognised from the first line that is not
-// blank (LOCUS: GenBank; '>': FASTA; otherwise a plain sequence). How
-// Primer Designer recognises formats was not recorded; this choice
-// loads every recorded file as it does. Not noexcept: allocates.
+// Primer Designer's own format: the molecule, if it is DNA with a
+// sequence; circular when there is no "linear" section. Not noexcept:
+// allocates.
+[[nodiscard]] constexpr auto parse_native(std::string_view const text) -> MoleculeResult {
+    auto native = parse_native_molecule(text);
+    if (not native.molecule.has_value()) {
+        return detail::failure(MoleculeError::illegal_format);
+    }
+    if (native.molecule->kind == SequenceKind::protein) {
+        return detail::failure(MoleculeError::protein);
+    }
+    auto sequence = std::string{};
+    detail::append_letters(sequence, native.molecule->sequence.value_or(std::string{}));
+    auto const topology =
+        native.molecule->linear_ends.has_value() ? sequence::Topology::linear : sequence::Topology::circular;
+    return detail::success(std::move(native.molecule->name), std::move(sequence), topology);
+}
+
+namespace detail {
+
+// Primer Designer's own format starts with a name, then two numbers
+// (the size, and 0)
+constexpr auto looks_native(std::string_view const text) noexcept -> bool {
+    auto lines = Lines{text};
+    static_cast<void>(lines.next());
+    auto const is_number = [](std::optional<std::string_view> const line) {
+        return line.has_value() and not line->empty() and
+               line->find_first_not_of("0123456789") == std::string_view::npos;
+    };
+    return is_number(lines.next()) and is_number(lines.next());
+}
+
+}  // namespace detail
+
+// Any of the four formats, recognised from the first line that is not
+// blank (LOCUS: GenBank; '>': FASTA), then from the second and third
+// lines (numbers: Primer Designer's own format); otherwise a plain
+// sequence. How Primer Designer recognises formats was not recorded;
+// this choice loads every recorded file as it does. Not noexcept:
+// allocates.
 [[nodiscard]] constexpr auto parse_molecule_file(MoleculeFile const& file) -> MoleculeResult {
     auto const text = file.text;
     auto const first = detail::first_content_line(text);
@@ -108,6 +153,9 @@ constexpr auto first_content_line(std::string_view const text) noexcept -> std::
     }
     if (first.has_value() and first->starts_with('>')) {
         return parse_fasta(text);
+    }
+    if (detail::looks_native(text)) {
+        return parse_native(text);
     }
     return parse_plain_sequence(file);
 }
