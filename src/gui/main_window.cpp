@@ -757,11 +757,13 @@ void MainWindow::start_picking() {
         partner = PickingPartner{.primer = {bases.begin(), bases.end()},
                                  .name = u"primer %1 (%2)"_s.arg(primer_list_.size()).arg(letters(bases))};
     }
+    auto const extension = std::span{active_primer_->sequence}.first(active_primer_->extension_length);
     picking_.start({.molecule_name = molecule_->name,
                     .molecule = molecule_->sequence,
                     .location = *active_primer_->location,
                     .criteria = active_primer_->criteria,
-                    .partner = std::move(partner)});
+                    .partner = std::move(partner),
+                    .extension = {extension.begin(), extension.end()}});
     pages_.setCurrentWidget(&picking_);
     picking_.setFocus();
 }

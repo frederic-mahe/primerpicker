@@ -78,9 +78,10 @@ public:
     struct Start {
         QString molecule_name;
         std::vector<sequence::Nucleotide> molecule;
-        sequence::PrimerLocation location;
+        sequence::PrimerLocation location;  // of the molecule's bases
         analysis::LegacyCriteria criteria;
         std::optional<PickingPartner> partner;
+        std::vector<sequence::Nucleotide> extension = {};  // the primer's 5' extension
     };
     // Requires a location that fits on the molecule
     void start(Start start);
@@ -108,6 +109,7 @@ private:
     std::vector<sequence::Nucleotide> molecule_;
     sequence::PrimerLocation location_{.position = 1, .length = 1, .strand = sequence::Strand::top};
     analysis::LegacyCriteria criteria_;
+    std::vector<sequence::Nucleotide> extension_;
     std::optional<PickingPartner> partner_;
     // members are destroyed in reverse order: the widgets before the
     // layouts that hold them

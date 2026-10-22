@@ -14,6 +14,7 @@
 #include <span>
 #include <string>
 #include <string_view>
+#include <vector>
 
 // The picking screen of Primer Designer 2.0 (MODIFY PRIMER POSITION,
 // opened by Primer/Create -> From Molecule and Modify -> Position): the
@@ -85,11 +86,10 @@ constexpr auto pad_to(std::string& text, std::size_t const width) -> void {
     }
 }
 
-// The values of a one-base primer, which the picking screen allows:
-// those of legacy_actual_values, with an unknown Tm
-[[nodiscard]] constexpr auto single_base_values(std::span<sequence::Nucleotide const> const primer)
+// the values of legacy_actual_values, with an unknown Tm
+[[nodiscard]] constexpr auto values_with_unknown_tm(std::span<sequence::Nucleotide const> const primer)
     -> analysis::LegacyActualValues {
-    assert(primer.size() == 1);
+    assert(not primer.empty());
     auto const hairpin = analysis::legacy_hairpin(primer);
     return {.gc_percent = analysis::legacy_gc_percent(primer),
             .tm_celsius = 0,
@@ -100,6 +100,14 @@ constexpr auto pad_to(std::string& text, std::size_t const width) -> void {
             .gc_run_3prime = analysis::gc_run_at_3prime_end(primer)};
 }
 
+// The values of a one-base primer, which the picking screen allows:
+// those of legacy_actual_values, with an unknown Tm
+[[nodiscard]] constexpr auto single_base_values(std::span<sequence::Nucleotide const> const primer)
+    -> analysis::LegacyActualValues {
+    assert(primer.size() == 1);
+    return values_with_unknown_tm(primer);
+}
+
 // The values of the picking screen for a primer of one base or more.
 // Unlike the Primer Analysis screen, the run at the 3' end counts as a
 // run, as in Find Pair (tests/legacy/README.md, "The picking screen").
@@ -107,6 +115,27 @@ constexpr auto pad_to(std::string& text, std::size_t const width) -> void {
     -> analysis::LegacyActualValues {
     auto values = primer.size() == 1 ? single_base_values(primer) : analysis::legacy_actual_values(primer);
     values.longest_run = std::max(values.longest_run, analysis::run_at_3prime_end(primer));
+    return values;
+}
+
+// The same for a primer with a 5' extension: the values of the whole
+// primer, the Tm without the extension (tests/legacy/README.md, "5'
+// extension and the criteria"; extension/picking_extension.tsv). With
+// one base after the extension, the Tm is unknown (not recorded). Not
+// noexcept: the whole primer is copied into a vector.
+[[nodiscard]] constexpr auto picking_values(std::span<sequence::Nucleotide const> const extension,
+                                            std::span<sequence::Nucleotide const> const primer)
+    -> analysis::LegacyActualValues {
+    if (extension.empty()) {
+        return picking_values(primer);
+    }
+    assert(not primer.empty());
+    auto whole = std::vector<sequence::Nucleotide>(extension.begin(), extension.end());
+    whole.insert(whole.end(), primer.begin(), primer.end());
+    auto values = primer.size() == 1
+                      ? values_with_unknown_tm(whole)
+                      : analysis::legacy_actual_values({.sequence = whole, .extension_length = extension.size()});
+    values.longest_run = std::max(values.longest_run, analysis::run_at_3prime_end(whole));
     return values;
 }
 
@@ -198,10 +227,13 @@ enum struct SearchDirection : std::uint8_t { forward, backward };
 // one in the direction, that meets every criterion ("MEETS CRITERIA
 // SELECTED: Yes"); none: PRIMER.exe's "No Primers found" (the window
 // stays). Not noexcept: primers are copied into vectors.
+// EXTENSION: the primer's 5' extension, part of the values
+// (extension/picking_extension.tsv)
 [[nodiscard]] constexpr auto legacy_find_next(std::span<sequence::Nucleotide const> const molecule,
                                               sequence::PrimerLocation const& from,
                                               analysis::LegacyCriteria const& criteria,
-                                              SearchDirection const direction)
+                                              SearchDirection const direction,
+                                              std::span<sequence::Nucleotide const> const extension = {})
     -> std::optional<sequence::PrimerLocation> {
     auto candidate = from;
     while (true) {
@@ -220,7 +252,7 @@ enum struct SearchDirection : std::uint8_t { forward, backward };
         if (not primer.has_value()) {
             continue;
         }
-        if (analysis::evaluate(detail::picking_values(*primer), criteria).all()) {
+        if (analysis::evaluate(detail::picking_values(extension, *primer), criteria).all()) {
             return candidate;
         }
     }
@@ -292,15 +324,19 @@ constexpr auto append_values(std::string& line, analysis::LegacyActualValues con
 // The picking screen's values for the primer at a location; none if it
 // does not fit on the molecule. Not noexcept: the primer is copied into
 // a vector.
+// EXTENSION: the primer's 5' extension, part of the values
+// (extension/picking_extension.tsv); the location is that of the
+// molecule's bases
 [[nodiscard]] constexpr auto legacy_picking_state(std::span<sequence::Nucleotide const> const molecule,
                                                   sequence::PrimerLocation const& location,
-                                                  analysis::LegacyCriteria const& criteria)
+                                                  analysis::LegacyCriteria const& criteria,
+                                                  std::span<sequence::Nucleotide const> const extension = {})
     -> std::optional<PickingState> {
     auto const primer = sequence::primer_at(molecule, location);
     if (not primer.has_value()) {
         return std::nullopt;
     }
-    auto const actual = detail::picking_values(*primer);
+    auto const actual = detail::picking_values(extension, *primer);
     auto const verdict = analysis::evaluate(actual, criteria);
     return PickingState{.value_line = legacy_value_line(location.position, actual, verdict),
                         .meets_criteria = verdict.all()};

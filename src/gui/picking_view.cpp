@@ -9,6 +9,7 @@
 #include "gui/picking_colours.hpp"
 
 #include <QBrush>
+#include <QChar>
 #include <QColor>
 #include <QEvent>
 #include <QFont>
@@ -258,6 +259,7 @@ void PickingView::start(Start start) {
     location_ = start.location;
     criteria_ = start.criteria;
     partner_ = std::move(start.partner);
+    extension_ = std::move(start.extension);
     strand_.setText(location_.strand == sequence::Strand::complement ? u"*** Complementary Strand ***"_s
                                                                     : QString{});
     strand_.setVisible(location_.strand == sequence::Strand::complement);
@@ -284,7 +286,7 @@ void PickingView::press(search::PickingKey const key) {
 }
 
 void PickingView::find(search::SearchDirection const direction) {
-    auto const found = search::legacy_find_next(molecule_, location_, criteria_, direction);
+    auto const found = search::legacy_find_next(molecule_, location_, criteria_, direction, extension_);
     if (not found.has_value()) {
         message_.setText(u"No Primers found"_s);  // PRIMER.exe's message
         return;
@@ -300,12 +302,22 @@ void PickingView::show_message(search::PickingMessage const message) {
 }
 
 void PickingView::show_state() {
-    auto const state = search::legacy_picking_state(molecule_, location_, criteria_);
+    auto const state = search::legacy_picking_state(molecule_, location_, criteria_, extension_);
     assert(state.has_value());
     if (not state.has_value()) {
         return;
     }
-    header_.setText(u"Primer length: %1   Molecule: %2"_s.arg(location_.length).arg(molecule_name_));
+    // as PRIMER.exe, the length counts the extension
+    // (tests/legacy/extension/picking_extension.tsv)
+    auto header = u"Primer length: %1   Molecule: %2"_s.arg(location_.length + extension_.size()).arg(molecule_name_);
+    if (not extension_.empty()) {
+        auto letters = QString{};
+        for (auto const nucleotide : extension_) {
+            letters.append(QChar::fromLatin1(sequence::to_letter(nucleotide)));
+        }
+        header += u"   5'extension: %1"_s.arg(letters);
+    }
+    header_.setText(header);
     verdict_.setText(state->meets_criteria ? u"Meets criteria selected: Yes"_s : u"Meets criteria selected: No"_s);
     values_.setText(QString::fromStdString(state->value_line));
     sequence_.show_window(location_, state->meets_criteria);
