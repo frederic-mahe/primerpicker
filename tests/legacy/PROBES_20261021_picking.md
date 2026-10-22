@@ -1,5 +1,8 @@
 # Probes of PRIMER.exe, evening of 2026-10-21: the picking screen
 
+Moved into `README.md` on 2026-10-22 (approved by the developer); this
+file keeps the notes on how the runs were designed.
+
 Primer/Create -> From Molecule, after its form, opens MODIFY PRIMER
 POSITION (so does Modify -> Position): the molecule, five lines of 60
 bases, with the primer drawn as a coloured window, its values on one
