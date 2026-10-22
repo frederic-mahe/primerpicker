@@ -553,6 +553,10 @@ auto read_molecule(std::filesystem::path const& path) -> std::optional<LoadedMol
     }
     auto const name = path.stem().string();
     auto const parsed = primerpicker::io::parse_molecule_file({.text = *text, .name = name});
+    if (parsed.error == primerpicker::io::MoleculeError::illegal_format) {
+        fail(std::format("{}: Illegal File Format", path.string()));  // PRIMER.exe's message
+        return std::nullopt;
+    }
     auto sequence = parsed.molecule.has_value() ? primerpicker::sequence::to_nucleotides(parsed.molecule->sequence)
                                                 : std::nullopt;
     if (not sequence.has_value()) {
