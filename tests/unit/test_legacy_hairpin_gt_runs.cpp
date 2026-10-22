@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -59,6 +60,23 @@ auto shown_energy(std::string const& text) -> double {
     return value;
 }
 
+// the energy and drawing of a recorded row against primerpicker's
+void check_row(std::vector<std::string> const& row) {
+    CAPTURE(row[0]);
+    auto const primer = nucleotides(row[0]);
+    auto const hairpin = legacy_hairpin(primer);
+    REQUIRE(hairpin.has_value());
+    auto const found = hairpin.value_or(primerpicker::analysis::Hairpin{});
+    // tenths of kcal: an explicit tolerance below the shown precision
+    constexpr auto tolerance = 1e-9;
+    auto const difference = primerpicker::analysis::legacy_displayed_energy(found).kcal_per_mol - shown_energy(row[6]);
+    CHECK((difference < tolerance and difference > -tolerance));
+    auto const drawing = legacy_hairpin_drawing(primer, found);
+    CHECK(drawing.top == row[7]);
+    CHECK(drawing.marks == row[8]);
+    CHECK(drawing.bottom == row[9]);
+}
+
 }  // namespace
 
 // Reference values: PRIMER.exe, the Hairpins screen of 32 primers whose
@@ -68,18 +86,6 @@ TEST_CASE("hairpins with runs of G.T pairs: every recorded energy and drawing", 
     auto const rows = recorded_rows();
     REQUIRE(rows.size() == 32);
     for (auto const& row : rows) {
-        CAPTURE(row[0]);
-        auto const primer = nucleotides(row[0]);
-        auto const hairpin = legacy_hairpin(primer);
-        REQUIRE(hairpin.has_value());
-        auto const found = hairpin.value_or(primerpicker::analysis::Hairpin{});
-        // tenths of kcal: an explicit tolerance below the shown precision
-        constexpr auto tolerance = 1e-9;
-        auto const difference = primerpicker::analysis::legacy_displayed_energy(found).kcal_per_mol - shown_energy(row[6]);
-        CHECK((difference < tolerance and difference > -tolerance));
-        auto const drawing = legacy_hairpin_drawing(primer, found);
-        CHECK(drawing.top == row[7]);
-        CHECK(drawing.marks == row[8]);
-        CHECK(drawing.bottom == row[9]);
+        check_row(row);
     }
 }
