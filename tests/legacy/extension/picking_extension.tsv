@@ -1,0 +1,6 @@
+# run	molecule	frame	strand	length	extension	position	meets	value_line	window_colour
+ext_picking3	pairs/TEST600.GB	f05742.png	top	20	GAATTC	51	No	Pos: 51     %GC: 45!   Tm°C: 47!   Hairpin: OK  Dimers: OK  Runs: !	lightgrey
+ext_picking3	pairs/TEST600.GB	f07463.png	top	20	GAATTC	52	No	Pos: 52     %GC: 45!   Tm°C: 47!   Hairpin: OK  Dimers: OK  Runs: !	lightgrey
+ext_picking3	pairs/TEST600.GB	f08693.png	top	21	GAATTC	52	No	Pos: 52     %GC: 42!   Tm°C: 52!   Hairpin: OK  Dimers: OK  Runs: !	lightgrey
+ext_picking3	pairs/TEST600.GB	f09923.png	top	20	GAATTC	52	No	Pos: 52     %GC: 45!   Tm°C: 47!   Hairpin: OK  Dimers: OK  Runs: !	lightgrey
+ext_picking3	pairs/TEST600.GB	f11153.png	top	20	GAATTC	75	Yes	Pos: 75     %GC: 50    Tm°C: 56    Hairpin: OK  Dimers: OK  Runs: OK	green

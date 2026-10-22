@@ -39,6 +39,10 @@ Recorded with
   hand8, hand9,   3.5  600  V " enter , , , , ,"                                     inputs/ZH8, ZH9, ZHA
   handA
   tfeat_view      3.5  700  V " enter , , , , , ,"                                   inputs/TFEAT.GB
+  round_zh6       3.5  600  L " s , , , enter , , y , , , ,"                         inputs/ZH6
+  round_zh7       3.5  600  L " s , , , enter , , y , , , ,"                         inputs/ZH7
+                  (loaded with From Molecule, then saved over itself: written/round_zh6.ZH6,
+                  written/round_zh7.ZH7; recorded later on 2026-10-22)
 
 Files:
 - NAME.screens.txt: tools/screen_text.py, splash screens removed by

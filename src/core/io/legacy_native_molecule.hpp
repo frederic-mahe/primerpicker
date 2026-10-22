@@ -24,9 +24,10 @@ namespace primerpicker::io {
 //   position, R or L,
 //   linear molecules only: linear, left end, right end, and two lines
 //   ("^" when no end was typed),
-//   if there is a description: description, the text,
 //   if there is a sequence: sequence (DNA) or sequenceAA (protein), the
-//   whole sequence.
+//   whole sequence,
+//   if there is a description: description, the text (read before or
+//   after the sequence, written after it).
 // REGION features are not saved.
 
 enum struct NativeError : std::uint8_t { none, illegal_format };
@@ -40,7 +41,7 @@ struct NativeGene {
     std::string description;
     std::size_t start;
     std::size_t end;
-    GeneDirection direction;
+    GeneDirection direction;  // as read; written from shows_complement
     ComplementFlag flag;
 };
 
@@ -199,8 +200,8 @@ constexpr auto is_blank(std::string_view const line) noexcept -> bool {
     return line.find_first_not_of(" \t") == std::string_view::npos;
 }
 
-// the sections after the features: linear ends, description, sequence,
-// in that order, each optional; then only blank lines
+// the sections after the features: the linear ends, then a description
+// and a sequence in either order, each optional; then only blank lines
 constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool {
     auto line = lines.next();
     if (line == linear_mark) {
@@ -210,24 +211,26 @@ constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool
         }
         line = lines.next();
     }
-    if (line == description_mark) {
-        auto const text = lines.next();
-        if (not text.has_value()) {
-            return false;
-        }
-        molecule.description = std::string{*text};
-        line = lines.next();
-    }
-    if (line == dna_mark or line == protein_mark) {
-        molecule.kind = line == protein_mark ? SequenceKind::protein : SequenceKind::dna;
-        auto const letters = lines.next();
-        if (not letters.has_value()) {
-            return false;
-        }
-        molecule.sequence = std::string{*letters};
-        line = lines.next();
-    }
+    auto description_read = false;
     for (; line.has_value(); line = lines.next()) {
+        if (line == description_mark and not description_read) {
+            auto const text = lines.next();
+            if (not text.has_value()) {
+                return false;
+            }
+            molecule.description = std::string{*text};
+            description_read = true;
+            continue;
+        }
+        if ((line == dna_mark or line == protein_mark) and not molecule.sequence.has_value()) {
+            molecule.kind = line == protein_mark ? SequenceKind::protein : SequenceKind::dna;
+            auto const letters = lines.next();
+            if (not letters.has_value()) {
+                return false;
+            }
+            molecule.sequence = std::string{*letters};
+            continue;
+        }
         if (not is_blank(*line)) {
             return false;
         }
@@ -284,6 +287,13 @@ constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool
     return {.molecule = std::move(molecule), .error = NativeError::none};
 }
 
+// The features table shows "(C)" for a gene whose flag is Y and whose
+// start is before its end, or whose flag is N and whose start is after
+// its end (tests/legacy/molecule_save/hand6, hand7, hand8)
+[[nodiscard]] constexpr auto shows_complement(NativeGene const& gene) noexcept -> bool {
+    return (gene.flag == ComplementFlag::yes) != (gene.start > gene.end);
+}
+
 // Not noexcept: the string allocates.
 [[nodiscard]] constexpr auto write_native_molecule(NativeMolecule const& molecule) -> std::string {
     using namespace native_detail;
@@ -305,7 +315,9 @@ constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool
         add_names(gene.name, gene.description);
         add(decimal(gene.start));
         add(decimal(gene.end));
-        add(gene.direction == GeneDirection::counterclockwise ? counterclockwise_mark : clockwise_mark);
+        // ccw when the gene shows (C), whatever was read
+        // (tests/legacy/molecule_save/round_zh6)
+        add(shows_complement(gene) ? counterclockwise_mark : clockwise_mark);
         add(gene.flag == ComplementFlag::yes ? yes_mark : no_mark);
     }
     add(decimal(molecule.markers.size()));
@@ -321,13 +333,13 @@ constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool
         add(molecule.linear_ends->left_mark);
         add(molecule.linear_ends->right_mark);
     }
-    if (not molecule.description.empty()) {
-        add(description_mark);
-        add(molecule.description);
-    }
     if (molecule.sequence.has_value()) {
         add(molecule.kind == SequenceKind::protein ? protein_mark : dna_mark);
         add(*molecule.sequence);
+    }
+    if (not molecule.description.empty()) {
+        add(description_mark);
+        add(molecule.description);
     }
     return text;
 }
@@ -352,11 +364,5 @@ constexpr auto read_tail(detail::Lines& lines, NativeMolecule& molecule) -> bool
     return native;
 }
 
-// The features table shows "(C)" for a gene whose flag is Y and whose
-// start is before its end, or whose flag is N and whose start is after
-// its end (tests/legacy/molecule_save/hand6, hand7, hand8)
-[[nodiscard]] constexpr auto shows_complement(NativeGene const& gene) noexcept -> bool {
-    return (gene.flag == ComplementFlag::yes) != (gene.start > gene.end);
-}
 
 }  // namespace primerpicker::io

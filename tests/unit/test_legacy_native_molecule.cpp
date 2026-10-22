@@ -90,7 +90,8 @@ constexpr auto written_files = std::to_array<std::string_view>(
      "molecule_save/written/save_circ.ZC.GB", "molecule_save/written/create_nothing.ZM",
      "molecule_save/written/create_feat4.ZN", "molecule_save/written/create_prot.ZP",
      "molecule_save/written/feat_marker4.ZF", "molecule_save/written/feat_region2.ZF",
-     "molecule_save/written/feat_gback.ZF"});
+     "molecule_save/written/feat_gback.ZF", "molecule_save/written/round_zh6.ZH6",
+     "molecule_save/written/round_zh7.ZH7"});
 
 }  // namespace
 
@@ -106,6 +107,15 @@ TEST_CASE("native molecules: every file PRIMER.exe wrote is read and written bac
         CHECK(parse_native_molecule(text).error == NativeError::none);
         CHECK(written_back(text) == text);
     }
+}
+
+TEST_CASE("native molecules: Save writes a file read as PRIMER.exe does", "[io][legacy]") {
+    // round_zh6: a gene 2 to 6, ccw, N is written cw (no (C)); round_zh7:
+    // the description, read before the sequence, is written after it
+    CHECK(written_back(legacy_file("molecule_save/inputs/ZH6")) ==
+          legacy_file("molecule_save/written/round_zh6.ZH6"));
+    CHECK(written_back(legacy_file("molecule_save/inputs/ZH7")) ==
+          legacy_file("molecule_save/written/round_zh7.ZH7"));
 }
 
 TEST_CASE("native molecules: Save writes a GenBank or FASTA molecule as PRIMER.exe does", "[io][legacy]") {

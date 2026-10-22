@@ -14,7 +14,7 @@ competing readings disagree.
 
 ## Saving and creating molecules (recorded 2026-10-22)
 
-`molecule_save/` (`README.txt`): 25 runs; `written/` holds every file
+`molecule_save/` (`README.txt`): 27 runs; `written/` holds every file
 PRIMER.exe wrote, `inputs/` the files written for the probes.
 
 **Save.** Save/Remove -> S on a loaded molecule opens "Save as
@@ -38,15 +38,22 @@ extension"; `zn` gives `ZN`); Enter on the empty field saves nothing.
    Format", with two record layouts tried: `hand1`, `hand9`, `handA`);
 4. the number of GENE features, then 5 lines per gene: `NAME` NUL
    `DESCRIPTION` on one line, start, end, `cw` or `ccw`, `Y` or `N`;
+   `ccw` is written when the features table shows `(C)` for the gene
+   (below), `cw` otherwise, whatever the file read had (`round_zh6`:
+   a gene 2 to 6, `ccw`, `N` is saved `cw`; `round_zh7`: 2 to 6,
+   `ccw`, `Y` stays `ccw`);
 5. the number of MARKER features, then 3 lines per marker: `NAME` NUL
    `DESCRIPTION`, position, `R` or `L` (`L` when Complement is Y);
 6. linear molecules only: `linear`, the left end, the right end, then
    two lines that are `^` and `^` when both ends are empty and empty
    lines when they were typed (`e`, `b`); circular molecules have none
    of these lines (`save_circ`);
-7. when the description is not empty: `description`, then the text;
-8. when there is a sequence: `sequence` (DNA) or `sequenceAA`
-   (protein), then the whole sequence on one line, in upper case.
+7. when there is a sequence: `sequence` (DNA) or `sequenceAA`
+   (protein), then the whole sequence on one line, in upper case;
+8. when the description is not empty: `description`, then the text.
+   PRIMER.exe reads the description before or after the sequence
+   (`hand3`, `hand7`), and writes it after (`round_zh7`: ZH7, with the
+   description before the sequence, saved over itself, has it after).
 A protein made with Create New (P) is written as DNA would be
 (`create_prot`: `0`, `linear`, no sequence): only `sequenceAA` marks a
 protein (`hand4`: "4 AA PROTEIN"). The description of a GenBank file
@@ -80,7 +87,8 @@ Answering Y to "Enter Sequence" stopped the program in every run
 (`create_seq4`: the screen stays on "Sequence Entered:  No" and keys
 are ignored): a sequence could not be typed.
 
-Not probed: Remove (R) after a save; a molecule with a sequence typed
+Not probed: Remove (R) after a save; a description and a sequence
+written by Create New (the editor hangs); a molecule with a sequence typed
 in (the editor hangs); left and right ends named after enzymes; the
 meaning of the two `^` lines; how a created gene gets Complement;
 whether `cw`/`ccw` matters on circular molecules.
