@@ -11,3 +11,5 @@
 *.CFG -text
 *.PD2 -text
 *.png binary
+tests/legacy/molecule_save/written/* -text
+tests/legacy/molecule_save/inputs/* -text

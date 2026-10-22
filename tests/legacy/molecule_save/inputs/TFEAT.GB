@@ -1,0 +1,20 @@
+LOCUS       TFEAT        600 bp    DNA     linear
+DEFINITION  Random test molecule (seed 600).
+FEATURES             Location/Qualifiers
+     gene            5..40
+                     /gene="abc"
+     CDS             complement(50..90)
+                     /note="xyz"
+     misc_feature    100
+ORIGIN
+        1 ggtcatttta aatggacaac catctattga gaatactcat gtcaacctgg ctcaaaggct
+       61 cagacatcag ggctcaatga cgtgcggtta gttatcaacc tacatggact ttatttatgc
+      121 ggcgaggcaa taaacaaacg tgcgcccagg tgttgggcct gtctgtaggc ccaacagact
+      181 gcgtgcgtca aatgcctccc gttttcattt agagcgaacc ggtccttaca tttatttcca
+      241 agtaacgacc gtaacgatga gcaacactcg tcctatacta gacgatggga cgccatcagt
+      301 tatcgatatg aataaagttt cagctctaca aactctaatg cgtttaccac aggacatgat
+      361 gttagcgtgc gacctggtat ccttgcatta cctggataca ctgacactta cgccagatga
+      421 cttcccgtat ggaaacgcga tgagtagtaa ccgcactcca aagtgcatac cggactgaaa
+      481 agtacccatt atgattctat gttcgtcgac tctcaggtat cgaaaacgtc tactcctgtc
+      541 caggggggat aagcaaatcc atctgtaagt caccagtcaa gatttccgat ttaaagcgac
+//
