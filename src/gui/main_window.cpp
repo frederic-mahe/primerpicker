@@ -714,17 +714,28 @@ void MainWindow::create_from_molecule() {
         return;
     }
     if (molecule_.has_value()) {  // always, here
-        from_molecule_.start(molecule_->name);
+        from_molecule_.start(molecule_->name, defaults_.primer_length);
     }
 }
 
+// the length typed counts the 5' extension, as PRIMER.exe's form
+// ("Primer length (incl 5' ext)"; tests/legacy/extension/)
 void MainWindow::use_from_molecule() {
+    auto const length = from_molecule_.length();
+    auto extension = from_molecule_.extension();
+    // two bases of the molecule at least, as the analysis needs (what
+    // PRIMER.exe does with fewer is not recorded)
+    constexpr auto min_bases = std::size_t{2};
+    if (not length.has_value() or *length < extension.size() + min_bases) {
+        from_molecule_.refuse(u"Primer must have length!"_s);  // PRIMER.exe's message for no base
+        return;
+    }
+    auto const bases = *length - extension.size();
     auto const position = from_molecule_.position();
-    auto primer = position.has_value() and molecule_.has_value()
-                      ? sequence::primer_at(molecule_->sequence, {.position = *position,
-                                                                  .length = defaults_.primer_length,
-                                                                  .strand = from_molecule_.strand()})
-                      : std::nullopt;
+    auto const location = sequence::PrimerLocation{
+        .position = position.value_or(0), .length = bases, .strand = from_molecule_.strand()};
+    auto primer = position.has_value() and molecule_.has_value() ? sequence::primer_at(molecule_->sequence, location)
+                                                                 : std::nullopt;
     if (not primer.has_value()) {
         from_molecule_.refuse_position();
         return;
@@ -732,9 +743,12 @@ void MainWindow::use_from_molecule() {
     from_molecule_.accept();
     auto const complement = from_molecule_.strand() == sequence::Strand::complement;
     auto origin = u"%1 at %2%3"_s.arg(molecule_->name).arg(*position).arg(complement ? u" (complement)"_s : QString{});
-    make_active(std::move(*primer), std::move(origin), sequence::PrimerLocation{.position = *position,
-                                                             .length = defaults_.primer_length,
-                                                             .strand = from_molecule_.strand()});
+    make_active(std::move(*primer), std::move(origin), location);
+    if (active_primer_.has_value() and not extension.empty()) {  // always active, here
+        active_primer_->extension_length = extension.size();
+        extension.insert(extension.end(), active_primer_->sequence.begin(), active_primer_->sequence.end());
+        active_primer_->sequence = std::move(extension);
+    }
     if (active_primer_.has_value() and molecule_.has_value()) {  // always, here
         active_primer_->molecule_name = molecule_->name;
         active_primer_->molecule_path = QDir::toNativeSeparators(molecule_->path);
