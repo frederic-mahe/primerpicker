@@ -55,3 +55,12 @@ multi` on the whole sequence gives the same values except the Tm (77).
 **Uniqueness** (`ext_unique`): "Primer is unique" (as `primerpicker
 homology` for 51 without extension): this run does not tell whether
 the extension is searched.
+
+**Reports** (`pair_ext_report.PRN`, `multi_ext_report.PRN`: Print to
+Disk of the Primer Pair and Multi Primer screens of M13EXT.PD2 and
+AACAGCTATGACCATG): the sequence is written with a dash after the
+extension (`Sequence:     5'-GAATTC-GTAAAACGACGGCCAGT-3'`), the length
+and composition are those of the whole primer (`Length:  23;`,
+`A:8  C:5  G:6  T:4`), the Tm is without the extension (64), and the
+duplexes of page 2 are drawn on the whole primers, without dash. No
+other line mentions the extension.
