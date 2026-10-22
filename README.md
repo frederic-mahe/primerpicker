@@ -57,6 +57,30 @@ Primer Analysis of the active primer (with its hairpin, Uniqueness,
 False Priming and the One Primer report), Primer Pair, Multi Primer,
 Match Active Primer, Find Pair and Find Enzymes; `--config` for a
 `pd2.cfg` file, and a System / Light / Dark colour scheme.
+Since then: the picking screen (move the primer along the molecule,
+change its length, find the next primer that meets the criteria),
+Modify -> Position, Length and Mutagenize, Molecule-Ops -> View/Edit
+and Save/Remove, and the molecule files Primer Designer writes.
+
+
+## Screenshots
+
+The picking screen of From Molecule (light and dark colour schemes):
+
+![Picking a primer on a molecule](docs/screenshots/picking_light.png)
+
+![The same, dark colour scheme](docs/screenshots/picking_dark.png)
+
+The Primer Analysis of the active primer, and the Mutagenize screen:
+
+![Primer Analysis](docs/screenshots/analysis_light.png)
+
+![Mutagenize](docs/screenshots/mutagenize_light.png)
+
+The screenshots are made by hidden GUI tests, for instance
+`PRIMERPICKER_SCREENSHOT_DIR=DIR build/debug/tests/gui/gui_tests
+'[.picking_screenshots]'` (also `[.screenshots]` and
+`[.mutagenize_screenshots]`).
 
 Also in the core library, for the graphical interface: Match Active
 Primer (a partner for a given primer), uniqueness and false priming
