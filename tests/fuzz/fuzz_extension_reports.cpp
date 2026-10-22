@@ -7,6 +7,7 @@
 // bases after the extension) and the bases (byte % 4). Missing bytes
 // leave the remaining fields empty.
 
+#include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
