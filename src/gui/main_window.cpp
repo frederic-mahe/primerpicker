@@ -792,13 +792,13 @@ auto MainWindow::mutagenize() -> std::optional<QString> {
         return u"Primer is already Mutated"_s;  // PRIMER.exe's message
     }
     // not recorded from PRIMER.exe yet (tests/legacy/README.md, "Mutagenize")
-    if (primer.location->strand != sequence::Strand::top or primer.extension_length != 0) {
-        return u"Mutagenize: primers on the top strand, without 5' extension, only"_s;
+    if (primer.extension_length != 0) {
+        return u"Mutagenize: primers without 5' extension only"_s;
     }
     mutagenize_source_ = primer;
     mutagenize_.start({.molecule_name = molecule_->name,
                        .molecule = molecule_->sequence,
-                       .position = primer.location->position,
+                       .location = *primer.location,
                        .primer = primer.sequence,
                        .criteria = primer.criteria});
     pages_.setCurrentWidget(&mutagenize_);

@@ -2,6 +2,7 @@
 
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <QDialog>
 #include <QEvent>
@@ -59,7 +60,7 @@ public:
     struct Start {
         QString molecule_name;
         std::vector<sequence::Nucleotide> molecule;
-        std::size_t position;  // the primer's 5' end (top strand)
+        sequence::PrimerLocation location;  // shown on the primer's own strand
         std::vector<sequence::Nucleotide> primer;
         analysis::LegacyCriteria criteria;
     };

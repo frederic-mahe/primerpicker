@@ -6,6 +6,7 @@
 #include "core/sequence/codon_table.hpp"
 #include "core/sequence/genetic_code.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <QAbstractItemView>
 #include <QDialog>
@@ -148,11 +149,15 @@ MutagenizeView::MutagenizeView()
 }
 
 void MutagenizeView::start(Start start) {
-    assert(start.position >= 1 and start.position - 1 + start.primer.size() <= start.molecule.size());
-    header_.setText(u"Mutagenize Primer    Molecule: %1    Position: %2"_s.arg(start.molecule_name)
-                        .arg(start.position));
-    molecule_ = std::move(start.molecule);
-    position_ = start.position;
+    // PRIMER.exe shows a complement-strand primer on its own strand
+    // (tests/legacy/README.md, "Complement-strand primers")
+    auto strand = analysis::legacy_mutagenize_strand(start.molecule, start.location);
+    assert(strand.position >= 1 and strand.position - 1 + start.primer.size() <= strand.molecule.size());
+    header_.setText(u"Mutagenize Primer    Molecule: %1    Position: %2%3"_s.arg(start.molecule_name)
+                        .arg(start.location.position)
+                        .arg(start.location.strand == sequence::Strand::complement ? u"   COMPLEMENTARY"_s : QString{}));
+    molecule_ = std::move(strand.molecule);
+    position_ = strand.position;
     original_ = std::move(start.primer);
     mutated_ = original_;
     cursor_ = 0;
