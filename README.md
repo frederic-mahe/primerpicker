@@ -1,9 +1,9 @@
-> **Note:** primerpicker is developed with the help of Anthropic's
-> Claude (Opus 5.5).
-
 # primerpicker
 
-graphical picker for DNA primers
+interactive design of PCR primers
+
+(primerpicker is developed with the help of Anthropic's Claude Opus
+5.5)
 
 primerpicker designs and checks PCR and sequencing primers. It is
 inspired by *Primer Designer* v2.0 (Scientific & Educational Software,
