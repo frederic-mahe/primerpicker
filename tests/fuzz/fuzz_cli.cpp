@@ -36,13 +36,16 @@ namespace {
 constexpr auto max_arguments = std::size_t{8};
 constexpr auto program_name = std::string_view{"primerpicker"};
 // TEST600 (one '/'), then molecules with homology sites, a short one
-// and a circular one
+// and a circular one, then files of Primer Designer's own format (one
+// with genes, markers and a description; a circular one)
 constexpr auto molecule_files = std::array{
     std::string_view{PRIMERPICKER_LEGACY_DIR "/pairs/TEST600.GB"},
     std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/TREP2.GB"},
     std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/map/TMAP660F.GB"},
     std::string_view{PRIMERPICKER_LEGACY_DIR "/homology/map/TMAP100.GB"},
-    std::string_view{PRIMERPICKER_LEGACY_DIR "/enzymes/TENZC.GB"}};
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/enzymes/TENZC.GB"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/molecule_save/inputs/ZH7"},
+    std::string_view{PRIMERPICKER_LEGACY_DIR "/molecule_save/written/save_circ.ZC.GB"}};
 constexpr auto settings_file = std::string_view{PRIMERPICKER_LEGACY_DIR "/config/PD2_RELAXED.CFG"};
 constexpr auto report_option = std::string_view{"--report"};
 constexpr auto report_file = std::string_view{"report.prn"};  // in the harness's directory

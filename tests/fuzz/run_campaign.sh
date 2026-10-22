@@ -28,7 +28,7 @@ workers=${3:-$(($(nproc) - 1))}
 check_seconds=${CHECK_SECONDS:-600}  # how often coverage is checked
 
 # harness:weight (share of the workers)
-harnesses="fuzz_find_pair:6 fuzz_cli:5 fuzz_molecule_file:4 fuzz_genbank:3 fuzz_fasta:2 fuzz_site_search:2 fuzz_multi_primer:2 fuzz_pd2:1 fuzz_pd2_cfg:1 fuzz_homology_report:2 fuzz_picking:2"
+harnesses="fuzz_find_pair:6 fuzz_cli:7 fuzz_molecule_file:3 fuzz_genbank:2 fuzz_fasta:1 fuzz_site_search:1 fuzz_multi_primer:1 fuzz_pd2:1 fuzz_pd2_cfg:1 fuzz_homology_report:1 fuzz_picking:2 fuzz_native_molecule:4 fuzz_extension_reports:3"
 total_weight=0
 for entry in $harnesses; do
     total_weight=$((total_weight + ${entry#*:}))
@@ -72,6 +72,10 @@ fixed_seeds() {
             printf 'match\n/m\n51\n400' > "$corpus/match"
             printf 'match\n--report\nr\n/m\n51\n400' > "$corpus/match_report"
             printf 'match\n--top-strand\n/m\n50\n600' > "$corpus/match_top_strand"
+            printf 'match\n--complement\n/m\n400\n100' > "$corpus/match_complement"
+            printf 'match\n--complement\n--report\nr\n/m\n460\n300' > "$corpus/match_complement_report"
+            printf 'find-enzymes\n//////m\nTaqI' > "$corpus/native_find_enzymes"
+            printf 'find-pair\n///////m\n100\n450' > "$corpus/native_find_pair"
             printf 'explain\nTa' > "$corpus/explain"
             # an argument cut by a NUL byte (fuzz_cli.cpp, found 2026-10-20)
             printf 'analyze\n--report\000x\n/\nGGGTCGGG' > "$corpus/nul_report" ;;
@@ -84,6 +88,20 @@ primers = ['CTCAAAGGCTCAGACATCAG', 'GATCCATGCAATGCTAGCTA', 'ACGTTGCAGGTCAAGCTTGC
 data = bytes([0x0F])
 for primer in primers:
     data += bytes([len(primer) - 2]) + bytes('ACGT'.index(base) for base in primer)
+open(sys.argv[1], 'wb').write(data)
+EOP
+            ;;
+        fuzz_molecule_file | fuzz_native_molecule)
+            # files of Primer Designer's own format (recorded 2026-10-22)
+            cp "$root"/tests/legacy/molecule_save/written/* "$root"/tests/legacy/molecule_save/inputs/ZH* "$corpus/" ;;
+        fuzz_extension_reports)
+            # M13EXT.PD2 (GAATTC + GTAAAACGACGGCCAGT) and GGATCC +
+            # AACAGCTATGACCATG in fields A and B (extension/*_ext2_report)
+            python3 -I - "$corpus/ext2" <<'EOP'
+import sys
+data = bytes([0x03])
+for extension, primer in [('GAATTC', 'GTAAAACGACGGCCAGT'), ('GGATCC', 'AACAGCTATGACCATG')]:
+    data += bytes([len(extension), len(primer) - 2]) + bytes('ACGT'.index(base) for base in extension + primer)
 open(sys.argv[1], 'wb').write(data)
 EOP
             ;;
@@ -102,7 +120,7 @@ seed() {
     case $1 in
         fuzz_pd2) find "$root/tests/legacy" -iname '*.pd2' -exec cp {} "$corpus/" \; ;;
         fuzz_pd2_cfg) find "$root/tests/legacy" -iname '*.cfg' -exec cp {} "$corpus/" \; ;;
-        fuzz_site_search | fuzz_cli | fuzz_multi_primer) ;;
+        fuzz_site_search | fuzz_cli | fuzz_multi_primer | fuzz_native_molecule | fuzz_extension_reports) ;;
         fuzz_find_pair)
             # settings (targets 150 and 400, built-in defaults), then
             # TEST600.GB, one byte per base
@@ -140,6 +158,8 @@ options() {
         fuzz_find_pair) printf '%s' "-max_len=1214" ;;  # 14 bytes of settings, 1200 bases
         fuzz_picking) printf '%s' "-max_len=2045" ;;  # 5 header bytes, 40 keys, 2000 bases
         fuzz_multi_primer) printf '%s' "-max_len=249" ;;  # 1 + 4 x (1 + 60)
+        fuzz_extension_reports) printf '%s' "-max_len=305" ;;  # 1 + 4 x (2 + 12 + 60)
+        fuzz_native_molecule) printf '%s' "-dict=$root/tests/fuzz/genbank.dict" ;;
         fuzz_pd2_cfg) printf '%s' "-max_len=128" ;;  # the files have 55 bytes
         *) printf '%s' "-max_len=65536" ;;
     esac
