@@ -131,27 +131,62 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-  static-analysis:
-    # the developers' tool versions (cppcheck 2.19, clang-tidy 20);
-    # older cppcheck releases report false positives
-    name: clang-tidy and cppcheck (clang 20, libstdc++)
+  clang-libstdcxx:
+    # clang 20 with libstdc++, the configuration of clang-tidy, built and
+    # tested (no other job tests it)
+    name: ubuntu-26.04, clang 20 and libstdc++
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v5
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install --yes ninja-build cppcheck clang-20 clang-tidy-20 qt6-base-dev
-      - name: Configure (clang-libstdcxx, the reference for clang-tidy)
+          sudo apt-get install --yes --no-install-recommends ninja-build clang-20 qt6-base-dev
+      - name: Configure
         run: cmake --preset clang-libstdcxx
       - name: Build
         run: cmake --build --preset clang-libstdcxx -j
       - name: Test
         run: ctest --preset clang-libstdcxx
+
+  clang-tidy:
+    # the developers' tool version (clang-tidy 20). The files are split
+    # into three shards, each checked on every core of its runner; no
+    # build is needed, only the compile database and the files Qt
+    # generates (moc)
+    name: clang-tidy (clang 20, libstdc++), shard ${{ matrix.shard }} of 3
+    runs-on: ubuntu-26.04
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends ninja-build clang-20 clang-tidy-20 qt6-base-dev
+      - name: Configure (clang-libstdcxx, the reference for clang-tidy)
+        run: cmake --preset clang-libstdcxx
+      - name: Generate the Qt files
+        run: cmake --build --preset clang-libstdcxx --target primerpicker_gui_autogen
       - name: clang-tidy
         run: |
-          find src tests/unit tests/gui -name '*.cpp' -print0 | \
-            xargs -0 -n1 clang-tidy-20 -p build/clang-libstdcxx --quiet --warnings-as-errors='*'
+          find src tests/unit tests/gui -name '*.cpp' | sort | \
+            awk -v shard=${{ matrix.shard }} 'NR % 3 == shard' | \
+            xargs -P "$(nproc)" -n1 clang-tidy-20 -p build/clang-libstdcxx --quiet --warnings-as-errors='*'
+
+  cppcheck:
+    # the developers' tool version (cppcheck 2.19); older cppcheck
+    # releases report false positives
+    name: cppcheck
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends cppcheck
       - name: cppcheck
         run: |
           cppcheck --force --enable=warning,style --language=c++ --std=c++20 \
