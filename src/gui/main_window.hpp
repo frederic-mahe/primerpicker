@@ -208,6 +208,12 @@ public:
     // Empty", as PRIMER.exe)
     [[nodiscard]] auto remove_molecule() -> std::optional<QString>;
 
+    // Molecule-Ops -> Save/Remove, S: writes the loaded molecule to PATH
+    // in PRIMER.exe's own format, as PRIMER.exe does; the error, if none
+    // is loaded ("Molecule List is Empty") or if the file cannot be
+    // written
+    [[nodiscard]] auto save_molecule_to(QString const& path) -> std::optional<QString>;
+
     // Help -> Glossary at the built-in definition NAME (a key or an
     // alias; the first entry if there is none); whether NAME was found
     auto show_glossary(QString const& name) -> bool;

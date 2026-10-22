@@ -4,6 +4,7 @@
 #include "core/analysis/legacy_multi_primer.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
+#include "core/io/legacy_native_molecule.hpp"
 #include "core/io/molecule_file.hpp"
 #include "core/search/legacy_find_pair.hpp"
 #include "core/search/legacy_match.hpp"
@@ -27,6 +28,7 @@
 #include "gui/picking_view.hpp"
 #include "gui/sequence_dialog.hpp"
 
+#include <QAbstractButton>
 #include <QAbstractItemView>
 #include <QAction>
 #include <QAnyStringView>
@@ -48,6 +50,7 @@
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QProgressDialog>
+#include <QPushButton>
 #include <QMenu>
 #include <QMenuBar>
 #include <QObject>
@@ -503,6 +506,9 @@ auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
     auto const name = QFileInfo{path}.completeBaseName().toStdString();
     auto const parsed = io::parse_molecule_file(
         {.text = std::string_view{bytes.constData(), static_cast<std::size_t>(bytes.size())}, .name = name});
+    if (parsed.error == io::MoleculeError::illegal_format) {
+        return u"%1: Illegal File Format"_s.arg(path);  // PRIMER.exe's message
+    }
     auto sequence = parsed.molecule.has_value() ? sequence::to_nucleotides(parsed.molecule->sequence) : std::nullopt;
     if (not sequence.has_value()) {
         return u"%1: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)"_s.arg(path);
@@ -844,19 +850,56 @@ auto MainWindow::remove_molecule() -> std::optional<QString> {
     return std::nullopt;
 }
 
-// PRIMER.exe's SAVE/REMOVE MOLECULE screen: Remove only (what Save
-// writes is not recorded)
+auto MainWindow::save_molecule_to(QString const& path) -> std::optional<QString> {
+    if (not molecule_.has_value()) {
+        return u"Molecule List is Empty"_s;  // PRIMER.exe's message
+    }
+    // a file of PRIMER.exe's own format is written back with its
+    // features and description; another file as PRIMER.exe writes it
+    // (tests/legacy/README.md, "Saving and creating molecules")
+    auto native = io::parse_native_molecule(molecule_->text);
+    if (not native.molecule.has_value()) {
+        auto bases = std::string{};
+        std::ranges::transform(molecule_->sequence, std::back_inserter(bases), sequence::to_letter);
+        native.molecule = io::native_from_molecule(
+            {.name = molecule_->name.toStdString(), .sequence = std::move(bases), .topology = molecule_->topology});
+    }
+    auto const text = io::write_native_molecule(*native.molecule);
+    auto file = QFile{path};
+    if (not file.open(QIODevice::WriteOnly) or
+        file.write(text.data(), static_cast<qint64>(text.size())) != static_cast<qint64>(text.size())) {
+        return u"cannot write the molecule to %1"_s.arg(path);
+    }
+    return std::nullopt;
+}
+
+// PRIMER.exe's SAVE/REMOVE MOLECULE screen: S saves the molecule (a file
+// dialog, which asks before overwriting a file, as PRIMER.exe), R
+// removes it
 void MainWindow::open_save_remove() {
     if (not molecule_.has_value()) {
         QMessageBox::information(this, u"Save/Remove Molecule"_s, u"Molecule List is Empty"_s);
         return;
     }
-    auto const answer = QMessageBox::question(
-        this, u"Save/Remove Molecule"_s,
-        u"Remove %1?\n\nRemoving a molecule from the list unloads the molecule from program memory "
-        u"(it does not delete a disk file)."_s.arg(molecule_->name),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-    if (answer != QMessageBox::Yes) {
+    auto box = QMessageBox{QMessageBox::Question, u"Save/Remove Molecule"_s,
+                           u"%1\n\nSave molecules to disk files and/or remove molecules from program list. "
+                           u"Removing a molecule from the list unloads the molecule from program memory "
+                           u"(it does not delete a disk file)."_s.arg(molecule_->name),
+                           QMessageBox::Cancel, this};
+    auto const* const save = box.addButton(u"&Save"_s, QMessageBox::AcceptRole);
+    auto const* const remove = box.addButton(u"&Remove"_s, QMessageBox::DestructiveRole);
+    box.exec();
+    if (box.clickedButton() == save) {
+        auto const path = QFileDialog::getSaveFileName(this, u"Save Molecule"_s, molecule_->path);
+        if (path.isEmpty()) {
+            return;
+        }
+        if (auto const error = save_molecule_to(path); error.has_value()) {
+            QMessageBox::warning(this, u"Save/Remove Molecule"_s, *error);
+        }
+        return;
+    }
+    if (box.clickedButton() != remove) {
         return;
     }
     if (auto const error = remove_molecule(); error.has_value()) {
