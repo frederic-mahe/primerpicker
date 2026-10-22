@@ -86,15 +86,11 @@ TEST_CASE("Match Active Primer asks for the target, with the settings' range", "
     CHECK(table_rows(window, u"match_table").size() == 11);
 }
 
-TEST_CASE("Match Active Primer needs a top-strand primer made from the molecule", "[gui][match]") {
+TEST_CASE("Match Active Primer needs a primer made from the molecule", "[gui][match]") {
     auto window = MainWindow{};
     REQUIRE_FALSE(window.load_molecule(legacy_file(u"pairs/TEST600.GB")).has_value());
     direct_entry(window, u"CTCAAAGGCTCAGACATCAG"_s);
     CHECK(window.match_active_primer({.target = 400, .start_offset = 50, .end_offset = 50}).has_value());
-    // a complement-strand primer A (primers B on the top strand):
-    // recorded, not reproduced yet (match_variations/)
-    from_molecule(window, u"400"_s, true);
-    CHECK(window.match_active_primer({.target = 51, .start_offset = 50, .end_offset = 50}).has_value());
 }
 
 // Reference: "No Matching Primers Found" (tests/legacy/README.md, "No

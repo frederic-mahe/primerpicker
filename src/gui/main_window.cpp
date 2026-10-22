@@ -1163,11 +1163,6 @@ auto MainWindow::match_active_primer(MatchRequest const& request) -> std::option
         return u"Please create a primer from a molecule"_s;
     }
     auto const& location = *active_primer_->location;
-    if (location.strand != sequence::Strand::top) {
-        // primers B on the top strand: recorded (match_variations/), not
-        // reproduced yet
-        return u"Match Active Primer needs a primer A on the top strand"_s;
-    }
     auto const primer_a = std::span{active_primer_->sequence}.subspan(active_primer_->extension_length);
     auto const settings = search::MatchSettings{.target = request.target,
                                                 .start_offset = request.start_offset,
@@ -1192,12 +1187,14 @@ auto MainWindow::match_active_primer(MatchRequest const& request) -> std::option
         report_ = ScreenReport{
             .file_name = u"MATCH.PRN"_s,
             .text = [name = molecule_->name.toStdString(), size = molecule_->sequence.size(),
-                     primer = std::vector(primer_a.begin(), primer_a.end()), position = location.position, settings,
+                     primer = std::vector(primer_a.begin(), primer_a.end()), position = location.position,
+                     strand = location.strand, settings,
                      criteria = active_primer_->criteria, list](std::chrono::year_month_day const& date) {
                 return report::legacy_match_report({.molecule_name = name,
                                                     .molecule_size = size,
                                                     .primer_a = primer,
                                                     .primer_a_position = position,
+                                                    .primer_a_strand = strand,
                                                     .settings = settings,
                                                     .criteria = criteria,
                                                     .list = list},
@@ -1213,7 +1210,11 @@ void MainWindow::open_match() {
         QMessageBox::information(this, u"Match Active Primer"_s, u"Please create a primer from a molecule"_s);
         return;
     }
-    match_dialog_.start(defaults_.match_start_offset, defaults_.match_end_offset);
+    // the form offers primers B on the other strand than primer A's
+    // (tests/legacy/complement/, match_variations/)
+    auto const other_strand = active_primer_->location->strand == sequence::Strand::top ? sequence::Strand::complement
+                                                                                       : sequence::Strand::top;
+    match_dialog_.start(defaults_.match_start_offset, defaults_.match_end_offset, other_strand);
 }
 
 void MainWindow::use_match() {

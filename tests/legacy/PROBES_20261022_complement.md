@@ -11,7 +11,8 @@ Predictions: the four Match lists were computed before comparison with
 primerpicker's `legacy_match_active_primer` given primer A's
 complement-strand sequence (a temporary CLI change, not kept): the
 lists of `match_c400`, `match_c460_all` and `match_c400_compB` (1, 70
-and 7 rows) agree row by row; `match_c400_all` is still to compare. The
+and 7 rows) agree row by row; every report is now reproduced byte for
+byte (`match --complement`), after the `!` rule below. The
 Mutagenize molecule line was predicted as the reverse complement of the
 molecule (below).
 
@@ -44,5 +45,10 @@ follows the same rules as for a top-strand primer A, primer A being the
 complement-strand sequence: `match_c400` (built-in settings, target
 100: 1 row, 73), `match_c400_all` and `match_c460_all`
 (`PD2_MATCH_ALL.CFG`), `match_c400_compB` (target 450, primers B on the
-complement strand: 7 rows). The report's Primer A line shows the
-position without `(C)` (`   400`).
+complement strand: 7 rows), `match_c460` and `match_c460_200` (built-in
+settings, targets 300 and 200). The report's Primer A line shows the
+position without `(C)` (`   400`), and no `!`: GC 45 at 400(C) is
+printed `45` (out of the 50-60 range); 460(C) (GC 50, while the
+top-strand primer at 460 has 45) is printed `50`, so the flags are not
+those of the top-strand primer either. No other value of these primers
+A fails its criterion.

@@ -7,6 +7,7 @@
 #include "core/search/legacy_find_pair.hpp"
 #include "core/search/legacy_match.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -132,6 +133,7 @@ struct MatchReport {
     std::size_t molecule_size;
     std::span<sequence::Nucleotide const> primer_a;
     std::size_t primer_a_position;
+    sequence::Strand primer_a_strand = sequence::Strand::top;
     search::MatchSettings settings;
     analysis::LegacyCriteria criteria;  // for primer A's '!' flags
     std::span<search::MatchCandidate const> list;

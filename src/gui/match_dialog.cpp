@@ -59,9 +59,11 @@ MatchDialog::MatchDialog(QWidget& parent)
     QObject::connect(&buttons_, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-void MatchDialog::start(std::size_t const start_offset, std::size_t const end_offset) {
+void MatchDialog::start(std::size_t const start_offset, std::size_t const end_offset,
+                        sequence::Strand const strand_b) {
     start_offset_.setText(QString::number(start_offset));
     end_offset_.setText(QString::number(end_offset));
+    complement_.setChecked(strand_b == sequence::Strand::complement);
     message_.clear();
     target_.selectAll();
     target_.setFocus();

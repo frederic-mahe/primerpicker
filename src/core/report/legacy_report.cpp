@@ -16,6 +16,7 @@
 #include <array>
 #include <cassert>
 #include <chrono>
+#include <cstdint>
 #include <optional>
 #include <cstddef>
 #include <format>
@@ -492,10 +493,13 @@ auto match_runs(analysis::LegacyActualValues const& actual) -> std::string {
     return std::format("{:>8}{:>6}", actual.longest_run, actual.gc_run_3prime);
 }
 
+// Whether primer A's row marks the values that fail their criterion
+enum struct PrimerAFlags : std::uint8_t { shown, hidden };
+
 // Primer A's row: a value that fails its criterion is followed by '!'
 // (in the column after it)
 auto match_primer_a_row(std::size_t const position, analysis::LegacyActualValues const& actual,
-                        analysis::LegacyCriteria const& criteria) -> std::string {
+                        analysis::LegacyCriteria const& criteria, PrimerAFlags const shown_flags) -> std::string {
     constexpr auto no_distance = std::string_view{"            "};
     constexpr auto no_inter_dimers = std::string_view{"             "};
     // the last column of each value
@@ -513,7 +517,7 @@ auto match_primer_a_row(std::size_t const position, analysis::LegacyActualValues
                                   std::pair{dimer_any_end, verdict.no_dimer}, std::pair{runs_end, verdict.no_runs},
                                   std::pair{gc_run_end, verdict.no_3prime_gc_run}};
     for (auto const& [end, meets] : flags) {
-        if (not meets) {
+        if (not meets and shown_flags == PrimerAFlags::shown) {
             row.resize(std::max(row.size(), end + 2), ' ');
             row[end + 1] = '!';
         }
@@ -918,8 +922,12 @@ auto legacy_match_report(MatchReport const& match, std::chrono::year_month_day c
     report += line("                                       -- Self Dimers --        -- Runs --");
     report += line(std::format("  Position              GC%   Tm{}C     3'  any                  any  3'G/C",
                                cp437_degree_sign));
+    // PRIMER.exe marks nothing on the row of a complement-strand primer A
+    // (tests/legacy/complement/match_c400.PRN: GC 45 without '!')
     report += match_primer_a_row(match.primer_a_position, analysis::legacy_actual_values(match.primer_a),
-                                 match.criteria);
+                                 match.criteria,
+                                 match.primer_a_strand == sequence::Strand::complement ? PrimerAFlags::hidden
+                                                                                       : PrimerAFlags::shown);
     report += blank_lines(2);
     report += line("Primer B (Matching) List:");
     report += line("                                         ---  Dimers  ---");

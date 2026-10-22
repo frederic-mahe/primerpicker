@@ -38,9 +38,9 @@ class MatchDialog final : public QDialog {
 public:
     explicit MatchDialog(QWidget& parent);
 
-    // opens the dialog with the settings' range (window-modal, returns
-    // at once)
-    void start(std::size_t start_offset, std::size_t end_offset);
+    // opens the dialog with the settings' range and primers B on
+    // STRAND_B (window-modal, returns at once)
+    void start(std::size_t start_offset, std::size_t end_offset, sequence::Strand strand_b);
 
     // the typed search, if every field holds a number (target: 1 or more)
     [[nodiscard]] auto request() const -> std::optional<MatchRequest>;

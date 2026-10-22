@@ -1,0 +1,30 @@
+Primer Design Report:  Match Active Primer            Report Date: 10/22/26
+
+
+Source molecule:  TEST600                             600 bps
+
+
+Search parameters:
+   Target bp pos:   200
+   Start: Target - 50 bases;   End: Target + 50 bases
+   Length:  20                 5' Extension: - none -
+   GC Match:  +/-  5 GC %      Tm Match:  +/- 10 C
+
+
+Primer A (Original) Characteristics:
+                                       -- Self Dimers --        -- Runs --
+  Position              GC%   TmøC     3'  any                  any  3'G/C
+   460                  50    67       2    4                    2     0
+
+
+Primer B (Matching) List:
+                                         ---  Dimers  ---
+             bps from                  -Self-       -Inter-     -- Runs --
+  Position   Target     GC%   TmøC     3'  any      3'  any     any  3'G/C
+
+     209         9      50    71       2    6       2    5       2     0
+     210        10      55    70       2    6       2    5       2     1
+     211        11      55    73       1    6       2    5       2     0
+     212        12      55    72       2    6       1    5       2     0
+     213        13      50    72       2    6       1    5       2     0
+     238        38      50    69       1    3       2    6       2     0

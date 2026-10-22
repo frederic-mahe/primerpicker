@@ -24,6 +24,8 @@ with
   match_c400_all    600          M("down down down", "4 0 0", "1 0 0", enter), PD2.CFG = ../match_variations/PD2_MATCH_ALL.CFG
   match_c460_all    600          M("down down down", "4 6 0", "3 0 0", enter), PD2.CFG = ../match_variations/PD2_MATCH_ALL.CFG
   match_c400_compB  600          M("down down", "4 0 0", "4 5 0", y)
+  match_c460        600          M("down down", "4 6 0", "3 0 0", enter)    (recorded later on 2026-10-22)
+  match_c460_200    600          M("down down", "4 6 0", "2 0 0", enter)    (the same)
 
 Files: NAME.screens.txt (tools/screen_text.py, splash screens removed by
 tools/strip_splash.py); NAME.PRN: the REPORT file as written (DOS line

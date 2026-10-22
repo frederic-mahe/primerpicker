@@ -69,7 +69,7 @@ constexpr auto usage = std::string_view{
     "                              MOLECULE TARGET_A TARGET_B\n"
     "       primerpicker find-enzymes [--almost] MOLECULE ENZYME\n"
     "       primerpicker homology [--false-priming] [--report FILE] MOLECULE POSITION\n"
-    "       primerpicker match [--top-strand] [--report FILE] MOLECULE POSITION TARGET\n"
+    "       primerpicker match [--complement] [--top-strand] [--report FILE] MOLECULE POSITION TARGET\n"
     "       primerpicker --config PD2.CFG analyze|pair|multi|find-pair|homology|match ...\n"
     "       primerpicker explain [TERM]\n"
     "       primerpicker --help | --version\n"
@@ -110,8 +110,9 @@ constexpr auto usage = std::string_view{
     "match    the Find Matching Primer list (Match Active Primer) of the primer\n"
     "         at POSITION (top strand): primers B on the complement strand from\n"
     "         TARGET - 50 to TARGET + 50 (the settings' search range) that match\n"
-    "         it (--top-strand: primers B on the top strand); --report also writes\n"
-    "         the report PRIMER.exe prints to disk\n"
+    "         it (--top-strand: primers B on the top strand); --complement: the\n"
+    "         primer at POSITION of the complement strand, primers B on the top\n"
+    "         strand; --report also writes the report PRIMER.exe prints to disk\n"
     "explain  the built-in definitions: without TERM, the list of terms; with\n"
     "         TERM (a name of the list, or another accepted name such as Ta),\n"
     "         its definition, method and references\n"};
@@ -1023,6 +1024,7 @@ auto homology_command(std::span<char const* const> arguments, LegacySystemDefaul
 // match [--top-strand] [--report FILE] MOLECULE POSITION TARGET
 struct MatchArguments {
     std::optional<std::string_view> report;
+    primerpicker::sequence::Strand strand_a = primerpicker::sequence::Strand::top;
     primerpicker::sequence::Strand strand_b = primerpicker::sequence::Strand::complement;
     std::string_view molecule;
     std::string_view position;
@@ -1033,8 +1035,9 @@ constexpr auto no_match_message = std::string_view{"No matching primer found\n"}
 
 auto match_screen(primerpicker::report::MatchReport const& match) -> std::string {
     auto const& settings = match.settings;
-    auto text = std::format("Primer A:  5'-{}-3', position {} (top strand)\n", letters(match.primer_a),
-                            match.primer_a_position);
+    auto text = std::format("Primer A:  5'-{}-3', position {} ({} strand)\n", letters(match.primer_a),
+                            match.primer_a_position,
+                            match.primer_a_strand == primerpicker::sequence::Strand::top ? "top" : "complement");
     text += std::format("Molecule:  {}, {} bases\n", match.molecule_name, match.molecule_size);
     text += std::format("Search:    primers B on the {} strand, target {} - {} to {} + {}\n\n",
                         settings.strand == primerpicker::sequence::Strand::top ? "top" : "complement",
@@ -1065,11 +1068,12 @@ auto match(MatchArguments const& arguments, LegacySystemDefaults const& defaults
         return EXIT_FAILURE;
     }
     auto const length = defaults.primer_length;
-    if (length > molecule->sequence.size() or *position > molecule->sequence.size() - length + 1) {
+    auto const primer_a = primerpicker::sequence::primer_at(
+        molecule->sequence, {.position = *position, .length = length, .strand = arguments.strand_a});
+    if (not primer_a.has_value()) {
         return fail(std::format("position: a primer of {} bases at {} goes beyond the molecule ({} bases)", length,
                                 *position, molecule->sequence.size()));
     }
-    auto const primer_a = std::span{molecule->sequence}.subspan(*position - 1, length);
     auto const settings = primerpicker::search::MatchSettings{.target = *target,
                                                               .start_offset = defaults.match_start_offset,
                                                               .end_offset = defaults.match_end_offset,
@@ -1078,11 +1082,12 @@ auto match(MatchArguments const& arguments, LegacySystemDefaults const& defaults
                                                               .gc_tolerance_percent = defaults.gc_tolerance_percent,
                                                               .tm_tolerance_celsius = defaults.tm_tolerance_celsius};
     auto const list = primerpicker::search::legacy_match_active_primer(
-        {.molecule = molecule->sequence, .primer_a = primer_a}, settings, defaults.criteria);
+        {.molecule = molecule->sequence, .primer_a = *primer_a}, settings, defaults.criteria);
     auto const report = primerpicker::report::MatchReport{.molecule_name = molecule->name,
                                                           .molecule_size = molecule->sequence.size(),
-                                                          .primer_a = primer_a,
+                                                          .primer_a = *primer_a,
                                                           .primer_a_position = *position,
+                                                          .primer_a_strand = arguments.strand_a,
                                                           .settings = settings,
                                                           .criteria = defaults.criteria,
                                                           .list = list};
@@ -1095,19 +1100,28 @@ auto match(MatchArguments const& arguments, LegacySystemDefaults const& defaults
     return EXIT_SUCCESS;
 }
 
-// match [--top-strand] [--report FILE] MOLECULE POSITION TARGET: the
-// command's arguments, after its name
+// match [--complement] [--top-strand] [--report FILE] MOLECULE POSITION
+// TARGET: the command's arguments, after its name
 auto match_command(std::span<char const* const> arguments, LegacySystemDefaults const& defaults) -> int {
     constexpr auto report_option = std::string_view{"--report"};
     constexpr auto top_strand_option = std::string_view{"--top-strand"};
+    constexpr auto complement_option = std::string_view{"--complement"};
     constexpr auto positional_count = std::size_t{3};
     constexpr auto report_size = std::size_t{2};  // the option and its file
     auto parsed = MatchArguments{};
     auto top_strand_seen = false;
+    auto complement_seen = false;
     while (arguments.size() > positional_count) {
         auto const option = std::string_view{arguments[0]};
         if (option == top_strand_option and not top_strand_seen) {
             top_strand_seen = true;
+            parsed.strand_b = primerpicker::sequence::Strand::top;
+            arguments = arguments.subspan(1);
+        } else if (option == complement_option and not complement_seen) {
+            // primers B on the top strand: the default of PRIMER.exe's form
+            // for such a primer A (tests/legacy/complement/)
+            complement_seen = true;
+            parsed.strand_a = primerpicker::sequence::Strand::complement;
             parsed.strand_b = primerpicker::sequence::Strand::top;
             arguments = arguments.subspan(1);
         } else if (option == report_option and not parsed.report.has_value() and
