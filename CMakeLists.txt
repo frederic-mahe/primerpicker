@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 project(primerpicker
-  VERSION 0.1.0
+  VERSION 0.9.0
   DESCRIPTION "Interactive PCR and sequencing primer design"
   LANGUAGES CXX)
 
