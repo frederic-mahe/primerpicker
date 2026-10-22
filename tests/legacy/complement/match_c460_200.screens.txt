@@ -1,0 +1,1040 @@
+==== f00530.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+??????????????????????????????????                   ?       ?                 ?
+│         ║ ??????????????????   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f00531.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+
+==== f00535.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│                                                                              │
+│         ╔═════════════════════════════════════════════════════════╗          │
+│         ║ ┌────────────────┐                                      ║          │
+│         ║ │                │        * *  GET MOLECULE  * *        ║          │
+│         ║ │ ■ Load  File                                         ║          │
+│         ║ │ ■ Create New   ░                                      ║          │
+│         ║ │ ───Loaded───   ░   Load, Create or Select Molecule    ║          │
+│         ║ │                ░                                      ║          │
+│         ║ │                ▓                                      ║          │
+└─────────║ │                ░       Move                         ║──────────┘
+          ║ │                ░                                      ║
+          ║ │                ░     ─┘ Select                       ║
+          ║ │                ░                                      ║
+          ║ │                                                      ║
+          ║ │                │        To Cancel Press: [ ESC ]      ║
+          ║ └────────────────┘                                      ║
+          ╚═════════════════════════════════════════════════════════╝
+
+
+
+
+?
+==== f00779.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f00783.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f01525.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule:                                                       │
+│  ╔═══════════════════════════════════════════════════════════════════════╗   │
+│  ║ ┌──────────────┐                                                      ║   │
+│  ║ │              │         * * * Load Molecule from Disk * * *          ║   │
+│  ║ │ <<< (parent)                                                       ║   │
+│  ║ │ PRIMER.EXE   ░  ┌────────────────────────────────────────────────┐  ║   │
+│  ║ │ TEST600.GB   ░  │CURRENT DIRECTORY = C:\                         │  ║   │
+│  ║ │              ░  │                                                │  ║   │
+│  ║ │              ░  │CURRENT FILESPEC =  *.*                         │  ║   │
+│  ║ │              ▓  └────────────────────────────────────────────────┘  ║   │
+└──║ │              ░                                                      ║───┘
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]    [ F=Filespec ]    [ ESC ]        ║
+   ??????????????????????????????????????????????????????????????????????????
+?          ????????????????????????????????????????????????????????????        ?
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f01526.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f01527.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│            ┌───────────────────┐                                             │
+│            │ Bp position       │     Enter approx starting position          │
+│            │ Feature table     │     Select region to amplify                │
+│            │ Change molecule   │     Select another source molecule          │
+│            │ ESCape/abandon    │     Cancel create primer operation          │
+│            └───────────────────┘                                             │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────TEST600────────────────────────────────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f02756.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:                             ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03005.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    4?                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03254.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    46                       ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03503.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    460                      ║          │
+│          ║  Complement strand  (Y/N):    N                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f03752.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    460                      ║          │
+│          ║  Complement strand  (Y/N):    ?                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04000.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    460                      ║          │
+│          ║  Complement strand  (Y/N):    Y                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04007.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    460                      ║          │
+│          ║  Complement strand  (Y/N):    Y                        ║          │
+│          ║  Primer length (incl 5' ext): ?0                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+└──────────║  [ F1 = REnz ]               To Cancel Press:  [ ESC ] ║──────────┘
+┌──────────╚════════════════════════════════════════════════════════╝──────────┐
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│ ══════════════════════╤═════════════════════╤═════════════════════╤          │
+│                       200                   400                   600        │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f04497.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│          ╔════════════════════════════════════════════════════════╗          │
+│          ║                                                        ║          │
+│          ║  Base position for primer:    460                      ║          │
+│          ║  Complement strand  (Y/N):    Y                        ║          │
+│          ║  Primer length (incl 5' ext): 20                       ║          │
+│          ║  5' extension to be added:                             ║          │
+│          ║                                                        ║          │
+│          ║                 ─┘  To Complete                       ║          │
+│????????????????????????????????????????????????????????????????????          │
+│                                                                              │
+│    541   GTCCCCCCTA TTCGTTTAGG TAGACATTCA GTGGTCAGTT CTAAAGGCTA AATTTCGCTG   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                 *** Complementary Strand ***     │
+│                                                                              │
+│ Pos: 460    %GC: 50    Tm°C: 67    Hairpin: !   Dimers: OK  Runs: OK         │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+ Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f04498.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600                                        │
+│                                                                              │
+│                                                                              │
+│    301   ATAGCTATAC TTATTTCAAA GTCGAGATGT TTGAGATTAC GCAAATGGTG TCCTGTACTA   │
+│                                                                              │
+│    361   CAATCGCACG CTGGACCATA GGAACGTAAT GGACCTATGT GACTGTGAAT GCGGTCTACT   │
+│                                 --                                          │
+│    421   GAAGGGCATA CCTTTGCGCT ACTCATCATT GGCGTGAGGT TTCACGTATG GCCTGACTTT   │
+│                                                                              │
+│    481   TCATGGGTAA TACTAAGATA CAAGCAGCTG AGAGTCCATA GCTTTTGCAG ATGAGGACAG   │
+│                                                                              │
+│    541   GTCCCCCCTA TTCGTTTAGG TAGACATTCA GTGGTCAGTT CTAAAGGCTA AATTTCGCTG   │
+│                                                                              │
+│                                                                              │
+│ MEETS CRITERIA SELECTED: No                 *** Complementary Strand ***     │
+│                                                                              │
+│ Pos: 460    %GC: 50    Tm°C: 67    Hairpin: !   Dimers: OK  Runs: OK         │
+│                                                                              │
+│                                                                              │
+│      C=Criteria    E=Extn(5')    I=Inspect     M=Mutagenz    S=Save+Exit     │
+└──────────────────────────────────────────────────────────────────────────────┘
+ Move:     Find next: Ctrl, Ctrl   Length: + -
+==== f05727.png
+                     * * *   MODIFY PRIMER POSITION   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│ Primer length: 20   Molecule: TEST600                                        │
+│                                                                              │
+│                                                                              │
+│    301   ATAGCTATAC TTATTTCAAA GTCGAGATGT TTGAGATTAC GCAAATGGTG TCCTGTACTA   │
+│                                                                              │
+│    361   CAATCGCACG CTGGACCATA GGAACGTAAT GGACCTATGT GACTGTGAAT GCGGTCTACT   │
+│                                 --                                          │
+│    421   GAAGGGCATA CCTTTGCGCT ACTCATCATT GGCGTGAGGT TTCACGTATG GCCTGACTTT   │
+│                                                                              │
+│    481   TCATGGGTAA TACTAAGATA CAAGCAGCTG AGAGTCCATA GCTTTTGCAG ATGAGGACAG   │
+│                                                                              │
+│    541   GTCCCCCCTA TTCGTTTAGG TAGACATTCA GTGGTCAGTT CTAAAGGCTA AATTTCGCTG   │
+│                                                                              │
+?                                                                              ?
+│  1   TEST600       !    460(C)  20   TGGAGTGCGGTTACTACTCA                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05728.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+║ Save Active Primer  ║
+║ Retrieve from disk  ║
+║                     ║
+╚═════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1   TEST600       !    460(C)  20   TGGAGTGCGGTTACTACTCA                    │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f07455.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+????????????????????????????????????????????????????????????????????????       ?
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:                                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f07456.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:                                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f08195.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             2                        ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f08444.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             20?                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f08692.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f08942.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - ?0                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f09191.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + ?0                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f09447.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       ?                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f09943.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           ?0                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f10186.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  ?  GC %                  ║
+        ║     Match Tm of Primer A to within  10 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f10439.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                                                              ║       │
+│       ║  Primer B (Matching):                                        ║       │
+│       ║     Target bp position:             200                      ║       │
+└───────║     Start search at:       Target - 50                       ║───────┘
+        ║     End   search at:       Target + 50                       ║
+        ║     Complement strand  (Y/N):       N                        ║
+        ║     5' extension to be added:                                ║
+        ║     Length (incl 5' ext):           20                       ║
+        ║     Match GC of Primer A to within  5  GC %                  ║
+        ║     Match Tm of Primer A to within  ?0 C°                    ║
+        ║                                                              ║
+        ║  [ F1 = REnz ]   ─┘  To Complete;  To Cancel Press: [ ESC ] ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+
+
+==== f10680.png
+                          * * *   CREATE PRIMER   * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│         From molecule: TEST600                                               │
+│                                                                              │
+│       ╔══════════════════════════════════════════════════════════════╗       │
+│       ║                * * DEFINE MATCHING PRIMER * *                ║       │
+│       ║                                                              ║       │
+│       ║  Primer A (Original):                                        ║       │
+│       ║     Position:  460 (C)     % GC:  50      Tm°C:  67          ║       │
+│       ║                      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                        ║       │
+│       ║  Primer B (Matching):▒              ▒                        ║       │
+│       ║     Target bp positio▒ Searching... ▒00                      ║       │
+└───────║     Start search at: ▒              ▒0                       ║───────┘
+        ║     End   search at: ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒0                       ║
+?       ?????????????????????????????????????? ?????????????????????????       ?
+│                                                                              
+│                                                                              ░
+│                                                                              ▓
+│                                                                              ░
+│                                                                              
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+?       Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f10681.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460                50    67       2    4                    2     0     │
+│                                                                              │
+│ ──────────────────────────────────────────────────────────────────────────── │
+│                                                                              │
+│   Primer B (Matching) List:                                                  │
+│                                          ---  Dimers  ---                    │
+│              bps from                  -Self-       -Inter-     -- Runs --   │
+│   Position   Target     GC%   Tm°C     3'  any      3'  any     any  3'G/C   │
+│                                                                              │
+│      209         9      50    71       2    6       2    5       2     0     
+│      210        10      55    70       2    6       2    5       2     1     ░
+│      211        11      55    73       1    6       2    5       2     0     ▓
+│      212        12      55    72       2    6       1    5       2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+?       Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f12399.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║  ┌───────────────────┐                 ║                  │
+│                  ║  │                   │                 ║                  │
+│              bps ║  │ Abandon Printing  │    Change     ║     -- Runs --   │
+│   Position   Targ║  │ Start Printing    │                 ║     any  3'G/C   │
+│                  ║  │ Print to Disk     │  ─┘ Select     ║                  │
+│      209         ║  │                   │                 ║      2     0     
+│      210        1║  └───────────────────┘                 ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f13636.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename:                           ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f14373.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: r                         ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f14622.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: re?                       ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f14870.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: rep                       ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f15119.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: repo                      ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f15369.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: repor?                    ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
+==== f15617.png
+                       * * *  FIND MATCHING PRIMER  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│   Primer A (Original) Characteristics:                                       │
+│                                        -- Self Dimers --        -- Runs --   │
+│   Position              GC%   Tm°C     3'  any                  any  3'G/C   │
+│      460         ╔════════════════════════════════════════╗      2     0     │
+│                  ║                                        ║                  │
+│ ─────────────────║       P R I N T   C O N T R O L        ║───────────────── │
+│                  ║                                        ║                  │
+│   Primer B (Match║╔═════════════════════════════════════╗ ║                  │
+│                  ║║                                     ║ ║                  │
+│              bps ║║ Filename: report                    ║ ║     -- Runs --   │
+│   Position   Targ║║                                     ║ ║     any  3'G/C   │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│      209         ║                                        ║      2     0     
+│      210        1║                                        ║      2     1     ░
+│      211        1║                                        ║      2     0     ▓
+│      212        1╚════════════════════════════════════════╝      2     0     ░
+│      213        13      50    72       2    6       1    5       2     0     
+│                                                                              │
+│                                                                              │
+│   I=Inspect    C=Chk.Pair    R=Redefine    P=Print      S=Save     ESCape    │
+└──────────────────────────────────────────────────────────────────────────────┘
+        Move;       Inspect or save highlighted primer;       ESC = Exit
