@@ -75,3 +75,19 @@ TEST_CASE("Multiple Primers report of a primer with a 5' extension", "[report][l
     auto const report = primerpicker::report::legacy_multi_primer_report(fields, LegacyCriteria{}, printed);
     CHECK(report == read_file(legacy_dir / "extension" / "multi_ext_report.PRN"));
 }
+
+// Reference: the same reports with both primers extended: M13EXT.PD2 and
+// GGATCC + AACAGCTATGACCATG (tests/legacy/extension/pair_ext2_report.PRN,
+// multi_ext2_report.PRN, recorded 2026-10-22)
+TEST_CASE("Primer Pair and Multiple Primers reports, both primers with a 5' extension", "[report][legacy]") {
+    auto const primer_a = nucleotides("GAATTCGTAAAACGACGGCCAGT");
+    auto const primer_b = nucleotides("GGATCCAACAGCTATGACCATG");
+    auto const extended_a = LegacyPrimer{.sequence = primer_a, .extension_length = 6};
+    auto const extended_b = LegacyPrimer{.sequence = primer_b, .extension_length = 6};
+    CHECK(primerpicker::report::legacy_pair_report(LegacyPrimerPair{.first = extended_a, .second = extended_b},
+                                                   LegacyCriteria{}, printed) ==
+          read_file(legacy_dir / "extension" / "pair_ext2_report.PRN"));
+    CHECK(primerpicker::report::legacy_multi_primer_report(
+              LegacyMultiPrimerFields{extended_a, extended_b, std::nullopt, std::nullopt}, LegacyCriteria{}, printed) ==
+          read_file(legacy_dir / "extension" / "multi_ext2_report.PRN"));
+}

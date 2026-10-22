@@ -1,0 +1,624 @@
+==== f02023.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+║ Save Active Primer  ║
+????????????????????? ???????????????????????????????????????????????????????
+   ║ │              ░  │CURRENT FILESPEC =  *.PD2                       │  ║
+   ║ │              ▓  └────────────────────────────────────────────────┘  ║
+   ║ │              ░                                                      ║
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]                      [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f02024.png
+
+
+
+   ╔═══════════════════════════════════════════════════════════════════════╗
+   ║ ┌──────────────┐                                                      ║
+   ║ │              │          * * * Load Primer from Disk * * *           ║
+   ║ │ <<< (parent)                                                       ║
+   ║ │ P1.PD2       ░  ┌────────────────────────────────────────────────┐  ║
+   ║ │ P2.PD2       ░  │CURRENT DIRECTORY = C:\                         │  ║
+   ║ │              ░  │                                                │  ║
+   ║ │              ░  │CURRENT FILESPEC =  *.PD2                       │  ║
+   ║ │              ▓  └────────────────────────────────────────────────┘  ║
+   ║ │              ░                                                      ║
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]                      [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+?
+==== f02031.png
+
+
+
+   ╔═══════════════════════════════════════════════════════════════════════╗
+   ║ ┌──────────────┐                                                      ║
+   ║ │              │          * * * Load Primer from Disk * * *           ║
+   ║ │ <<< (parent)                                                       ║
+   ║ │ P1.PD2       ░  ┌────────────────────────────────────────────────┐  ║
+   ║ │ P2.PD2       ░  │CURRENT DIRECTORY = C:\                         │  ║
+   ║ │              ░  │                                                │  ║
+   ║ │              ░  │CURRENT FILESPEC =  *.PD2                       │  ║
+   ║ │              ▓  └────────────────────────────────────────────────┘  ║
+   ║ │              ░                                                      ║
+   ║ │              ░                  Change                            ║
+   ║ │              ░                                                      ║
+   ║ │              ░                ─┘ Select                            ║
+   ║ │              ░                                                      ║
+   ║ │                                                                    ║
+   ║ │              │      [ D=Drive ]                      [ ESC ]        ║
+   ║ └──────────────┘                                                      ║
+   ╚═══════════════════════════════════════════════════════════════════════╝
+
+
+
+
+==== f02521.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+║ Save Active Primer  ║
+║ Retrieve from disk  ║
+║                     ║
+╚═════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04007.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+║ ─────────────────── ║
+║ Save Active Primer  ║
+║ Retrieve from disk  ║
+║                     ║
+╚═════════════════════╝
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04746.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+╔═════════════════════╗═════════════════════════════════════════════════════════
+║                     ║
+║ from Molecule       ║
+║ Direct Entry        ║
+║ Match Active Primer ║
+║ Find Pair           ║
+?????????????????????????????????????
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04747.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ║   Position      ║
+                 ║   Length        ║
+                 ║   5'-extension  ║
+                 ║   Criteria      ║
+                 ║   Mutagenize    ║
+                 ║ ─────────────── ║
+                 ║ System Defaults ║
+                 ║                 ║
+                 ╚═════════════════╝
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+?1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04995.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+═════════════════╔═════════════════╗════════════════════════════════════════════
+                 ║                 ║
+                 ║ Active Primer:  ║
+                 ???????????? Prime???????????
+                            ║ Multi Primer  ║
+                            ║               ║
+                            ╚═══════════════╝
+
+
+
+
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f04996.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════╔═══════════════╗═══════════════════════════════════
+                            ║               ║
+                            ║ Active Primer ║
+                            ║ Primer Pair   ║
+                            ║ Multi Primer  ║
+                            ║               ║
+                            ╚═══════════════╝
+
+
+
+
+
+                           * * *  PRIMER LIST  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05742.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+        ╔══════════════════════════════════════════════════════════════╗
+        ║              * * *  MULTI PRIMER ANALYSIS  * * *             ║
+        ║                                                              ║
+        ║    Please enter primer #s (from Active Primer List, below)   ║
+        ║    to indicate which two primers to analyze.                 ║
+        ║                                                              ║
+        ║         Primer A: ?                                          ║
+        ║         Primer B:                                            ║
+        ║         Primer C:                                            ║
+        ║         Primer D:                                            ║
+        ║                                  To Cancel Press:  [ ESC ]   ║
+        ╚══════════════════════════════════════════════════════════════╝
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f05991.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+        ╔══════════════════════════════════════════════════════════════╗
+        ║              * * *  MULTI PRIMER ANALYSIS  * * *             ║
+        ║                                                              ║
+        ║    Please enter primer #s (from Active Primer List, below)   ║
+        ║    to indicate which two primers to analyze.                 ║
+        ║                                                              ║
+        ║         Primer A: 1                                          ║
+        ║         Primer B: ?                                          ║
+        ║         Primer C:                                            ║
+        ║         Primer D:                                            ║
+        ║                                  To Cancel Press:  [ ESC ]   ║
+        ╚══════════════════════════════════════════════════════════════╝
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f06239.png
+ Primer/Create    Modify     Analyze     Molecule-Ops    Quit
+════════════════════════════════════════════════════════════════════════════════
+        ╔══════════════════════════════════════════════════════════════╗
+        ║              * * *  MULTI PRIMER ANALYSIS  * * *             ║
+        ║                                                              ║
+        ║    Please enter primer #s (from Active Primer List, below)   ║
+        ║    to indicate which two primers to analyze.                 ║
+        ║                                                              ║
+        ║         Primer A: 1                                          ║
+        ║         Primer B: 2                                          ║
+        ║         Primer C:                                            ║
+        ║         Primer D:                                            ║
+        ║                                  To Cancel Press:  [ ESC ]   ║
+        ╚══════════════════════════════════════════════════════════════╝
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  #   Molecule     Crit  Pos    Len   5' Ext (if any) - Sequence              │
+│                                                                              │
+│  1                 !            23   GAATTC-GTAAAACGACGGCCAGT                │
+│  2                 !            22   GGATCC-AACAGCTATGACCATG                 │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+ 1-6 = Set Active primer; R = Remove primer;  C = Clear List;  M = Map Primer
+==== f06737.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              23      22                           │
+│     % GC                                47!     50                           │
+│     Tm°C                                64      52!                          │
+│     Runs of G/C at 3' end                0       1                           │
+│     Runs of bases (any)                  4!      2                           │
+│     Hairpins                            OK      OK                           │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     2                   Any    A   6     2                    │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f06743.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────────────────────────────────────────────────────────────────│
+│   Primer Balance and Cautions:         -A-     -B-     -C-     -D-           │
+│     Length                              23      22                           │
+│     % GC                                47!     50                           │
+│     Tm°C                                64      52!                          │
+│     Runs of G/C at 3' end                0       1                           │
+│     Runs of bases (any)                  4!      2                           │
+│     Hairpins                            OK      OK                           │
+│                                                                              │
+│   Primer Dimers: (number of adjacent bases in largest duplex)                │
+│                                                                              │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     2                   Any    A   6     2                    │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f07967.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║  ┌───────────────────┐                 ║                  │
+│     Runs of G/C a║  │                   │                 ║                  │
+│     Runs of bases║  │ Abandon Printing  │    Change     ║                  │
+│     Hairpins     ║  │ Start Printing    │                 ║                  │
+│                  ║  │ Print to Disk     │  ─┘ Select     ║                  │
+│   Primer Dimers: ║  │                   │                 ║x)                │
+│                  ║  └───────────────────┘                 ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f07975.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║  ┌───────────────────┐                 ║                  │
+│     Runs of G/C a║  │                   │                 ║                  │
+│     Runs of bases║  │ Abandon Printing  │    Change     ║                  │
+│     Hairpins     ║  │ Start Printing    │                 ║                  │
+│                  ║  │ Print to Disk     │  ─┘ Select     ║                  │
+│   Primer Dimers: ║  │                   │                 ║x)                │
+│                  ║  └───────────────────┘                 ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+?──────────────────────────────────────────────────────────────────────────────┘
+==== f09204.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename:                           ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f09944.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: r?                        ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f10192.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: re                        ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f10442.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: rep?                      ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f10690.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: repo                      ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f10939.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: repor?                    ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f11188.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: report                    ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝ ║                  │
+│   Primer Dimers: ║                                        ║x)                │
+│                  ║                                        ║                  │
+│              A   ║                                        ║   C     D        │
+│   3'     A   2   ╚════════════════════════════════════════╝                  │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘
+==== f11436.png
+                      * * *   MULTI PRIMER ANALYSIS  * * *
+┌──────────────────────────────────────────────────────────────────────────────┐
+│   Primer A (bp     1 ):  5'-GAATTCGTAAAACGACGGCCAGT-3'                       │
+│   Primer B (bp     1 ):  5'-GGATCCAACAGCTATGACCATG-3'                        │
+│   Primer C                                                                   │
+│   Primer D                                                                   │
+│──────────────────╔════════════════════════════════════════╗──────────────────│
+│   Primer Balance ║                                        ║    -D-           │
+│     Length       ║       P R I N T   C O N T R O L        ║                  │
+│     % GC         ║                                        ║                  │
+│     Tm°C         ║╔═════════════════════════════════════╗ ║                  │
+│     Runs of G/C a║║                                     ║ ║                  │
+│     Runs of bases║║ Filename: report?                   ║ ║                  │
+│     Hairpins     ║║                                     ║ ║                  │
+│                  ║╚═════════════════════════════════════╝?║                  │
+│   Primer Dimers: ║           Please wait...               ║x)                │
+│                  ??????????????????????????????????????????                  │
+│              A     B     C     D                  A     B     C     D        │
+│   3'     A   2     2                   Any    A   6     2                    │
+│   end    B  ∙∙∙∙   4!                         B  ∙∙∙∙   6                    │
+│          C                                    C                              │
+│          D                                    D                              │
+│                                                                              │
+│      M=MapPrimr     H=HairPn      D=Dimers       P=Print        ESCape       │
+└──────────────────────────────────────────────────────────────────────────────┘

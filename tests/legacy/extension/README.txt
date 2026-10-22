@@ -46,3 +46,9 @@ enter , , ,":
   pair_ext_report   R "right right down enter 1 enter 2 enter" PRINT    P1.PD2 P2.PD2
   multi_ext_report  R "right right down down enter 1 2 enter enter" PRINT P1.PD2 P2.PD2
 NAME.PRN: the REPORT file as written (DOS line ends, code page 437).
+  pair_ext2_report   R' "right right down enter 1 enter 2 enter" PRINT    (PAUSE 3)
+  multi_ext2_report  R' "right right down down enter 1 2 enter enter" PRINT (PAUSE 3.5, rerun: the first run lost keys)
+  R' is R with P3.PD2 copied as P2.PD2: both primers with an extension.
+P3.PD2: tools/make_pd2.py AACAGCTATGACCATG GGATCC (input). The four
+reports were predicted with primerpicker before the last two were
+recorded; both equal the prediction (but for the date).
