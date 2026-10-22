@@ -2,13 +2,17 @@
 
 #include "core/sequence/genetic_code.hpp"
 #include "core/sequence/nucleotide.hpp"
+#include "core/sequence/strand.hpp"
 
 #include <algorithm>
 #include <array>
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <span>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace primerpicker::analysis {
 
@@ -105,6 +109,29 @@ constexpr auto frame_row(char const label, std::span<sequence::Nucleotide const>
         view.primer += sequence::to_letter(base);
     }
     return view;
+}
+
+// The strand the Mutagenize Primer screen shows: the primer's own,
+// 5' to 3'. For a complement-strand primer, the reverse complement of
+// the molecule, on which the primer's 5' end is at molecule size -
+// position + 1 (tests/legacy/README.md, "Complement-strand primers").
+struct MutagenizeStrand {
+    std::vector<sequence::Nucleotide> molecule;
+    std::size_t position;  // the primer's 5' end on that strand, 1-based
+};
+
+// LOCATION: a primer that lies on the molecule. Not noexcept: the
+// vector allocates.
+[[nodiscard]] constexpr auto legacy_mutagenize_strand(std::span<sequence::Nucleotide const> const molecule,
+                                                      sequence::PrimerLocation const& location) -> MutagenizeStrand {
+    assert(location.position >= 1 and location.position <= molecule.size());
+    if (location.strand == sequence::Strand::top) {
+        return {.molecule = std::vector(molecule.begin(), molecule.end()), .position = location.position};
+    }
+    auto reversed = std::vector<sequence::Nucleotide>{};
+    reversed.reserve(molecule.size());
+    std::ranges::transform(molecule.rbegin(), molecule.rend(), std::back_inserter(reversed), sequence::complement);
+    return {.molecule = std::move(reversed), .position = molecule.size() - location.position + 1};
 }
 
 }  // namespace primerpicker::analysis

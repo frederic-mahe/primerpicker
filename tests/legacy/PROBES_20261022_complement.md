@@ -32,7 +32,7 @@ to 240 of the reverse complement of the 600 bases, the primer's 5' end
 being 600 - 400 + 1 = 201), the primer under it, and the reading frames
 as for a top-strand primer, on that strand. Typing over bases works as
 on the top strand (`mut_c400_edit`: `a` on the third base and `g` on the
-eighth: MUTATED %GC 45, Tm 69, Hairpin OK); S shows "Primer Saved"; F2
+seventh (`TGAATCGAGG...`): MUTATED %GC 45, Tm 69, Hairpin OK); S shows "Primer Saved"; F2
 opens the codon table (`mut_c460`).
 
 **Match Active Primer** with primer A on the complement strand: the

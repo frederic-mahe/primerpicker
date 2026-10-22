@@ -29,3 +29,13 @@ Files: NAME.screens.txt (tools/screen_text.py, splash screens removed by
 tools/strip_splash.py); NAME.PRN: the REPORT file as written (DOS line
 ends, code page 437).
 Not kept: runs that froze early (3 emulators at once).
+
+mutagenize_complement.tsv: the Mutagenize screens of mut_c400 (keys
+"-"), mut_c400_edit ("a3_g7": a over base 3, g over base 7) and
+mut_c460 (the screen before F2), written by
+  python3 -I tools/parse_mutagenize.py DIR/TEST600.GB_400C DIR/TEST600.GB_400C_a3_g7 DIR/TEST600.GB_460C
+where each DIR/NAME/screens.txt is the run's NAME.screens.txt; for
+mut_c400_edit, without the screens that show the "Primer Saved" box
+(those holding the character ▒), so that the last screen read is the
+one before S. Position NNNC: the primer's 5' end NNN, complement
+strand.

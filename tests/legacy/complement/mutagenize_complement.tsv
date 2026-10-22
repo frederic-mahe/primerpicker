@@ -1,0 +1,34 @@
+# molecule	position	keys	line	text
+TEST600.GB	400C	-	original	%GC: 45!   Tm°C: 66    Hairpin: !   Dimers: OK  Runs: OK
+TEST600.GB	400C	-	O	 O         I  W  R  K  C  Q  C  I  Q  V  M  Q  G  Y  Q  V  A  R  -
+TEST600.GB	400C	-	R	 R        H  L  A  -  V  S  V  Y  P  G  N  A  R  I  P  G  R  T  L
+TEST600.GB	400C	-	I	 I       S  S  G  V  S  V  S  V  S  R  -  C  K  D  T  R  S  H  A  N
+TEST600.GB	400C	-	molecule	       TCATCTGGCGTAAGTGTCAGTGTATCCAGGTAATGCAAGGATACCAGGTCGCACGCTAAC
+TEST600.GB	400C	-	marker	 5'->3'                          --
+TEST600.GB	400C	-	primer	                           TGTATCCAGGTAATGCAAGG
+TEST600.GB	400C	-	M	 M                            V  S  R  -  C  K
+TEST600.GB	400C	-	U	 U                             Y  P  G  N  A  R
+TEST600.GB	400C	-	T	 T                           C  I  Q  V  M  Q
+TEST600.GB	400C	-	mutated	%GC: 45!   Tm°C: 66    Hairpin: !   Dimers: OK  Runs: OK
+TEST600.GB	400C	a3_g7	original	%GC: 45!   Tm°C: 66    Hairpin: !   Dimers: OK  Runs: OK
+TEST600.GB	400C	a3_g7	O	 O         I  W  R  K  C  Q  C  I  Q  V  M  Q  G  Y  Q  V  A  R  -
+TEST600.GB	400C	a3_g7	R	 R        H  L  A  -  V  S  V  Y  P  G  N  A  R  I  P  G  R  T  L
+TEST600.GB	400C	a3_g7	I	 I       S  S  G  V  S  V  S  V  S  R  -  C  K  D  T  R  S  H  A  N
+TEST600.GB	400C	a3_g7	molecule	       TCATCTGGCGTAAGTGTCAGTGTATCCAGGTAATGCAAGGATACCAGGTCGCACGCTAAC
+TEST600.GB	400C	a3_g7	marker	 5'->3'                          --
+TEST600.GB	400C	a3_g7	primer	                           TGAATCGAGGTAATGCAAGG
+TEST600.GB	400C	a3_g7	M	 M                            E  S  R  -  C  K
+TEST600.GB	400C	a3_g7	U	 U                             N  R  G  N  A  R
+TEST600.GB	400C	a3_g7	T	 T                           -  I  E  V  M  Q
+TEST600.GB	400C	a3_g7	mutated	%GC: 45!   Tm°C: 69    Hairpin: OK  Dimers: OK  Runs: OK
+TEST600.GB	460C	-	original	%GC: 50    Tm°C: 67    Hairpin: !   Dimers: OK  Runs: OK
+TEST600.GB	460C	-	O	 O         S  V  R  Y  A  L  W  S  A  V  T  T  H  R  V  S  I  R  E
+TEST600.GB	460C	-	R	 R        F  S  P  V  C  T  L  E  C  G  Y  Y  S  S  R  F  H  T  G
+TEST600.GB	460C	-	I	 I       F  Q  S  G  M  H  F  G  V  R  L  L  L  I  A  F  P  Y  G  K
+TEST600.GB	460C	-	molecule	       TTTCAGTCCGGTATGCACTTTGGAGTGCGGTTACTACTCATCGCGTTTCCATACGGGAAG
+TEST600.GB	460C	-	marker	 5'->3'                          --
+TEST600.GB	460C	-	primer	                           TGGAGTGCGGTTACTACTCA
+TEST600.GB	460C	-	M	 M                            G  V  R  L  L  L
+TEST600.GB	460C	-	U	 U                             E  C  G  Y  Y  S
+TEST600.GB	460C	-	T	 T                           W  S  A  V  T  T
+TEST600.GB	460C	-	mutated	%GC: 50    Tm°C: 67    Hairpin: !   Dimers: OK  Runs: OK
