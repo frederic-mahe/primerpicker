@@ -1,0 +1,33 @@
+# primer	design	primerpicker_kcal (computed before the recording, at commit 2c793d8)
+TCCGGGGCAAAAGCTTTGGA	run GGG middle loop4	-6.7 kcal
+TCCGGGGCAAAAAGCTTTGGA	run GGG middle loop5	-8.2 kcal
+TCCTTTGCAAAAGCGGGGGA	run TTT middle loop4	-6.7 kcal
+TCCTTTGCAAAAAGCGGGGGA	run TTT middle loop5	-8.2 kcal
+TCCGTGGCAAAAGCTGTGGA	run GTG middle loop4	-6.8 kcal
+TCCGTGGCAAAAAGCTGTGGA	run GTG middle loop5	-8.3 kcal
+TCCTGTGCAAAAGCGTGGGA	run TGT middle loop4	-6.8 kcal
+TCCTGTGCAAAAAGCGTGGGA	run TGT middle loop5	-8.3 kcal
+TCCGGTGCAAAAGCGTTGGA	run GGT middle loop4	-6.7 kcal
+TCCGGTGCAAAAAGCGTTGGA	run GGT middle loop5	-8.2 kcal
+TCCTTGGCAAAAGCTGGGGA	run TTG middle loop4	-6.8 kcal
+TCCTTGGCAAAAAGCTGGGGA	run TTG middle loop5	-8.3 kcal
+TCCGTTGCAAAAGCGGTGGA	run GTT middle loop4	-6.7 kcal
+TCCGTTGCAAAAAGCGGTGGA	run GTT middle loop5	-8.2 kcal
+TCCTGGGCAAAAGCTTGGGA	run TGG middle loop4	-6.8 kcal
+TCCTGGGCAAAAAGCTTGGGA	run TGG middle loop5	-8.3 kcal
+TCCGGGGGCAAAAGCTTTTGGA	run GGGG middle loop4	-7.2 kcal
+TCCGGGGGCAAAAAGCTTTTGGA	run GGGG middle loop5	-8.7 kcal
+TCCTTTTGCAAAAGCGGGGGGA	run TTTT middle loop4	-7.2 kcal
+TCCTTTTGCAAAAAGCGGGGGGA	run TTTT middle loop5	-8.7 kcal
+TCCGTGTGCAAAAGCGTGTGGA	run GTGT middle loop4	-7.3 kcal
+TCCGTGTGCAAAAAGCGTGTGGA	run GTGT middle loop5	-8.8 kcal
+TCCTGTGGCAAAAGCTGTGGGA	run TGTG middle loop4	-7.4 kcal
+TCCTGTGGCAAAAAGCTGTGGGA	run TGTG middle loop5	-8.9 kcal
+TCCGCGGGAAAATTTGCGGA	run GGG next to loop	-6.3 kcal
+TGGGCCGCAAAAGCGGTTTA	run GGG outer end	-6.0 kcal
+TCCGCTTTAAAAGGGGCGGA	run TTT next to loop	-6.3 kcal
+TTTTCCGCAAAAGCGGGGGA	run TTT outer end	-5.2 kcal
+TCCGCGTGAAAATGTGCGGA	run GTG next to loop	-6.3 kcal
+TGTGCCGCAAAAGCGGTGTA	run GTG outer end	-6.1 kcal
+TCCGCTGTAAAAGTGGCGGA	run TGT next to loop	-6.3 kcal
+TTGTCCGCAAAAGCGGGTGA	run TGT outer end	-5.3 kcal
