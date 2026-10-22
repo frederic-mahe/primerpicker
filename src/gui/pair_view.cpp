@@ -1,6 +1,5 @@
 #include "gui/pair_view.hpp"
 
-#include "core/analysis/legacy_criteria.hpp"
 #include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "core/sequence/nucleotide.hpp"
@@ -65,9 +64,11 @@ PairView::PairView() : model_{{QString{}, u"-A-"_s, u"-B-"_s, u"Comment"_s}} {
     setLayout(&layout_);
 }
 
-void PairView::show_pair(analysis::PrimerPair const& primers, analysis::LegacyCriteria const& criteria) {
-    primer_a_.setText(u"Primer A: 5'-%1-3'"_s.arg(letters(primers.first)));
-    primer_b_.setText(u"Primer B: 5'-%1-3'"_s.arg(letters(primers.second)));
+// the whole primers, their 5' extensions included, as PRIMER.exe
+// (tests/legacy/extension/ext_pair.screens.txt)
+void PairView::show_pair(analysis::LegacyPrimerPair const& primers, analysis::LegacyCriteria const& criteria) {
+    primer_a_.setText(u"Primer A: 5'-%1-3'"_s.arg(letters(primers.first.sequence)));
+    primer_b_.setText(u"Primer B: 5'-%1-3'"_s.arg(letters(primers.second.sequence)));
     auto const actual_a = analysis::legacy_actual_values(primers.first);
     auto const actual_b = analysis::legacy_actual_values(primers.second);
     auto const cautions_a = analysis::legacy_pair_cautions(actual_a, criteria);
@@ -80,7 +81,7 @@ void PairView::show_pair(analysis::PrimerPair const& primers, analysis::LegacyCr
     auto const flags_bb = flags(actual_b.dimer_3prime_matches, actual_b.dimer_adjacent_bases);
     auto const flags_ab = flags(pair.dimer_3prime_matches, pair.dimer_adjacent_bases);
     auto rows = QList<QList<QString>>{
-        {u"Length"_s, QString::number(primers.first.size()), QString::number(primers.second.size()),
+        {u"Length"_s, QString::number(primers.first.sequence.size()), QString::number(primers.second.sequence.size()),
          difference(pair.length_difference, u" base")},
         {u"% GC"_s, flagged(actual_a.gc_percent, cautions_a.gc), flagged(actual_b.gc_percent, cautions_b.gc),
          difference(pair.gc_difference_percent, u" %")},

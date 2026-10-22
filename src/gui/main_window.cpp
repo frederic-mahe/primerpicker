@@ -2,6 +2,7 @@
 
 #include "core/analysis/legacy_homology.hpp"
 #include "core/analysis/legacy_multi_primer.hpp"
+#include "core/analysis/legacy_verdict.hpp"
 #include "core/enzymes/rebase_enzymes.hpp"
 #include "core/enzymes/site_search.hpp"
 #include "core/io/legacy_native_molecule.hpp"
@@ -1082,7 +1083,9 @@ auto MainWindow::analyze_pair(PairSelection const& selection) -> std::optional<Q
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
     auto const primer_a = std::span{first.sequence}.subspan(first.extension_length);
     auto const primer_b = std::span{second.sequence}.subspan(second.extension_length);
-    pair_.show_pair({.first = primer_a, .second = primer_b}, criteria);
+    pair_.show_pair({.first = {.sequence = first.sequence, .extension_length = first.extension_length},
+                     .second = {.sequence = second.sequence, .extension_length = second.extension_length}},
+                    criteria);
     report_ = ScreenReport{.file_name = u"PAIR.PRN"_s,
                            .text = [primer_a = std::vector(primer_a.begin(), primer_a.end()),
                                     primer_b = std::vector(primer_b.begin(), primer_b.end()),
@@ -1116,6 +1119,7 @@ auto MainWindow::list_texts() const -> QList<QString> {
 
 auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional<QString> {
     auto fields = analysis::MultiPrimerFields{};
+    auto extended = analysis::LegacyMultiPrimerFields{};
     auto filled = std::size_t{0};
     for (auto index = std::size_t{0}; index < selection.size(); ++index) {
         auto const& choice = selection.at(index);
@@ -1127,6 +1131,7 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
         }
         auto const& primer = primer_list_.at(*choice);
         fields.at(index) = std::span{primer.sequence}.subspan(primer.extension_length);
+        extended.at(index) = analysis::LegacyPrimer{.sequence = primer.sequence, .extension_length = primer.extension_length};
         ++filled;
     }
     constexpr auto min_filled = std::size_t{2};
@@ -1134,7 +1139,7 @@ auto MainWindow::analyze_multi(MultiSelection const& selection) -> std::optional
         return u"Please choose at least two primers"_s;
     }
     auto const& criteria = active_primer_.has_value() ? active_primer_->criteria : defaults_.criteria;
-    multi_.show_primers(fields, criteria);
+    multi_.show_primers(extended, criteria);
     // copies of the primers: the list may change before printing
     auto copies = std::array<std::optional<std::vector<sequence::Nucleotide>>, analysis::legacy_multi_primer_fields>{};
     std::ranges::transform(fields, copies.begin(), [](auto const& field) {

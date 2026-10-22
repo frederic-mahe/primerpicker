@@ -22,7 +22,7 @@ class MultiPrimerView final : public QWidget {
 public:
     MultiPrimerView();
 
-    void show_primers(analysis::MultiPrimerFields const& fields, analysis::LegacyCriteria const& criteria);
+    void show_primers(analysis::LegacyMultiPrimerFields const& fields, analysis::LegacyCriteria const& criteria);
 
 private:
     // members are destroyed in reverse order: the widgets before the

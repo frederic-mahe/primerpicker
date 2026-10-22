@@ -108,7 +108,10 @@ MultiPrimerView::MultiPrimerView()
     setLayout(&layout_);
 }
 
-void MultiPrimerView::show_primers(analysis::MultiPrimerFields const& fields, analysis::LegacyCriteria const& criteria) {
+// the whole primers, their 5' extensions included, as PRIMER.exe
+// (tests/legacy/extension/ext_multi.screens.txt)
+void MultiPrimerView::show_primers(analysis::LegacyMultiPrimerFields const& fields,
+                                   analysis::LegacyCriteria const& criteria) {
     auto const analysis = analysis::legacy_multi_primer(fields, criteria);
     auto balance = QList<QList<QString>>{};
     for (auto index = std::size_t{0}; index < analysis::legacy_multi_primer_fields; ++index) {
@@ -119,7 +122,7 @@ void MultiPrimerView::show_primers(analysis::MultiPrimerFields const& fields, an
         }
         auto const& actual = column->actual;
         auto const& cautions = column->cautions;
-        balance.append({QString{field_names.at(index)}, letters(*field), QString::number(column->length),
+        balance.append({QString{field_names.at(index)}, letters(field->sequence), QString::number(column->length),
                         flagged(actual.gc_percent, cautions.gc), flagged(actual.tm_celsius, cautions.tm),
                         flagged(actual.gc_run_3prime, cautions.gc_run_3prime),
                         flagged(actual.longest_run, cautions.runs), cautions.hairpin ? u"!"_s : u"OK"_s});

@@ -17,6 +17,8 @@ namespace primerpicker::analysis {
 // may stay empty
 constexpr auto legacy_multi_primer_fields = std::size_t{4};
 using MultiPrimerFields = std::array<std::optional<std::span<sequence::Nucleotide const>>, legacy_multi_primer_fields>;
+// The same, for primers with their 5' extensions
+using LegacyMultiPrimerFields = std::array<std::optional<LegacyPrimer>, legacy_multi_primer_fields>;
 
 // One column of "Primer Balance and Cautions"
 struct LegacyMultiPrimerColumn {
@@ -43,19 +45,22 @@ struct LegacyMultiPrimer {
     LegacyDimerMatrix dimers;
 };
 
-// Multi Primer Analysis: each primer needs at least two nucleotides
-[[nodiscard]] constexpr auto legacy_multi_primer(MultiPrimerFields const& fields, LegacyCriteria const& criteria) noexcept
-    -> LegacyMultiPrimer {
+// Multi Primer Analysis of primers with their 5' extensions: the
+// values of the whole primers, the Tm without the extension
+// (tests/legacy/README.md, "Primers with a 5' extension"); each primer
+// needs at least two nucleotides after its extension
+[[nodiscard]] constexpr auto legacy_multi_primer(LegacyMultiPrimerFields const& fields,
+                                                 LegacyCriteria const& criteria) noexcept -> LegacyMultiPrimer {
     auto analysis = LegacyMultiPrimer{};
     for (auto row = std::size_t{0}; row < legacy_multi_primer_fields; ++row) {
         auto const& field = fields.at(row);
         if (not field.has_value()) {
             continue;
         }
-        auto const primer = *field;
+        auto const& primer = *field;
         auto const actual = legacy_actual_values(primer);
         analysis.columns.at(row) = LegacyMultiPrimerColumn{
-            .length = primer.size(), .actual = actual, .cautions = legacy_pair_cautions(actual, criteria)};
+            .length = primer.sequence.size(), .actual = actual, .cautions = legacy_pair_cautions(actual, criteria)};
         analysis.dimers.at(row).at(row) =
             LegacyDimerCell{.dimer_3prime_matches = actual.dimer_3prime_matches,
                             .dimer_adjacent_bases = actual.dimer_adjacent_bases,
@@ -65,7 +70,7 @@ struct LegacyMultiPrimer {
             if (not other.has_value()) {
                 continue;
             }
-            auto const values = legacy_pair_values(PrimerPair{.first = primer, .second = *other});
+            auto const values = legacy_pair_values(LegacyPrimerPair{.first = primer, .second = *other});
             analysis.dimers.at(row).at(column) = LegacyDimerCell{
                 .dimer_3prime_matches = values.dimer_3prime_matches,
                 .dimer_adjacent_bases = values.dimer_adjacent_bases,
@@ -73,6 +78,23 @@ struct LegacyMultiPrimer {
         }
     }
     return analysis;
+}
+
+// Primers without 5' extension
+[[nodiscard]] constexpr auto with_extensions(MultiPrimerFields const& fields) noexcept -> LegacyMultiPrimerFields {
+    auto extended = LegacyMultiPrimerFields{};
+    for (auto index = std::size_t{0}; index < legacy_multi_primer_fields; ++index) {
+        if (auto const& field = fields.at(index); field.has_value()) {
+            extended.at(index) = LegacyPrimer{.sequence = *field, .extension_length = 0};
+        }
+    }
+    return extended;
+}
+
+// Multi Primer Analysis: each primer needs at least two nucleotides
+[[nodiscard]] constexpr auto legacy_multi_primer(MultiPrimerFields const& fields, LegacyCriteria const& criteria) noexcept
+    -> LegacyMultiPrimer {
+    return legacy_multi_primer(with_extensions(fields), criteria);
 }
 
 }  // namespace primerpicker::analysis

@@ -20,6 +20,30 @@ struct LegacyPairValues {
     std::size_t dimer_adjacent_bases;
 };
 
+// Two primers with their 5' extensions
+struct LegacyPrimerPair {
+    LegacyPrimer first;
+    LegacyPrimer second;
+};
+
+// The same for primers with a 5' extension: lengths and dimers of the
+// whole primers, the Tm without the extension, as the Primer Analysis
+// screen (tests/legacy/README.md, "Primers with a 5' extension"). Both
+// primers need at least two nucleotides after their extension.
+[[nodiscard]] constexpr auto legacy_pair_values(LegacyPrimerPair const& primers) noexcept -> LegacyPairValues {
+    auto const first = legacy_actual_values(primers.first);
+    auto const second = legacy_actual_values(primers.second);
+    auto const length_difference = static_cast<std::ptrdiff_t>(primers.first.sequence.size()) -
+                                   static_cast<std::ptrdiff_t>(primers.second.sequence.size());
+    auto const absolute = [](auto const value) { return value < 0 ? -value : value; };
+    auto const whole = PrimerPair{.first = primers.first.sequence, .second = primers.second.sequence};
+    return {.length_difference = static_cast<int>(absolute(length_difference)),
+            .gc_difference_percent = absolute(first.gc_percent - second.gc_percent),
+            .tm_difference_celsius = absolute(first.tm_celsius - second.tm_celsius),
+            .dimer_3prime_matches = dimer_at_3prime_end(whole),
+            .dimer_adjacent_bases = longest_complementary_run(whole)};
+}
+
 // Both primers need at least two nucleotides (without 5' extension)
 [[nodiscard]] constexpr auto legacy_pair_values(PrimerPair const& primers) noexcept -> LegacyPairValues {
     auto const first = legacy_actual_values(primers.first);

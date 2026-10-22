@@ -170,11 +170,13 @@ public:
     [[nodiscard]] auto homology(analysis::HomologyKind kind) -> std::optional<QString>;
 
     // Analyze -> Primer Pair of two primers of the Primer List (their 5'
-    // extensions aside); the error, if there was no analysis
+    // extensions included, as PRIMER.exe; the report still leaves them
+    // aside); the error, if there was no analysis
     [[nodiscard]] auto analyze_pair(PairSelection const& selection) -> std::optional<QString>;
 
     // Analyze -> Multi Primer of two to four primers of the Primer List
-    // (their 5' extensions aside); the error, if there was no analysis
+    // (their 5' extensions included, as PRIMER.exe; the report still
+    // leaves them aside); the error, if there was no analysis
     [[nodiscard]] auto analyze_multi(MultiSelection const& selection) -> std::optional<QString>;
 
     // Primer/Create -> Match Active Primer: the primers B (complement

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/analysis/legacy_pair.hpp"
 #include "core/analysis/legacy_verdict.hpp"
 #include "gui/text_table_model.hpp"
 
@@ -20,7 +21,7 @@ class PairView final : public QWidget {
 public:
     PairView();
 
-    void show_pair(analysis::PrimerPair const& primers, analysis::LegacyCriteria const& criteria);
+    void show_pair(analysis::LegacyPrimerPair const& primers, analysis::LegacyCriteria const& criteria);
 
 private:
     // members are destroyed in reverse order: the widgets before the
