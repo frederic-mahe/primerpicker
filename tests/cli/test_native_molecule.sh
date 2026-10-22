@@ -34,8 +34,10 @@ INPUTS="${LEGACY}/molecule_save/inputs"
 ## PRIMER.exe reads the files it writes: ZZ.GB (TEST600.GB saved) gives
 ## the same results as TEST600.GB
 DESCRIPTION="a molecule saved by PRIMER.exe gives the results of the original file"
-diff <("${PRIMERPICKER}" find-enzymes "${WRITTEN}/save_new.ZZ.GB" TaqI 2>&1) \
-     <("${PRIMERPICKER}" find-enzymes "${LEGACY}/pairs/TEST600.GB" TaqI 2>&1) > /dev/null && \
+## (compared in bash: no diff or cmp in MSYS2)
+SAVED=$("${PRIMERPICKER}" find-enzymes "${WRITTEN}/save_new.ZZ.GB" TaqI 2>&1)
+ORIGINAL=$("${PRIMERPICKER}" find-enzymes "${LEGACY}/pairs/TEST600.GB" TaqI 2>&1)
+[[ -n "${SAVED}" && "${SAVED}" == "${ORIGINAL}" ]] && \
     success "${DESCRIPTION}" || \
         failure "${DESCRIPTION}"
 
