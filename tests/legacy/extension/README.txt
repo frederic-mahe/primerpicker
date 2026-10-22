@@ -21,3 +21,19 @@ ext_picking3 (tools/picking_table_extension.py pairs/TEST600.GB
 WORKDIR/ext_picking3; its colours.txt is not kept, about 9 MB). Not
 kept: earlier runs that froze early or lost keys (ext_picking,
 ext_picking2, ext_length; "plus" is not an autotype key: kp_plus).
+
+Later runs (2026-10-22), tools/probe_keys.sh, PAUSE=3.5, SECONDS_MAX=600,
+X as above:
+  NAME        KEYS                                                    FILES
+  ext_unique  X "i , , , u , , , , , ,"                                ../pairs/TEST600.GB
+              (Inspect on the picking screen, then U: Uniqueness)
+  ext_pair    X "s , , enter , , enter 4 0 0 enter y enter enter enter , , s , ,
+              right right down enter 1 enter 2 enter , , a , , , ,"    ../pairs/TEST600.GB
+              (primer B at 400(C), Analyze -> Primer Pair 1 2, A: AnalProd)
+  ext_multi   "space down down down down down down enter down enter , enter down down enter ,
+              right right down down enter 1 2 enter enter , , , , h , , , d , , , ,"
+                                                                       P1.PD2 P2.PD2
+              (Retrieve from disk P1.PD2 and P2.PD2, Analyze -> Multi Primer 1 2, H, D)
+P1.PD2: tools/make_pd2.py GTAAAACGACGGCCAGT GAATTC (= ../primers/M13EXT.PD2);
+P2.PD2: tools/make_pd2.py AACAGCTATGACCATG (inputs).
+Not kept: ext_false (False Priming; froze before the picking screen).
