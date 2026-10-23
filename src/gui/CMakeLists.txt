@@ -23,6 +23,7 @@ add_library(primerpicker_gui
   pair_dialog.cpp
   pair_view.cpp
   picking_view.cpp
+  return_key_filter.cpp
   sequence_dialog.cpp
   sites_view.cpp
   system_defaults_dialog.cpp

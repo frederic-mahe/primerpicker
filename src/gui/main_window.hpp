@@ -26,6 +26,7 @@
 #include "gui/pair_dialog.hpp"
 #include "gui/pair_view.hpp"
 #include "gui/picking_view.hpp"
+#include "gui/return_key_filter.hpp"
 #include "gui/sequence_dialog.hpp"
 #include "gui/sites_view.hpp"
 #include "gui/system_defaults_dialog.hpp"
@@ -314,6 +315,9 @@ private:
     QDockWidget list_dock_;
     TextTableModel list_model_;
     QTableView list_view_;
+    // Return and Enter in the list pick the primer (as activated() does
+    // on Windows and Linux, but not on macOS)
+    ReturnKeyFilter list_return_;
     QLabel molecule_label_;
     QLabel settings_label_;
     QActionGroup colour_schemes_;

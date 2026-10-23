@@ -153,6 +153,11 @@ auto mutated_copy(ActivePrimer const& primer, std::vector<sequence::Nucleotide> 
 
 MainWindow::MainWindow()
     : list_model_{{u"#"_s, u"Sequence"_s, u"Length"_s, u"Origin"_s}},
+      list_return_{[this] {
+          if (auto const index = list_view_.currentIndex(); index.isValid()) {
+              show_listed_primer(index.row());
+          }
+      }},
       colour_schemes_{this},
       direct_entry_{*this, direct_entry_kind},
       extension_{*this, extension_kind},
@@ -196,6 +201,7 @@ MainWindow::MainWindow()
     addDockWidget(Qt::LeftDockWidgetArea, &list_dock_);
     QObject::connect(&list_view_, &QAbstractItemView::activated, this,
                      [this](QModelIndex const& index) { show_listed_primer(index.row()); });
+    list_view_.installEventFilter(&list_return_);
     QObject::connect(&pair_dialog_, &QDialog::accepted, this, &MainWindow::use_primer_pair);
     QObject::connect(&multi_dialog_, &QDialog::accepted, this, &MainWindow::use_multi_primer);
     QObject::connect(&match_dialog_, &MatchDialog::search_entered, this, &MainWindow::use_match);
