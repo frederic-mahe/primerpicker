@@ -13,3 +13,5 @@
 *.png binary
 tests/legacy/molecule_save/written/* -text
 tests/legacy/molecule_save/inputs/* -text
+*.ico binary
+*.icns binary
