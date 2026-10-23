@@ -3,6 +3,7 @@
 # computed by the core library.
 add_library(primerpicker_gui
   analysis_view.cpp
+  application_icon.cpp
   colour_scheme.cpp
   criteria_dialog.cpp
   criteria_fields.cpp
@@ -27,6 +28,19 @@ add_library(primerpicker_gui
   system_defaults_dialog.cpp
   text_table_model.cpp)
 set_target_properties(primerpicker_gui PROPERTIES AUTOMOC ON)
+# The icon of the windows, built into the library (made by
+# packaging/icons/make_icons.sh)
+qt_add_resources(primerpicker_gui "icons"
+  PREFIX /icons
+  BASE "${PROJECT_SOURCE_DIR}/packaging/icons/png"
+  FILES
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-small-16.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-small-24.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-small-32.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-small-48.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-64.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-128.png"
+    "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-256.png")
 target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets Qt6::Concurrent)
 target_compile_options(primerpicker_gui PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 # QString conversions and Qt's keyword macros are explicit; no API

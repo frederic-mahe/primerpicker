@@ -1,5 +1,6 @@
 // primerpicker-gui: entry point of the graphical front-end
 
+#include "gui/application_icon.hpp"
 #include "gui/main_window.hpp"
 
 #include <QApplication>
@@ -17,6 +18,7 @@ auto main(int argc, char* argv[]) -> int {
     QApplication::setApplicationName(u"primerpicker"_s);
     QApplication::setApplicationDisplayName(u"PrimerPicker"_s);
     QApplication::setApplicationVersion(QString::fromUtf8(PRIMERPICKER_VERSION));
+    QApplication::setWindowIcon(primerpicker::gui::application_icon());
 
     auto parser = QCommandLineParser{};
     parser.setApplicationDescription(u"Interactive PCR and sequencing primer design"_s);

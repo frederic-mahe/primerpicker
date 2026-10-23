@@ -49,9 +49,11 @@ add_executable(gui_tests
   test_picking_extension.cpp
   test_match_complement.cpp
   test_extension_pair_multi.cpp
-  test_from_molecule_fields.cpp)
+  test_from_molecule_fields.cpp
+  test_application_icon.cpp)
 target_link_libraries(gui_tests PRIVATE primerpicker_gui Qt6::Test Catch2::Catch2)
 target_compile_options(gui_tests PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
-target_compile_definitions(gui_tests PRIVATE PRIMERPICKER_LEGACY_DIR="${PROJECT_SOURCE_DIR}/tests/legacy")
+target_compile_definitions(gui_tests PRIVATE PRIMERPICKER_LEGACY_DIR="${PROJECT_SOURCE_DIR}/tests/legacy"
+  PRIMERPICKER_ICONS_DIR="${PROJECT_SOURCE_DIR}/packaging/icons")
 
 catch_discover_tests(gui_tests DISCOVERY_MODE PRE_TEST TEST_PREFIX "gui: ")
