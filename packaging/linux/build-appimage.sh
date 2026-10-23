@@ -49,14 +49,25 @@ export QMAKE="${QMAKE:-$(command -v qmake6 || command -v qmake)}"
 # Qt plugin of linuxdeploy deploys the wayland platform plugin without
 # the shell integration plugins that it needs to show a window
 
-appdir=$(mktemp -d)/AppDir
+work=$(mktemp -d)
+appdir=$work/AppDir
+# the icons (packaging/icons/): the drawing for every size, and the
+# arrows alone for the small ones; linuxdeploy names each file after
+# the desktop file's icon (primerpicker) and sorts it by its size
+icons=$here/../icons
+set -- --icon-file "$icons/primerpicker.svg"
+for size in 16 24 32 48; do
+    mkdir "$work/$size"
+    cp "$icons/png/primerpicker-small-$size.png" "$work/$size/primerpicker.png"
+    set -- "$@" --icon-file "$work/$size/primerpicker.png"
+done
 LDAI_OUTPUT=$output
 LDAI_RUNTIME_FILE=$tools/runtime-x86_64
 export LDAI_OUTPUT LDAI_RUNTIME_FILE
 linuxdeploy-x86_64.AppImage --appdir "$appdir" \
     --executable "$exe" \
     --desktop-file "$here/primerpicker.desktop" \
-    --icon-file "$here/primerpicker.svg" \
+    "$@" \
     --plugin qt \
     --output appimage
-rm -rf "$(dirname "$appdir")"
+rm -rf "$work"

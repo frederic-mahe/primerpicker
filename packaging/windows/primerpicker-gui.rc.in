@@ -1,0 +1,4 @@
+// The icon of primerpicker-gui.exe in Windows Explorer and the taskbar
+// (the first icon resource of the program); configured by
+// src/gui/CMakeLists.txt
+IDI_ICON1 ICON "@PRIMERPICKER_ICO@"
