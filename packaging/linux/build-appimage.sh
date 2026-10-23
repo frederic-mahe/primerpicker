@@ -61,6 +61,14 @@ for size in 16 24 32 48; do
     cp "$icons/png/primerpicker-small-$size.png" "$work/$size/primerpicker.png"
     set -- "$@" --icon-file "$work/$size/primerpicker.png"
 done
+# libgpg-error is on linuxdeploy's list of libraries left to the
+# system, but libgcrypt, which needs it, is not: bundled through
+# libdbus-1 and libsystemd, it failed to start on Debian 13, which can
+# lack libgpg-error (Executables workflow, 2026-10-23). A library given
+# with --library is bundled whatever the list says.
+gpg_error=$(ldconfig -p | awk '$1 == "libgpg-error.so.0" && /x86-64/ { print $NF; exit }')
+[ -n "$gpg_error" ] || { echo "error: libgpg-error.so.0 not found" >&2; exit 1; }
+set -- "$@" --library "$gpg_error"
 LDAI_OUTPUT=$output
 LDAI_RUNTIME_FILE=$tools/runtime-x86_64
 export LDAI_OUTPUT LDAI_RUNTIME_FILE
