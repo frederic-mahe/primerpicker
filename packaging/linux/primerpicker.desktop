@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=PrimerPicker
+GenericName=Primer design
+Comment=Interactive PCR and sequencing primer design
+Exec=primerpicker-gui
+Icon=primerpicker
+Terminal=false
+Categories=Science;Biology;
