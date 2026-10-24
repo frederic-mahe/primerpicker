@@ -2,7 +2,10 @@
 # Gathers primerpicker-gui.exe and everything it needs into a folder
 # that runs on a Windows computer without MSYS2: the Qt libraries and
 # plugins (windeployqt), then every DLL of the MSYS2 environment that
-# the executables and DLLs of the folder load, until none is missing.
+# the executables and DLLs of the folder load, until none is missing;
+# then the licences: those of PrimerPicker's packages
+# (packaging/licenses/), and the licence files of every MSYS2 package
+# that a DLL of the folder comes from, in licenses/.
 #
 # usage (MSYS2 UCRT64 shell): sh packaging/windows/deploy-gui.sh EXE FOLDER
 set -eu
@@ -10,6 +13,7 @@ set -eu
 exe=$1
 folder=$2
 prefix=${MINGW_PREFIX:?run from an MSYS2 shell (UCRT64)}
+here=$(cd "$(dirname "$0")" && pwd)
 
 mkdir -p "$folder"
 cp "$exe" "$folder/"
@@ -35,3 +39,20 @@ while :; do
         cp "$dll" "$folder/"
     done
 done
+
+# the MSYS2 packages of the DLLs (windeployqt's included), and their
+# licence files
+mkdir -p "$folder/licenses"
+for dll in "$folder"/*.dll; do
+    pacman -Qqo "$prefix/bin/$(basename "$dll")" 2> /dev/null || true
+done | sort -u > "$folder/licenses/packages"
+[ -s "$folder/licenses/packages" ] || { echo "error: no MSYS2 package found for the DLLs" >&2; exit 1; }
+while read -r package; do
+    pacman -Qlq "$package" | grep '/share/licenses/.' | grep -v '/$' | while read -r file; do
+        mkdir -p "$folder/licenses/$package"
+        cp "$file" "$folder/licenses/$package/"
+    done
+done < "$folder/licenses/packages"
+xargs pacman -Q < "$folder/licenses/packages" > "$folder/licenses/packages.txt"
+rm "$folder/licenses/packages"
+cp "$here/../licenses/THIRD-PARTY.md" "$here/../licenses/LGPL-3.0.txt" "$folder/"

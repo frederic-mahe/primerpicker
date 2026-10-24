@@ -51,6 +51,14 @@ export QMAKE="${QMAKE:-$(command -v qmake6 || command -v qmake)}"
 
 work=$(mktemp -d)
 appdir=$work/AppDir
+# the licences (packaging/licenses/), with the software bill of
+# materials of Qt; linuxdeploy adds the copyright files of the Ubuntu
+# packages that it bundles (usr/share/doc/<package>/copyright)
+licences=$appdir/usr/share/doc/primerpicker
+mkdir -p "$licences/qt-sbom"
+cp "$here/../../LICENSE" "$here/../licenses/THIRD-PARTY.md" "$here/../licenses/LGPL-3.0.txt" \
+    "$here/../licenses/LGPL-2.1.txt" "$here/../licenses/ICU-73.txt" "$licences/"
+cp "$("$QMAKE" -query QT_INSTALL_PREFIX)"/sbom/*.spdx "$licences/qt-sbom/"
 # the icons (packaging/icons/): the drawing for every size, and the
 # arrows alone for the small ones; linuxdeploy names each file after
 # the desktop file's icon (primerpicker) and sorts it by its size

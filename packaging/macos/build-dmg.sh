@@ -7,7 +7,7 @@
 # given documents. Without an Apple Developer ID, the program is
 # neither signed by a known developer nor notarized (proposal §3.8).
 #
-# usage: sh packaging/macos/build-dmg.sh APP OUTPUT.dmg VOLUME_NAME [FILE...]
+# usage: QT_BIN=... sh packaging/macos/build-dmg.sh APP OUTPUT.dmg VOLUME_NAME [FILE...]
 set -eu
 
 app=$1
@@ -18,9 +18,18 @@ shift 3
 staging=$(mktemp -d)
 bundle=$staging/PrimerPicker.app
 cp -R "$app" "$bundle"
-# macdeployqt of QT_BIN (the bin folder of Qt), or of PATH
-deploy=${QT_BIN:+$QT_BIN/}macdeployqt
+# QT_BIN: the bin folder of Qt (macdeployqt; the software bill of
+# materials is in ../sbom)
+qt_bin=${QT_BIN:?the bin folder of Qt}
+deploy=$qt_bin/macdeployqt
 "$deploy" "$bundle" -verbose=1
+# the licences (packaging/licenses/), with the software bill of
+# materials of Qt, in the bundle (before it is signed)
+here=$(cd "$(dirname "$0")" && pwd)
+licences=$bundle/Contents/Resources/licenses
+mkdir -p "$licences/qt-sbom"
+cp "$here/../../LICENSE" "$here/../licenses/THIRD-PARTY.md" "$here/../licenses/LGPL-3.0.txt" "$licences/"
+cp "$qt_bin"/../sbom/*.spdx "$licences/qt-sbom/"
 codesign --force --deep --sign - "$bundle"
 codesign --verify --deep --strict "$bundle"
 
