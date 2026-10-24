@@ -166,11 +166,13 @@ number replaces `X.Y.Z`):
 
 | System | Graphical program | Command-line program |
 |---|---|---|
-| Windows 11 (x86_64) | `primerpicker-gui-X.Y.Z-windows-x86_64.zip`: unpack, run `primerpicker-gui.exe` | `primerpicker-X.Y.Z-windows-x86_64.zip` |
+| Windows 10 or 11 (x86_64) | `primerpicker-gui-X.Y.Z-windows-x86_64-setup.exe`: installer (Start menu entry, uninstaller; no administrator rights needed), or `primerpicker-gui-X.Y.Z-windows-x86_64.zip`: unpack, run `primerpicker-gui.exe` | `primerpicker-X.Y.Z-windows-x86_64.zip` |
 | macOS 14.4 or later (Apple silicon and Intel) | `primerpicker-gui-X.Y.Z-macos-universal.dmg`: open, drag PrimerPicker to Applications | `primerpicker-X.Y.Z-macos-universal.tar.gz` (macOS 13.3 or later) |
 | GNU/Linux x86_64 (glibc 2.39 or later: Ubuntu 24.04, Debian 13, or newer) | `primerpicker-gui-X.Y.Z-linux-x86_64.AppImage`: make it executable (`chmod +x`), run it | `primerpicker-X.Y.Z-linux-x86_64.tar.gz` (also `aarch64`) |
 
-`SHA256SUMS` lists the checksums of the files. The programs are not
+`SHA256SUMS` lists the checksums of the files. Each package holds
+the licences of the software it contains (`THIRD-PARTY.md`, also
+shown by Help, About PrimerPicker). The programs are not
 signed by a known developer: on Windows, SmartScreen asks for
 confirmation ("More info", "Run anyway"); on macOS, the first launch
 is refused, then allowed in System Settings, Privacy & Security,

@@ -3,8 +3,9 @@ name: Executables
 # Builds the executables attached to a release (proposal §3.8): the
 # command-line program for Linux (x86_64, aarch64), Windows (x86_64)
 # and macOS (universal), and the graphical program for Windows
-# (x86_64, zip), Linux (x86_64, AppImage) and macOS (universal, disk
-# image). Triggered by a published release, or by hand: with a tag,
+# (x86_64, zip and installer), Linux (x86_64, AppImage) and macOS
+# (universal, disk image), each with the licences of what it contains
+# (packaging/licenses/). Triggered by a published release, or by hand: with a tag,
 # the assets are attached to that tag's release; without one, they are
 # only built, checked and kept as workflow artifacts. Not run on
 # pushes: the CI workflow already tests every commit.
@@ -33,6 +34,9 @@ env:
   # later), installed with aqtinstall. Windows uses the Qt of MSYS2.
   QT_VERSION: 6.12.0
   AQT_VERSION: 3.3.0
+  # Inno Setup, for the Windows installer (packaging/windows/primerpicker.iss)
+  INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+  INNO_SETUP_SHA256: 9c73c3bae7ed48d44112a0f48e66742c00090bdb5bef71d9d3c056c66e97b732
 
 jobs:
   version:
@@ -169,6 +173,13 @@ jobs:
             echo "::error::needs glibc $newest, newer than 2.39 (Ubuntu 24.04)"
             exit 1
           fi
+      - name: Check the licences of the AppImage
+        run: |
+          licences=$RUNNER_TEMP/squashfs-root/usr/share/doc/primerpicker
+          for file in LICENSE THIRD-PARTY.md LGPL-3.0.txt LGPL-2.1.txt ICU-73.txt qt-sbom/qtbase-$QT_VERSION.spdx; do
+            test -s "$licences/$file" || { echo "::error::$file is missing"; exit 1; }
+          done
+          ls "$RUNNER_TEMP/squashfs-root/usr/share/doc"
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ASSET }}
@@ -298,16 +309,43 @@ jobs:
           cmake --build build/asset -j
           ctest --test-dir build/asset --output-on-failure -R '^gui: '
           strip build/asset/src/gui/primerpicker-gui.exe
-      - name: Gather the DLLs
-        run: sh packaging/windows/deploy-gui.sh build/asset/src/gui/primerpicker-gui.exe "$ASSET"
+      - name: Gather the DLLs and the licences
+        run: |
+          sh packaging/windows/deploy-gui.sh build/asset/src/gui/primerpicker-gui.exe "$ASSET"
+          cat "$ASSET/licenses/packages.txt"
+          grep -q '^mingw-w64-ucrt-x86_64-qt6-base ' "$ASSET/licenses/packages.txt"
+          test -n "$(ls "$ASSET/licenses/mingw-w64-ucrt-x86_64-qt6-base")"
       - name: Package
         run: |
           cp LICENSE README.md CITATION.cff "$ASSET/"
           zip -r "$ASSET.zip" "$ASSET"
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          $installer = Join-Path $env:RUNNER_TEMP 'innosetup.exe'
+          Invoke-WebRequest -Uri $env:INNO_SETUP_URL -OutFile $installer
+          if ((Get-FileHash -Algorithm SHA256 $installer).Hash -ne $env:INNO_SETUP_SHA256) {
+            Write-Error 'Inno Setup: wrong SHA-256'
+            exit 1
+          }
+          $folder = Join-Path $env:RUNNER_TEMP 'InnoSetup'
+          Start-Process -Wait -FilePath $installer -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', '/CURRENTUSER', "/DIR=$folder"
+          "ISCC=$(Join-Path $folder 'ISCC.exe')" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+      - name: Make the installer
+        shell: pwsh
+        run: |
+          & $env:ISCC "/DAppVersion=${{ needs.version.outputs.cmake_version }}" "/DAppFolder=$(Join-Path $env:GITHUB_WORKSPACE $env:ASSET)" `
+            "/DOutputDir=$env:GITHUB_WORKSPACE" "/DOutputName=$($env:ASSET)-setup" packaging\windows\primerpicker.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ASSET }}
           path: ${{ env.ASSET }}.zip
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ASSET }}-setup
+          path: ${{ env.ASSET }}-setup.exe
           if-no-files-found: error
 
   windows-gui-check:
@@ -337,6 +375,53 @@ jobs:
           }
           Stop-Process -Id $process.Id
           Get-ChildItem -Recurse $env:ASSET | Select-Object -ExpandProperty FullName
+          foreach ($file in 'LICENSE', 'THIRD-PARTY.md', 'LGPL-3.0.txt', 'licenses\packages.txt') {
+            if (-not (Test-Path (Join-Path $env:ASSET $file))) { Write-Error "$file is missing"; exit 1 }
+          }
+
+  windows-installer-check:
+    # Installs for the current user, without MSYS2 in PATH, starts the
+    # program from the installation folder, then uninstalls it
+    name: Windows x86_64 (graphical, installer check)
+    needs: [version, windows-gui]
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      ASSET: primerpicker-gui-${{ needs.version.outputs.version }}-windows-x86_64
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.ASSET }}-setup
+      - name: Install, start, uninstall
+        shell: pwsh
+        run: |
+          $setup = Start-Process -Wait -PassThru -FilePath ".\$($env:ASSET)-setup.exe" `
+            -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/CURRENTUSER', '/LOG=install.log'
+          if ($setup.ExitCode -ne 0) { Get-Content install.log; Write-Error "setup: exit code $($setup.ExitCode)"; exit 1 }
+          $folder = Join-Path $env:LOCALAPPDATA 'Programs\PrimerPicker'
+          $exe = Join-Path $folder 'primerpicker-gui.exe'
+          foreach ($file in $exe, (Join-Path $folder 'THIRD-PARTY.md'), (Join-Path $folder 'licenses\packages.txt')) {
+            if (-not (Test-Path $file)) { Get-Content install.log; Write-Error "$file is missing"; exit 1 }
+          }
+          $shortcut = Join-Path ([Environment]::GetFolderPath('Programs')) 'PrimerPicker.lnk'
+          if (-not (Test-Path $shortcut)) { Write-Error 'no Start menu entry'; exit 1 }
+          $process = Start-Process -FilePath $exe -PassThru
+          Start-Sleep -Seconds 10
+          if ($process.HasExited) {
+            Write-Error "primerpicker-gui.exe stopped with exit code $($process.ExitCode)"
+            exit 1
+          }
+          Stop-Process -Id $process.Id
+          Start-Sleep -Seconds 2
+          # the uninstaller copies itself to a temporary folder and returns
+          # at once: wait for the program to disappear
+          Start-Process -Wait -FilePath (Join-Path $folder 'unins000.exe') -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART'
+          foreach ($second in 1..60) {
+            if (-not (Test-Path $exe)) { break }
+            Start-Sleep -Seconds 1
+          }
+          if (Test-Path $exe) { Write-Error 'the uninstaller left primerpicker-gui.exe'; exit 1 }
+          if (Test-Path $shortcut) { Write-Error 'the uninstaller left the Start menu entry'; exit 1 }
 
   macos:
     name: macOS ${{ matrix.arch }} (command line)
@@ -431,7 +516,8 @@ jobs:
       - name: Pack into a disk image
         run: |
           QT_BIN="$QT_DIR/bin" sh packaging/macos/build-dmg.sh build/asset/src/gui/primerpicker-gui.app \
-            "$ASSET.dmg" "PrimerPicker ${{ needs.version.outputs.version }}" LICENSE README.md CITATION.cff
+            "$ASSET.dmg" "PrimerPicker ${{ needs.version.outputs.version }}" LICENSE README.md CITATION.cff \
+            packaging/licenses/THIRD-PARTY.md packaging/licenses/LGPL-3.0.txt
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ASSET }}
@@ -466,6 +552,10 @@ jobs:
           hdiutil detach "$RUNNER_TEMP/image"
           app=$RUNNER_TEMP/PrimerPicker.app
           codesign --verify --deep --strict "$app"
+          for file in LICENSE THIRD-PARTY.md LGPL-3.0.txt "qt-sbom/qtbase-$QT_VERSION.spdx"; do
+            test -s "$app/Contents/Resources/licenses/$file" || { echo "::error::$file is missing"; exit 1; }
+          done
+          test -s "$app/Contents/Resources/primerpicker.icns"
           plutil -extract CFBundleShortVersionString raw "$app/Contents/Info.plist" | grep -Fx "$VERSION"
           exe=$app/Contents/MacOS/primerpicker-gui
           lipo -archs "$exe" | grep -Fw ${{ matrix.arch }}
@@ -482,7 +572,7 @@ jobs:
   publish:
     name: Attach to the release
     if: ${{ (github.event.release.tag_name || inputs.tag) != '' }}
-    needs: [version, linux, linux-gui-check, windows-cli-check, windows-gui-check, macos-universal, macos-gui-check]
+    needs: [version, linux, linux-gui-check, windows-cli-check, windows-gui-check, windows-installer-check, macos-universal, macos-gui-check]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -499,8 +589,8 @@ jobs:
         run: |
           cd assets || exit 1
           count=$(find . -maxdepth 1 -type f | wc -l)
-          if [ "$count" -ne 7 ]; then
-            echo "::error::expected 7 assets, found $count"
+          if [ "$count" -ne 8 ]; then
+            echo "::error::expected 8 assets, found $count"
             ls -l
             exit 1
           fi
