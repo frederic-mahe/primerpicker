@@ -22,6 +22,14 @@ REBASE data and the following reference is cited:
 > REBASE--a database for DNA restriction and modification: enzymes,
 > genes and genomes. Nucl. Acids Res. 38: D234-D236.
 
+## pUC19
+
+The example molecule of the graphical program (Help -> Example
+Molecule) is the GenBank record L09137.2 (cloning vector pUC19), from
+NCBI, which places no restrictions on the use or distribution of the
+GenBank data. Yanisch-Perron, C., Vieira, J., Messing, J. (1985) Gene
+33: 103-119.
+
 ## Qt (the graphical program)
 
 The graphical program uses the Qt toolkit (Copyright The Qt Company Ltd

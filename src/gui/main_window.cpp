@@ -333,6 +333,14 @@ void MainWindow::add_legacy_menus() {
     auto& glossary = add_item(help, {.text = u"&Glossary", .name = u"glossary"});
     glossary.setShortcut(QKeySequence{Qt::Key_F1});
     QObject::connect(&glossary, &QAction::triggered, this, [this] { show_glossary({}); });
+    auto const& example = add_item(help, {.text = u"&Example Molecule (pUC19)", .name = u"example_molecule"});
+    QObject::connect(&example, &QAction::triggered, this, [this] {
+        if (auto const error = load_example_molecule(); error.has_value()) {
+            QMessageBox::warning(this, u"Example Molecule"_s, *error);
+            return;
+        }
+        open_view_molecule();
+    });
     help.addSeparator();
     auto& about = add_item(help, {.text = u"&About PrimerPicker", .name = u"about"});
     QObject::connect(&about, &QAction::triggered, &about_, &QDialog::show);
@@ -514,19 +522,36 @@ auto MainWindow::load_molecule(QString const& path) -> std::optional<QString> {
     if (not file.open(QIODevice::ReadOnly)) {
         return u"cannot read %1"_s.arg(path);
     }
-    auto const bytes = file.readAll();
-    auto const name = QFileInfo{path}.completeBaseName().toStdString();
+    return use_molecule_text(
+        {.bytes = file.readAll(), .display_path = path, .path = QFileInfo{path}.absoluteFilePath()});
+}
+
+auto MainWindow::load_example_molecule() -> std::optional<QString> {
+    if (find_pair_running()) {
+        return u"A Find Pair search is running"_s;  // it reads the molecule
+    }
+    // the "examples" resources (src/gui/CMakeLists.txt)
+    auto file = QFile{u":/examples/pUC19.gb"_s};
+    if (not file.open(QIODevice::ReadOnly)) {
+        return u"cannot read the example molecule"_s;
+    }
+    return use_molecule_text({.bytes = file.readAll(), .display_path = u"pUC19.gb"_s, .path = u"pUC19.gb"_s});
+}
+
+auto MainWindow::use_molecule_text(MoleculeText const& text) -> std::optional<QString> {
+    auto const& bytes = text.bytes;
+    auto const name = QFileInfo{text.display_path}.completeBaseName().toStdString();
     auto const parsed = io::parse_molecule_file(
         {.text = std::string_view{bytes.constData(), static_cast<std::size_t>(bytes.size())}, .name = name});
     if (parsed.error == io::MoleculeError::illegal_format) {
-        return u"%1: Illegal File Format"_s.arg(path);  // PRIMER.exe's message
+        return u"%1: Illegal File Format"_s.arg(text.display_path);  // PRIMER.exe's message
     }
     auto sequence = parsed.molecule.has_value() ? sequence::to_nucleotides(parsed.molecule->sequence) : std::nullopt;
     if (not sequence.has_value()) {
-        return u"%1: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)"_s.arg(path);
+        return u"%1: not a DNA molecule (GenBank, FASTA or plain sequence of A, C, G and T)"_s.arg(text.display_path);
     }
     molecule_ = LoadedMolecule{.name = QString::fromStdString(parsed.molecule->name),
-                               .path = QFileInfo{path}.absoluteFilePath(),
+                               .path = text.path,
                                .text = bytes.toStdString(),
                                .sequence = std::move(*sequence),
                                .topology = parsed.molecule->topology};

@@ -86,5 +86,5 @@ TEST_CASE("menu items that are not implemented yet are disabled", "[gui][menu]")
                                     u"Print to &Disk..."_s,
                                     u"Find &Enzymes..."_s, u"&View/Edit"_s, u"&Save/Remove"_s,
                                     u"Primer &List"_s, u"&Colour Scheme"_s,
-                                    u"&Glossary"_s, u"&About PrimerPicker"_s});
+                                    u"&Glossary"_s, u"&Example Molecule (pUC19)"_s, u"&About PrimerPicker"_s});
 }

@@ -43,6 +43,11 @@ qt_add_resources(primerpicker_gui "icons"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-64.png"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-128.png"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-256.png")
+# The example molecule of Help -> Example Molecule (pUC19)
+qt_add_resources(primerpicker_gui "examples"
+  PREFIX /examples
+  BASE "${PROJECT_SOURCE_DIR}/data/molecules"
+  FILES "${PROJECT_SOURCE_DIR}/data/molecules/pUC19.gb")
 # The licences shown by Help -> About PrimerPicker
 qt_add_resources(primerpicker_gui "licences"
   PREFIX /licences

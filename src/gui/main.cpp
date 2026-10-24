@@ -30,6 +30,9 @@ auto main(int argc, char* argv[]) -> int {
         u"ranges and weights replace the built-in defaults."_s,
         u"PD2.CFG"_s};
     parser.addOption(config);
+    auto const demo =
+        QCommandLineOption{u"demo"_s, u"Start with the example molecule, pUC19 (Help -> Example Molecule)."_s};
+    parser.addOption(demo);
     parser.process(application);
 
     auto settings = QSettings{};
@@ -37,6 +40,11 @@ auto main(int argc, char* argv[]) -> int {
     if (parser.isSet(config)) {
         if (auto const error = window.load_settings(parser.value(config)); error.has_value()) {
             QMessageBox::warning(&window, u"Settings"_s, *error + u"\nThe built-in defaults are used."_s);
+        }
+    }
+    if (parser.isSet(demo)) {
+        if (auto const error = window.load_example_molecule(); error.has_value()) {
+            QMessageBox::warning(&window, u"Example Molecule"_s, *error);
         }
     }
     window.show();

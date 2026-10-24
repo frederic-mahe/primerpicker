@@ -34,6 +34,7 @@
 #include "gui/text_table_model.hpp"
 
 #include <QActionGroup>
+#include <QByteArray>
 #include <QCloseEvent>
 #include <QDockWidget>
 #include <QFutureWatcher>
@@ -112,6 +113,11 @@ public:
     // Loads a molecule file (GenBank, FASTA or plain sequence) as the
     // molecule primers are made from; the error, if it was not loaded
     [[nodiscard]] auto load_molecule(QString const& path) -> std::optional<QString>;
+
+    // Help -> Example Molecule (not in PRIMER.exe): loads pUC19, built
+    // into the program (data/molecules/pUC19.gb), as if from a file
+    // named pUC19.gb; the error, if it was not loaded
+    [[nodiscard]] auto load_example_molecule() -> std::optional<QString>;
 
     // Loads Primer Designer's settings from a pd2.cfg file (criteria,
     // primer length, tolerances, search ranges and weights); the error,
@@ -273,6 +279,14 @@ private:
     void use_picked_location();
     void open_mutagenize();
     void open_view_molecule();
+    // A molecule file's contents, read from DISPLAY_PATH (in messages),
+    // kept with PATH (the default of Save, primer files)
+    struct MoleculeText {
+        QByteArray bytes;
+        QString display_path;
+        QString path;
+    };
+    auto use_molecule_text(MoleculeText const& text) -> std::optional<QString>;
     void open_save_remove();
     void save_mutated_primer();
     void inspect_mutated_primer();
