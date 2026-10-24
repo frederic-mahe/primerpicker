@@ -2,6 +2,7 @@
 # GUI tests) and the program. Presentation only: every value is
 # computed by the core library.
 add_library(primerpicker_gui
+  about_dialog.cpp
   analysis_view.cpp
   application_icon.cpp
   colour_scheme.cpp
@@ -42,6 +43,14 @@ qt_add_resources(primerpicker_gui "icons"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-64.png"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-128.png"
     "${PROJECT_SOURCE_DIR}/packaging/icons/png/primerpicker-256.png")
+# The licences shown by Help -> About PrimerPicker
+qt_add_resources(primerpicker_gui "licences"
+  PREFIX /licences
+  BASE "${PROJECT_SOURCE_DIR}"
+  FILES
+    "${PROJECT_SOURCE_DIR}/LICENSE"
+    "${PROJECT_SOURCE_DIR}/packaging/licenses/THIRD-PARTY.md"
+    "${PROJECT_SOURCE_DIR}/packaging/licenses/LGPL-3.0.txt")
 target_link_libraries(primerpicker_gui PUBLIC primerpicker_core Qt6::Widgets Qt6::Concurrent)
 target_compile_options(primerpicker_gui PRIVATE ${PRIMERPICKER_WARNING_FLAGS})
 # QString conversions and Qt's keyword macros are explicit; no API

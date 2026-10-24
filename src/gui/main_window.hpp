@@ -8,6 +8,7 @@
 #include "core/sequence/nucleotide.hpp"
 #include "core/sequence/strand.hpp"
 #include "core/sequence/topology.hpp"
+#include "gui/about_dialog.hpp"
 #include "gui/analysis_view.hpp"
 #include "gui/colour_scheme.hpp"
 #include "gui/criteria_dialog.hpp"
@@ -337,6 +338,7 @@ private:
     GlossaryDialog glossary_;
     CriteriaDialog criteria_dialog_;
     SystemDefaultsDialog defaults_dialog_;
+    AboutDialog about_;
 };
 
 }  // namespace primerpicker::gui

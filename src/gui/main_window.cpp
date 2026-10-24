@@ -170,7 +170,8 @@ MainWindow::MainWindow()
       find_pair_progress_{this},
       glossary_{*this},
       criteria_dialog_{*this},
-      defaults_dialog_{*this} {
+      defaults_dialog_{*this},
+      about_{*this} {
     setWindowTitle(u"PrimerPicker"_s);
     // the dock's title first: it names the dock's View menu item
     list_dock_.setWindowTitle(u"Primer List"_s);
@@ -332,6 +333,9 @@ void MainWindow::add_legacy_menus() {
     auto& glossary = add_item(help, {.text = u"&Glossary", .name = u"glossary"});
     glossary.setShortcut(QKeySequence{Qt::Key_F1});
     QObject::connect(&glossary, &QAction::triggered, this, [this] { show_glossary({}); });
+    help.addSeparator();
+    auto& about = add_item(help, {.text = u"&About PrimerPicker", .name = u"about"});
+    QObject::connect(&about, &QAction::triggered, &about_, &QDialog::show);
 
     auto const& quit = *menu_bar.addAction(u"&Quit"_s);
     QObject::connect(&quit, &QAction::triggered, &QApplication::closeAllWindows);
